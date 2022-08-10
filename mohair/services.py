@@ -2,7 +2,6 @@ import pyarrow
 
 from pyarrow import flight, parquet
 
-
 class SmartFileService(flight.FlightServerBase):
 
     def __init__(self, **kwargs):
@@ -14,6 +13,7 @@ class SmartFileService(flight.FlightServerBase):
     def list_flights(self, context, criteria):
         pass
 
+    # >> Flight Verbs
     def get_flight_info(self, context, descriptor):
         pass
 
