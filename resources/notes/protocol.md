@@ -13,26 +13,114 @@ also discuss the various architectures we consider and their relationships.
 
 Based on research done for [MSG Express][slides-msgexpress], we can imagine a
 Computational Data Management System to consist of three important layers: (1) storage
-clients, (2) computational storage servers, and (3) computational storage devices.
+clients, (2) computational storage services, and (3) computational storage devices.
 
 At the lowest level of abstraction, computational storage devices (CSDs) refer to storage
 devices (e.g. HDDs or SSDs) that have an attached accelerator or SoC which allows them to
-do some processing without the use of a CPU complex or main memory.
+do some processing without the use of the storage client's (or storage server's) CPU
+complex or main memory.
 
-Above the CSDs are computational storage servers. These differ from typical storage
-servers only in their ability to propagate, or delegate, data processing to underlying
-CSDs. This means that the difference is primarily in software and control logic, rather
-than hardware. Although we explicitly refer to them as computational storage servers here,
-throughout our writing and documentation in this repository we simply call them storage
-servers.
+Above the CSDs are computational storage services (CSSs). These differ from typical
+storage services only in their ability to propagate, or delegate, data processing to
+underlying CSDs. Note that CSSs and simple storage services can both run on "storage
+servers." This means that the difference is primarily in software and control logic,
+rather than hardware, and so we use "service" to refer to the software processes and
+"server" to refer to the machine (physical or virtual). 
 
-Finally, at the highest level of abstraction are storage clients. These are clients that
-are co-designed with the storage system so that they can directly communicate to storage
-servers for efficiency, but they are physically on a compute server (either application
-servers or edge servers). Storage clients act as the interface to the computational data
-management system: they accept queries from applications, then manage access to data
-partitioned across storage servers and merge result sets before returning them to an
-application.
+At the highest level of abstraction, storage clients are clients that send requests
+directly to a storage service (CSS or simple). When we discuss storage clients that
+communicate with a CSS, we assume that they are co-designed with the computational storage
+system so that they can participate in end-to-end decisions; but, we also assume they are
+physically resident on a compute server (either application servers or edge servers).
+Storage clients act as the interface to the computational data management system: they
+accept queries from applications, then manage access to data partitioned across storage
+servers and merge result sets before returning them to an application.
+
+#### Remote Storage System
+
+The simplest remote storage system can be represented as a storage server with an attached
+storage device. In this architecture, a storage service (running on the storage server)
+can receive data access requests and serve those requests via an underlying filesystem or
+file-like interface. The remote filesystem can provide features such as data filtering or
+projection before returning the data to the client. However, it is assumed that the
+underlying filesystem is unable to receive complex requests (such as SQL queries or a
+substrait query plan). This means that the remote filesystem has no capability for
+pushdowns: the data access only executed by the filesystem service and processing of
+distributed data must be done, or managed, by the client.
+
+#### Remote Computational Storage System
+
+A computational storage system is the next level of complexity beyond a remote storage
+system. The "computational" adjective denotes the capability for pushdowns to the
+underlying storage. In other words, a computational storage service (running on the
+storage server) communicates with an underlying storage service for data storage. It is
+assumed that the underlying storage service is running on some sort of computational
+storage device (CSD). The CSD may provide a low-level interface (e.g. smart SSDs) or a
+high-level interface (e.g. appliances, kinetic drives).
+
+While a computational storage service may simply propagate data access requests to the
+underlying CSD, there is an opportunity for the storage service to manage or coordinate
+the execution of a data access request with the CSD such that the overall performance when
+serving the request is improved. In the simplest case, this means that a computational
+storage service should be able to forward a data access request as-is to a CSD. In the
+most complex case, this means that a computational storage service should be able to: (1)
+alter portions of the data request into a different execution order, (2) send a portion of
+the modified data access request to a CSD, and (3) interleave data access requests to a
+CSD with processing of results from the CSD.
+
+Finally, a CSD should be able to simplify execution of a data access when under load, and
+a computational storage service should be able to adapt to the results returned from the
+CSD to satisfy remaining portions of the data access request. In simpler terms, a CSD
+should only run extra computations (e.g. filtering or projection) when the overhead is
+within acceptable bounds relative to the required computations (e.g. read or consistent
+writes). If the CSD does not run extra computations, then the computational storage
+service should attempt to run the extra computations within similar constraints. In the
+case when both the CSD and the computational storage service are under heavy load, it
+should be possible to leave extra computations to the client (which is assumed to have a
+more powerful compute complex).
+
+
+### Mapping Storage Types to Flight Types
+
+Apache Arrow defines an RPC protocol leveraging gRPC and the protobuf library. The
+protocol and its implementation are collectively called Arrow Flight and is used when
+communicating Arrow data for memory efficiency when sending Arrow data from a CPU to a NIC
+(network interface card). Here, we discuss the mappings between a storage system's data
+model and Arrow Flight's data model.
+
+#### Control Flow Types
+
+*FlightDescriptor.* A FlightDescriptor contains either string data or binary data. There
+is a field, Type, which can be used to determine which type of data the FlightDescriptor
+contains. The names of string and binary fields, respectively "path" and "cmd", suggests
+that the FlightDescriptor represents some file name or application-specific identifier.
+
+We imagine the FlightDescriptor to represent identifying information for a "dataset" (in
+the general sense of the word). For a filesystem, this would likely be a file or directory
+path. For an object storage system, this would likely be an object name or key. For a
+key value storage system, this would likely be a key name. For a computational storage
+system, we would like this to be either a simple name (e.g. an object name or key name for
+Ceph) or a query (SQL or a substrait plan).
+
+When delegating a data access request to an underlying CSD, we imagine a CSS to be able to
+specify either a physical storage object (a kinetic key) or a computational namespace (a
+skytether partition name).
+
+*FlightEndpoint.*
+
+*FlightInfo.*
+
+#### Data Flow Actions
+
+*ListFlights.*
+
+*GetFlightInfo.*
+
+*Get.*
+
+*Put.*
+
+*Exchange.*
 
 
 <!-- resources -->
