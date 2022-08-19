@@ -26,9 +26,10 @@ lightweight representations of what practical services might do. These implement
 are used to sketch the interactions of services in a computational storage system and how
 we might query data from them. We want to explore the use of Substrait and Flight, but we
 want to imagine how services that can handle these complex interfaces might co-exist with
-simple interfaces (e.g. an S3-like interface or a KV interface backed by parquet files on
-a local filesystem).
+simple interfaces (e.g. an S3-like interface or a KV interface backed by IPC
+files on a local filesystem).
 """
+
 
 # ------------------------------
 # Dependencies
@@ -36,7 +37,7 @@ a local filesystem).
 import pathlib
 
 # modules
-from pyarrow import parquet
+from pyarrow import ipc
 
 # basic types
 from pyarrow.flight import FlightDescriptor, FlightEndpoint
@@ -48,38 +49,7 @@ from pyarrow.flight import FlightServerBase, FlightInfo
 # ------------------------------
 # Classes
 
-# >> Convenience classes for object construction
-class FileInfo:
-    """
-    A namespace for convenience functions for `FlightInfo` objects representing files.
-    """
-
-    @classmethod
-    def MetadataFromSchema(cls, file_schema):
-        """
-        Convenience function to extract metadata from the given file's schema. This
-        metadata is packed with the schema to reduce IO requests.
-        """
-
-        pass
-
-    @classmethod
-    def ForDataset(cls, file_descr, file_tkt, file_schema, file_locs=[]):
-        """
-        Factory function to create a `FlightInfo` from file information. By default,
-        :file_loc: is None because a `SmartFileService` only knows about files at its
-        location. However, a `MetadataService` will be able to provide a :file_loc:.
-        """
-
-        endpoints = [FlightEndpoint(file_tkt, file_locs)]
-        row_count, byte_count = cls.MetadataFromSchema(file_schema)
-
-        return FlightInfo(file_schema, file_descr, endpoints, row_count, byte_count)
-
-
-
 # >> Client to computational storage server
-
 class ApplicationService(FlightServerBase):
     """
     A facade for a service running on a client that takes application requests and
@@ -165,7 +135,7 @@ class ComputationalStorageService(flight.FlightServerBase):
         pass
 
 
-# >> Computational storage device
+# >> Computational file server
 class SmartFileService(FlightServerBase):
     """
     A facade for an intelligent shim over a simple filesystem. This service keeps track of
@@ -178,35 +148,26 @@ class SmartFileService(FlightServerBase):
     initially be IPC stream format.
     """
 
-    def __init__(self, root_dir='/tmp', **kwargs):
+    def __init__(self, root_dirpath='/tmp', **kwargs):
         super().__init__(**kwargs)
-        self.root_dir = root_dir
+        self.root_dir = pathlib.Path(root_dirpath)
 
         # a way to identify what datasets are in memory
         #   <file descriptor: FlightDescriptor> -> <file ticket: FlightTicket>
         self._open_files = {}
 
-    # TODO: Need to figure out how to enumerate URI Paths from a substrait query.
-    # Reference:
-    #   - https://substrait.io/relations/logical_relations/#read-definition-types
-    # 1st pass: a single file
-    # 2nd pass: a folder representing a partitioned file
-    # 3rd pass: a glob representing files with matching schemas, each potentially a
-    #           part of a partitioned file.
-    def handle_from_descriptor(self, descriptor):
-        if file_descr.path is not None:
-            return self.root_dir / file_descr.path
+    def read_schema(self, file_handle):
+        """
+        Reads the schema for a flight. The schema is used when returning `FlightInfo`
+        structures. For now, it seems best to keep arbitrary metadata with the schema.
+        This approach means that a schema and application metadata can be accessed in a
+        consistent way with a single access.
+        """
 
-        elif file_descr.cmd is not None:
-            # file_handle = (SubstraitQuery.FromCommand(file_descr.cmd).URIPath())
-            pass
-
-        return ''
-
-    def read_schema(self, flight_handle):
-        # schema = parquet.read_schema(dataset_path)
+        # schema = ipc.read_schema(dataset_path)
         pass
 
+    # >> Flight Verbs
     def list_flights(self, context, criteria):
         """
         Lists "available" flights, meaning flights that are readable at this location. The
@@ -214,30 +175,58 @@ class SmartFileService(FlightServerBase):
         `FlightDescriptor` is being actively accessed (some portion of it is in memory).
         """
 
+        # Foreach active descriptor: (1) get a handle, (2) get schema and metadata
         for file_descr, file_tkt in self._open_files.items():
-            # get a handle depending on what the descriptor contains
-            flight_handle = self.handle_from_descriptor(file_descr)
+            file_handle = FileHandle.FromDescriptor(self.root_dir, file_descr)
+            schema      = self.read_schema(file_handle)
 
-            # get the schema for the file. This should also contain metadata
-            schema = self.read_schema(flight_handle)
-
-            # this seems to be how we send `FlightInfo` instances?
             yield FileInfo.ForDataset(file_descr, file_tkt, schema)
 
-    # >> Flight Verbs
-    def get_flight_info(self, context, descriptor):
+    def get_flight_info(self, context, flight_descr):
         # TODO: This facade should only know how to serve data it stores
         pass
 
-    def do_exchange(self, context, descriptor, reader, writer):
-        pass
-
-    def do_put(self, context, descriptor, reader, writer):
-        pass
-
     def do_get(self, context, ticket):
-        pass
+        """
+        Flight verb that reads data described by :ticket: and returns the results to the
+        client. In the simplest case, ticket may be a file path. In the most complex case,
+        ticket may be a substrait plan.
+        """
 
+		file_handle = FileHandle.FromTicket(self.root_dir, ticket)
+        with file_handle.open('wb') as file_sink:
+            with ipc.new_file(file_sink, reader.schema) as flight_writer:
+                for data_batch in reader:
+                    flight_writer.write_batch(data_batch)
+
+    def do_put(self, context, flight_descr, reader, writer):
+        """
+        Flight verb that writes data (from :reader:) to the handle described by
+        :flight_descr:. Note that this verb overwrites the destination handle; to update
+        the handle, use `do_exchange`.
+        """
+
+		file_handle = self.get_handle(flight_descr)
+        with file_handle.open('wb') as file_sink:
+            with ipc.new_file(file_sink, reader.schema) as flight_writer:
+                for data_batch in reader:
+                    flight_writer.write_batch(data_batch)
+
+    def do_exchange(self, context, flight_descr, reader, writer):
+        """
+        Flight verb that writes data (from :reader:) to the handle described by
+        :flight_descr:. Note that this verb updates the destination handle; to simply
+        overwrite the handle, use `do_put`.
+        """
+
+		file_handle = self.get_handle(flight_descr)
+        with file_handle.open('wb') as file_sink:
+            with ipc.new_file(file_sink, reader.schema) as flight_writer:
+                for data_batch in reader:
+                    flight_writer.write_batch(data_batch)
+
+
+# >> Computational storage device
 class SmartDiskService(flight.FlightServerBase):
     """A facade for a smart disk (e.g. kinetic)"""
 
