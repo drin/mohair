@@ -8,6 +8,37 @@ various systems we envision mohair being relevant for. It is difficult to discus
 protocol without also talking about the organization of components in our system; so, we
 also discuss the various architectures we consider and their relationships.
 
+### Terminology
+
+**Storage Components:**
+* **Storage Device** -- A physical storage device such as a HDD or SSD or NVRam.
+* **Storage Server** -- A physical or virtual machine that handles data storage and access
+  and is **not** part of a compute cluster (may be part of a storage cluster, or a
+  stand-alone server).
+* **Storage Service** -- A process on a storage server that handles data storage and
+  access. May be one-to-one with a storage server, or may represent a logical data shard
+  if a storage server has many storage services.
+
+**Computational Storage Components:**
+* **Computational Storage Device** -- A storage device that has an attached CPU, SoC, or
+  some other processor. Essentially, a storage device that can execute some compute
+  independently of a client processor (storage server or storage client).
+* **Computational Storage Service** -- A storage service that is capable of delegating
+  work to a computational storage device and completing any remaining data processing
+  tasks before returning data to the client.
+
+**Clients:**
+* **Client Process** -- A process that runs on a client server or compute server.
+* **Storage Client** -- The portion of a client process that communicates with a storage
+  service, computational storage service, or computational storage device. This may be
+  something like a framework (skyhook or skytether) or a protocol (rados or gRPC).
+* **Application Client** -- The portion of a client process where storage requests
+  originate from.
+
+**Processing:**
+* **Computational Pushdown** -- Delegation of part, or all, of a data processing request
+  to a separate processor.
+
 
 ### Architecture
 
@@ -36,17 +67,46 @@ Storage clients act as the interface to the computational data management system
 accept queries from applications, then manage access to data partitioned across storage
 servers and merge result sets before returning them to an application.
 
-#### Remote Storage System
 
-The simplest remote storage system can be represented as a storage server with an attached
-storage device. In this architecture, a storage service (running on the storage server)
-can receive data access requests and serve those requests via an underlying filesystem or
-file-like interface. The remote filesystem can provide features such as data filtering or
-projection before returning the data to the client. However, it is assumed that the
-underlying filesystem is unable to receive complex requests (such as SQL queries or a
-substrait query plan). This means that the remote filesystem has no capability for
-pushdowns: the data access only executed by the filesystem service and processing of
-distributed data must be done, or managed, by the client.
+#### Storage Systems
+
+**Filesystem.** The simplest storage system is a storage server with an attached storage
+device. In this architecture, a storage service (running on the storage server) can
+receive data access requests from a client and serve those requests via an underlying
+filesystem or file-like interface. The storage service can provide features such as data
+filtering or projection before returning the data to the client. However, it is assumed
+that the underlying filesystem is unable to receive complex requests (such as SQL queries
+or a substrait query plan). This means that the storage service has no capability for
+computational pushdowns: the underlying filesystem can only execute simple data accesses,
+thus the storage server is where all data processing is executed before data is returned
+to the client.
+
+**Key Value Storage System.** This type of storage system associates a key name with a key
+value. In this architecture, a storage service manages data for a subset of keys and can
+serve data access requests for those keys. The underlying storage supports a simple data
+access interface, treating key values as a single entity that may be retrieved
+individually or as a group. This means that the interface cannot express computational
+pushdowns.
+
+**Object Storage System.** This type of storage system is similar to a key value storage
+system, but associates object names with object blobs. Objects are like keys, but they
+have a flexible interface. In this architecture, a storage service manages data for a
+subset of objects and can serve data access requests for those objects. The underlying
+storage is de-coupled, and so can be served by a filesystem, key-value storage, or other
+storage backend. While the underlying storage backend may be able to receive complex
+requests, it is assumed to not have an independent processor. This means that the storage
+service cannot typically support computational pushdowns, but can be extended to support
+them. Further, storage objects are identified by a single name, and any accesses at a
+smaller granularity differ between storage systems.
+
+**Computational Object Storage System.** This is an object storage system that consists of
+a mix of computational storage services and standard storage services. In this
+architecture, a standard storage device is associated with a standard storage service and
+a computational storage device is associated with a computational storage service.
+A standard storage services cannot support computational pushdown, but a computational
+storage service does support computational pushdown by propagating data processing tasks
+to its computational storage device.
+
 
 #### Remote Computational Storage System
 
