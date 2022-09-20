@@ -156,6 +156,22 @@ class SmartFileService(FlightServerBase):
         #   <file descriptor: FlightDescriptor> -> <file ticket: FlightTicket>
         self._open_files = {}
 
+    def remove_dirtree(self, dirpath):
+        if not dirpath.exists(): return
+
+        for subpath in dirpath.iterdir():
+            if subpath.is_dir(): self.remove_dirtree(subpath)
+            else:                subpath.unlink(missing_ok=True)
+
+        dirpath.rmdir()
+
+    def init_storage(self):
+        self.root_dir.mkdir(parents=True, exist_ok=True)
+
+    def reset_storage(self):
+        self.remove_dirtree(self.root_dir)
+        self.root_dir.mkdir(parents=True, exist_ok=True)
+
     def read_schema(self, file_handle):
         """
         Reads the schema for a flight. The schema is used when returning `FlightInfo`
@@ -193,9 +209,9 @@ class SmartFileService(FlightServerBase):
         ticket may be a substrait plan.
         """
 
-		file_handle = FileHandle.FromTicket(self.root_dir, ticket)
-        with file_handle.open('wb') as file_sink:
-            with ipc.new_file(file_sink, reader.schema) as flight_writer:
+		flight_file = FileHandle.FromTicket(self.root_dir, ticket)
+        with flight_file.open('wb') as file_handle:
+            with ipc.new_file(file_handle, reader.schema) as flight_writer:
                 for data_batch in reader:
                     flight_writer.write_batch(data_batch)
 
@@ -206,9 +222,11 @@ class SmartFileService(FlightServerBase):
         the handle, use `do_exchange`.
         """
 
-		file_handle = self.get_handle(flight_descr)
-        with file_handle.open('wb') as file_sink:
-            with ipc.new_file(file_sink, reader.schema) as flight_writer:
+        # TODO: handle the multiplicity of files
+		flight_files = FileHandle.FromDescriptor(self.root_dir, flight_descr)
+
+        with flight_files[0].open('wb') as file_handle:
+            with ipc.new_file(file_handle, reader.schema) as flight_writer:
                 for data_batch in reader:
                     flight_writer.write_batch(data_batch)
 
@@ -219,9 +237,10 @@ class SmartFileService(FlightServerBase):
         overwrite the handle, use `do_put`.
         """
 
-		file_handle = self.get_handle(flight_descr)
-        with file_handle.open('wb') as file_sink:
-            with ipc.new_file(file_sink, reader.schema) as flight_writer:
+		flight_files = FileHandle.FromDescriptor(self.root_dir, flight_descr)
+
+        with flight_files[0].open('wb') as file_handle:
+            with ipc.new_file(file_handle, reader.schema) as flight_writer:
                 for data_batch in reader:
                     flight_writer.write_batch(data_batch)
 
