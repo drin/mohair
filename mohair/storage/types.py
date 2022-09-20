@@ -53,6 +53,11 @@ class FileDescriptor:
 
 # >> Specializations for FlightTicket
 class FileTicket:
+    """
+    Should be a structure that can be serialized to a byte string. Then, when deserialized
+    it can be inspected for a type (substrait plan or file path), and then a generator can
+    be returned that yields a stream of batches from whatever this is.
+    """
 
     @classmethod
     def FromPath(cls, file_path):
@@ -98,6 +103,7 @@ class FileInfo:
         return FlightInfo(file_schema, file_descr, endpoints, row_count, byte_count)
 
 
+# TODO: could use a much better interface, but this will work for now.
 class FileHandle:
 
     # TODO: Need to figure out how to enumerate URI Paths from a substrait query.
@@ -123,8 +129,12 @@ class FileHandle:
 
         # NOTE: this is for 1st, 3rd, and 5th passes
         if file_descr.path is not None:
-        	# file_descr.path[0].decode('utf-8')
-            return file_rootdir / file_descr.path
+            # TODO: path is a list, so figure that out
+            # I suspect it makes most sense for it to be a set of sources to pull batches
+            # from or write batches to. The sender should include in the schema which file
+            # to write to. Or, maybe it can be used to consolidate "small files"? Probably
+            # too tricky...
+            return file_rootdir / file_descr.path[0].decode('utf-8')
 
         # TODO: implement for 2nd and 4th passes
         elif file_descr.cmd is not None:
@@ -135,4 +145,15 @@ class FileHandle:
 
     @classmethod
     def FromTicket(cls, file_rootdir, file_ticket):
+        """
+        Constructs a "handle" given a `FlightTicket`. The given `FlightTicket` is an
+        "opaque" byte blob. But, in order for this to be a useful utility it implements
+        the byte blob format. So, the byte blob is opaque to any file service using this
+        `FileHandle`.
+        """
+
+        # TODO: ticket can be a general structure that says what it's type is. Then, based
+        # on that type, it can decode into a query or it can decode into a path. The
+        # appropriate decoding can be processed and the result should be something that
+        # yields a data stream.
         pass
