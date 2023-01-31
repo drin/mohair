@@ -14,6 +14,7 @@ class SmartFileService(flight.FlightServerBase):
     def list_flights(self, context, criteria):
         pass
 
+    # >> Flight Verbs
     def get_flight_info(self, context, descriptor):
         pass
 
