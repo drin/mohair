@@ -1,0 +1,3 @@
+[submodule "submodules/substrait-proto"]
+	path = submodules/substrait-proto
+	url = git@github.com:substrait-io/substrait.git
