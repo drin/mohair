@@ -12,6 +12,8 @@ Cython = "^0.29.30"
 wheel = "^0.37.1"
 ibis-substrait = "^2.19.0"
 duckdb = "^0.6.1"
+click = "^8.1.3"
+pyarrow = "^11.0.0"
 
 [tool.poetry.dev-dependencies]
 
