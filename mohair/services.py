@@ -45,40 +45,13 @@ from pyarrow import ipc
 from pyarrow.flight import FlightDescriptor, FlightEndpoint
 from pyarrow.flight import FlightServerBase, FlightInfo
 
+# >> Internal libs
+#   |> Storage interfaces
+from mohair.storage.dbms import DuckDBMS
+
 
 # ------------------------------
 # Classes
-
-# >> Client to computational storage server
-class ApplicationService(FlightServerBase):
-    """
-    A facade for a service running on a client that takes application requests and
-    converts them to queries against a storage server. This service only knows that the
-    server it is talking to can receive queries of this form.
-    """
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def _make_flight_info(self, dataset):
-        pass
-
-    def list_flights(self, context, criteria):
-        pass
-
-    # >> Flight Verbs
-    def get_flight_info(self, context, descriptor):
-        # TODO: This facade should be able to point clients to the correct storage service
-        pass
-
-
-    def do_put(self, context, descriptor, reader, writer):
-        pass
-
-    def do_get(self, context, ticket):
-        pass
-
-
 
 # >> Storage servers that store data on computational storage devices
 
@@ -102,6 +75,91 @@ class MetadataService(FlightServerBase):
     # >> Flight Verbs
     def get_flight_info(self, context, descriptor):
         # TODO: This facade should be able to point clients to the correct storage service
+        pass
+
+
+class DatabaseService(FlightServerBase):
+    """
+    A facade for a storage service that runs on a server and is backed by a DBMS. This
+    storage service receives queries and executes them against the backing DBMS.
+    """
+
+    # TODO: consider suffixing db_fpath with skytether domain
+    def __init__(self, service_location, db_fpath,  **kwargs):
+        super().__init__(**kwargs)
+
+        self.__service_loc = service_location
+
+        if db_fpath and db_fpath.is_file():
+            self.db         = DuckDBMS.InFile(db_fpath)
+            self.__data_loc = db_fpath
+
+        else:
+            self.db         = DuckDBMS.InMemory()
+            self.__data_loc = None
+
+    def info(self):
+        storage_type = 'in-memory'
+        storage_loc  = ''
+
+        if self.__data_loc:
+            storage_type = 'file-backed'
+            storage_loc  = f'({self.__data_loc})'
+
+        return (
+             'DatabaseService (DuckDB)\n'
+            f'\tStorage type: {storage_type} {storage_loc}\n'
+            f'\tService location: {self.__service_loc}'
+        )
+
+    def _make_flight_info(self, table_name):
+        """
+        Constructs a FlightInfo object by encoding the table name (str) to utf-8 bytes.
+        Other location information (endpoints) is constructed from the service and data
+        locations this DatabaseService was initialized with. Other metadata information is
+        obtained from the database table (converted into an Arrow table).
+        """
+
+        db_table = self.db.table(table_name).arrow()
+
+        # flight objects
+        db_descriptor = FlightDescriptor.for_path(table_name.encode('utf-8'))
+        db_endpoints  = [
+            FlightEndpoint(
+                 self.__data_loc
+                ,[self.__service_loc]
+            )
+        ]
+
+        # TODO: possibly revisit descriptor; should be domain/partition
+        return FlightInfo(
+             db_table.schema
+            ,db_descriptor
+            ,db_endpoints
+            ,db_table.num_rows
+            ,db_table.nbytes
+        )
+
+    def list_flights(self, context, criteria):
+        for table_name in self.db.ShowTables():
+            yield self._make_flight_info(table_name)
+
+    # >> Flight Verbs
+    def get_flight_info(self, context, descriptor):
+        """
+        Constructs a FlightInfo object by decoding the descriptor path from utf-8 bytes to
+        a string.
+        """
+
+        return self._make_flight_info(descriptor.path[0].decode('utf-8'))
+
+    def do_exchange(self, context, descriptor, reader, writer):
+        pass
+
+    def do_put(self, context, descriptor, reader, writer):
+        pass
+
+    def do_get(self, context, ticket):
         pass
 
 
