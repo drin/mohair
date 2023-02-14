@@ -34,15 +34,15 @@ files on a local filesystem).
 # ------------------------------
 # Dependencies
 
+# >> Standard libs
 import pathlib
 
-# modules
+# >> Arrow
+#   |> Core types
 from pyarrow import ipc
 
-# basic types
+#   |> Flight types
 from pyarrow.flight import FlightDescriptor, FlightEndpoint
-
-# higher-level types
 from pyarrow.flight import FlightServerBase, FlightInfo
 
 
@@ -68,10 +68,9 @@ class ApplicationService(FlightServerBase):
 
     # >> Flight Verbs
     def get_flight_info(self, context, descriptor):
+        # TODO: This facade should be able to point clients to the correct storage service
         pass
 
-    def do_exchange(self, context, descriptor, reader, writer):
-        pass
 
     def do_put(self, context, descriptor, reader, writer):
         pass
@@ -106,7 +105,7 @@ class MetadataService(FlightServerBase):
         pass
 
 
-class ComputationalStorageService(flight.FlightServerBase):
+class ComputationalStorageService(FlightServerBase):
     """
     A facade for a storage service that runs on a server. This storage service is aware
     that it utilizes computational storage devices for data persistence.
@@ -209,7 +208,7 @@ class SmartFileService(FlightServerBase):
         ticket may be a substrait plan.
         """
 
-		flight_file = FileHandle.FromTicket(self.root_dir, ticket)
+        flight_file = FileHandle.FromTicket(self.root_dir, ticket)
         with flight_file.open('wb') as file_handle:
             with ipc.new_file(file_handle, reader.schema) as flight_writer:
                 for data_batch in reader:
@@ -223,7 +222,7 @@ class SmartFileService(FlightServerBase):
         """
 
         # TODO: handle the multiplicity of files
-		flight_files = FileHandle.FromDescriptor(self.root_dir, flight_descr)
+        flight_files = FileHandle.FromDescriptor(self.root_dir, flight_descr)
 
         with flight_files[0].open('wb') as file_handle:
             with ipc.new_file(file_handle, reader.schema) as flight_writer:
@@ -237,7 +236,7 @@ class SmartFileService(FlightServerBase):
         overwrite the handle, use `do_put`.
         """
 
-		flight_files = FileHandle.FromDescriptor(self.root_dir, flight_descr)
+        flight_files = FileHandle.FromDescriptor(self.root_dir, flight_descr)
 
         with flight_files[0].open('wb') as file_handle:
             with ipc.new_file(file_handle, reader.schema) as flight_writer:
@@ -246,7 +245,7 @@ class SmartFileService(FlightServerBase):
 
 
 # >> Computational storage device
-class SmartDiskService(flight.FlightServerBase):
+class SmartDiskService(FlightServerBase):
     """A facade for a smart disk (e.g. kinetic)"""
 
     def __init__(self, **kwargs):
