@@ -135,10 +135,3 @@ def start(srv_ctx, dry_run):
 
     if not dry_run:
         srv_ctx.service.serve()
-
-
-# ------------------------------
-# Main Logic
-
-if __name__ == '__main__':
-    cli()
