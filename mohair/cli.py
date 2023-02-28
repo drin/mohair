@@ -45,12 +45,18 @@ class ServiceContext:
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.host    = 'grpc://0.0.0.0'
+        self.host    = 'localhost'
         self.port    = GRPC_PORT
         self.service = None
 
-    def uri(self):
-        return f'{self.host}:{self.port}'
+    def listen_uri(self):
+        if self.host == 'localhost':
+            return f'grpc://0.0.0.0:{self.port}'
+
+        return f'grpc://{self.host}:{self.port}'
+
+    def connect_uri(self):
+        return f'grpc://{self.host}:{self.port}'
 
 
 # ------------------------------
@@ -106,6 +112,7 @@ def service(srv_ctx, port):
               ,type=click.Choice(DB_ENGINES, case_sensitive=False)
               ,default=DB_ENGINES[0]
               ,show_default=True)
+@cli_service_ctx
 def database(srv_ctx, data_path, engine):
     print(f'DB data path: {data_path}')
     print(f'Using DBMS engine: {engine}')
@@ -113,7 +120,7 @@ def database(srv_ctx, data_path, engine):
     # TODO: make this cleaner
     if engine == DB_ENGINES[0]:
         srv_ctx.service = DatabaseService(
-             service_location=srv_ctx.uri()
+             service_location=srv_ctx.listen_uri()
             ,db_fpath=data_path
         )
 
@@ -122,14 +129,40 @@ def database(srv_ctx, data_path, engine):
 
 #   |> Client commands
 @client.command()
+@cli_service_ctx
 def list(srv_ctx):
-    flight_client = MohairClient.ConnectTo(srv_ctx.uri())
+    flight_client = MohairClient.ConnectTo(srv_ctx.connect_uri())
     flight_client.GetFlights()
+
+@client.command()
+@click.option('--plan-file', type=str, required=True)
+@cli_service_ctx
+def send(srv_ctx, plan_file):
+    plan_fpath = Path(plan_file)
+
+    if not plan_fpath.is_file():
+        sys.exit(f'Invalid file path for query plan: [{plan_file}]')
+
+    with open(plan_fpath, 'rb') as proto_handle:
+        message_bytes = proto_handle.read()
+
+    flight_client = MohairClient.ConnectTo(srv_ctx.connect_uri())
+    flight_client.SendQueryPlan(message_bytes)
+
+
+#   |> Service commands (common)
+# @service.command()
+# def status(srv_ctx):
+#     print(srv_ctx.service.info())
+# 
+#     if not dry_run:
+#         srv_ctx.service.serve()
     
 
 #   |> Service commands (database)
 @database.command()
 @click.option('--dry-run/--no-dry-run', default=False, show_default=True)
+@cli_service_ctx
 def start(srv_ctx, dry_run):
     print(srv_ctx.service.info())
 

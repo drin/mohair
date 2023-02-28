@@ -47,7 +47,8 @@ class MohairClient:
 
     @classmethod
     def ConnectTo(cls, service_location):
-        cls(flight.connect(service_location))
+        print(f'Establishing connection to [{service_location}]')
+        return cls(flight.connect(service_location))
 
     def __init__(self, flight_conn, **kwargs):
         super().__init__(**kwargs)
@@ -55,5 +56,14 @@ class MohairClient:
         self.__flightconn = flight_conn
 
     def GetFlights(self):
+        """ Requests a list of flights from the remote mohair service. """
+
         for flight in self.__flightconn.list_flights():
             print(flight)
+
+    def SendQueryPlan(self, substrait_plan):
+        """ Sends a substrait plan (as bytes) to the remote mohair service. """
+
+        results = self.__flightconn.do_action(flight.Action('query', substrait_plan))
+        for res in results:
+            print(res.body.to_pybytes().decode('utf-8'))
