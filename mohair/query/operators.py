@@ -231,29 +231,26 @@ def _from_rel(plan_op: Rel) -> Any:
     """
 
     op_rel = getattr(plan_op, plan_op.WhichOneof('rel_type'))
-
-    print(f'translating <Rel: {type(op_rel)}>')
     return MohairFrom(op_rel, plan_op)
 
 # >> Translations for unary relations
 @MohairFrom.register
-def _from_filter(filter_op: FilterRel, base_rel: Rel) -> Any:
+def _from_filter(filter_op: FilterRel) -> Any:
     print('translating <Filter>')
 
 @MohairFrom.register
-def _from_fetch(fetch_op: FetchRel, base_rel: Rel) -> Any:
+def _from_fetch(fetch_op: FetchRel) -> Any:
     print('translating <Fetch>')
 
 @MohairFrom.register
-def _from_sort(sort_op: SortRel, base_rel: Rel) -> Any:
+def _from_sort(sort_op: SortRel) -> Any:
     print('translating <Sort>')
 
 @MohairFrom.register
-def _from_project(project_op: ProjectRel, base_rel: Rel) -> Any:
+def _from_project(project_op: ProjectRel) -> Any:
     print('translating <Project>')
 
     mohair_subplan = MohairFrom(project_op.input)
-    # mohair_op      = Projection(project_op, base_rel)
     mohair_op      = Projection(project_op)
 
     if mohair_subplan is PlanPipeline:
@@ -266,12 +263,9 @@ def _from_project(project_op: ProjectRel, base_rel: Rel) -> Any:
 
 
 @MohairFrom.register
-def _from_aggregate(aggregate_op: AggregateRel, base_rel: Rel) -> Any:
-    print('translating <Aggregate>')
-
-    mohair_subplan  = MohairFrom(aggregate_op.input)
-    # mohair_op       = Aggregation(aggregate_op, base_rel)
-    mohair_op       = Aggregation(aggregate_op)
+def _from_aggregate(aggregate_op: AggregateRel) -> Any:
+    mohair_subplan = MohairFrom(aggregate_op.input)
+    mohair_op      = Aggregation(aggregate_op)
 
     return PlanBreak(mohair_op, mohair_subplan.name, [mohair_subplan])
 
@@ -279,30 +273,21 @@ def _from_aggregate(aggregate_op: AggregateRel, base_rel: Rel) -> Any:
 # >> Translations for leaf relations
 
 @MohairFrom.register
-def _from_readrel(read_op: ReadRel, base_rel: Rel) -> Any:
-    print('translating <Read>')
-
-    # mohair_op = Read(read_op, base_rel)
+def _from_readrel(read_op: ReadRel) -> Any:
     mohair_op = Read(read_op)
     return PlanPipeline([mohair_op], mohair_op.name)
 
 @MohairFrom.register
-def _from_skyrel(sky_op: SkyRel, base_rel: Rel) -> Any:
-    print('translating <SkyPartition>')
-
-    # mohair_op = SkyPartition(base_rel, sky_op)
+def _from_skyrel(sky_op: SkyRel) -> Any:
     mohair_op = SkyPartition(sky_op)
     return PlanPipeline([mohair_op], mohair_op.name)
 
 # >> Translations for join and n-ary relations
 
 @MohairFrom.register
-def _from_joinrel(join_op: JoinRel, base_rel: Rel) -> Any:
-    print('translating <Join>')
-
+def _from_joinrel(join_op: JoinRel) -> Any:
     left_subplan    = MohairFrom(join_op.left)
     right_subplan   = MohairFrom(join_op.right)
-    # mohair_op       = Join(join_op, base_rel)
     mohair_op       = Join(join_op)
 
     return PlanBreak(mohair_op, subplans=[left_subplan, right_subplan])
