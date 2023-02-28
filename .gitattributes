@@ -1,2 +1,5 @@
 resources/assets/ filter=lfs diff=lfs merge=lfs -text
 resources/assets/Mohair[[:space:]]-[[:space:]]Architecture.png filter=lfs diff=lfs merge=lfs -text
+resources/examples/average-expression.substrait filter=lfs diff=lfs merge=lfs -text
+resources/examples/average-expression.substrait.txt filter=lfs diff=lfs merge=lfs -text
+resources/examples/select-expr.substrait filter=lfs diff=lfs merge=lfs -text
