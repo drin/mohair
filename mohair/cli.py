@@ -23,6 +23,7 @@
 # Dependencies
 
 # >> Standard libs
+import sys
 from pathlib import Path
 
 # >> Third-party

@@ -50,6 +50,10 @@ from pyarrow.flight import Result
 #   |> Storage interfaces
 from mohair.storage.dbms import DuckDBMS
 
+#   |> Query processor interfaces
+from mohair.query.planner import QueryPlan
+from mohair.query.planner import TranslateSubstrait
+
 
 # ------------------------------
 # Classes
@@ -170,26 +174,37 @@ class DatabaseService(FlightServerBase):
 
         pass
 
-    def do_action(self, context, action):
-        """ Custom action handler.  """
-
-        if action.type == 'query':
-            action_result = self.action_query(action.body.to_pybytes())
-        else:
-            raise NotImplementedError
-
-        return action_result
-
-    def action_query(self, query_plan):
+    def action_query(self, plan_as_msg):
         """
-        Handler for `query` action, which is called via `do_action('query', ...)`.
+        Handler for `query` action, which is called via `do_action` with 'query' as the
+        `ActionType`.
 
         This action expects a substrait plan as bytes, and should be able to parse the
         bytes using substrait protobuf wrappers.
         """
 
         print('Received query plan')
-        yield Result('Received query plan'.encode('utf-8'))
+        query_plan = TranslateSubstrait(plan_as_msg)
+        yield Result(str(query_plan).encode('utf-8'))
+
+    def action_unknown(self, *args, **kwargs):
+        """ Handler for unknown actions that simply raises an error. """
+
+        raise NotImplementedError
+
+    def do_action(self, context, action):
+        """
+        Handler for custom-defined actions. An action consists of an `ActionType` and
+        opaque bytes as a "body". The `ActionType` is used for resolving a particular
+        handler (e.g. `action_query` for 'query' action type). The argument to the
+        resolved handler is always the full opaque bytes.
+        """
+
+        # resolve a handler function; the default is `action_unknown`
+        fn_handler = getattr(self, f'action_{action.type}', self.action_unknown)
+
+        # return the result of the handler; which may be `NotImplementedError`
+        return fn_handler(action.body.to_pybytes())
 
 
 class ComputationalStorageService(FlightServerBase):
