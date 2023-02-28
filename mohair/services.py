@@ -44,6 +44,7 @@ from pyarrow import ipc
 #   |> Flight types
 from pyarrow.flight import FlightDescriptor, FlightEndpoint
 from pyarrow.flight import FlightServerBase, FlightInfo
+from pyarrow.flight import Result
 
 # >> Internal libs
 #   |> Storage interfaces
@@ -86,7 +87,7 @@ class DatabaseService(FlightServerBase):
 
     # TODO: consider suffixing db_fpath with skytether domain
     def __init__(self, service_location, db_fpath,  **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(service_location, **kwargs)
 
         self.__service_loc = service_location
 
@@ -119,6 +120,8 @@ class DatabaseService(FlightServerBase):
         locations this DatabaseService was initialized with. Other metadata information is
         obtained from the database table (converted into an Arrow table).
         """
+
+        print(f'Constructing FlightInfo for [{table_name}]')
 
         db_table = self.db.table(table_name).arrow()
 
@@ -160,7 +163,33 @@ class DatabaseService(FlightServerBase):
         pass
 
     def do_get(self, context, ticket):
+        """
+        Handler for a `get` request. For mohair, a `ticket` is expected to be a substrait
+        plan.
+        """
+
         pass
+
+    def do_action(self, context, action):
+        """ Custom action handler.  """
+
+        if action.type == 'query':
+            action_result = self.action_query(action.body.to_pybytes())
+        else:
+            raise NotImplementedError
+
+        return action_result
+
+    def action_query(self, query_plan):
+        """
+        Handler for `query` action, which is called via `do_action('query', ...)`.
+
+        This action expects a substrait plan as bytes, and should be able to parse the
+        bytes using substrait protobuf wrappers.
+        """
+
+        print('Received query plan')
+        yield Result('Received query plan'.encode('utf-8'))
 
 
 class ComputationalStorageService(FlightServerBase):
