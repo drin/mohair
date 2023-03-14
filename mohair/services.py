@@ -35,7 +35,11 @@ files on a local filesystem).
 # Dependencies
 
 # >> Standard libs
-import pathlib
+import sys
+import logging
+import pdb
+
+from pathlib import Path
 
 # >> Arrow
 #   |> Core types
@@ -44,15 +48,30 @@ from pyarrow import ipc
 #   |> Flight types
 from pyarrow.flight import FlightDescriptor, FlightEndpoint
 from pyarrow.flight import FlightServerBase, FlightInfo
-from pyarrow.flight import Result
+from pyarrow.flight import Result, RecordBatchStream
 
 # >> Internal libs
+
+#   |> Logging
+from mohair import AddConsoleLogHandler
+from mohair import default_loglevel
+
 #   |> Storage interfaces
 from mohair.storage.dbms import DuckDBMS
 
 #   |> Query processor interfaces
 from mohair.query.planner import QueryPlan
 from mohair.query.planner import TranslateSubstrait
+from mohair.query.executor import ExecuteSubstrait
+
+
+# ------------------------------
+# Module variables
+
+# >> Logging
+logger = logging.getLogger(__name__)
+logger.setLevel(default_loglevel)
+AddConsoleLogHandler(logger)
 
 
 # ------------------------------
@@ -94,6 +113,7 @@ class DatabaseService(FlightServerBase):
         super().__init__(service_location, **kwargs)
 
         self.__service_loc = service_location
+        self.results       = {}
 
         if db_fpath and db_fpath.is_file():
             self.db         = DuckDBMS.InFile(db_fpath)
@@ -125,7 +145,7 @@ class DatabaseService(FlightServerBase):
         obtained from the database table (converted into an Arrow table).
         """
 
-        print(f'Constructing FlightInfo for [{table_name}]')
+        logger.debug(f'Constructing FlightInfo for [{table_name}]')
 
         db_table = self.db.table(table_name).arrow()
 
@@ -168,11 +188,12 @@ class DatabaseService(FlightServerBase):
 
     def do_get(self, context, ticket):
         """
-        Handler for a `get` request. For mohair, a `ticket` is expected to be a substrait
-        plan.
+        Handler for a `get` request. For mohair, a `ticket` is expected to be the hash of
+        a substrait plan, as defined by QueryPlan.__hash__().
         """
 
-        pass
+        result_name = QueryPlan.FromBytes(ticket.ticket)
+        return RecordBatchStream(self.results[result_name])
 
     def action_query(self, plan_as_msg):
         """
@@ -183,9 +204,22 @@ class DatabaseService(FlightServerBase):
         bytes using substrait protobuf wrappers.
         """
 
-        print('Received query plan')
+        logger.debug('Received query plan')
         query_plan = TranslateSubstrait(plan_as_msg)
-        yield Result(str(query_plan).encode('utf-8'))
+        log_msg    = 'Translated query plan'
+        logger.debug(log_msg)
+        yield Result(log_msg.encode('utf-8'))
+
+        query_results = ExecuteSubstrait(query_plan)
+        log_msg       = 'Executed query plan'
+        logger.debug(log_msg)
+        yield Result(log_msg.encode('utf-8'))
+
+        # pdb.set_trace()
+        result_name = hash(query_plan)
+        logger.debug(f'Result name: {result_name}')
+        self.results[result_name] = query_results
+        yield Result(QueryPlan.ToBytes(result_name))
 
     def action_unknown(self, *args, **kwargs):
         """ Handler for unknown actions that simply raises an error. """
@@ -251,7 +285,7 @@ class SmartFileService(FlightServerBase):
 
     def __init__(self, root_dirpath='/tmp', **kwargs):
         super().__init__(**kwargs)
-        self.root_dir = pathlib.Path(root_dirpath)
+        self.root_dir = Path(root_dirpath)
 
         # a way to identify what datasets are in memory
         #   <file descriptor: FlightDescriptor> -> <file ticket: FlightTicket>

@@ -27,8 +27,94 @@ The execution portion of query processing for decomposable queries.
 
 # ------------------------------
 # Dependencies
-from mohair.substrait.algebra_pb2 import Rel
+
+# >> Standard libs
+import logging
+
+from pathlib import Path
+
+# >> Third-party
+import pyarrow
+
+#   |> modules
+from pyarrow import substrait
+
+# >> Internal
+
+#   |> Logging
+from mohair import AddConsoleLogHandler
+from mohair import default_loglevel
+
+#   |> classes
+from mohair.query.planner import QueryPlan
+
+
+# ------------------------------
+# Module variables
+
+# >> Logging
+logger = logging.getLogger(__name__)
+logger.setLevel(default_loglevel)
+AddConsoleLogHandler(logger)
+
+SAMPLE_FPATH  = Path('resources') / 'examples' / 'sample-data.tsv'
+SAMPLE_SCHEMA = pyarrow.schema([
+     pyarrow.field('gene_id'   , pyarrow.string())
+    ,pyarrow.field('cell_id'   , pyarrow.string())
+    ,pyarrow.field('expression', pyarrow.float32())
+])
 
 
 # ------------------------------
 # Classes
+
+
+# ------------------------------
+# Functions
+
+def TableFromTSV(data_fpath: Path = SAMPLE_FPATH) -> pyarrow.Table:
+    """
+    Convenience function that creates an arrow table from :data_fpath: using hard-coded
+    assumptions.
+    """
+
+    # read data from the given file; assume 3 columns (see `SAMPLE_SCHEMA`)
+    with open(data_fpath) as data_handle:
+        col_names   = next(data_handle).split(' ')
+        data_by_col = [ [] for _ in col_names ]
+
+        for line in data_handle:
+            fields = line.strip().split(' ')
+
+            data_by_col[0].append(fields[0])
+            data_by_col[1].append(fields[1])
+            data_by_col[2].append(float(fields[2]))
+
+    # construct the table and return it
+    return pyarrow.Table.from_arrays(
+         [
+              pyarrow.array(data_by_col[0], type=pyarrow.string())
+             ,pyarrow.array(data_by_col[1], type=pyarrow.string())
+             ,pyarrow.array(data_by_col[2], type=pyarrow.float32())
+         ]
+        ,schema=SAMPLE_SCHEMA
+    )
+
+def MohairTableProvider(table_names, expected_schema=None):
+    for tname in table_names:
+        logger.debug(f'Table requested: [{tname}]')
+
+        if tname == 'expr': return TableFromTSV()
+
+    return
+
+def ExecuteSubstrait(mohair_plan: QueryPlan) -> pyarrow.Table:
+    logger.debug('Executing substrait...')
+    result_reader = substrait.run_query(
+         mohair_plan.plan_msg
+        ,table_provider=MohairTableProvider
+    )
+
+    logger.debug('Query plan executed')
+
+    return result_reader.read_all()
