@@ -24,6 +24,8 @@
 
 # >> Standard libs
 import sys
+import logging
+
 from pathlib import Path
 
 # >> Third-party
@@ -31,12 +33,25 @@ import click
 
 # >> Internal libs
 
+#   |> Logging
+from mohair import AddConsoleLogHandler
+from mohair import default_loglevel
+
 #   |> Clients and Services
 from mohair.clients import MohairClient
 from mohair.services import DatabaseService
 
 #   |> module variables
 from mohair.configs import GRPC_PORT, DB_FPATH, DB_ENGINES
+
+
+# ------------------------------
+# Module variables
+
+# >> Logging
+logger = logging.getLogger(__name__)
+logger.setLevel(default_loglevel)
+AddConsoleLogHandler(logger)
 
 
 # ------------------------------
@@ -115,8 +130,8 @@ def service(srv_ctx, port):
               ,show_default=True)
 @cli_service_ctx
 def database(srv_ctx, data_path, engine):
-    print(f'DB data path: {data_path}')
-    print(f'Using DBMS engine: {engine}')
+    logger.debug(f'DB data path: {data_path}')
+    logger.debug(f'Using DBMS engine: {engine}')
 
     # TODO: make this cleaner
     if engine == DB_ENGINES[0]:
@@ -154,7 +169,7 @@ def send(srv_ctx, plan_file):
 #   |> Service commands (common)
 # @service.command()
 # def status(srv_ctx):
-#     print(srv_ctx.service.info())
+#     logger.debug(srv_ctx.service.info())
 # 
 #     if not dry_run:
 #         srv_ctx.service.serve()
@@ -165,7 +180,7 @@ def send(srv_ctx, plan_file):
 @click.option('--dry-run/--no-dry-run', default=False, show_default=True)
 @cli_service_ctx
 def start(srv_ctx, dry_run):
-    print(srv_ctx.service.info())
+    logger.debug(srv_ctx.service.info())
 
     if not dry_run:
         srv_ctx.service.serve()

@@ -29,13 +29,21 @@ Convenience classes and functions for processing relational operators.
 # Dependencies
 
 # >> Standard libs
+import logging
+
 from typing import Any
 
 from functools import singledispatch
 from dataclasses import dataclass, field
 
-# >> Substrait definitions
-#   |> relation types for common, leaf, unary, and N-ary relations
+# >> Internal
+
+#   |> Logging
+from mohair import AddConsoleLogHandler
+from mohair import default_loglevel
+
+#   |> Substrait definitions
+#       |> relation types for common, leaf, unary, and N-ary relations
 from mohair.substrait.algebra_pb2 import Rel
 from mohair.substrait.algebra_pb2 import ReadRel, ExtensionLeafRel
 from mohair.substrait.algebra_pb2 import (FilterRel,  FetchRel, AggregateRel, SortRel,
@@ -43,9 +51,18 @@ from mohair.substrait.algebra_pb2 import (FilterRel,  FetchRel, AggregateRel, So
 from mohair.substrait.algebra_pb2 import (JoinRel, SetRel, ExtensionMultiRel,
                                           HashJoinRel, MergeJoinRel)
 
-# >> Mohair definitions
-#   |> leaf relation types
+#   |> Mohair definitions
+#       |> leaf relation types
 from mohair.mohair.algebra_pb2 import SkyRel, QueryRel
+
+
+# ------------------------------
+# Module Variables
+
+# >> Logging
+logger = logging.getLogger(__name__)
+logger.setLevel(default_loglevel)
+AddConsoleLogHandler(logger)
 
 
 # ------------------------------
@@ -64,12 +81,18 @@ class Projection(MohairOp):
     def __str__(self):
         return 'Projection()'
 
+    def __hash__(self):
+        return hash(self.__str__())
+
 @dataclass
 class Selection(MohairOp):
     plan_op: FilterRel
 
     def __str__(self):
         return 'Selection()'
+
+    def __hash__(self):
+        return hash(self.__str__())
 
 @dataclass
 class Aggregation(MohairOp):
@@ -78,12 +101,18 @@ class Aggregation(MohairOp):
     def __str__(self):
         return 'Aggregation()'
 
+    def __hash__(self):
+        return hash(self.__str__())
+
 @dataclass
 class Limit(MohairOp):
     plan_op: FetchRel
 
     def __str__(self):
         return 'Limit()'
+
+    def __hash__(self):
+        return hash(self.__str__())
 
 
 #   |> Leaf relational classes
@@ -106,6 +135,9 @@ class Read(MohairOp):
 
         return f'Read({read_type})'
 
+    def __hash__(self):
+        return hash(self.__str__())
+
 # NOTE: this should integrate a skytether partition and a SkyRel message
 @dataclass
 class SkyPartition(MohairOp):
@@ -118,6 +150,9 @@ class SkyPartition(MohairOp):
     def __str__(self):
         return f'SkyPartition({self.name})'
 
+    def __hash__(self):
+        return hash(self.__str__())
+
 
 #   |>  Concrete relational classes (joins)
 @dataclass
@@ -128,12 +163,18 @@ class Join(MohairOp):
     def __str__(self):
         return f'Join({self.name})'
 
+    def __hash__(self):
+        return hash(self.__str__())
+
 @dataclass
 class HashJoin(MohairOp):
     plan_op: HashJoinRel
 
     def __str__(self):
         return f'HashJoin()'
+
+    def __hash__(self):
+        return hash(self.__str__())
 
 @dataclass
 class MergeJoin(MohairOp):
@@ -142,16 +183,34 @@ class MergeJoin(MohairOp):
     def __str__(self):
         return f'MergeJoin()'
 
+    def __hash__(self):
+        return hash(self.__str__())
+
 
 #   |>  Concrete relational classes (N-ary)
 @dataclass
 class SetOp(MohairOp):
     plan_op: SetRel
 
+    def __str__(self):
+        return f'SetOp()'
+
+    def __hash__(self):
+        return hash(self.__str__())
+
 
 # >> High-level plan structure
 @dataclass
-class MohairPlan: pass
+class MohairPlan:
+
+    @classmethod
+    def FromBytes(cls, plan_bytes: bytes, signed: bool=True) -> int:
+        return int.from_bytes(plan_bytes, byteorder='big', signed=signed)
+
+    @classmethod
+    def ToBytes(cls, plan_hash: int, width: int=8, signed: bool=True) -> bytes:
+        return plan_hash.to_bytes(width, byteorder='big', signed=signed)
+
 
 @dataclass
 class PlanPipeline(MohairPlan):
@@ -167,6 +226,9 @@ class PlanPipeline(MohairPlan):
 
     def __str__(self):
         return self.Print()
+
+    def __hash__(self):
+        return sum([hash(op) for op in self.op_pipeline])
 
     def Print(self, indent=''):
         return (
@@ -207,6 +269,9 @@ class PlanBreak(MohairPlan):
     def __str__(self):
         return self.Print()
 
+    def __hash__(self):
+        return hash(self.plan_op) + sum([hash(subplan) for subplan in self.subplans])
+
     def Print(self, indent=''):
         return (
               f'{indent}PlanBreak({self.name}) <{self.plan_op}>\n'
@@ -231,30 +296,31 @@ def _from_rel(plan_op: Rel) -> Any:
     """
 
     op_rel = getattr(plan_op, plan_op.WhichOneof('rel_type'))
-    return MohairFrom(op_rel, plan_op)
+    # return MohairFrom(op_rel, plan_op)
+    return MohairFrom(op_rel)
 
 # >> Translations for unary relations
 @MohairFrom.register
 def _from_filter(filter_op: FilterRel) -> Any:
-    print('translating <Filter>')
+    logger.debug('translating <Filter>')
 
 @MohairFrom.register
 def _from_fetch(fetch_op: FetchRel) -> Any:
-    print('translating <Fetch>')
+    logger.debug('translating <Fetch>')
 
 @MohairFrom.register
 def _from_sort(sort_op: SortRel) -> Any:
-    print('translating <Sort>')
+    logger.debug('translating <Sort>')
 
 @MohairFrom.register
 def _from_project(project_op: ProjectRel) -> Any:
-    print('translating <Project>')
+    logger.debug('translating <Project>')
 
     mohair_subplan = MohairFrom(project_op.input)
     mohair_op      = Projection(project_op)
 
     if mohair_subplan is PlanPipeline:
-        print('\t>> extending pipeline')
+        logger.debug('\t>> extending pipeline')
 
         mohair_subplan.add_op(mohair_op)
         return mohair_subplan

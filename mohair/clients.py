@@ -28,10 +28,35 @@ Interface and implementations of client-side communications with a FlightServer.
 # ------------------------------
 # Dependencies
 
+# >> Standard
+
+import logging
+import pdb
+
 # >> Third-party
+import pyarrow
 
 #   |> Arrow Flight
 from pyarrow import flight
+
+
+# >> Internal
+
+#   |> Logging
+from mohair import AddConsoleLogHandler
+from mohair import default_loglevel
+
+#   |> Plan representation
+from mohair.query.operators import MohairPlan
+
+
+# ------------------------------
+# Module variables
+
+# >> Logging
+logger = logging.getLogger(__name__)
+logger.setLevel(default_loglevel)
+AddConsoleLogHandler(logger)
 
 
 # ------------------------------
@@ -47,7 +72,7 @@ class MohairClient:
 
     @classmethod
     def ConnectTo(cls, service_location):
-        print(f'Establishing connection to [{service_location}]')
+        logger.debug(f'Establishing connection to [{service_location}]')
         return cls(flight.connect(service_location))
 
     def __init__(self, flight_conn, **kwargs):
@@ -59,11 +84,27 @@ class MohairClient:
         """ Requests a list of flights from the remote mohair service. """
 
         for flight in self.__flightconn.list_flights():
-            print(flight)
+            logger.debug(flight)
 
     def SendQueryPlan(self, substrait_plan):
         """ Sends a substrait plan (as bytes) to the remote mohair service. """
 
-        results = self.__flightconn.do_action(flight.Action('query', substrait_plan))
-        for res in results:
-            print(res.body.to_pybytes().decode('utf-8'))
+        log_results = self.__flightconn.do_action(flight.Action('query', substrait_plan))
+
+        # pdb.set_trace()
+        result_msg = next(log_results)
+        while True:
+            log_msg = result_msg.body
+
+            try:
+                result_msg = next(log_results)
+                logger.debug(log_msg.to_pybytes().decode('utf-8'))
+
+            except StopIteration:
+                break
+
+        mohair_ticket = flight.Ticket(result_msg.body.to_pybytes())
+        result_data   = self.__flightconn.do_get(mohair_ticket)
+        # logger.debug(result_data.read_all())
+        for data_result in result_data:
+            logger.debug(data_result.data.to_pandas())
