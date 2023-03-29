@@ -204,6 +204,23 @@ files = [
 ]
 
 [[package]]
+name = "datafusion"
+version = "20.0.0"
+description = "Build and run queries against data"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "datafusion-20.0.0-cp37-abi3-macosx_10_7_x86_64.whl", hash = "sha256:a529dcf69d1ed99e2dea312d7269c8c7c28330db88f197e73cba3d08a45712d9"},
+    {file = "datafusion-20.0.0-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:6fe29e51af3b473db1268756f1bbae367367a66c99f438f2bd47a98fe4ae2d2d"},
+    {file = "datafusion-20.0.0-cp37-abi3-manylinux_2_34_x86_64.whl", hash = "sha256:d950193c58103d28bff13e88c7a331bd897334efbe490f745376195bf04a62ca"},
+    {file = "datafusion-20.0.0.tar.gz", hash = "sha256:e3b5ad340188b804ffb3e4666fbc3580f6c715ba3971760e60d3023aa0fb71e0"},
+]
+
+[package.dependencies]
+pyarrow = ">=6.0.1"
+
+[[package]]
 name = "duckdb"
 version = "0.6.1"
 description = "DuckDB embedded database"
@@ -1115,4 +1132,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "59992590b88eeee10a9d909c03abbcdd9f2e5a1b714314e8cb8544ecb4bc35b1"
+content-hash = "9fcef3586d23342a0a3391f1ee7e0a1caa06bc004f6c4c79bf4bfa067f852e56"
