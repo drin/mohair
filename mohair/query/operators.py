@@ -31,25 +31,42 @@ Convenience classes and functions for processing relational operators.
 # >> Standard libs
 import logging
 
-from typing import Any
-
-from functools import singledispatch
+from typing      import Any
+from functools   import singledispatch
 from dataclasses import dataclass, field
 
-# >> Internal
+# >> Arrow
+from pyarrow import Schema
 
+# >> Internal
 #   |> Logging
 from mohair import AddConsoleLogHandler
 from mohair import default_loglevel
 
 #   |> Substrait definitions
-#       |> relation types for common, leaf, unary, and N-ary relations
-from mohair.substrait.algebra_pb2 import Rel
-from mohair.substrait.algebra_pb2 import ReadRel, ExtensionLeafRel
-from mohair.substrait.algebra_pb2 import (FilterRel,  FetchRel, AggregateRel, SortRel,
-                                          ProjectRel, ExtensionSingleRel)
-from mohair.substrait.algebra_pb2 import (JoinRel, SetRel, ExtensionMultiRel,
-                                          HashJoinRel, MergeJoinRel)
+from mohair.substrait.algebra_pb2 import (
+         # top-level type
+         Rel
+
+         # leaf relations
+        ,ReadRel
+        ,ExtensionLeafRel
+
+         # unary relations
+        ,FilterRel
+        ,FetchRel
+        ,AggregateRel
+        ,SortRel
+        ,ProjectRel
+        ,ExtensionSingleRel
+
+         # n-ary relations
+        ,JoinRel
+        ,SetRel
+        ,ExtensionMultiRel
+        ,HashJoinRel
+        ,MergeJoinRel
+)
 
 #   |> Mohair definitions
 #       |> leaf relation types
@@ -71,7 +88,37 @@ AddConsoleLogHandler(logger)
 # >> Operator structure
 
 @dataclass
-class MohairOp: pass
+class PipelineBreak:
+    """
+    A mixin class that represents a "pipeline breaker," or an operator that must exhaust
+    tuples from input operators (upstream) before sending tuples to an output operator
+    (downstream).
+    """
+
+    def is_breaker(self): return True
+
+@dataclass
+class MohairOp:
+    """
+    A base class representing basic attributes for all operators.
+
+    All operators should have a schema that represents its **output** schema; this does
+    **not** represent all attributes available to the operator.
+
+    All operators should have a list of inputs; so that it's possible to walk the query
+    plan.
+    """
+
+    schema   : Schema
+    input_ops: list['MohairOp']
+
+    def is_breaker(self):
+        """
+        Returns true if this operator requires all of its input before it can send tuples
+        to an output operator.
+        """
+
+        return False
 
 #   |> Unary relational classes
 @dataclass
@@ -285,75 +332,3 @@ class PlanBreak(MohairPlan):
 
 # ------------------------------
 # Functions
-@singledispatch
-def MohairFrom(plan_op) -> Any:
-    raise NotImplementedError(f'No implementation for operator: {plan_op}')
-
-@MohairFrom.register
-def _from_rel(plan_op: Rel) -> Any:
-    """
-    Translation function that propagates through the generic 'Rel' message.
-    """
-
-    op_rel = getattr(plan_op, plan_op.WhichOneof('rel_type'))
-    # return MohairFrom(op_rel, plan_op)
-    return MohairFrom(op_rel)
-
-# >> Translations for unary relations
-@MohairFrom.register
-def _from_filter(filter_op: FilterRel) -> Any:
-    logger.debug('translating <Filter>')
-
-@MohairFrom.register
-def _from_fetch(fetch_op: FetchRel) -> Any:
-    logger.debug('translating <Fetch>')
-
-@MohairFrom.register
-def _from_sort(sort_op: SortRel) -> Any:
-    logger.debug('translating <Sort>')
-
-@MohairFrom.register
-def _from_project(project_op: ProjectRel) -> Any:
-    logger.debug('translating <Project>')
-
-    mohair_subplan = MohairFrom(project_op.input)
-    mohair_op      = Projection(project_op)
-
-    if mohair_subplan is PlanPipeline:
-        logger.debug('\t>> extending pipeline')
-
-        mohair_subplan.add_op(mohair_op)
-        return mohair_subplan
-
-    return PlanPipeline([mohair_op], mohair_subplan.name, [mohair_subplan])
-
-
-@MohairFrom.register
-def _from_aggregate(aggregate_op: AggregateRel) -> Any:
-    mohair_subplan = MohairFrom(aggregate_op.input)
-    mohair_op      = Aggregation(aggregate_op)
-
-    return PlanBreak(mohair_op, mohair_subplan.name, [mohair_subplan])
-
-
-# >> Translations for leaf relations
-
-@MohairFrom.register
-def _from_readrel(read_op: ReadRel) -> Any:
-    mohair_op = Read(read_op)
-    return PlanPipeline([mohair_op], mohair_op.name)
-
-@MohairFrom.register
-def _from_skyrel(sky_op: SkyRel) -> Any:
-    mohair_op = SkyPartition(sky_op)
-    return PlanPipeline([mohair_op], mohair_op.name)
-
-# >> Translations for join and n-ary relations
-
-@MohairFrom.register
-def _from_joinrel(join_op: JoinRel) -> Any:
-    left_subplan    = MohairFrom(join_op.left)
-    right_subplan   = MohairFrom(join_op.right)
-    mohair_op       = Join(join_op)
-
-    return PlanBreak(mohair_op, subplans=[left_subplan, right_subplan])

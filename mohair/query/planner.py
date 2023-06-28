@@ -30,38 +30,51 @@ The plan definition and planning portion of query processing for decomposable qu
 
 # >> Standard libs
 import logging
+import pdb
 
-from functools import singledispatch
+from functools   import singledispatch
 from dataclasses import dataclass
+from typing      import Any
 
-# >> Third-party libs
+# >> Substrait
+from mohair.substrait.plan_pb2    import Plan
+from mohair.substrait.algebra_pb2 import (
+         # top-level type
+         Rel
 
-#   |> substrait types
-from mohair.substrait.plan_pb2 import Plan
-
-from mohair.substrait.algebra_pb2 import Rel
-from mohair.substrait.algebra_pb2 import ( ReadRel  , ExtensionLeafRel
+         # leaf relations
+        ,ReadRel
+        ,ExtensionLeafRel
                                           
-                                          # unary relations
-                                          ,FilterRel,  FetchRel, AggregateRel, SortRel
-                                          ,ProjectRel, ExtensionSingleRel
+         # unary relations
+        ,FilterRel
+        ,FetchRel
+        ,AggregateRel
+        ,SortRel
+        ,ProjectRel
+        ,ExtensionSingleRel
 
-                                          # n-ary relations
-                                          ,JoinRel, SetRel, ExtensionMultiRel
-                                          ,HashJoinRel, MergeJoinRel
-                                         )
+         # n-ary relations
+        ,JoinRel
+        ,SetRel
+        ,ExtensionMultiRel
+        ,HashJoinRel
+        ,MergeJoinRel
+)
+
 
 # >> Internal 
-
 #   |> Logging
 from mohair import AddConsoleLogHandler
 from mohair import default_loglevel
 
 #   |> classes
-from mohair.query.operators import MohairPlan
-
-#   |> functions
-from mohair.query.operators import MohairFrom
+from mohair.mohair.algebra_pb2 import SkyRel, QueryRel
+from mohair.query.operators import ( MohairPlan, MohairOp
+                                    ,Projection, Selection, Aggregation, Join
+                                    ,Read, SkyPartition
+                                    ,PlanPipeline, PlanBreak
+                                   )
 
 
 # ------------------------------
@@ -107,7 +120,28 @@ class QueryPlan:
 # ------------------------------
 # Functions (translation)
 
+@singledispatch
+def MohairFrom(plan_op) -> Any:
+    """
+    A single-dispatch function that translates a substrait operator to a mohair operator.
+    """
+
+    raise NotImplementedError(f'No implementation for operator: {plan_op}')
+
+
+def PrintMohairPlan(mohair_op: MohairOp, indent: str = '') -> Any:
+    print(f'{indent}{mohair_op}')
+
+    for input_op in mohair_op.input_ops:
+        PrintMohairPlan(input_op, indent + '\t')
+
+
 def TranslateSubstrait(substrait_msg: bytes) -> QueryPlan:
+    """
+    A convenience function that takes a serialized substrait plan (python bytes) and
+    returns a `QueryPlan` instance.
+    """
+
     substrait_plan = Plan()
     substrait_plan.ParseFromString(substrait_msg)
 
@@ -119,12 +153,85 @@ def TranslateSubstrait(substrait_msg: bytes) -> QueryPlan:
             # A query plan should have only 1 `root`, even if it has many trees
             assert mohair_plan == None
 
+            # pdb.set_trace()
             mohair_plan = MohairFrom(plan_root.root.input)
 
     # Very confusing if a query plan did not have any `root`
     assert mohair_plan is not None
 
     return QueryPlan(substrait_msg, Plan(), mohair_plan)
+
+
+# ------------------------------
+# Dispatch functions for `MohairFrom`
+
+@MohairFrom.register
+def _from_rel(plan_op: Rel) -> Any:
+    """
+    Translation function that propagates through the generic 'Rel' message.
+    """
+
+    op_rel = getattr(plan_op, plan_op.WhichOneof('rel_type'))
+    # return MohairFrom(op_rel, plan_op)
+    return MohairFrom(op_rel)
+
+
+# >> Translations for unary relations
+@MohairFrom.register
+def _from_filter(filter_op: FilterRel) -> Any:
+    logger.debug('translating <Filter>')
+
+@MohairFrom.register
+def _from_fetch(fetch_op: FetchRel) -> Any:
+    logger.debug('translating <Fetch>')
+
+@MohairFrom.register
+def _from_sort(sort_op: SortRel) -> Any:
+    logger.debug('translating <Sort>')
+
+@MohairFrom.register
+def _from_project(project_op: ProjectRel) -> Any:
+    logger.debug('translating <Project>')
+
+    mohair_subplan = MohairFrom(project_op.input)
+    mohair_op      = Projection(project_op)
+
+    if mohair_subplan is PlanPipeline:
+        logger.debug('\t>> extending pipeline')
+
+        mohair_subplan.add_op(mohair_op)
+        return mohair_subplan
+
+    return PlanPipeline([mohair_op], mohair_subplan.name, [mohair_subplan])
+
+@MohairFrom.register
+def _from_aggregate(aggregate_op: AggregateRel) -> Any:
+    mohair_subplan = MohairFrom(aggregate_op.input)
+    mohair_op      = Aggregation(aggregate_op)
+
+    return PlanBreak(mohair_op, mohair_subplan.name, [mohair_subplan])
+
+
+# >> Translations for leaf relations
+@MohairFrom.register
+def _from_readrel(read_op: ReadRel) -> Any:
+    mohair_op = Read(read_op.base_schema, None, read_op)
+    return PlanPipeline([mohair_op], mohair_op.name)
+
+@MohairFrom.register
+def _from_skyrel(sky_op: SkyRel) -> Any:
+    mohair_op = SkyPartition(sky_op)
+    return PlanPipeline([mohair_op], mohair_op.name)
+
+
+# >> Translations for join and n-ary relations
+@MohairFrom.register
+def _from_joinrel(join_op: JoinRel) -> Any:
+    left_subplan    = MohairFrom(join_op.left)
+    right_subplan   = MohairFrom(join_op.right)
+    mohair_op       = Join(join_op)
+
+    return PlanBreak(mohair_op, subplans=[left_subplan, right_subplan])
 
 
 # ------------------------------
