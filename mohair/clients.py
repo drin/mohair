@@ -89,9 +89,9 @@ class MohairClient:
     def SendQueryPlan(self, substrait_plan):
         """ Sends a substrait plan (as bytes) to the remote mohair service. """
 
+        # pdb.set_trace()
         log_results = self.__flightconn.do_action(flight.Action('query', substrait_plan))
 
-        # pdb.set_trace()
         result_msg = next(log_results)
         while True:
             log_msg = result_msg.body
