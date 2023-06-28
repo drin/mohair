@@ -35,8 +35,10 @@ from operator    import itemgetter, attrgetter
 from functools   import singledispatch, singledispatchmethod
 from dataclasses import dataclass, field
 
-# >> Internal
+# >> Arrow
+from pyarrow import Schema
 
+# >> Internal
 #   |> Logging
 from mohair import CreateMohairLogger
 
