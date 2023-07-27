@@ -21,7 +21,7 @@
 # ------------------------------
 # Module Docstring
 """
-Convenience classes and functions for wrapping substrait types.
+Convenience classes and functions for wrapping substrait and mohair types.
 """
 
 
@@ -29,13 +29,117 @@ Convenience classes and functions for wrapping substrait types.
 # Dependencies
 
 # >> Standard libs
-from functools import singledispatch
-from dataclasses import dataclass
+from operator import attrgetter
+from dataclasses import dataclass, field
+from typing import Any, TypeAlias
 
-# >> Substrait definitions
-# from mohair.substrait.type_pb2 import *
+# >> Internal
+from mohair import CreateMohairLogger
 
 
 # ------------------------------
-# Classes and Functions
+# Module Variables
+
+# >> Logging
+logger = CreateMohairLogger(__name__)
+
+# >> Forward references (Type aliases)
+OpTypeAlias  : TypeAlias = 'MohairOp'
+PlanTypeAlias: TypeAlias = 'MohairPlan'
+
+
+# ------------------------------
+# Classes
+
+# >> Operator base classes
+@dataclass
+class MohairOp:
+    """
+    A single operator in a query plan that primarily maintains references to operators in
+    the substrait plan.
+    """
+
+    plan_op   : Any
+    op_inputs : tuple[OpTypeAlias, ...]
+    table_name: str = ''
+
+    def __str__(self):
+        op_name = self.plan_op.DESCRIPTOR.name
+        return f'{op_name}({self.table_name})'
+
+@dataclass
+class PipelineOp(MohairOp):
+    """ A query operator that tuples can stream through. """
+
+    def ViewStr(self): return f'← {self}'
+
+
+@dataclass
+class BreakerOp(MohairOp):
+    """ A stateful query operator that tuples cannot naively stream through. """
+
+    def ViewStr(self): return f'↤ {self}'
+
+
+# >> Graph classes
+
+@dataclass
+class MohairPlan:
+    """
+    Query plan that propagates through a computational storage system. Also stores
+    properties of the plan for later analysis.
+
+    :plan_root:      The `MohairOp` that is the root of this plan.
+    :pipeline_len:   The length of the longest pipeline.
+    :breaker_height: The max count of pipeline breakers in the plan.
+    :breaker_count:  The total count of breakers in the plan.
+    :breaker_leaves: The "bottom-most" pipeline breakers in the query plan.
+    """
+
+    plan_root: MohairOp
+
+    pipeline_len  : int = 0
+    plan_width    : int = 0
+    plan_height   : int = 0
+    breaker_count : int = 0
+    breaker_height: int = 0
+    breaker_leaves: list[PlanTypeAlias] = field(default_factory=list)
+    breaker_list  : list[PlanTypeAlias] = field(default_factory=list)
+
+    def __hash__(self):
+        plan_hash = hash(self.plan_root)
+        logger.debug(f'Hash of MohairPlan: {plan_hash}')
+
+        return plan_hash
+
+    def IncrementPipelineLength(self) -> int:
+        """
+        Function to get an incremented pipeline length. If this plan is rooted with a
+        pipeline-able operator, then :pipeline_len: is incremented, otherwise 1 is
+        returned.
+        """
+
+        if issubclass(type(self.plan_root), BreakerOp): return 1
+        return self.pipeline_len + 1
+
+@dataclass
+class SuperPlan:
+    """ Portion of a query plan that is *not* delegated downstream. """
+
+    query_plan     : MohairPlan
+    anchor_root    : MohairPlan
+    anchors_subplan: tuple[MohairOp, ...]
+
+
+@dataclass
+class SubPlan:
+    """ Portion of a query plan that *is* delegated downstream. """
+
+    anchor_root  : MohairPlan
+    query_subplan: MohairOp
+
+
+@dataclass
+class LogicalExecPlan(MohairPlan):
+    pass
 

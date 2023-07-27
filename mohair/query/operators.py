@@ -29,10 +29,10 @@ Convenience classes and functions for processing relational operators.
 # Dependencies
 
 # >> Standard libs
-import logging
+from typing import Any, TypeAlias
 
-from typing      import Any
-from functools   import singledispatch
+from operator    import itemgetter, attrgetter
+from functools   import singledispatch, singledispatchmethod
 from dataclasses import dataclass, field
 
 # >> Arrow
@@ -40,8 +40,7 @@ from pyarrow import Schema
 
 # >> Internal
 #   |> Logging
-from mohair import AddConsoleLogHandler
-from mohair import default_loglevel
+from mohair import CreateMohairLogger
 
 #   |> Substrait definitions
 from mohair.substrait.algebra_pb2 import (
@@ -68,267 +67,212 @@ from mohair.substrait.algebra_pb2 import (
         ,MergeJoinRel
 )
 
-#   |> Mohair definitions
-#       |> leaf relation types
+#       |> Mohair extensions
 from mohair.mohair.algebra_pb2 import SkyRel, QueryRel
+
+#   |> Internal classes
+from mohair.query.types import MohairOp, PipelineOp, BreakerOp
 
 
 # ------------------------------
 # Module Variables
 
 # >> Logging
-logger = logging.getLogger(__name__)
-logger.setLevel(default_loglevel)
-AddConsoleLogHandler(logger)
+logger = CreateMohairLogger(__name__)
 
 
 # ------------------------------
 # Classes
 
-# >> Operator structure
+# >> Query operators that can stream data
+@dataclass
+class Projection(PipelineOp):
+    plan_op : ProjectRel
 
 @dataclass
-class PipelineBreak:
-    """
-    A mixin class that represents a "pipeline breaker," or an operator that must exhaust
-    tuples from input operators (upstream) before sending tuples to an output operator
-    (downstream).
-    """
-
-    def is_breaker(self): return True
+class Selection(PipelineOp):
+    plan_op : FilterRel
 
 @dataclass
-class MohairOp:
-    """
-    A base class representing basic attributes for all operators.
-
-    All operators should have a schema that represents its **output** schema; this does
-    **not** represent all attributes available to the operator.
-
-    All operators should have a list of inputs; so that it's possible to walk the query
-    plan.
-    """
-
-    schema   : Schema
-    input_ops: list['MohairOp']
-
-    def is_breaker(self):
-        """
-        Returns true if this operator requires all of its input before it can send tuples
-        to an output operator.
-        """
-
-        return False
-
-#   |> Unary relational classes
-@dataclass
-class Projection(MohairOp):
-    plan_op: ProjectRel
-
-    def __str__(self):
-        return 'Projection()'
-
-    def __hash__(self):
-        return hash(self.__str__())
+class Limit(PipelineOp):
+    plan_op : FetchRel
 
 @dataclass
-class Selection(MohairOp):
-    plan_op: FilterRel
+class Sort(PipelineOp):
+    plan_op : SortRel
 
-    def __str__(self):
-        return 'Selection()'
 
-    def __hash__(self):
-        return hash(self.__str__())
-
+# >> Leaf query operators (can stream data and are base cases)
 @dataclass
-class Aggregation(MohairOp):
-    plan_op: AggregateRel
-
-    def __str__(self):
-        return 'Aggregation()'
-
-    def __hash__(self):
-        return hash(self.__str__())
-
-@dataclass
-class Limit(MohairOp):
-    plan_op: FetchRel
-
-    def __str__(self):
-        return 'Limit()'
-
-    def __hash__(self):
-        return hash(self.__str__())
-
-
-#   |> Leaf relational classes
-@dataclass
-class Read(MohairOp):
-    plan_op: ReadRel
-    name   : str = None
+class Read(PipelineOp):
+    plan_op     : ReadRel
+    op_inputs   : tuple[()] = ()
 
     def __post_init__(self):
-        # grab the name of the table; otherwise just its type for now
+        # grab the name of the table if it's available
         if self.plan_op.HasField('named_table'):
-            self.name = '/'.join(self.plan_op.named_table.names)
+            self.table_name = '/'.join(self.plan_op.named_table.names)
 
         else:
-            # TODO: we will eventually want a more robust name than the type of ReadRel
-            self.name = self.plan_op.WhichOneof('read_type')
+            self.table_name = self.read_type()
 
     def __str__(self):
-        read_type = self.plan_op.WhichOneof('read_type')
+        op_name   = self.plan_op.DESCRIPTOR.name
+        read_type = self.read_type()
 
-        return f'Read({read_type})'
+        return f'{op_name}({read_type}:{self.table_name})'
 
-    def __hash__(self):
-        return hash(self.__str__())
+    def read_type(self):
+        return self.plan_op.WhichOneof('read_type')
+
 
 # NOTE: this should integrate a skytether partition and a SkyRel message
 @dataclass
-class SkyPartition(MohairOp):
-    plan_op: SkyRel
-    name   : str = None
+class SkyPartition(PipelineOp):
+    """
+    A custom query operator to be used in a substrait query plan. This provides a way for
+    the schema to be resolved at a remote query engine instead of having to know it up
+    front.
+    """
+
+    plan_op     : SkyRel
+    op_inputs   : tuple[()] = ()
 
     def __post_init__(self):
-        self.name = f'{self.plan_op.domain}/{self.plan_op.partition}'
+        dname = self.domain_key()
+        pname = self.partition_key()
 
-    def __str__(self):
-        return f'SkyPartition({self.name})'
+        self.table_name = f'{dname}/{pname}'
 
-    def __hash__(self):
-        return hash(self.__str__())
+    def domain_key(self):
+        return self.plan_op.domain
+
+    def partition_key(self):
+        return self.plan_op.partition
 
 
-#   |>  Concrete relational classes (joins)
+# >> Query operators that cannot stream data
 @dataclass
-class Join(MohairOp):
-    plan_op: JoinRel
-    name   : str = None
-
-    def __str__(self):
-        return f'Join({self.name})'
-
-    def __hash__(self):
-        return hash(self.__str__())
+class Aggregation(BreakerOp):
+    plan_op : AggregateRel
 
 @dataclass
-class HashJoin(MohairOp):
+class Join(BreakerOp):
+    plan_op    : JoinRel
+    op_inputs  : tuple[MohairOp, MohairOp]
+
+@dataclass
+class HashJoin(Join):
     plan_op: HashJoinRel
 
-    def __str__(self):
-        return f'HashJoin()'
-
-    def __hash__(self):
-        return hash(self.__str__())
-
 @dataclass
-class MergeJoin(MohairOp):
+class MergeJoin(Join):
     plan_op: MergeJoinRel
 
-    def __str__(self):
-        return f'MergeJoin()'
-
-    def __hash__(self):
-        return hash(self.__str__())
-
-
-#   |>  Concrete relational classes (N-ary)
 @dataclass
-class SetOp(MohairOp):
-    plan_op: SetRel
-
-    def __str__(self):
-        return f'SetOp()'
-
-    def __hash__(self):
-        return hash(self.__str__())
-
-
-# >> High-level plan structure
-@dataclass
-class MohairPlan:
-
-    @classmethod
-    def FromBytes(cls, plan_bytes: bytes, signed: bool=True) -> int:
-        return int.from_bytes(plan_bytes, byteorder='big', signed=signed)
-
-    @classmethod
-    def ToBytes(cls, plan_hash: int, width: int=8, signed: bool=True) -> bytes:
-        return plan_hash.to_bytes(width, byteorder='big', signed=signed)
-
-
-@dataclass
-class PlanPipeline(MohairPlan):
-    """
-    Represents a holistic plan that has a list of pipelined ops that can be applied to the
-    result of a subplan. If the subplan is None, then this should be a pipeline with a
-    single data source as input.
-    """
-
-    op_pipeline: list[MohairOp]   = field(default_factory=list)
-    name       : str              = None
-    subplans   : list[MohairPlan] = field(default_factory=list)
-
-    def __str__(self):
-        return self.Print()
-
-    def __hash__(self):
-        return sum([hash(op) for op in self.op_pipeline])
-
-    def Print(self, indent=''):
-        return (
-              f'{indent}PlanPipeline({self.name})\n'
-            + f'{indent}[' + '\n\t'.join([str(op) for op in self.op_pipeline]) + ']'
-            + f'\n{indent}|> subplans:\n'
-            + '\n'.join([
-                  subplan.Print(indent + '\t')
-                  for subplan in self.subplans
-              ])
-        )
-
-    def add_op(self, new_op: MohairOp):
-        self.op_pipeline.append(new_op)
-        return self
-
-    def add_ops(self, new_ops: list[MohairOp]):
-        self.op_pipeline.extend(new_ops)
-        return self
-
-@dataclass
-class PlanBreak(MohairPlan):
-    """
-    Represents a holistic plan that has a list of pipelined ops that can be applied to the
-    result of each subplan. This means that each subplan must be grouped first (or streamed
-    over in some appropriate manner) and the pipeline operations can be applied to tuples
-    as they flow through the result of the grouping operation (i.e. join or a set
-    operator).
-    """
-
-    plan_op  : MohairOp
-    name     : str              = None
-    subplans : list[MohairPlan] = field(default_factory=list)
-
-    def __post_init__(self):
-        self.name = '.'.join([sub_root.name for sub_root in self.subplans])
-
-    def __str__(self):
-        return self.Print()
-
-    def __hash__(self):
-        return hash(self.plan_op) + sum([hash(subplan) for subplan in self.subplans])
-
-    def Print(self, indent=''):
-        return (
-              f'{indent}PlanBreak({self.name}) <{self.plan_op}>\n'
-            + f'{indent}>> subplans:\n'
-            + '\n'.join([
-                  subplan.Print(indent + '\t')
-                  for subplan in self.subplans
-              ])
-        )
+class SetOp(BreakerOp):
+    plan_op  : SetRel
 
 
 # ------------------------------
-# Functions
+# Functions for parsing a substrait query plan
+@singledispatch
+def MohairFrom(plan_op) -> Any:
+    """
+    Recursive function to parse the query plan. This handler executes if no other
+    registered handler matches the argument type.
+    """
+
+    raise NotImplementedError(f'No implementation for operator: {plan_op}')
+
+
+@MohairFrom.register
+def _from_rel(plan_op: Rel) -> Any:
+    """
+    Translation function that propagates through the generic 'Rel' message.
+    """
+
+    op_rel = getattr(plan_op, plan_op.WhichOneof('rel_type'))
+    return MohairFrom(op_rel)
+
+
+# >> Translations for unary relations
+@MohairFrom.register
+def _from_project(project_op: ProjectRel) -> Any:
+    logger.debug('translating <Project>')
+
+    op_inputs = (MohairFrom(project_op.input),)
+    return Projection(
+         project_op, op_inputs
+        ,table_name=op_inputs[0].table_name
+    )
+
+
+@MohairFrom.register
+def _from_filter(filter_op: FilterRel) -> Any:
+    logger.debug('translating <Filter>')
+
+    op_inputs = (MohairFrom(filter_op.input),)
+    return Selection(
+         filter_op, op_inputs
+        ,table_name=op_inputs[0].table_name
+    )
+
+
+@MohairFrom.register
+def _from_fetch(fetch_op: FetchRel) -> Any:
+    logger.debug('translating <Fetch>')
+
+    op_inputs = (MohairFrom(fetch_op.input),)
+    return Projection(
+         fetch_op, op_inputs
+        ,table_name=op_inputs[0].table_name
+    )
+
+
+@MohairFrom.register
+def _from_sort(sort_op: SortRel) -> Any:
+    logger.debug('translating <Sort>')
+
+    op_inputs = (MohairFrom(sort_op.input),)
+    return Projection(
+         sort_op, op_inputs
+        ,table_name=op_inputs[0].table_name
+    )
+
+
+@MohairFrom.register
+def _from_aggregate(aggregate_op: AggregateRel) -> Any:
+    logger.debug('translating <Aggregate>')
+
+    op_inputs = (MohairFrom(aggregate_op.input),)
+    return Aggregation(
+         aggregate_op, op_inputs
+        ,table_name=op_inputs[0].table_name
+    )
+
+
+# >> Translations for leaf relations
+@MohairFrom.register
+def _from_readrel(read_op: ReadRel) -> Any:
+    logger.debug('translating <ReadRel>')
+
+    return Read(read_op)
+
+@MohairFrom.register
+def _from_skyrel(sky_op: SkyRel) -> Any:
+    logger.debug('translating <SkyRel>')
+
+    return SkyPartition(sky_op)
+
+
+# >> Translations for join and n-ary relations
+@MohairFrom.register
+def _from_joinrel(join_op: JoinRel) -> Any:
+    logger.debug('translating <JoinRel>')
+
+    op_inputs = (MohairFrom(join_op.left), MohairFrom(join_op.right))
+    return Join(
+         join_op, op_inputs
+        ,table_name=':'.join(map(attrgetter('table_name'), op_inputs))
+    )
