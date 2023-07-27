@@ -29,36 +29,20 @@ The plan definition and planning portion of query processing for decomposable qu
 # Dependencies
 
 # >> Standard libs
-import logging
-
-from functools import singledispatch
 from dataclasses import dataclass
 
 # >> Third-party libs
-
 #   |> substrait types
 from mohair.substrait.plan_pb2 import Plan
 
-from mohair.substrait.algebra_pb2 import Rel
-from mohair.substrait.algebra_pb2 import ( ReadRel  , ExtensionLeafRel
-                                          
-                                          # unary relations
-                                          ,FilterRel,  FetchRel, AggregateRel, SortRel
-                                          ,ProjectRel, ExtensionSingleRel
-
-                                          # n-ary relations
-                                          ,JoinRel, SetRel, ExtensionMultiRel
-                                          ,HashJoinRel, MergeJoinRel
-                                         )
-
 # >> Internal 
-
 #   |> Logging
-from mohair import AddConsoleLogHandler
-from mohair import default_loglevel
+from mohair import CreateMohairLogger
 
 #   |> classes
-from mohair.query.operators import MohairPlan
+from mohair.query.types import MohairOp, MohairPlan, SuperPlan, SubPlan
+from mohair.query.plans import PlanExplorer, PlanViewer
+from mohair.query.decomposition import PlanSplitter
 
 #   |> functions
 from mohair.query.operators import MohairFrom
@@ -68,73 +52,87 @@ from mohair.query.operators import MohairFrom
 # Module Variables
 
 # >> Logging
-logger = logging.getLogger(__name__)
-logger.setLevel(default_loglevel)
-AddConsoleLogHandler(logger)
+logger = CreateMohairLogger(__name__)
 
 
 # ------------------------------
 # Classes
 
 @dataclass
-class QueryPlan:
+class SubstraitPlan:
     """
-    Wrapper class that references the root of a substrait plan as well as the root of a
-    mohair plan. The mohair plan only maintains references to operators in the substrait
-    plan, so this class allows us to re-access the entirety of the substrait plan when
-    necessary.
+    Wrapper class that references a serialized substrait plan and the root of its
+    deserialized representation.
     """
 
-    plan_msg      : bytes
-    substrait_plan: Plan
-    mohair_plan   : MohairPlan = None
-
+    msg : bytes
+    plan: Plan
 
     @classmethod
-    def FromBytes(cls, plan_bytes: bytes) -> int:
-        return MohairPlan.FromBytes(plan_bytes)
+    def FromBytes(cls, plan_bytes: bytes, signed: bool=True) -> int:
+        return int.from_bytes(plan_bytes, byteorder='big', signed=signed)
 
     @classmethod
-    def ToBytes(cls, plan_hash: int) -> bytes:
-        return MohairPlan.ToBytes(plan_hash)
-
-    def __hash__(self):
-        plan_hash = hash(self.mohair_plan)
-        logger.debug(f'Hash of QueryPlan: {plan_hash}')
-        return plan_hash
+    def ToBytes(cls, plan_hash: int, width: int=8, signed: bool=True) -> bytes:
+        return plan_hash.to_bytes(width, byteorder='big', signed=signed)
 
 
 # ------------------------------
 # Functions (translation)
 
-def TranslateSubstrait(substrait_msg: bytes) -> QueryPlan:
+def ParseSubstrait(substrait_msg: bytes) -> SubstraitPlan:
     substrait_plan = Plan()
     substrait_plan.ParseFromString(substrait_msg)
 
-    mohair_plan = None
-    for plan_ndx, plan_root in enumerate(substrait_plan.relations):
+    return SubstraitPlan(substrait_msg, substrait_plan)
+
+
+def ParseQueryPlan(substrait_plan: SubstraitPlan) -> MohairPlan:
+    mohair_root = None
+
+    for plan_ndx, plan_root in enumerate(substrait_plan.plan.relations):
         logger.debug(f'translating plan {plan_ndx}')
 
         if plan_root.HasField('root'):
             # A query plan should have only 1 `root`, even if it has many trees
-            assert mohair_plan == None
+            assert mohair_root == None
 
-            mohair_plan = MohairFrom(plan_root.root.input)
+            mohair_root = MohairFrom(plan_root.root.input)
 
     # Very confusing if a query plan did not have any `root`
-    assert mohair_plan is not None
+    assert mohair_root is not None
 
-    return QueryPlan(substrait_msg, Plan(), mohair_plan)
+    return PlanExplorer.WalkPlan(mohair_root)
+
+
+def ViewQueryPlan(mohair_plan: MohairPlan) -> str:
+    return PlanViewer.View(mohair_plan)
+
+
+def ViewPlanOp(mohair_op: MohairOp) -> str:
+    return PlanViewer.ViewOp(mohair_op)
+
+
+def ViewQueryBreakers(mohair_plan: MohairPlan) -> str:
+    return PlanViewer.ViewBreakers(mohair_plan)
+
+
+def SplitQueryPlan(mohair_plan: MohairPlan) -> tuple[SuperPlan, list[SubPlan]]:
+    return PlanSplitter.SplitPlan(mohair_plan)
 
 
 # ------------------------------
 # Main logic
 
+from pathlib import Path
+
 if __name__ == '__main__':
     # parse sample protobuf from a file, then translate it
-    with open('average-expression.substrait', 'rb') as file_handle:
-        query_plan = TranslateSubstrait(file_handle.read())
+    example_filepath = Path('resources') / 'examples' / 'average-expression.substrait'
+    with open(example_filepath, 'rb') as file_handle:
+        substrait_plan = ParseSubstrait(file_handle.read())
 
+    mohair_plan = ParseQueryPlan(substrait_plan)
+    plan_str    = ViewQueryPlan(mohair_plan, indent='  ')
     logger.debug(f'Mohair Plan:')
-    # logger.debug(f'\t{query_plan.substrait_plan}')
-    logger.debug(f'\t{query_plan.mohair_plan}')
+    logger.debug(plan_str)
