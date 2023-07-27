@@ -34,17 +34,21 @@ import logging
 # ------------------------------
 # Module Variables
 
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 
-default_loglevel = logging.DEBUG
-# default_loglevel = logging.INFO
+# default_loglevel = logging.DEBUG
+default_loglevel = logging.INFO
 
 
 # ------------------------------
 # Convenience functions
 
 def AddConsoleLogHandler(mohair_logger):
+    '''
+    Convenience function to centralize boiler plate for configuring a logger instance.
+    '''
+
     console_loghandler = logging.StreamHandler()
     console_loghandler.setLevel(default_loglevel)
     console_loghandler.setFormatter(logging.Formatter(
@@ -52,3 +56,19 @@ def AddConsoleLogHandler(mohair_logger):
     ))
 
     mohair_logger.addHandler(console_loghandler)
+
+
+def CreateMohairLogger(logger_name, logger_level=default_loglevel):
+    '''
+    Convenience function to centralize boiler plate for creating a logger instance.
+    '''
+
+    # Create instance
+    logger = logging.getLogger(logger_name)
+
+    # Configure instance
+    logger.setLevel(logger_level)
+    AddConsoleLogHandler(logger)
+
+    # Return instance
+    return logger
