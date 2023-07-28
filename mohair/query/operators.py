@@ -42,7 +42,7 @@ from mohair import CreateMohairLogger
 
 #   |> Substrait definitions
 #       |> relation types for common, leaf, unary, and N-ary relations
-from mohair.substrait.algebra_pb2 import Rel
+from mohair.substrait.algebra_pb2 import Rel, RelCommon
 from mohair.substrait.algebra_pb2 import ReadRel, ExtensionLeafRel
 from mohair.substrait.algebra_pb2 import (FilterRel,  FetchRel, AggregateRel, SortRel,
                                           ProjectRel, ExtensionSingleRel)
@@ -158,6 +158,7 @@ class SetOp(BreakerOp):
 
 # ------------------------------
 # Functions for parsing a substrait query plan
+
 @singledispatch
 def MohairFrom(plan_op) -> Any:
     """
@@ -258,3 +259,63 @@ def _from_joinrel(join_op: JoinRel) -> Any:
          join_op, op_inputs
         ,table_name=':'.join(map(attrgetter('table_name'), op_inputs))
     )
+
+
+# ------------------------------
+# Functions for reconstructing a substrait Rel
+
+@singledispatch
+def MohairTo(mohair_op: Any) -> Rel:
+    """ Recursive function to convert a MohairOp wrapper to a substrait Rel. """
+
+    raise NotImplementedError(f'No implementation for type: {type(mohair_op)}')
+
+# >> Translations for unary relations
+@MohairTo.register
+def _to_project(mohair_op: Projection) -> Rel:
+    return Rel(project=mohair_op.plan_op)
+
+@MohairTo.register
+def _to_filter(mohair_op: Selection) -> Rel:
+    return Rel(filter=mohair_op.plan_op)
+
+@MohairTo.register
+def _to_fetch(mohair_op: Limit) -> Rel:
+    return Rel(fetch=mohair_op.plan_op)
+
+@MohairTo.register
+def _to_sort(mohair_op: Sort) -> Rel:
+    return Rel(sort=mohair_op.plan_op)
+
+@MohairTo.register
+def _to_aggregate(mohair_op: Aggregation) -> Rel:
+    return Rel(aggregate=mohair_op.plan_op)
+
+@MohairTo.register
+def _to_readrel(mohair_op: Read) -> Rel:
+    return Rel(read=mohair_op.plan_op)
+
+@MohairTo.register
+def _to_skyrel(mohair_op: SkyPartition) -> Rel:
+    sky_rel = Rel(extension_leaf=ExtensionLeafRel(
+         common=RelCommon(direct=RelCommon.Direct())
+    ))
+
+    # because of how this property is defined, we have to explicitly
+    # pack our custom substrait message
+    sky_rel.extension_leaf.detail.Pack(mohair_op.plan_op)
+
+    return sky_rel
+
+# >> Translations for join and n-ary relations
+@MohairTo.register
+def _to_joinrel(mohair_op: Join) -> Rel:
+    return Rel(join=mohair_op.plan_op)
+
+@MohairTo.register
+def _to_hash_joinrel(mohair_op: HashJoin) -> Rel:
+    return Rel(hash_join=mohair_op.plan_op)
+
+@MohairTo.register
+def _to_merge_joinrel(mohair_op: MergeJoin) -> Rel:
+    return Rel(merge_join=mohair_op.plan_op)
