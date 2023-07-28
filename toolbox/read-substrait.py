@@ -2,6 +2,8 @@
 # Dependencies
 
 # >> Standard modules
+import sys
+
 from pathlib import Path
 
 # >> Third-party
@@ -26,7 +28,9 @@ if __name__ == '__main__':
     substrait_plan = Plan()
 
     # populate the protobuf structure from binary
-    with open(example_input, 'rb') as file_handle:
+    plan_message_fpath = Path(sys.argv[1]) or example_input
+    with open(plan_message_fpath, 'rb') as file_handle:
+        print(f'Source of plan: {plan_message_fpath}')
         substrait_plan.ParseFromString(file_handle.read())
 
     # print the structure
