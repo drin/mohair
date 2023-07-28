@@ -30,7 +30,7 @@ plans.
 # Dependencies
 
 # >> Standard libs
-from typing import Any, TypeAlias
+from typing import Any
 from operator import attrgetter
 
 from enum import Enum
@@ -38,17 +38,14 @@ from enum import Enum
 # >> Internal
 from mohair import CreateMohairLogger
 from mohair.query.types import MohairOp, PipelineOp, BreakerOp
-from mohair.query.types import MohairPlan, SuperPlan, SubPlan
+from mohair.query.types import MohairPlan, DecomposedPlan
+
 
 # ------------------------------
 # Module Variables
 
 # >> Logging
 logger = CreateMohairLogger(__name__)
-
-
-# >> Type aliases
-SplitTypeAlias: TypeAlias = 'tuple[SuperPlan, list[SubPlan]]'
 
 
 # ------------------------------
@@ -69,7 +66,7 @@ class PlanSplitter:
     """ Methods for splitting a query plan; coalesced as a visitor class. """
 
     @classmethod
-    def SplitPlan(cls, plan: MohairPlan, method: SplitOpt=def_split_method) -> SplitTypeAlias:
+    def SplitPlan(cls, plan: MohairPlan, method: SplitOpt=def_split_method) -> DecomposedPlan:
         """
         A function to decompose a `MohairPlan` into two portions: a `SuperPlan` and a
         `SubPlan`. The SubPlan is multicast to downstream devices that:
@@ -86,11 +83,8 @@ class PlanSplitter:
         if method is SplitOpt.LongestChain:
             split_plan_root = cls.FindLongestChain(plan)
 
-        sub_roots  = split_plan_root.plan_root.op_inputs
-        super_plan = SuperPlan(plan, split_plan_root, sub_roots)
-        sub_plans  = [SubPlan(split_plan_root, sub_root) for sub_root in sub_roots]
-
-        return (super_plan, sub_plans)
+        sub_roots = split_plan_root.plan_root.op_inputs
+        return DecomposedPlan(plan, split_plan_root, sub_roots)
 
     @classmethod
     def FindLongestChain(cls, plan: MohairPlan) -> MohairPlan:

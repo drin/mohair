@@ -117,7 +117,7 @@ def ViewQueryBreakers(mohair_plan: MohairPlan) -> str:
     return PlanViewer.ViewBreakers(mohair_plan)
 
 
-def SplitQueryPlan(mohair_plan: MohairPlan) -> tuple[SuperPlan, list[SubPlan]]:
+def SplitQueryPlan(mohair_plan: MohairPlan) -> DecomposedPlan:
     return PlanSplitter.SplitPlan(mohair_plan)
 
 
