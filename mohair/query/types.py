@@ -123,20 +123,12 @@ class MohairPlan:
         return self.pipeline_len + 1
 
 @dataclass
-class SuperPlan:
+class DecomposedPlan:
     """ Portion of a query plan that is *not* delegated downstream. """
 
     query_plan     : MohairPlan
     anchor_root    : MohairPlan
-    anchors_subplan: tuple[MohairOp, ...]
-
-
-@dataclass
-class SubPlan:
-    """ Portion of a query plan that *is* delegated downstream. """
-
-    anchor_root  : MohairPlan
-    query_subplan: MohairOp
+    anchor_subplans: tuple[MohairOp, ...]
 
 
 @dataclass
