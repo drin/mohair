@@ -60,8 +60,8 @@ def ViewQueryPlan(mohair_plan: MohairPlan) -> str:
     return PlanViewer.View(mohair_plan)
 
 
-def ViewPlanOp(mohair_op: MohairOp) -> str:
-    return PlanViewer.ViewOp(mohair_op)
+def ViewPlanOp(mohair_op: MohairOp, indent='') -> str:
+    return PlanViewer.ViewOp(mohair_op, indent)
 
 
 def ViewQueryBreakers(mohair_plan: MohairPlan) -> str:
