@@ -30,17 +30,22 @@ if __name__ == '__main__':
 
     # construct and view the mohair structure
     mohair_plan = substrait_plan.ToMohair()
-    print(ViewQueryPlan(mohair_plan))
+    plan_str    = ViewQueryPlan(mohair_plan)
+    print(f'Query Plan:\n{plan_str}\n')
 
     # view the breakers in the mohair plan
-    print(ViewQueryBreakers(mohair_plan))
+    # print(ViewQueryBreakers(mohair_plan))
 
     # View a naive subplan
     decomposed_plan = SplitQueryPlan(mohair_plan)
 
-    logger.info('SubPlans:')
-    for subplan_root in decomposed_plan.anchor_subplans:
-        logger.info(ViewPlanOp(subplan_root))
+    subplan_anchor_str = decomposed_plan.anchor_root.plan_root.ViewStr()
+    print(f'SuperPlan Anchor:\n\t{subplan_anchor_str}')
+
+    print('SubPlans:')
+    for subplan_ndx, subplan_root in enumerate(decomposed_plan.anchor_subplans):
+        plan_op_str = ViewPlanOp(subplan_root, indent='\t')[1:]
+        print(f'\t[{subplan_ndx}]: {plan_op_str}')
 
     subplan_tree_ndx  = 0
     substrait_subplan = substrait_plan.ToSubPlanMessage(decomposed_plan, subplan_tree_ndx)
