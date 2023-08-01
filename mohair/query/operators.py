@@ -324,6 +324,30 @@ def _to_merge_joinrel(mohair_op: MergeJoin) -> Rel:
 
 
 # ------------------------------
-# Function for converting a MohairOp to a PlanAnchor message
-def ToPlanAnchor(mohair_op: MohairOp) -> PlanAnchor:
-    return PlanAnchor(anchor_rel=SubstraitFrom(mohair_op))
+# Functions for converting a MohairOp to a PlanAnchor (simplified substrait Rel)
+
+@singledispatch
+def PlanAnchorFrom(mohair_op: MohairOp) -> PlanAnchor:
+    """
+    Function to convert a MohairOp wrapper to a simplified substrait Rel.
+
+    We only need this Rel for validation and for context, so we simplify it by clearing
+    its inputs.
+    """
+
+    raise NotImplementedError(f'No implementation for simplifying [type(mohair_op)].')
+
+
+@PlanAnchorFrom.register
+def _anchor_join(mohair_op: Join) -> Rel:
+    # Get a correctly constructed Rel message
+    anchor_msg = SubstraitFrom(mohair_op)
+    compare_msg = SubstraitFrom(mohair_op)
+
+    # Clear fields to reduce the size of the message
+    anchor_msg.join.ClearField('left')
+    anchor_msg.join.ClearField('right')
+
+    print(f'Still equal: {anchor_msg == compare_msg}')
+
+    return PlanAnchor(anchor_rel=anchor_msg)
