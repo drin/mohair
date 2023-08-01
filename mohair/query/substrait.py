@@ -42,7 +42,7 @@ from mohair.query.plans import PlanExplorer
 
 #   |> functions
 from mohair import CreateMohairLogger
-from mohair.query.operators import MohairFrom, MohairTo
+from mohair.query.operators import MohairFrom, SubstraitFrom, ToPlanAnchor
 
 
 # ------------------------------
@@ -135,7 +135,13 @@ class SubstraitPlan:
         subplan_newroot = dplan.anchor_subplans[subplan_ndx]
         subplan_oldroot = subplan_message.relations[self.plan_rootndx]
 
-        subplan_oldroot.root.input.CopyFrom(MohairTo(subplan_newroot))
+        subplan_oldroot.root.input.CopyFrom(SubstraitFrom(subplan_newroot))
+
+        # include a PlanAnchor message
+        #   get a `PlanAnchor` substrait message
+        superplan_anchor = ToPlanAnchor(dplan.anchor_root.plan_root)
+        #   then pack it into the `optimization` property (an Any message)
+        subplan_message.advanced_extensions.optimization.Pack(superplan_anchor)
 
         # return a new instance that also serializes the proto structure
         return self.__class__.FromMessageProto(subplan_message)
