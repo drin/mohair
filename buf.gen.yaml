@@ -1,10 +1,12 @@
 # A modified version of github.com/substrait-io/substrait/buf.gen.yaml for
 # this repo's directory structure
+#
 
 version: v1
+managed:
+  enabled: true
 plugins:
-  # Will re-introduce when we support C++
-  # - remote: buf.build/protocolbuffers/plugins/cpp:v3.20.0-1
-  #   out: src/cpp/mohair
-  - remote: buf.build/protocolbuffers/plugins/python:v3.20.0-1
+  - plugin: buf.build/protocolbuffers/cpp:v23.0
+    out: src/cpp/mohair
+  - plugin: buf.build/protocolbuffers/python:v23.0
     out: mohair
