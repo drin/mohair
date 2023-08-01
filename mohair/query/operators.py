@@ -50,7 +50,7 @@ from mohair.substrait.algebra_pb2 import (JoinRel, SetRel, ExtensionMultiRel,
                                           HashJoinRel, MergeJoinRel)
 
 #       |> Mohair extensions
-from mohair.mohair.algebra_pb2 import SkyRel, QueryRel
+from mohair.mohair.algebra_pb2 import SkyRel, QueryRel, PlanAnchor
 
 #   |> Internal classes
 from mohair.query.types import MohairOp, PipelineOp, BreakerOp
@@ -265,37 +265,37 @@ def _from_joinrel(join_op: JoinRel) -> Any:
 # Functions for reconstructing a substrait Rel
 
 @singledispatch
-def MohairTo(mohair_op: Any) -> Rel:
+def SubstraitFrom(mohair_op: Any) -> Rel:
     """ Recursive function to convert a MohairOp wrapper to a substrait Rel. """
 
     raise NotImplementedError(f'No implementation for type: {type(mohair_op)}')
 
 # >> Translations for unary relations
-@MohairTo.register
+@SubstraitFrom.register
 def _to_project(mohair_op: Projection) -> Rel:
     return Rel(project=mohair_op.plan_op)
 
-@MohairTo.register
+@SubstraitFrom.register
 def _to_filter(mohair_op: Selection) -> Rel:
     return Rel(filter=mohair_op.plan_op)
 
-@MohairTo.register
+@SubstraitFrom.register
 def _to_fetch(mohair_op: Limit) -> Rel:
     return Rel(fetch=mohair_op.plan_op)
 
-@MohairTo.register
+@SubstraitFrom.register
 def _to_sort(mohair_op: Sort) -> Rel:
     return Rel(sort=mohair_op.plan_op)
 
-@MohairTo.register
+@SubstraitFrom.register
 def _to_aggregate(mohair_op: Aggregation) -> Rel:
     return Rel(aggregate=mohair_op.plan_op)
 
-@MohairTo.register
+@SubstraitFrom.register
 def _to_readrel(mohair_op: Read) -> Rel:
     return Rel(read=mohair_op.plan_op)
 
-@MohairTo.register
+@SubstraitFrom.register
 def _to_skyrel(mohair_op: SkyPartition) -> Rel:
     sky_rel = Rel(extension_leaf=ExtensionLeafRel(
          common=RelCommon(direct=RelCommon.Direct())
@@ -308,14 +308,20 @@ def _to_skyrel(mohair_op: SkyPartition) -> Rel:
     return sky_rel
 
 # >> Translations for join and n-ary relations
-@MohairTo.register
+@SubstraitFrom.register
 def _to_joinrel(mohair_op: Join) -> Rel:
     return Rel(join=mohair_op.plan_op)
 
-@MohairTo.register
+@SubstraitFrom.register
 def _to_hash_joinrel(mohair_op: HashJoin) -> Rel:
     return Rel(hash_join=mohair_op.plan_op)
 
-@MohairTo.register
+@SubstraitFrom.register
 def _to_merge_joinrel(mohair_op: MergeJoin) -> Rel:
     return Rel(merge_join=mohair_op.plan_op)
+
+
+# ------------------------------
+# Function for converting a MohairOp to a PlanAnchor message
+def ToPlanAnchor(mohair_op: MohairOp) -> PlanAnchor:
+    return PlanAnchor(anchor_rel=SubstraitFrom(mohair_op))
