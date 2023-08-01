@@ -42,7 +42,7 @@ from mohair.query.plans import PlanExplorer
 
 #   |> functions
 from mohair import CreateMohairLogger
-from mohair.query.operators import MohairFrom, SubstraitFrom, ToPlanAnchor
+from mohair.query.operators import MohairFrom, SubstraitFrom, PlanAnchorFrom
 
 
 # ------------------------------
@@ -139,7 +139,7 @@ class SubstraitPlan:
 
         # include a PlanAnchor message
         #   get a `PlanAnchor` substrait message
-        superplan_anchor = ToPlanAnchor(dplan.anchor_root.plan_root)
+        superplan_anchor = PlanAnchorFrom(dplan.anchor_root.plan_root)
         #   then pack it into the `optimization` property (an Any message)
         subplan_message.advanced_extensions.optimization.Pack(superplan_anchor)
 
