@@ -30,7 +30,6 @@ The plan definition and planning portion of query processing for decomposable qu
 
 # >> Standard libs
 from dataclasses import dataclass
-from typing      import Any
 
 
 # >> Internal 
