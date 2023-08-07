@@ -33,8 +33,12 @@ from operator import attrgetter
 from dataclasses import dataclass, field
 from typing import Any, TypeAlias
 
+# >> Arrow
+from pyarrow import Schema, Table
+
 # >> Internal
 from mohair import CreateMohairLogger
+from mohair.mohair.algebra_pb2 import SkyRel, ExecutionStats
 
 
 # ------------------------------
@@ -44,8 +48,10 @@ from mohair import CreateMohairLogger
 logger = CreateMohairLogger(__name__)
 
 # >> Forward references (Type aliases)
-OpTypeAlias  : TypeAlias = 'MohairOp'
-PlanTypeAlias: TypeAlias = 'MohairPlan'
+OpTypeAlias       : TypeAlias = 'MohairOp'
+PlanTypeAlias     : TypeAlias = 'MohairPlan'
+PartitionTypeAlias: TypeAlias = 'SkyPartition'
+MetaTypeAlias     : TypeAlias = 'SkyPartitionMeta'
 
 
 # ------------------------------
@@ -135,3 +141,91 @@ class DecomposedPlan:
 class LogicalExecPlan(MohairPlan):
     pass
 
+
+# ------------------------------
+# Skytether classes
+
+@dataclass
+class SkyDomain:
+    """ A convenience class for managing domains. """
+
+    key: str = 'public'
+
+    def PartitionFor(self, partition_key: str) -> PartitionTypeAlias:
+        return SkyPartition(domain=self, meta=SkyPartitionMeta(key=partition_key))
+
+@dataclass
+class SkyPartitionMeta:
+    """ A data class for partition metadata. """
+
+    slice_width: int                = 0
+    slice_count: int                = 0
+    key        : str                = None
+    schema     : Schema             = None
+    schema_meta: dict[bytes, bytes] = None
+
+    def WithMetadata(self, new_meta: dict[bytes, bytes]) -> MetaTypeAlias:
+        """ Convenience method to set metadata and update schema. """
+
+        # replace metadata
+        self.schema_meta = new_meta
+
+        # return schema with new metadata
+        return self.schema.with_metadata(self.schema_meta)
+
+@dataclass
+class SkyPartitionSlice:
+    """ A data class that couples a slice's index, key name, and table data. """
+
+    slice_index: int   = 0
+    key        : str   = None
+    data       : Table = None
+
+    def num_rows(self)    -> int: return self.data.num_rows
+    def num_columns(self) -> int: return self.data.num_columns
+
+
+@dataclass
+class SkyPartition:
+    """
+    A data class that couples the parts of a partition (domain, metadata, slice).
+
+    This is used to compile substrait using ibis (or some producer) or to extract
+    information from a substrait operator (SkyRel).
+    """
+
+    domain: SkyDomain               = None
+    meta  : SkyPartitionMeta        = None
+    slices: list[SkyPartitionSlice] = None
+    stats : ExecutionStats          = ExecutionStats(executed=False)
+
+    @classmethod
+    def FromOp(cls, query_op: SkyRel) -> PartitionTypeAlias:
+        return cls(
+             domain=SkyDomain(query_op.domain)
+            ,meta=SkyPartitionMeta(key=query_op.partition)
+            ,slices=[
+                 SkyPartitionSlice(slice_index=slice_ndx)
+                 for slice_ndx in query_op.slices
+             ]
+            ,stats=query_op.execstats
+        )
+
+    def __hash__(self):
+        return hash(self.domain.key) + hash(self.meta.key)
+
+    def name(self):
+        return f'{self.domain.key}/{self.meta.key}'
+
+    def schema(self):
+        return self.meta.schema
+
+    def slice_indices(self) -> list[int]:
+        return [
+            partition_slice.slice_index
+            for partition_slice in self.slices
+            if partition_slice is not None
+        ]
+
+    def exec_stats(self) -> ExecutionStats:
+        return self.stats

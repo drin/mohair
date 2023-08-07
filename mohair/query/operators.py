@@ -35,9 +35,6 @@ from operator    import itemgetter, attrgetter
 from functools   import singledispatch, singledispatchmethod
 from dataclasses import dataclass, field
 
-# >> Arrow
-from pyarrow import Schema
-
 # >> Internal
 #   |> Logging
 from mohair import CreateMohairLogger
@@ -56,6 +53,7 @@ from mohair.mohair.algebra_pb2 import SkyRel, QueryRel, PlanAnchor
 
 #   |> Internal classes
 from mohair.query.types import MohairOp, PipelineOp, BreakerOp
+from mohair.query.types import SkyPartition
 
 
 # ------------------------------
@@ -110,9 +108,10 @@ class Read(PipelineOp):
         return self.plan_op.WhichOneof('read_type')
 
 
+# >> Skytether operators
 # NOTE: this should integrate a skytether partition and a SkyRel message
 @dataclass
-class SkyPartition(PipelineOp):
+class ReadSkyPartition(PipelineOp):
     """
     A custom query operator to be used in a substrait query plan. This provides a way for
     the schema to be resolved at a remote query engine instead of having to know it up
@@ -121,6 +120,8 @@ class SkyPartition(PipelineOp):
 
     plan_op     : SkyRel
     op_inputs   : tuple[()] = ()
+
+    partition: SkyPartition = None
 
     def __post_init__(self):
         dname = self.domain_key()
@@ -133,6 +134,9 @@ class SkyPartition(PipelineOp):
 
     def partition_key(self):
         return self.plan_op.partition
+
+    def ToRelation(self):
+        self.partition = SkyPartition.FromOp(self.plan_op)
 
 
 # >> Query operators that cannot stream data
@@ -248,7 +252,7 @@ def _from_readrel(read_op: ReadRel) -> Any:
 def _from_skyrel(sky_op: SkyRel) -> Any:
     logger.debug('translating <SkyRel>')
 
-    return SkyPartition(sky_op)
+    return ReadSkyPartition(sky_op)
 
 
 # >> Translations for join and n-ary relations
@@ -298,7 +302,7 @@ def _to_readrel(mohair_op: Read) -> Rel:
     return Rel(read=mohair_op.plan_op)
 
 @SubstraitFrom.register
-def _to_skyrel(mohair_op: SkyPartition) -> Rel:
+def _to_skyrel(mohair_op: ReadSkyPartition) -> Rel:
     sky_rel = Rel(extension_leaf=ExtensionLeafRel(
          common=RelCommon(direct=RelCommon.Direct())
     ))
