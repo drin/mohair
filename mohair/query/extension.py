@@ -51,8 +51,8 @@ from ibis_substrait.compiler.core      import SubstraitCompiler
 from google.protobuf import any_pb2
 
 # >> Internal
-from mohair_extension.relations          import SkyPartition
-from mohair_extension.mohair.algebra_pb2 import SkyRel, ExecutionStats
+from mohair.query.operators    import SkyPartition
+from mohair.mohair.algebra_pb2 import SkyRel, ExecutionStats
 
 
 # ------------------------------
@@ -103,7 +103,7 @@ def _translate_mohair( op      : SkyTable
             domain=op.skyrel.domain.key
            ,partition=op.skyrel.meta.key
            ,slices=op.skyrel.slice_indices()
-           ,execstats=ExecutionStats(executed=False)
+           ,execstats=op.skyrel.exec_stats()
         )
     )
 
