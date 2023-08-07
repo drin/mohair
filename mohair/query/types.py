@@ -197,7 +197,7 @@ class SkyPartition:
     domain: SkyDomain               = None
     meta  : SkyPartitionMeta        = None
     slices: list[SkyPartitionSlice] = None
-    stats : ExecutionStats          = ExecutionStats(executed=False)
+    stats : ExecutionStats          = None
 
     @classmethod
     def FromOp(cls, query_op: SkyRel) -> PartitionTypeAlias:
@@ -210,6 +210,10 @@ class SkyPartition:
              ]
             ,stats=query_op.execstats
         )
+
+    def __post_init__(self):
+        if self.stats is None:
+            self.stats = ExecutionStats(executed=False)
 
     def __hash__(self):
         return hash(self.domain.key) + hash(self.meta.key)
