@@ -1,9 +1,12 @@
 [tool.poetry]
 name = "mohair"
 version = "0.1.0"
-description = "computational data management system"
+description = "query processing for decomposable queries"
 authors = ["Aldrin M <octalene.dev@pm.me>"]
 license = "Apache License 2.0"
+packages = [
+    { include = "mohair", from = "src/python" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
