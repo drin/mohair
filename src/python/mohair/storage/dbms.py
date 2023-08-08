@@ -45,6 +45,16 @@ import duckdb
 #   |> Core types
 from pyarrow import Table
 
+# >> Internal
+from mohair import CreateMohairLogger
+
+
+# ------------------------------
+# Module Variables
+
+# >> Logging
+logger = CreateMohairLogger(__name__)
+
 
 # ------------------------------
 # Classes
@@ -59,6 +69,8 @@ class DuckDBMS:
     @classmethod
     def InFile(cls, db_filepath, mutable=True):
         """ Initialize a DuckDBMS instance as a new file-backed DuckDB database. """
+
+        logger.info('Initialized DuckDBMS[filesystem]')
         return cls(duckdb.connect(database=db_filepath, read_only=(not mutable)))
 
     @classmethod
@@ -71,6 +83,7 @@ class DuckDBMS:
             https://duckdb.org/docs/guides/python/sql_on_arrow
         """
 
+        logger.info('Initialized DuckDBMS[memory]')
         return cls(duckdb.connect(database=':memory:'), data_src=arrow_src)
 
     def __init__(self, db_conn, data_src=None, **kwargs):
