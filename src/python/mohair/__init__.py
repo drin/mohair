@@ -44,13 +44,13 @@ default_loglevel = logging.INFO
 # ------------------------------
 # Convenience functions
 
-def AddConsoleLogHandler(mohair_logger):
+def AddConsoleLogHandler(mohair_logger, logger_level):
     '''
     Convenience function to centralize boiler plate for configuring a logger instance.
     '''
 
     console_loghandler = logging.StreamHandler()
-    console_loghandler.setLevel(default_loglevel)
+    console_loghandler.setLevel(logger_level)
     console_loghandler.setFormatter(logging.Formatter(
         '%(name)s [%(levelname)s] |> %(message)s'
     ))
@@ -68,7 +68,7 @@ def CreateMohairLogger(logger_name, logger_level=default_loglevel):
 
     # Configure instance
     logger.setLevel(logger_level)
-    AddConsoleLogHandler(logger)
+    AddConsoleLogHandler(logger, logger_level)
 
     # Return instance
     return logger

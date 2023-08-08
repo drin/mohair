@@ -42,20 +42,17 @@ from pyarrow import substrait
 # >> Internal
 
 #   |> Logging
-from mohair import AddConsoleLogHandler
-from mohair import default_loglevel
+from mohair import CreateMohairLogger
 
 #   |> classes
-from mohair.query.planner import QueryPlan
+from mohair.query.substrait import SubstraitPlan
 
 
 # ------------------------------
 # Module variables
 
 # >> Logging
-logger = logging.getLogger(__name__)
-logger.setLevel(default_loglevel)
-AddConsoleLogHandler(logger)
+logger = CreateMohairLogger(__name__)
 
 SAMPLE_FPATH  = Path('resources') / 'examples' / 'sample-data.tsv'
 SAMPLE_SCHEMA = pyarrow.schema([
@@ -108,13 +105,12 @@ def MohairTableProvider(table_names, expected_schema=None):
 
     return
 
-def ExecuteSubstrait(mohair_plan: QueryPlan) -> pyarrow.Table:
+def ExecuteSubstrait(substrait_plan: SubstraitPlan) -> pyarrow.Table:
     logger.debug('Executing substrait...')
     result_reader = substrait.run_query(
-         mohair_plan.plan_msg
+         substrait_plan.msg
         ,table_provider=MohairTableProvider
     )
 
     logger.debug('Query plan executed')
-
     return result_reader.read_all()

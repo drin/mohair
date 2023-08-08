@@ -34,8 +34,7 @@ import click
 # >> Internal libs
 
 #   |> Logging
-from mohair import AddConsoleLogHandler
-from mohair import default_loglevel
+from mohair import CreateMohairLogger
 
 #   |> Clients and Services
 from mohair.clients import MohairClient
@@ -49,9 +48,7 @@ from mohair.configs import GRPC_PORT, DB_FPATH, DB_ENGINES
 # Module variables
 
 # >> Logging
-logger = logging.getLogger(__name__)
-logger.setLevel(default_loglevel)
-AddConsoleLogHandler(logger)
+logger = CreateMohairLogger(__name__)
 
 
 # ------------------------------

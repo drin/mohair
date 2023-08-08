@@ -29,8 +29,10 @@ Classes and functions to insulate Mohair from substrait implementation details.
 # Dependencies
 
 # >> Standard libs
-from typing import TypeAlias
+from typing      import TypeAlias
 from dataclasses import dataclass
+from pathlib     import Path
+from hashlib     import sha256
 
 # >> substrait types
 from mohair.substrait.plan_pb2 import Plan, PlanRel
@@ -41,7 +43,7 @@ from mohair.query.types import MohairPlan, DecomposedPlan
 from mohair.query.plans import PlanExplorer
 
 #   |> functions
-from mohair import CreateMohairLogger
+from mohair                 import CreateMohairLogger
 from mohair.query.operators import MohairFrom, SubstraitFrom, PlanAnchorFrom
 
 
@@ -53,6 +55,23 @@ logger = CreateMohairLogger(__name__)
 
 # >> Type aliases
 PlanTypeAlias: TypeAlias = 'SubstraitPlan'
+
+
+# ------------------------------
+# Functions
+def EncodePlanHash(plan_hash: int, hash_bytewidth: int=8) -> bytes:
+    """
+    Encodes the hash (integer) of a plan as :hash_bytewidth: bytes.
+
+    :hash_bytewidth: defaults to 8 bytes (64 bits).
+    """
+
+    return plan_hash.to_bytes(hash_bytewidth, byteorder='big', signed=False)
+
+def DecodePlanHash(plan_hash_bytes: bytes) -> int:
+    """ Decodes the byte representaiton of a plan hash. Inverse of `EncodePlanHash`.  """
+
+    return int.from_bytes(plan_hash_bytes, byteorder='big', signed=False)
 
 
 # ------------------------------
@@ -91,6 +110,19 @@ class SubstraitPlan:
     def FromMessageProto(cls, substrait_proto: Plan) -> PlanTypeAlias:
         substrait_msg = substrait_proto.SerializeToString()
         return cls(substrait_msg, substrait_proto)
+
+    @classmethod
+    def FromFile(cls, plan_fpath: Path) -> PlanTypeAlias:
+        with open(plan_fpath, 'rb') as plan_handle:
+            return cls.FromMessageBytes(plan_handle.read())
+
+    def __hash__(self) -> int:
+        """ Return a hash representing a compressed form of the substrait message. """
+
+        hash_msg = sha256(usedforsecurity=False)
+        hash_msg.update(self.msg)
+
+        return DecodePlanHash(hash_msg.digest())
 
     def CopyPlan(self) -> Plan:
         new_plan = Plan()
