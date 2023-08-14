@@ -47,12 +47,16 @@ from mohair import CreateMohairLogger
 #   |> classes
 from mohair.query.substrait import SubstraitPlan
 
+#   |> cython
+from scytether import run_query
+
 
 # ------------------------------
 # Module variables
 
 # >> Logging
-logger = CreateMohairLogger(__name__)
+import logging
+logger = CreateMohairLogger(__name__, logging.DEBUG)
 
 SAMPLE_FPATH  = Path('resources') / 'examples' / 'sample-data.tsv'
 SAMPLE_SCHEMA = pyarrow.schema([
@@ -98,6 +102,7 @@ def TableFromTSV(data_fpath: Path = SAMPLE_FPATH) -> pyarrow.Table:
     )
 
 def MohairTableProvider(table_names, expected_schema=None):
+    print('Mohair table provider')
     for tname in table_names:
         logger.debug(f'Table requested: [{tname}]')
 
@@ -107,7 +112,15 @@ def MohairTableProvider(table_names, expected_schema=None):
 
 def ExecuteSubstrait(substrait_plan: SubstraitPlan) -> pyarrow.Table:
     logger.debug('Executing substrait...')
-    result_reader = substrait.run_query(
+
+    # NOTE: arrow API
+    # result_reader = substrait.run_query(
+    #      substrait_plan.msg
+    #     ,table_provider=MohairTableProvider
+    # )
+
+    # NOTE: via internal cython (custom interpose)
+    result_reader = run_query(
          substrait_plan.msg
         ,table_provider=MohairTableProvider
     )
