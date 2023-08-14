@@ -10,6 +10,7 @@
 // Dependencies
 
 // >> Standard libs
+#include <functional>
 #include <iostream>
 #include <sstream>
 
@@ -18,20 +19,24 @@
 
 #include "faodel/faodel-common/Common.hh"
 #include "faodel/faodel-services/MPISyncStart.hh"
-#include "lunasa/common/Helpers.hh"
-#include "kelpie/Kelpie.hh"
+#include "faodel/lunasa/common/Helpers.hh"
+#include "faodel/kelpie/Kelpie.hh"
+
+// >> Aliases
+using std::string;
 
 
 // ------------------------------
 // Functions
+
 namespace mohair::adapters {
 
-  constexpr string default_pool_name { "/myplace" };
-  string DefaultFaodelConfig(string &pool_name = default_pool_name);
+  const string default_pool_name { "/myplace" };
+  string DefaultFaodelConfig(const string &pool_name);
 
   void InitializeMPI(int argc, char **argv, int *provided, int *rank, int *size);
-  void BootstrapServices(std::string &faodel_config);
-  void PrintStringObj(const std::string print_msg, const std::string string_obj);
+  void BootstrapServices(string &faodel_config);
+  void PrintStringObj(const string print_msg, const string string_obj);
 
   struct Faodel {
     string config_str;
@@ -42,14 +47,15 @@ namespace mohair::adapters {
     int  mpi_rank;
     int  mpi_size;
 
-    Faodel::Faodel(string &service_config);
-    Faodel::Faodel();
+    Faodel(const string &kpool_name, const string &service_config);
+    Faodel();
 
     void Bootstrap(int argc, char **argv);
     void BootstrapWithKelpie(int argc, char **argv);
     void Finish();
-    auto ConnectToPool();
-    auto AllocateString(string &str_obj);
+    kelpie::Pool ConnectToPool();
+    lunasa::DataObject AllocateString(const string &str_obj);
+    void FencedRankFn(int target_rank, std::function<void()> target_fn);
   };
 
 } // mohair::faodel

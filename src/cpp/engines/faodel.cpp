@@ -9,12 +9,14 @@
 // ------------------------------
 // Dependencies
 
-#include "faodel.hpp"
+#include "mohair/faodel.hpp"
 
 
 // type aliases
 using std::string;
 using std::stringstream;
+
+using std::endl;
 
 
 // ------------------------------
@@ -23,27 +25,28 @@ using std::stringstream;
 // Default faodel configuration
 namespace mohair::adapters {
 
-  string DefaultFaodelConfig(string &pool_name) {
+  string DefaultFaodelConfig(const string &pool_name) {
     stringstream config_ss;
 
-    config_ss << "# Use mpisyncstart to create a DHT (across all our nodes)"
-              << "# Name of dht is '/myplace'"
-              << "mpisyncstart.enable    true"
-              << "dirman.type            centralized"
-              << "dirman.root_node_mpi   0"
-              << "dirman.resources_mpi[] dht:" << pool_name << " ALL"
+    config_ss << "# Use mpisyncstart to create a DHT (across all our nodes)" << endl
+              << "# Name of dht is '/myplace'"                               << endl
+              << "mpisyncstart.enable    true"                               << endl
+              << "dirman.type            centralized"                        << endl
+              << "dirman.root_node_mpi   0"                                  << endl
+              << "dirman.resources_mpi[] dht:" << pool_name << " ALL"        << endl
 
-              << "# Uncomment these options to get debug info for each component"
-              << "bootstrap.debug true"
-              << "dirman.debug    true"
-              << "kelpie.debug    true"
+              << "# Uncomment to get debug info for each component"          << endl
+              // << "bootstrap.debug true"                                      << endl
+              // << "dirman.debug    true"                                      << endl
+              << "kelpie.debug    true"                                      << endl
     ;
 
-    return config_ss.string();
+    return config_ss.str();
   }
 
-  Faodel::Faodel(string &service_config)
+  Faodel::Faodel(const string &kpool_name, const string &service_config)
     :  config_str(service_config)
+      ,pool_name(kpool_name)
       ,initialized(false)
       ,provided(0)
       ,mpi_rank(0)
@@ -51,11 +54,7 @@ namespace mohair::adapters {
   {
   }
 
-  Faodel::Faodel()
-    :  Faodel(DefaultFaodelConfig(default_pool_name))
-      ,pool_name(default_pool_name)
-  {
-  }
+  Faodel::Faodel(): Faodel(default_pool_name, DefaultFaodelConfig(default_pool_name)) {}
 
 
   /**
@@ -91,15 +90,28 @@ namespace mohair::adapters {
   /**
    * Simple wrapper that connects to a kelpie pool.
    */
-  auto Faodel::ConnectToPool() {
+  kelpie::Pool Faodel::ConnectToPool() {
     return kelpie::Connect(pool_name);
   }
 
   /**
    * Simple wrapper that allocates a String object via lunasa.
    */
-  auto Faodel::AllocateString(string &str_obj) {
+  lunasa::DataObject Faodel::AllocateString(const string &str_obj) {
     return lunasa::AllocateStringObject(str_obj);
+  }
+
+  /**
+   * Wrapper that runs a lambda on a particular MPI rank.
+   */
+  void Faodel::FencedRankFn(int target_rank, std::function<void()> target_fn) {
+    // start and end with a fence
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    // execute the lambda on a particular rank
+    if (mpi_rank == target_rank) { target_fn(); }
+
+    MPI_Barrier(MPI_COMM_WORLD);
   }
 
 } // mohair::faodel
