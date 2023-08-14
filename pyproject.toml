@@ -18,6 +18,8 @@ duckdb = "^0.6.1"
 click = "^8.1.3"
 pyarrow = "^12.0.0"
 datafusion = "^20.0.0"
+pyarrow = "^12.0.1"
+pkgconfig = "^1.5.5"
 
 [tool.poetry.dev-dependencies]
 
@@ -25,5 +27,11 @@ datafusion = "^20.0.0"
 mohair = "mohair.cli:cli"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = [
+   "poetry-core>=1.0.0"
+  ,"cython>=0.29"
+  ,"setuptools"
+  ,"wheel"
+  ,"pkgconfig>=1.5.5"
+]
 build-backend = "poetry.core.masonry.api"
