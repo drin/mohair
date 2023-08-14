@@ -352,6 +352,4 @@ def _anchor_join(mohair_op: Join) -> Rel:
     anchor_msg.join.ClearField('left')
     anchor_msg.join.ClearField('right')
 
-    print(f'Still equal: {anchor_msg == compare_msg}')
-
     return PlanAnchor(anchor_rel=anchor_msg)
