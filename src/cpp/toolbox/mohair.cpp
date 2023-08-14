@@ -11,6 +11,8 @@
 
 #include "faodel.hpp"
 
+using mohair::adapters::Faodel;
+
 
 // ------------------------------
 // Functions
@@ -24,7 +26,7 @@ void PrintStringObj(const std::string print_msg, const std::string string_obj) {
 // This function returns the object with key name that is first or last in the wildcard
 // list (alphabetically); or, that is smallest or largest in size.
 void CallPick( kelpie::Pool       &kpool
-              ,kelpie::Key        &kname
+              ,const kelpie::Key  &kname
               ,const std::string   fn_arg
               ,lunasa::DataObject *result) {
   // TODO: could validate fn_arg is one of 'first', 'last', 'smallest', 'biggest'.
@@ -38,38 +40,34 @@ int main(int argc, char **argv) {
   Faodel faodel_adapter;
 
   faodel_adapter.BootstrapWithKelpie(argc, argv);
-  std::cout << "\tMPI Size: " << std::to_string(mpi_size) << std::endl
-            << "\tMPI rank: " << std::to_string(mpi_rank) << std::endl
+  std::cout << "\tMPI Size: " << std::to_string(faodel_adapter.mpi_size) << std::endl
+            << "\tMPI rank: " << std::to_string(faodel_adapter.mpi_rank) << std::endl
   ;
 
   // >> Things that happen on our rank
+  std::stringstream testobj_stream;
+  testobj_stream << "This is an object from rank "
+                 << std::to_string(faodel_adapter.mpi_rank)
+                 << std::string(faodel_adapter.mpi_size - faodel_adapter.mpi_rank, '!')
+  ;
 
-  // default pool is "/myplace"
+  // >> Define the object to put in the pool
+  auto ldo1 = faodel_adapter.AllocateString(testobj_stream.str());
+  kelpie::Key k1 {"myrow", std::to_string(faodel_adapter.mpi_rank)};
+
+  // >> publish key-value pair to pool (default is "/myplace")
   auto pool = faodel_adapter.ConnectToPool();
-  auto ldo1 = faodel_adapter.AllocateString(
-      "This is an object from rank "
-    + std::to_string(mpi_rank)
-    // + std::string { std::to_string(mpi_size - mpi_rank) + '!' }
-    + std::string(mpi_size - mpi_rank, '!')
-  );
-
-  // Publish string object to pool
-  kelpie::Key k1 {"myrow", std::to_string(mpi_rank)};
   pool.Publish(k1, ldo1);
 
-  // Wait for everyone to be done
-  MPI_Barrier(MPI_COMM_WORLD);
-
-  // work restricted to rank 0
-  if (mpi_rank == 0) {
+  auto sample_fn = [kpool=std::move(pool)]() mutable noexcept {
     // '*' is a wildcard suffix for "any column with same prefix"
     kelpie::Key key_myrow("myrow", "*"); 
 
     lunasa::DataObject ldo_first, ldo_last, ldo_smallest, ldo_largest;
-    CallPick(pool, key_myrow, "first"   , &ldo_first   );
-    CallPick(pool, key_myrow, "last"    , &ldo_last    );
-    CallPick(pool, key_myrow, "smallest", &ldo_smallest);
-    CallPick(pool, key_myrow, "largest" , &ldo_largest );
+    CallPick(kpool, key_myrow, "first"   , &ldo_first   );
+    CallPick(kpool, key_myrow, "last"    , &ldo_last    );
+    CallPick(kpool, key_myrow, "smallest", &ldo_smallest);
+    CallPick(kpool, key_myrow, "largest" , &ldo_largest );
 
     // Should be from rank 0
     PrintStringObj("First item:    ", lunasa::UnpackStringObject(ldo_first));
@@ -78,9 +76,11 @@ int main(int argc, char **argv) {
     PrintStringObj("Last item:     ", lunasa::UnpackStringObject(ldo_last)    );
     PrintStringObj("Smallest item: ", lunasa::UnpackStringObject(ldo_smallest));
     PrintStringObj("Largest item:  ", lunasa::UnpackStringObject(ldo_largest) );
-  }
+  };
 
-  MPI_Barrier(MPI_COMM_WORLD);
+  // execute `sample_fn` on rank 0
+  // this also adds barriers around the lambda
+  faodel_adapter.FencedRankFn(/*mpi_rank==*/0, sample_fn);
 
   faodel_adapter.Finish();
 
