@@ -53,6 +53,8 @@ namespace mohair::adapters {
     void Bootstrap(int argc, char **argv);
     void BootstrapWithKelpie(int argc, char **argv);
     void Finish();
+    void PrintMPIInfo();
+
     kelpie::Pool ConnectToPool();
     lunasa::DataObject AllocateString(const string &str_obj);
     void FencedRankFn(int target_rank, std::function<void()> target_fn);

@@ -88,6 +88,15 @@ namespace mohair::adapters {
   }
 
   /**
+   * Simple wrapper that prints our MPI rank and the size of the MPI pool.
+   */
+  void Faodel::PrintMPIInfo() {
+    std::cout << "\tMPI Size: " << std::to_string(mpi_size) << std::endl
+              << "\tMPI rank: " << std::to_string(mpi_rank) << std::endl
+    ;
+  }
+
+  /**
    * Simple wrapper that connects to a kelpie pool.
    */
   kelpie::Pool Faodel::ConnectToPool() {

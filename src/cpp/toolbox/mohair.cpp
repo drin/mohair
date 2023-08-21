@@ -40,9 +40,15 @@ int main(int argc, char **argv) {
   Faodel faodel_adapter;
 
   faodel_adapter.BootstrapWithKelpie(argc, argv);
-  std::cout << "\tMPI Size: " << std::to_string(faodel_adapter.mpi_size) << std::endl
-            << "\tMPI rank: " << std::to_string(faodel_adapter.mpi_rank) << std::endl
-  ;
+  faodel_adapter.PrintMPIInfo();
+
+  // A for loop to round robin through each rank.
+  for (int rank_id = 0; rank_id < faodel_adapter.mpi_size; ++rank_id) {
+
+    // This is to progressively debug more steps
+    // TODO: build towards a linear chain of ranks that execute and pass pushforward plans
+    if (rank_id >= 0) { break; }
+  }
 
   // >> Things that happen on our rank
   std::stringstream testobj_stream;
