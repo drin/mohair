@@ -24,11 +24,33 @@
 #include <iostream>
 #include <sstream>
 
-// >> Aliases
-using std::unique_ptr;
+// >> Type Aliases
 
+//  |> For standard libs
+using std::unique_ptr;
 using std::string;
+
 using std::tuple;
+using std::get;
+
+//  |> For substrait
+using substrait::Rel;
+
+using substrait::ReadRel;
+using substrait::SkyRel;
+
+using substrait::ProjectRel;
+using substrait::FilterRel;
+using substrait::FetchRel;
+
+using substrait::SortRel;
+using substrait::AggregateRel;
+
+using substrait::CrossRel;
+using substrait::JoinRel;
+
+using substrait::HashJoinRel;
+using substrait::MergeJoinRel;
 
 
 // ------------------------------
@@ -44,11 +66,13 @@ namespace mohair {
 
   // classes for distinguishing pipeline-able operators from pipeline breakers
   class PipelineOp : QueryOp {
-    const string ViewStr() { return u8"← {self}"; }
+    virtual string ToString();
+    const   string ViewStr() { return u8"← " + this->ToString(); }
   };
 
   class BreakerOp : QueryOp {
-    const string ViewStr() { return u8"↤ {self}"; }
+    virtual string ToString();
+    const   string ViewStr() { return u8"↤ " + this->ToString(); }
   };
 
 
@@ -56,80 +80,110 @@ namespace mohair {
   // Operator Classes
 
   // >> Leaf operators
+  struct OpErr : QueryOp {
+    string err_msg;
+    Rel    plan_op;
+  };
 
   struct OpRead : PipelineOp {
-    substrait::ReadRel plan_op;
-    tuple<>            op_input;
-    unique_ptr<string> table_name;
+    ReadRel            &plan_op;
+    Rel                &op_wrap;
+    tuple<>             op_inputs;
+    unique_ptr<string>  table_name;
   };
 
   // TODO: figure out how this should bridge to skytether
   struct OpSkyRead : PipelineOp {
-    substrait::SkyRel  plan_op;
-    tuple<>            op_input;
-    unique_ptr<string> table_name;
+    SkyRel             &plan_op;
+    Rel                &op_wrap;
+    tuple<>             op_inputs;
+    unique_ptr<string>  table_name;
   };
 
   // >> Pipeline-able operators
   struct OpProj : PipelineOp {
-    substrait::ProjectRel plan_op;
-    tuple<QueryOp>        op_input;
-    unique_ptr<string>    table_name;
+    ProjectRel                 &plan_op;
+    Rel                        &op_wrap;
+    tuple<unique_ptr<QueryOp>>  op_inputs;
+    unique_ptr<string>          table_name;
   };
 
   struct OpSel : PipelineOp {
-    substrait::FilterRel plan_op;
-    tuple<QueryOp>       op_input;
-    unique_ptr<string>   table_name;
+    FilterRel                  &plan_op;
+    Rel                        &op_wrap;
+    tuple<unique_ptr<QueryOp>>  op_inputs;
+    unique_ptr<string>          table_name;
   };
 
   struct OpLimit : PipelineOp {
-    substrait::FetchRel plan_op;
-    tuple<QueryOp>      op_input;
-    unique_ptr<string>  table_name;
+    FetchRel                   &plan_op;
+    Rel                        &op_wrap;
+    tuple<unique_ptr<QueryOp>>  op_inputs;
+    unique_ptr<string>          table_name;
   };
 
 
   // >> Pipeline breaking operators
   struct OpSort : BreakerOp {
-    substrait::SortRel plan_op;
-    tuple<QueryOp>     op_input;
-    unique_ptr<string> table_name;
+    SortRel                    &plan_op;
+    Rel                        &op_wrap;
+    tuple<unique_ptr<QueryOp>>  op_inputs;
+    unique_ptr<string>          table_name;
   };
+
+  struct OpAggr : BreakerOp {
+    AggregateRel               &plan_op;
+    Rel                        &op_wrap;
+    tuple<unique_ptr<QueryOp>>  op_inputs;
+    unique_ptr<string>          table_name;
+  };
+
+  struct OpCrossJoin : BreakerOp {
+    CrossRel                                        &plan_op;
+    Rel                                             &op_wrap;
+    tuple<unique_ptr<QueryOp>, unique_ptr<QueryOp>>  op_inputs;
+    unique_ptr<string>                               table_name;
+  };
+
+  struct OpJoin : BreakerOp {
+    JoinRel                                         &plan_op;
+    Rel                                             &op_wrap;
+    tuple<unique_ptr<QueryOp>, unique_ptr<QueryOp>>  op_inputs;
+    unique_ptr<string>                               table_name;
+  };
+
+  struct OpHashJoin : BreakerOp {
+    HashJoinRel                                     &plan_op;
+    Rel                                             &op_wrap;
+    tuple<unique_ptr<QueryOp>, unique_ptr<QueryOp>>  op_inputs;
+    unique_ptr<string>                               table_name;
+  };
+
+  struct OpMergeJoin : BreakerOp {
+    MergeJoinRel                                    &plan_op;
+    Rel                                             &op_wrap;
+    tuple<unique_ptr<QueryOp>, unique_ptr<QueryOp>>  op_inputs;
+    unique_ptr<string>                               table_name;
+  };
+
+  /* TODO: needs variadic op_inputs
+  struct OpSet : BreakerOp {
+    SetRel                          &plan_op;
+    Rel                             &op_wrap;
+    tuple<unique_ptr<QueryOp>, ...>  op_inputs;
+    unique_ptr<string>               table_name;
+  };
+  */
 
 
   // >> Translation functions
-  QueryOp MohairFrom(substrait::Rel substrait_op_wrap) {
-    // Translate pipeline-able operators
-    if      (substrait_op_wrap.has_project())    { return MohairFrom(substrait_op_wrap.project());    }
-    else if (substrait_op_wrap.has_filter())     { return MohairFrom(substrait_op_wrap.filter());     }
-    else if (substrait_op_wrap.has_fetch())      { return MohairFrom(substrait_op_wrap.fetch());      }
+  unique_ptr<QueryOp>    MohairFrom(Rel& rel_msg);
+  Rel&                   SubstraitFrom(unique_ptr<QueryOp>& mohair_op);
+  unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<OpJoin>& mohair_op);
 
-    // Translate pipeline breaking operators
-    else if (substrait_op_wrap.has_aggregate())  { return MohairFrom(substrait_op_wrap.aggregate());  }
-    else if (substrait_op_wrap.has_sort())       { return MohairFrom(substrait_op_wrap.sort());       }
-    else if (substrait_op_wrap.has_join())       { return MohairFrom(substrait_op_wrap.join());       }
-    else if (substrait_op_wrap.has_cross())      { return MohairFrom(substrait_op_wrap.cross());      }
 
-    else if (substrait_op_wrap.has_hash_join())  { return MohairFrom(substrait_op_wrap.hash_join());  }
-    else if (substrait_op_wrap.has_merge_join()) { return MohairFrom(substrait_op_wrap.merge_join()); }
+  // >> Convenience functions
+  string SourceNameForRead(ReadRel& substrait_op);
 
-    // note: may not be pipeline breaking, but we can improve that when we get there
-    else if (substrait_op_wrap.has_set())        { return MohairFrom(substrait_op_wrap.set());        }
-
-    // Translate leaf operators
-    else if (substrait_op_wrap.has_read())    { return MohairFrom(substrait_op_wrap.read()); }
-
-    else if (substrait_op_wrap.has_extension_leaf()) {
-      return MohairFrom(substrait_op_wrap.extension_leaf());
-    }
-
-    // Catch all: figure out how to error
-    else {}
-  }
-
-  QueryOp MohairFrom(substrait::ProjectRel substrait_op) {
-
-  }
 
 } // namespace: mohair
