@@ -79,10 +79,6 @@ class Selection(PipelineOp):
 class Limit(PipelineOp):
     plan_op : FetchRel
 
-@dataclass
-class Sort(PipelineOp):
-    plan_op : SortRel
-
 
 # >> Leaf query operators (can stream data and are base cases)
 @dataclass
@@ -140,6 +136,10 @@ class ReadSkyPartition(PipelineOp):
 
 
 # >> Query operators that cannot stream data
+@dataclass
+class Sort(BreakerOp):
+    plan_op : SortRel
+
 @dataclass
 class Aggregation(BreakerOp):
     plan_op : AggregateRel
