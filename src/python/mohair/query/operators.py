@@ -346,7 +346,6 @@ def PlanAnchorFrom(mohair_op: MohairOp) -> PlanAnchor:
 def _anchor_join(mohair_op: Join) -> Rel:
     # Get a correctly constructed Rel message
     anchor_msg = SubstraitFrom(mohair_op)
-    compare_msg = SubstraitFrom(mohair_op)
 
     # Clear fields to reduce the size of the message
     anchor_msg.join.ClearField('left')
