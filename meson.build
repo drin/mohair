@@ -69,13 +69,13 @@ install_headers(mohair_hdrlist, subdir: 'mohair')
 # Binaries
 
 # >> Executable for primary mohair binary
-mohair_binsources = (
-    [ cpp_tooldir / 'mohair.cpp' ]
+testfaodel_binsources = (
+    [ cpp_tooldir / 'test-faodel.cpp' ]
   + mohair_srclist
 )
 
-mohair = executable('mohair'
-  ,mohair_binsources
+test_faodel = executable('test-faodel'
+  ,testfaodel_binsources
   ,dependencies       : [dep_ompi, dep_faodel, dep_arrow]
   ,include_directories: cpp_headerdir
   ,install            : false
