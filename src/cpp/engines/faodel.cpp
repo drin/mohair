@@ -9,7 +9,7 @@
 // ------------------------------
 // Dependencies
 
-#include "mohair/faodel.hpp"
+#include "../headers/faodel.hpp"
 
 
 // type aliases
@@ -123,5 +123,5 @@ namespace mohair::adapters {
     MPI_Barrier(MPI_COMM_WORLD);
   }
 
-} // mohair::faodel
+} // namespace mohair::adapters
 

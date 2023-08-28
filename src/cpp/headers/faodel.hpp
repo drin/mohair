@@ -60,4 +60,4 @@ namespace mohair::adapters {
     void FencedRankFn(int target_rank, std::function<void()> target_fn);
   };
 
-} // mohair::faodel
+} // namespace mohair::adapters
