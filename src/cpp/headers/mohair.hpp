@@ -36,6 +36,7 @@ using std::unique_ptr;
 using std::string;
 
 //  |> For substrait
+using substrait::PlanRel;
 using substrait::Rel;
 using substrait::ErrRel;
 using substrait::PlanAnchor;
