@@ -31,6 +31,9 @@ cpp_srcdir    = 'src' / 'cpp'
 # dir for headers
 cpp_headerdir = cpp_srcdir / 'headers'
 
+# dir for core mohair sources
+cpp_coredir   = cpp_srcdir / 'mohair'
+
 # dir for adapters (execution engines)
 cpp_enginedir = cpp_srcdir / 'engines'
 
@@ -44,7 +47,17 @@ cpp_tooldir   = cpp_srcdir / 'toolbox'
 # >> For primary mohair binary
 #   |> include dirs and source list
 mohair_hdrlist = [cpp_headerdir / 'arrow.hpp' , cpp_headerdir / 'faodel.hpp']
-mohair_srclist = [cpp_enginedir / 'faodel.cpp', cpp_enginedir /  'acero.cpp']
+mohair_srclist = [
+   cpp_enginedir /    'faodel.cpp'
+  ,cpp_enginedir /     'acero.cpp'
+  ,cpp_coredir   /      'util.cpp'
+  ,cpp_coredir   / 'operators.cpp'
+  ,cpp_coredir   /     'plans.cpp'
+]
+
+# >> For faodel testing binary
+#   |> include dirs and source list
+faodel_srclist = [cpp_enginedir / 'faodel.cpp']
 
 
 # ------------------------------
@@ -69,9 +82,22 @@ install_headers(mohair_hdrlist, subdir: 'mohair')
 # Binaries
 
 # >> Executable for primary mohair binary
+mohair_binsources = (
+    [ cpp_tooldir / 'mohair.cpp' ]
+  + mohair_srclist
+)
+
+test_faodel = executable('mohair'
+  ,mohair_binsources
+  ,dependencies       : [dep_ompi, dep_faodel, dep_arrow]
+  ,include_directories: cpp_headerdir
+  ,install            : false
+)
+
+# >> Executable for faodel testing binary
 testfaodel_binsources = (
     [ cpp_tooldir / 'test-faodel.cpp' ]
-  + mohair_srclist
+  + faodel_srclist
 )
 
 test_faodel = executable('test-faodel'
