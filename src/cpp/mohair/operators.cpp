@@ -122,7 +122,7 @@ namespace mohair {
 
       // Catch all error
       default: {
-        return OpErr{"ParseError: Unknown substrait operator", rel_msg};
+        return std::make_unique<OpErr>(rel_msg, "ParseError: Unknown substrait operator");
       }
   }
 
@@ -132,7 +132,21 @@ namespace mohair {
   }
 
 
+  /* TODO: needs some non-trivial templating
   // >> Translation from Mohair to a PlanAnchor
+  unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<QueryOp>& mohair_op) {
+    // Create an ErrRel and set its error details
+    auto anchor_relmsg = std::make_unique<ErrRel>();
+    anchor_relmsg.set_err_msg("UnimplementedError: PlanAnchor must be a JoinRel");
+    anchor_relmsg.set_err_code(ErrRel::ErrType::INVALID_MSG_TYPE);
+
+    // Construct a PlanAnchor using the Rel
+    auto anchor_msg = std::make_unique<PlanAnchor>();
+    anchor_msg.set_allocated_anchor_rel(anchor_relmsg);
+    return anchor_msg;
+  }
+  */
+
   unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<OpJoin>& mohair_op) {
     // Get a Rel and clear its children (an anchor doesn't need that info)
     auto anchor_relmsg = SubstraitFrom(mohair_op);
