@@ -16,27 +16,13 @@ using mohair::adapters::Faodel;
 
 // ------------------------------
 // Functions
+
 void PrintStringObj(const std::string print_msg, const std::string string_obj) {
   std::cout << "Printing string obj:"  << std::endl;
   std::cout << print_msg << string_obj << std::endl;
 }
 
-// Calls Kelpie's built-in function, 'pick'.
-// Pick has four options for arguments: 'first', 'last','smallest', and 'biggest'.
-// This function returns the object with key name that is first or last in the wildcard
-// list (alphabetically); or, that is smallest or largest in size.
-void CallPick( kelpie::Pool       &kpool
-              ,const kelpie::Key  &kname
-              ,const std::string   fn_arg
-              ,lunasa::DataObject *result) {
-  // TODO: could validate fn_arg is one of 'first', 'last', 'smallest', 'biggest'.
-  // key_name may have a wildcard suffix
-  std::cout << "Calling compute function 'pick'" << std::endl;
-  kpool.Compute(kname, "pick", fn_arg, result);
-}
-
-
-int main(int argc, char **argv) {
+void MPIMain(int argc, char **argv) {
   Faodel faodel_adapter;
 
   faodel_adapter.BootstrapWithKelpie(argc, argv);
@@ -71,6 +57,13 @@ int main(int argc, char **argv) {
   faodel_adapter.FencedRankFn(/*mpi_rank==*/0, sample_fn);
 
   faodel_adapter.Finish();
+}
+
+
+// ------------------------------
+// Main Logic
+int main(int argc, char **argv) {
+  std::cout << argv[0] << std::endl;
 
   return 0;
 }

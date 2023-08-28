@@ -20,3 +20,19 @@
 // Dependencies
 
 #include "util.hpp"
+
+
+// ------------------------------
+// Functions
+
+fstream StreamForFile(const char *in_fpath) {
+  return fstream { in_fpath, std::ios::in | std::ios::binary };
+}
+
+unique_ptr<PlanRel> SubstraitPlanFromFile(fstream plan_fstream) {
+  auto substrait_plan = std::make_unique<PlanRel>();
+  if (substrait_plan->ParseFromIstream(&plan_fstream)) { return substrait_plan; }
+
+  std::cerr << "Failed to parse substrait plan" << std::endl;
+  return nullptr;
+}

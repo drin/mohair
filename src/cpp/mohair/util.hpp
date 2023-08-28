@@ -23,16 +23,16 @@
 #include <fstream>
 #include <iostream>
 
+// >> Internal libs
+#include "../headers/mohair.hpp"
+
+
 // >> Type Aliases
 using std::string;
 
-//  |> For standard libs
 
 // ------------------------------
 // Functions
 
-// TODO:  make convenience function to read a plan from a file
-fstream StreamForFile(const char *in_fpath) {
-  fstream in_fstream { in_fpath, std::ios::in | std::ios::binary };
-  return in_fstream;
-}
+fstream StreamForFile(const char *in_fpath);
+unique_ptr<PlanRel> SubstraitPlanFromFile(fstream plan_fstream);
