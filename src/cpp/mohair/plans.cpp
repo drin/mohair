@@ -18,29 +18,4 @@
 
 // ------------------------------
 // Dependencies
-#pragma once
-
-// >> Standard libs
-#include <functional>
-#include <sstream>
-
-// >> Internal libs
-#include "../headers/mohair.hpp"
-
-// >> Aliases
-using std::any;
-
-
-// ------------------------------
-// Types for Public API
-
-namespace mohair {
-
-  struct PlanExplorer {
-
-    // TODO
-    // WalkFrom
-
-  };
-
-} // namespace: mohair
+#include "plans.hpp"

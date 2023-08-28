@@ -18,24 +18,22 @@
 
 // ------------------------------
 // Dependencies
+#pragma once
 
 // >> Standard libs
 #include <functional>
-#include <iostream>
 #include <sstream>
+
+// >> Internal libs
+#include "../headers/mohair.hpp"
 
 // >> Type Aliases
 
 //  |> For standard libs
-using std::unique_ptr;
-using std::string;
-
 using std::tuple;
 using std::get;
 
 //  |> For substrait
-using substrait::Rel;
-
 using substrait::ReadRel;
 using substrait::SkyRel;
 
@@ -59,30 +57,12 @@ using substrait::MergeJoinRel;
 namespace mohair {
 
   // ------------------------------
-  // Base classes for operators
-
-  // empty base class
-  class QueryOp {};
-
-  // classes for distinguishing pipeline-able operators from pipeline breakers
-  class PipelineOp : QueryOp {
-    virtual string ToString();
-    const   string ViewStr() { return u8"← " + this->ToString(); }
-  };
-
-  class BreakerOp : QueryOp {
-    virtual string ToString();
-    const   string ViewStr() { return u8"↤ " + this->ToString(); }
-  };
-
-
-  // ------------------------------
   // Operator Classes
 
   // >> Leaf operators
   struct OpErr : QueryOp {
-    string err_msg;
-    Rel    plan_op;
+    Rel    &plan_op;
+    string  err_msg;
   };
 
   struct OpRead : PipelineOp {
@@ -174,13 +154,6 @@ namespace mohair {
     unique_ptr<string>               table_name;
   };
   */
-
-
-  // >> Translation functions
-  unique_ptr<QueryOp>    MohairFrom(Rel& rel_msg);
-  Rel&                   SubstraitFrom(unique_ptr<QueryOp>& mohair_op);
-  unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<OpJoin>& mohair_op);
-
 
   // >> Convenience functions
   string SourceNameForRead(ReadRel& substrait_op);
