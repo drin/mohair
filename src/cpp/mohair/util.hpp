@@ -20,37 +20,19 @@
 // Dependencies
 
 // >> Standard libs
-#include <memory>
-
-#include <functional>
+#include <fstream>
 #include <iostream>
-#include <sstream>
 
-#include "substrait/algebra.pb.h"
-
-// >> Aliases
-using std::shared_ptr;
-using std::unique_ptr;
-
+// >> Type Aliases
 using std::string;
-using std::any;
 
+//  |> For standard libs
 
 // ------------------------------
-// Types for Public API
+// Functions
 
-namespace mohair {
-
-  // empty base class
-  class QueryPlan {};
-
-  // classes for distinguishing abstraction levels of query plans
-  class LogicalPlan {};
-
-  // TODO define empty classes for optimization passes (dialects)
-  // class Predicate
-
-  // TODO move convenience function to read plan from a file to here
-
-
-} // namespace: mohair
+// TODO:  make convenience function to read a plan from a file
+fstream StreamForFile(const char *in_fpath) {
+  fstream in_fstream { in_fpath, std::ios::in | std::ios::binary };
+  return in_fstream;
+}

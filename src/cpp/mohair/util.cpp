@@ -19,38 +19,4 @@
 // ------------------------------
 // Dependencies
 
-// >> Standard libs
-#include <memory>
-
-#include <functional>
-#include <iostream>
-#include <sstream>
-
-#include "substrait/algebra.pb.h"
-
-// >> Aliases
-using std::shared_ptr;
-using std::unique_ptr;
-
-using std::string;
-using std::any;
-
-
-// ------------------------------
-// Types for Public API
-
-namespace mohair {
-
-  // empty base class
-  class QueryPlan {};
-
-  // classes for distinguishing abstraction levels of query plans
-  class LogicalPlan {};
-
-  // TODO define empty classes for optimization passes (dialects)
-  // class Predicate
-
-  // TODO move convenience function to read plan from a file to here
-
-
-} // namespace: mohair
+#include "util.hpp"
