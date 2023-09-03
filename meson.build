@@ -29,7 +29,9 @@ module_pkgcfg = import('pkgconfig')
 cpp_srcdir    = 'src' / 'cpp'
 
 # dir for headers
-cpp_headerdir = cpp_srcdir / 'headers'
+cpp_headerdir       = cpp_srcdir / 'headers'
+cpp_proto_substrait = cpp_srcdir / 'mohair' / 'substrait'
+cpp_proto_mohair    = cpp_srcdir / 'mohair' / 'mohair'
 
 # dir for core mohair sources
 cpp_coredir   = cpp_srcdir / 'mohair'
@@ -46,7 +48,21 @@ cpp_tooldir   = cpp_srcdir / 'toolbox'
 
 # >> For primary mohair binary
 #   |> include dirs and source list
-mohair_hdrlist = [cpp_headerdir / 'arrow.hpp' , cpp_headerdir / 'faodel.hpp']
+mohair_hdrlist = [
+   cpp_headerdir / 'arrow.hpp'
+  ,cpp_headerdir / 'faodel.hpp'
+  ,cpp_proto_mohair    / 'algebra.pb.h'
+  ,cpp_proto_substrait / 'algebra.pb.h'
+  ,cpp_proto_substrait / 'extensions' / 'extensions.pb.h'
+  ,cpp_proto_substrait / 'type.pb.h'
+  ,cpp_proto_substrait / 'function.pb.h'
+  ,cpp_proto_substrait / 'type_expressions.pb.h'
+  ,cpp_proto_substrait / 'parameterized_types.pb.h'
+  ,cpp_proto_substrait / 'extended_expression.pb.h'
+  ,cpp_proto_substrait / 'capabilities.pb.h'
+  ,cpp_proto_substrait / 'plan.pb.h'
+]
+
 mohair_srclist = [
    cpp_enginedir /    'faodel.cpp'
   ,cpp_enginedir /     'acero.cpp'
