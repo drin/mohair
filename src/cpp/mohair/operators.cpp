@@ -31,8 +31,8 @@ namespace mohair {
 
   // >> Specific translation functions (from Substrait to Mohair)
   template <typename UnaryRelMsg, typename MohairRel>
-  unique_ptr<QueryOp> FromUnaryOpMsg(Rel& rel_msg, UnaryRelMsg& substrait_op) {
-    auto op_input = MohairFrom(substrait_op.input());
+  unique_ptr<QueryOp> FromUnaryOpMsg(Rel *rel_msg, UnaryRelMsg *substrait_op) {
+    auto op_input = MohairFrom(substrait_op->mutable_input());
 
     // op_inputs is structured as a tuple and we propagate table name
     auto&& op_inputs = { op_input };
@@ -42,9 +42,9 @@ namespace mohair {
   }
 
   template <typename BinaryRelMsg, typename MohairRel>
-  unique_ptr<QueryOp> FromBinaryOpMsg(Rel& rel_msg, BinaryRelMsg& substrait_op) {
-    auto left_input  = MohairFrom(substrait_op.left() );
-    auto right_input = MohairFrom(substrait_op.right());
+  unique_ptr<QueryOp> FromBinaryOpMsg(Rel *rel_msg, BinaryRelMsg *substrait_op) {
+    auto left_input  = MohairFrom(substrait_op->mutable_left() );
+    auto right_input = MohairFrom(substrait_op->mutable_right());
 
     // inputs is structured as a tuple and we propagate table name
     auto&& op_inputs = { left_input, right_input };
@@ -54,14 +54,14 @@ namespace mohair {
   }
 
 
-  unique_ptr<QueryOp> FromReadMsg(Rel& rel_msg, ReadRel& substrait_op) {
+  unique_ptr<QueryOp> FromReadMsg(Rel *rel_msg, ReadRel *substrait_op) {
     string &&op_tname = std::move(SourceNameForRead(substrait_op));
     return std::make_unique<OpRead>(substrait_op, rel_msg, {}, op_tname);
   }
 
 
   // TODO
-  unique_ptr<QueryOp> FromSkyMsg(Rel& rel_msg, SkyRel& substrait_op) {
+  unique_ptr<QueryOp> FromSkyMsg(Rel *rel_msg, SkyRel *substrait_op) {
     return nullptr;
   }
 
@@ -70,47 +70,52 @@ namespace mohair {
    * A function to convert a substrait `Rel` message to a Mohair `QueryOp` derived
    * class.
    */
-  unique_ptr<QueryOp> MohairFrom(Rel& rel_msg) {
+  unique_ptr<QueryOp> MohairFrom(const Rel *rel_msg) {
     switch(rel_msg.rel_type_case()) {
       // Translate pipeline-able operators
       case Rel::RelTypeCase::kProject: {
-        return FromUnaryOpMsg<ProjectRel, OpProj>(rel_msg, rel_msg.project());
+        return FromUnaryOpMsg<ProjectRel, OpProj>(
+          rel_msg, rel_msg->mutable_project());
       }
       case Rel::RelTypeCase::kFilter: {
-        return FromUnaryOpMsg<FilterRel, OpSel>(rel_msg, rel_msg.filter());
+        return FromUnaryOpMsg<FilterRel, OpSel>(rel_msg, rel_msg->mutable_filter());
       }
       case Rel::RelTypeCase::kFetch: {
-        return FromUnaryOpMsg<FetchRel, OpLimit>(rel_msg, rel_msg.fetch());
+        return FromUnaryOpMsg<FetchRel, OpLimit>(rel_msg, rel_msg->mutable_fetch());
       }
 
       // Translate pipeline breaking operators
       case Rel::RelTypeCase::kSort: {
-        return FromUnaryOpMsg<SortRel, OpSort>(rel_msg, substrait_op);
+        return FromUnaryOpMsg<SortRel, OpSort>(rel_msg, rel_msg->mutable_sort());
       }
       case Rel::RelTypeCase::kAggregate: {
-        return FromUnaryOpMsg<AggregateRel, OpAggr>(rel_msg, rel_msg.aggregate());
+        return FromUnaryOpMsg<AggregateRel, OpAggr>(rel_msg, rel_msg->mutable_aggregate());
       }
       case Rel::RelTypeCase::kCross: {
-        return FromBinaryOpMsg<CrossRel, OpCrossJoin>(rel_msg, rel_msg.cross());
+        return FromBinaryOpMsg<CrossRel, OpCrossJoin>(rel_msg, rel_msg->mutable_cross());
       }
       case Rel::RelTypeCase::kJoin: {
-        return FromBinaryOpMsg<JoinRel, OpJoin>(rel_msg, rel_msg.join());
+        return FromBinaryOpMsg<JoinRel, OpJoin>(rel_msg, rel_msg->mutable_join());
       }
 
       // hash and merge joins
       case Rel::RelTypeCase::kHashJoin: {
-        return FromBinaryOpMsg<HashJoinRel, OpHashJoin>(rel_msg, rel_msg.hash_join());
+        return FromBinaryOpMsg<HashJoinRel, OpHashJoin>(
+          rel_msg, rel_msg->mutable_hash_join()
+        );
       }
       case Rel::RelTypeCase::kMergeJoin: {
-        return FromBinaryOpMsg<MergeJoinRel, OpMergeJoin>(rel_msg, rel_msg.merge_join());
+        return FromBinaryOpMsg<MergeJoinRel, OpMergeJoin>(
+          rel_msg, rel_msg->mutable_merge_join()
+        );
       }
 
       // Translate leaf operators
       case Rel::RelTypeCase::kRead: {
-        return FromReadMsg(rel_msg, rel_msg.read());
+        return FromReadMsg(rel_msg, rel_msg->mutable_read());
       }
       case Rel::RelTypeCase::kExtensionLeaf: {
-        return FromSkyMsg(rel_msg, rel_msg.extension_leaf());
+        return FromSkyMsg(rel_msg, rel_msg->mutable_extension_leaf());
       }
 
       // note: may not be pipeline breaking, but we can improve that when we get there
@@ -122,12 +127,15 @@ namespace mohair {
 
       // Catch all error
       default: {
-        return std::make_unique<OpErr>(rel_msg, "ParseError: Unknown substrait operator");
+        return std::make_unique<OpErr>(
+          rel_msg, "ParseError: Unknown substrait operator"
+        );
       }
+    }
   }
 
   // >> Translation from Mohair to Substrait
-  Rel& SubstraitFrom(unique_ptr<QueryOp>& mohair_op) {
+  const Rel *SubstraitFrom(unique_ptr<QueryOp>& mohair_op) {
     return mohair_op->op_wrap;
   }
 
@@ -150,8 +158,8 @@ namespace mohair {
   unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<OpJoin>& mohair_op) {
     // Get a Rel and clear its children (an anchor doesn't need that info)
     auto anchor_relmsg = SubstraitFrom(mohair_op);
-    anchor_relmsg.join().clear_left();
-    anchor_relmsg.join().clear_right();
+    anchor_relmsg->join().clear_left();
+    anchor_relmsg->join().clear_right();
 
     // Construct a PlanAnchor using the Rel
     auto anchor_msg = std::make_unique<PlanAnchor>();
@@ -160,11 +168,11 @@ namespace mohair {
   }
 
 
-  string SourceNameForRead(ReadRel& substrait_op) {
-    switch (substrait_op.read_type_case()) {
+  string SourceNameForRead(const ReadRel *substrait_op) {
+    switch (substrait_op->read_type_case()) {
       case ReadRel::ReadTypeCase::kNamedTable: {
         std::stringstream tname_stream;
-        const auto src_table = substrait_op.named_table;
+        const auto src_table = substrait_op->named_table();
 
         tname_stream << src_table.names(0);
         for (int tname_ndx = 1; tname_ndx < src_table.names_size(); ++tname_ndx) {

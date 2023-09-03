@@ -26,7 +26,10 @@
 
 // >> Internal libs
 //  |> generated protobuf code
-#include "substrait/algebra.pb.h"
+#include "../mohair/substrait/algebra.pb.h"
+#include "../mohair/substrait/plan.pb.h"
+
+#include "../mohair/mohair/algebra.pb.h"
 
 // >> Aliases
 //  |> For memory types
@@ -38,11 +41,8 @@ using std::string;
 //  |> For substrait
 using substrait::PlanRel;
 using substrait::Rel;
-using substrait::ErrRel;
-using substrait::PlanAnchor;
-
-// TODO: this is here as a hack; it should eventually be removed
-using substrait::OpJoin;
+using mohair::PlanAnchor;
+using mohair::ErrRel;
 
 
 // ------------------------------
@@ -89,9 +89,8 @@ namespace mohair {
 
   // ------------------------------
   // Translation Functions
-  unique_ptr<QueryOp>    MohairFrom(Rel& rel_msg);
+  unique_ptr<QueryOp>    MohairFrom(const Rel *rel_msg);
   Rel&                   SubstraitFrom(unique_ptr<QueryOp>& mohair_op);
-  unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<OpJoin>& mohair_op);
 
 
 } // namespace: mohair

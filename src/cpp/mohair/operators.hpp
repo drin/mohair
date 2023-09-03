@@ -35,7 +35,6 @@ using std::get;
 
 //  |> For substrait
 using substrait::ReadRel;
-using substrait::SkyRel;
 
 using substrait::ProjectRel;
 using substrait::FilterRel;
@@ -50,6 +49,8 @@ using substrait::JoinRel;
 using substrait::HashJoinRel;
 using substrait::MergeJoinRel;
 
+using mohair::SkyRel;
+
 
 // ------------------------------
 // Functions
@@ -61,102 +62,104 @@ namespace mohair {
 
   // >> Leaf operators
   struct OpErr : QueryOp {
-    Rel    &plan_op;
-    string  err_msg;
+    const Rel *plan_op;
+    string     err_msg;
   };
 
   struct OpRead : PipelineOp {
-    ReadRel            &plan_op;
-    Rel                &op_wrap;
-    tuple<>             op_inputs;
-    unique_ptr<string>  table_name;
+    const ReadRel *plan_op;
+    const Rel     *op_wrap;
+    tuple<>        op_inputs;
+    string         table_name;
   };
 
   // TODO: figure out how this should bridge to skytether
   struct OpSkyRead : PipelineOp {
-    SkyRel             &plan_op;
-    Rel                &op_wrap;
-    tuple<>             op_inputs;
-    unique_ptr<string>  table_name;
+    const SkyRel *plan_op;
+    const Rel    *op_wrap;
+    tuple<>       op_inputs;
+    string        table_name;
   };
 
   // >> Pipeline-able operators
   struct OpProj : PipelineOp {
-    ProjectRel                 &plan_op;
-    Rel                        &op_wrap;
+    const ProjectRel           *plan_op;
+    const Rel                  *op_wrap;
     tuple<unique_ptr<QueryOp>>  op_inputs;
-    unique_ptr<string>          table_name;
+    string                      table_name;
   };
 
   struct OpSel : PipelineOp {
-    FilterRel                  &plan_op;
-    Rel                        &op_wrap;
+    const FilterRel            *plan_op;
+    const Rel                  *op_wrap;
     tuple<unique_ptr<QueryOp>>  op_inputs;
-    unique_ptr<string>          table_name;
+    string                      table_name;
   };
 
   struct OpLimit : PipelineOp {
-    FetchRel                   &plan_op;
-    Rel                        &op_wrap;
+    const FetchRel             *plan_op;
+    const Rel                  *op_wrap;
     tuple<unique_ptr<QueryOp>>  op_inputs;
-    unique_ptr<string>          table_name;
+    string                      table_name;
   };
 
 
   // >> Pipeline breaking operators
   struct OpSort : BreakerOp {
-    SortRel                    &plan_op;
-    Rel                        &op_wrap;
+    const SortRel              *plan_op;
+    const Rel                  *op_wrap;
     tuple<unique_ptr<QueryOp>>  op_inputs;
-    unique_ptr<string>          table_name;
+    string                      table_name;
   };
 
   struct OpAggr : BreakerOp {
-    AggregateRel               &plan_op;
-    Rel                        &op_wrap;
+    const AggregateRel         *plan_op;
+    const Rel                  *op_wrap;
     tuple<unique_ptr<QueryOp>>  op_inputs;
-    unique_ptr<string>          table_name;
+    string                      table_name;
   };
 
   struct OpCrossJoin : BreakerOp {
-    CrossRel                                        &plan_op;
-    Rel                                             &op_wrap;
+    const CrossRel                                  *plan_op;
+    const Rel                                       *op_wrap;
     tuple<unique_ptr<QueryOp>, unique_ptr<QueryOp>>  op_inputs;
-    unique_ptr<string>                               table_name;
+    string                                           table_name;
   };
 
   struct OpJoin : BreakerOp {
-    JoinRel                                         &plan_op;
-    Rel                                             &op_wrap;
+    const JoinRel                                   *plan_op;
+    const Rel                                       *op_wrap;
     tuple<unique_ptr<QueryOp>, unique_ptr<QueryOp>>  op_inputs;
-    unique_ptr<string>                               table_name;
+    string                                           table_name;
   };
 
   struct OpHashJoin : BreakerOp {
-    HashJoinRel                                     &plan_op;
-    Rel                                             &op_wrap;
+    const HashJoinRel                               *plan_op;
+    const Rel                                       *op_wrap;
     tuple<unique_ptr<QueryOp>, unique_ptr<QueryOp>>  op_inputs;
-    unique_ptr<string>                               table_name;
+    string                                           table_name;
   };
 
   struct OpMergeJoin : BreakerOp {
-    MergeJoinRel                                    &plan_op;
-    Rel                                             &op_wrap;
+    const MergeJoinRel                              *plan_op;
+    const Rel                                       *op_wrap;
     tuple<unique_ptr<QueryOp>, unique_ptr<QueryOp>>  op_inputs;
-    unique_ptr<string>                               table_name;
+    string                                           table_name;
   };
 
   /* TODO: needs variadic op_inputs
   struct OpSet : BreakerOp {
-    SetRel                          &plan_op;
-    Rel                             &op_wrap;
+    SetRel                          *plan_op;
+    Rel                             *op_wrap;
     tuple<unique_ptr<QueryOp>, ...>  op_inputs;
     unique_ptr<string>               table_name;
   };
   */
 
   // >> Convenience functions
-  string SourceNameForRead(ReadRel& substrait_op);
+  string SourceNameForRead(const ReadRel *substrait_op);
 
+  // >> Translation functions
+  unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<OpJoin>& mohair_op);
 
 } // namespace: mohair
