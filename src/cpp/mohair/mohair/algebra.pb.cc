@@ -62,6 +62,25 @@ struct SkyRelDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SkyRelDefaultTypeInternal _SkyRel_default_instance_;
+PROTOBUF_CONSTEXPR ErrRel::ErrRel(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.err_msg_)*/ {
+    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
+  }
+
+  , /*decltype(_impl_.err_code_)*/ 0
+
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct ErrRelDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ErrRelDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ErrRelDefaultTypeInternal() {}
+  union {
+    ErrRel _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ErrRelDefaultTypeInternal _ErrRel_default_instance_;
 PROTOBUF_CONSTEXPR QueryRel::QueryRel(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.query_)*/ {
@@ -95,9 +114,8 @@ struct PlanAnchorDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PlanAnchorDefaultTypeInternal _PlanAnchor_default_instance_;
 }  // namespace mohair
-static ::_pb::Metadata file_level_metadata_mohair_2falgebra_2eproto[4];
-static constexpr const ::_pb::EnumDescriptor**
-    file_level_enum_descriptors_mohair_2falgebra_2eproto = nullptr;
+static ::_pb::Metadata file_level_metadata_mohair_2falgebra_2eproto[5];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_mohair_2falgebra_2eproto[1];
 static constexpr const ::_pb::ServiceDescriptor**
     file_level_service_descriptors_mohair_2falgebra_2eproto = nullptr;
 const ::uint32_t TableStruct_mohair_2falgebra_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
@@ -129,6 +147,16 @@ const ::uint32_t TableStruct_mohair_2falgebra_2eproto::offsets[] PROTOBUF_SECTIO
     ~0u,
     0,
     ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::mohair::ErrRel, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::mohair::ErrRel, _impl_.err_msg_),
+    PROTOBUF_FIELD_OFFSET(::mohair::ErrRel, _impl_.err_code_),
+    ~0u,  // no _has_bits_
     PROTOBUF_FIELD_OFFSET(::mohair::QueryRel, _internal_metadata_),
     ~0u,  // no _extensions_
     ~0u,  // no _oneof_case_
@@ -153,13 +181,15 @@ static const ::_pbi::MigrationSchema
     schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
         { 0, -1, -1, sizeof(::mohair::ExecutionStats)},
         { 10, 22, -1, sizeof(::mohair::SkyRel)},
-        { 26, -1, -1, sizeof(::mohair::QueryRel)},
-        { 35, 44, -1, sizeof(::mohair::PlanAnchor)},
+        { 26, -1, -1, sizeof(::mohair::ErrRel)},
+        { 36, -1, -1, sizeof(::mohair::QueryRel)},
+        { 45, 54, -1, sizeof(::mohair::PlanAnchor)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
     &::mohair::_ExecutionStats_default_instance_._instance,
     &::mohair::_SkyRel_default_instance_._instance,
+    &::mohair::_ErrRel_default_instance_._instance,
     &::mohair::_QueryRel_default_instance_._instance,
     &::mohair::_PlanAnchor_default_instance_._instance,
 };
@@ -171,12 +201,15 @@ const char descriptor_table_protodef_mohair_2falgebra_2eproto[] PROTOBUF_SECTION
     "kyRel\022\026\n\006domain\030\001 \001(\tR\006domain\022\034\n\tpartiti"
     "on\030\002 \001(\tR\tpartition\022\026\n\006slices\030\003 \003(\rR\006sli"
     "ces\0224\n\texecstats\030\004 \001(\0132\026.mohair.Executio"
-    "nStatsR\texecstats\" \n\010QueryRel\022\024\n\005query\030\001"
-    " \001(\014R\005query\";\n\nPlanAnchor\022-\n\nanchor_rel\030"
-    "\001 \001(\0132\016.substrait.RelR\tanchorRelBR\n\ncom."
-    "mohairB\014AlgebraProtoP\001\242\002\003MXX\252\002\006Mohair\312\002\006"
-    "Mohair\342\002\022Mohair\\GPBMetadata\352\002\006Mohairb\006pr"
-    "oto3"
+    "nStatsR\texecstats\"u\n\006ErrRel\022\027\n\007err_msg\030\001"
+    " \001(\tR\006errMsg\0221\n\010err_code\030\002 \001(\0162\026.mohair."
+    "ErrRel.ErrTypeR\007errCode\"\037\n\007ErrType\022\024\n\020IN"
+    "VALID_MSG_TYPE\020\000\" \n\010QueryRel\022\024\n\005query\030\001 "
+    "\001(\014R\005query\";\n\nPlanAnchor\022-\n\nanchor_rel\030\001"
+    " \001(\0132\016.substrait.RelR\tanchorRelBR\n\ncom.m"
+    "ohairB\014AlgebraProtoP\001\242\002\003MXX\252\002\006Mohair\312\002\006M"
+    "ohair\342\002\022Mohair\\GPBMetadata\352\002\006Mohairb\006pro"
+    "to3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_mohair_2falgebra_2eproto_deps[2] =
     {
@@ -187,13 +220,13 @@ static ::absl::once_flag descriptor_table_mohair_2falgebra_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_mohair_2falgebra_2eproto = {
     false,
     false,
-    484,
+    603,
     descriptor_table_protodef_mohair_2falgebra_2eproto,
     "mohair/algebra.proto",
     &descriptor_table_mohair_2falgebra_2eproto_once,
     descriptor_table_mohair_2falgebra_2eproto_deps,
     2,
-    4,
+    5,
     schemas,
     file_default_instances,
     TableStruct_mohair_2falgebra_2eproto::offsets,
@@ -220,6 +253,28 @@ PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_mohair_2
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY2
 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_mohair_2falgebra_2eproto(&descriptor_table_mohair_2falgebra_2eproto);
 namespace mohair {
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ErrRel_ErrType_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_mohair_2falgebra_2eproto);
+  return file_level_enum_descriptors_mohair_2falgebra_2eproto[0];
+}
+bool ErrRel_ErrType_IsValid(int value) {
+  switch (value) {
+    case 0:
+      return true;
+    default:
+      return false;
+  }
+}
+#if (__cplusplus < 201703) && \
+  (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
+
+constexpr ErrRel_ErrType ErrRel::INVALID_MSG_TYPE;
+constexpr ErrRel_ErrType ErrRel::ErrType_MIN;
+constexpr ErrRel_ErrType ErrRel::ErrType_MAX;
+constexpr int ErrRel::ErrType_ARRAYSIZE;
+
+#endif  // (__cplusplus < 201703) &&
+        // (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
 // ===================================================================
 
 class ExecutionStats::_Internal {
@@ -785,6 +840,235 @@ void SkyRel::InternalSwap(SkyRel* other) {
 }
 // ===================================================================
 
+class ErrRel::_Internal {
+ public:
+};
+
+ErrRel::ErrRel(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:mohair.ErrRel)
+}
+ErrRel::ErrRel(const ErrRel& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  ErrRel* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.err_msg_) {}
+
+    , decltype(_impl_.err_code_) {}
+
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.err_msg_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.err_msg_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_err_msg().empty()) {
+    _this->_impl_.err_msg_.Set(from._internal_err_msg(), _this->GetArenaForAllocation());
+  }
+  _this->_impl_.err_code_ = from._impl_.err_code_;
+  // @@protoc_insertion_point(copy_constructor:mohair.ErrRel)
+}
+
+inline void ErrRel::SharedCtor(::_pb::Arena* arena) {
+  (void)arena;
+  new (&_impl_) Impl_{
+      decltype(_impl_.err_msg_) {}
+
+    , decltype(_impl_.err_code_) { 0 }
+
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.err_msg_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        _impl_.err_msg_.Set("", GetArenaForAllocation());
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+ErrRel::~ErrRel() {
+  // @@protoc_insertion_point(destructor:mohair.ErrRel)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void ErrRel::SharedDtor() {
+  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.err_msg_.Destroy();
+}
+
+void ErrRel::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void ErrRel::Clear() {
+// @@protoc_insertion_point(message_clear_start:mohair.ErrRel)
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.err_msg_.ClearToEmpty();
+  _impl_.err_code_ = 0;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ErrRel::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string err_msg = 1 [json_name = "errMsg"];
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_err_msg();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "mohair.ErrRel.err_msg"));
+        } else {
+          goto handle_unusual;
+        }
+        continue;
+      // .mohair.ErrRel.ErrType err_code = 2 [json_name = "errCode"];
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
+          ::int32_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+          _internal_set_err_code(static_cast<::mohair::ErrRel_ErrType>(val));
+        } else {
+          goto handle_unusual;
+        }
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+::uint8_t* ErrRel::_InternalSerialize(
+    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:mohair.ErrRel)
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string err_msg = 1 [json_name = "errMsg"];
+  if (!this->_internal_err_msg().empty()) {
+    const std::string& _s = this->_internal_err_msg();
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "mohair.ErrRel.err_msg");
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  // .mohair.ErrRel.ErrType err_code = 2 [json_name = "errCode"];
+  if (this->_internal_err_code() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+        2, this->_internal_err_code(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:mohair.ErrRel)
+  return target;
+}
+
+::size_t ErrRel::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:mohair.ErrRel)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string err_msg = 1 [json_name = "errMsg"];
+  if (!this->_internal_err_msg().empty()) {
+    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+                                    this->_internal_err_msg());
+  }
+
+  // .mohair.ErrRel.ErrType err_code = 2 [json_name = "errCode"];
+  if (this->_internal_err_code() != 0) {
+    total_size += 1 +
+                  ::_pbi::WireFormatLite::EnumSize(this->_internal_err_code());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ErrRel::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    ErrRel::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ErrRel::GetClassData() const { return &_class_data_; }
+
+
+void ErrRel::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<ErrRel*>(&to_msg);
+  auto& from = static_cast<const ErrRel&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:mohair.ErrRel)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_err_msg().empty()) {
+    _this->_internal_set_err_msg(from._internal_err_msg());
+  }
+  if (from._internal_err_code() != 0) {
+    _this->_internal_set_err_code(from._internal_err_code());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ErrRel::CopyFrom(const ErrRel& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:mohair.ErrRel)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ErrRel::IsInitialized() const {
+  return true;
+}
+
+void ErrRel::InternalSwap(ErrRel* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.err_msg_, lhs_arena,
+                                       &other->_impl_.err_msg_, rhs_arena);
+  swap(_impl_.err_code_, other->_impl_.err_code_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ErrRel::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_mohair_2falgebra_2eproto_getter, &descriptor_table_mohair_2falgebra_2eproto_once,
+      file_level_metadata_mohair_2falgebra_2eproto[2]);
+}
+// ===================================================================
+
 class QueryRel::_Internal {
  public:
 };
@@ -974,7 +1258,7 @@ void QueryRel::InternalSwap(QueryRel* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata QueryRel::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_mohair_2falgebra_2eproto_getter, &descriptor_table_mohair_2falgebra_2eproto_once,
-      file_level_metadata_mohair_2falgebra_2eproto[2]);
+      file_level_metadata_mohair_2falgebra_2eproto[3]);
 }
 // ===================================================================
 
@@ -1183,7 +1467,7 @@ void PlanAnchor::InternalSwap(PlanAnchor* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata PlanAnchor::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_mohair_2falgebra_2eproto_getter, &descriptor_table_mohair_2falgebra_2eproto_once,
-      file_level_metadata_mohair_2falgebra_2eproto[3]);
+      file_level_metadata_mohair_2falgebra_2eproto[4]);
 }
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace mohair
@@ -1195,6 +1479,10 @@ Arena::CreateMaybeMessage< ::mohair::ExecutionStats >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::mohair::SkyRel*
 Arena::CreateMaybeMessage< ::mohair::SkyRel >(Arena* arena) {
   return Arena::CreateMessageInternal< ::mohair::SkyRel >(arena);
+}
+template<> PROTOBUF_NOINLINE ::mohair::ErrRel*
+Arena::CreateMaybeMessage< ::mohair::ErrRel >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::mohair::ErrRel >(arena);
 }
 template<> PROTOBUF_NOINLINE ::mohair::QueryRel*
 Arena::CreateMaybeMessage< ::mohair::QueryRel >(Arena* arena) {

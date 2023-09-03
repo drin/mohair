@@ -30,9 +30,10 @@
 #include "google/protobuf/message.h"
 #include "google/protobuf/repeated_field.h"  // IWYU pragma: export
 #include "google/protobuf/extension_set.h"  // IWYU pragma: export
+#include "google/protobuf/generated_enum_reflection.h"
 #include "google/protobuf/unknown_field_set.h"
 #include "google/protobuf/any.pb.h"
-#include "substrait/algebra.pb.h"
+#include "../substrait/algebra.pb.h"
 // @@protoc_insertion_point(includes)
 
 // Must be included last.
@@ -53,6 +54,9 @@ struct TableStruct_mohair_2falgebra_2eproto {
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable
     descriptor_table_mohair_2falgebra_2eproto;
 namespace mohair {
+class ErrRel;
+struct ErrRelDefaultTypeInternal;
+extern ErrRelDefaultTypeInternal _ErrRel_default_instance_;
 class ExecutionStats;
 struct ExecutionStatsDefaultTypeInternal;
 extern ExecutionStatsDefaultTypeInternal _ExecutionStats_default_instance_;
@@ -68,6 +72,8 @@ extern SkyRelDefaultTypeInternal _SkyRel_default_instance_;
 }  // namespace mohair
 PROTOBUF_NAMESPACE_OPEN
 template <>
+::mohair::ErrRel* Arena::CreateMaybeMessage<::mohair::ErrRel>(Arena*);
+template <>
 ::mohair::ExecutionStats* Arena::CreateMaybeMessage<::mohair::ExecutionStats>(Arena*);
 template <>
 ::mohair::PlanAnchor* Arena::CreateMaybeMessage<::mohair::PlanAnchor>(Arena*);
@@ -78,6 +84,37 @@ template <>
 PROTOBUF_NAMESPACE_CLOSE
 
 namespace mohair {
+enum ErrRel_ErrType : int {
+  ErrRel_ErrType_INVALID_MSG_TYPE = 0,
+  ErrRel_ErrType_ErrRel_ErrType_INT_MIN_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::min(),
+  ErrRel_ErrType_ErrRel_ErrType_INT_MAX_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::max(),
+};
+
+bool ErrRel_ErrType_IsValid(int value);
+constexpr ErrRel_ErrType ErrRel_ErrType_ErrType_MIN = static_cast<ErrRel_ErrType>(0);
+constexpr ErrRel_ErrType ErrRel_ErrType_ErrType_MAX = static_cast<ErrRel_ErrType>(0);
+constexpr int ErrRel_ErrType_ErrType_ARRAYSIZE = 0 + 1;
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
+ErrRel_ErrType_descriptor();
+template <typename T>
+const std::string& ErrRel_ErrType_Name(T value) {
+  static_assert(std::is_same<T, ErrRel_ErrType>::value ||
+                    std::is_integral<T>::value,
+                "Incorrect type passed to ErrType_Name().");
+  return ErrRel_ErrType_Name(static_cast<ErrRel_ErrType>(value));
+}
+template <>
+inline const std::string& ErrRel_ErrType_Name(ErrRel_ErrType value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfDenseEnum<ErrRel_ErrType_descriptor,
+                                                 0, 0>(
+      static_cast<int>(value));
+}
+inline bool ErrRel_ErrType_Parse(absl::string_view name, ErrRel_ErrType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ErrRel_ErrType>(
+      ErrRel_ErrType_descriptor(), name, value);
+}
 
 // ===================================================================
 
@@ -476,6 +513,201 @@ class SkyRel final :
   friend struct ::TableStruct_mohair_2falgebra_2eproto;
 };// -------------------------------------------------------------------
 
+class ErrRel final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:mohair.ErrRel) */ {
+ public:
+  inline ErrRel() : ErrRel(nullptr) {}
+  ~ErrRel() override;
+  explicit PROTOBUF_CONSTEXPR ErrRel(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ErrRel(const ErrRel& from);
+  ErrRel(ErrRel&& from) noexcept
+    : ErrRel() {
+    *this = ::std::move(from);
+  }
+
+  inline ErrRel& operator=(const ErrRel& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ErrRel& operator=(ErrRel&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ErrRel& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ErrRel* internal_default_instance() {
+    return reinterpret_cast<const ErrRel*>(
+               &_ErrRel_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(ErrRel& a, ErrRel& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ErrRel* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ErrRel* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ErrRel* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ErrRel>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ErrRel& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ErrRel& from) {
+    ErrRel::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ErrRel* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::absl::string_view FullMessageName() {
+    return "mohair.ErrRel";
+  }
+  protected:
+  explicit ErrRel(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  using ErrType = ErrRel_ErrType;
+  static constexpr ErrType INVALID_MSG_TYPE = ErrRel_ErrType_INVALID_MSG_TYPE;
+  static inline bool ErrType_IsValid(int value) {
+    return ErrRel_ErrType_IsValid(value);
+  }
+  static constexpr ErrType ErrType_MIN = ErrRel_ErrType_ErrType_MIN;
+  static constexpr ErrType ErrType_MAX = ErrRel_ErrType_ErrType_MAX;
+  static constexpr int ErrType_ARRAYSIZE = ErrRel_ErrType_ErrType_ARRAYSIZE;
+  static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ErrType_descriptor() {
+    return ErrRel_ErrType_descriptor();
+  }
+  template <typename T>
+  static inline const std::string& ErrType_Name(T value) {
+    return ErrRel_ErrType_Name(value);
+  }
+  static inline bool ErrType_Parse(absl::string_view name, ErrType* value) {
+    return ErrRel_ErrType_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kErrMsgFieldNumber = 1,
+    kErrCodeFieldNumber = 2,
+  };
+  // string err_msg = 1 [json_name = "errMsg"];
+  void clear_err_msg() ;
+  const std::string& err_msg() const;
+
+
+
+
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_err_msg(Arg_&& arg, Args_... args);
+  std::string* mutable_err_msg();
+  PROTOBUF_NODISCARD std::string* release_err_msg();
+  void set_allocated_err_msg(std::string* ptr);
+
+  private:
+  const std::string& _internal_err_msg() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_err_msg(
+      const std::string& value);
+  std::string* _internal_mutable_err_msg();
+
+  public:
+  // .mohair.ErrRel.ErrType err_code = 2 [json_name = "errCode"];
+  void clear_err_code() ;
+  ::mohair::ErrRel_ErrType err_code() const;
+  void set_err_code(::mohair::ErrRel_ErrType value);
+
+  private:
+  ::mohair::ErrRel_ErrType _internal_err_code() const;
+  void _internal_set_err_code(::mohair::ErrRel_ErrType value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:mohair.ErrRel)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr err_msg_;
+    int err_code_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_mohair_2falgebra_2eproto;
+};// -------------------------------------------------------------------
+
 class QueryRel final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:mohair.QueryRel) */ {
  public:
@@ -531,7 +763,7 @@ class QueryRel final :
                &_QueryRel_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    3;
 
   friend void swap(QueryRel& a, QueryRel& b) {
     a.Swap(&b);
@@ -695,7 +927,7 @@ class PlanAnchor final :
                &_PlanAnchor_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
   friend void swap(PlanAnchor& a, PlanAnchor& b) {
     a.Swap(&b);
@@ -1086,6 +1318,77 @@ inline void SkyRel::set_allocated_execstats(::mohair::ExecutionStats* execstats)
 
 // -------------------------------------------------------------------
 
+// ErrRel
+
+// string err_msg = 1 [json_name = "errMsg"];
+inline void ErrRel::clear_err_msg() {
+  _impl_.err_msg_.ClearToEmpty();
+}
+inline const std::string& ErrRel::err_msg() const {
+  // @@protoc_insertion_point(field_get:mohair.ErrRel.err_msg)
+  return _internal_err_msg();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ErrRel::set_err_msg(Arg_&& arg,
+                                                     Args_... args) {
+  ;
+  _impl_.err_msg_.Set(static_cast<Arg_&&>(arg), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:mohair.ErrRel.err_msg)
+}
+inline std::string* ErrRel::mutable_err_msg() {
+  std::string* _s = _internal_mutable_err_msg();
+  // @@protoc_insertion_point(field_mutable:mohair.ErrRel.err_msg)
+  return _s;
+}
+inline const std::string& ErrRel::_internal_err_msg() const {
+  return _impl_.err_msg_.Get();
+}
+inline void ErrRel::_internal_set_err_msg(const std::string& value) {
+  ;
+
+
+  _impl_.err_msg_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ErrRel::_internal_mutable_err_msg() {
+  ;
+  return _impl_.err_msg_.Mutable( GetArenaForAllocation());
+}
+inline std::string* ErrRel::release_err_msg() {
+  // @@protoc_insertion_point(field_release:mohair.ErrRel.err_msg)
+  return _impl_.err_msg_.Release();
+}
+inline void ErrRel::set_allocated_err_msg(std::string* value) {
+  _impl_.err_msg_.SetAllocated(value, GetArenaForAllocation());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.err_msg_.IsDefault()) {
+          _impl_.err_msg_.Set("", GetArenaForAllocation());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:mohair.ErrRel.err_msg)
+}
+
+// .mohair.ErrRel.ErrType err_code = 2 [json_name = "errCode"];
+inline void ErrRel::clear_err_code() {
+  _impl_.err_code_ = 0;
+}
+inline ::mohair::ErrRel_ErrType ErrRel::err_code() const {
+  // @@protoc_insertion_point(field_get:mohair.ErrRel.err_code)
+  return _internal_err_code();
+}
+inline void ErrRel::set_err_code(::mohair::ErrRel_ErrType value) {
+   _internal_set_err_code(value);
+  // @@protoc_insertion_point(field_set:mohair.ErrRel.err_code)
+}
+inline ::mohair::ErrRel_ErrType ErrRel::_internal_err_code() const {
+  return static_cast<::mohair::ErrRel_ErrType>(_impl_.err_code_);
+}
+inline void ErrRel::_internal_set_err_code(::mohair::ErrRel_ErrType value) {
+  ;
+  _impl_.err_code_ = value;
+}
+
+// -------------------------------------------------------------------
+
 // QueryRel
 
 // bytes query = 1 [json_name = "query"];
@@ -1230,6 +1533,17 @@ inline void PlanAnchor::set_allocated_anchor_rel(::substrait::Rel* anchor_rel) {
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace mohair
 
+
+PROTOBUF_NAMESPACE_OPEN
+
+template <>
+struct is_proto_enum<::mohair::ErrRel_ErrType> : std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor<::mohair::ErrRel_ErrType>() {
+  return ::mohair::ErrRel_ErrType_descriptor();
+}
+
+PROTOBUF_NAMESPACE_CLOSE
 
 // @@protoc_insertion_point(global_scope)
 
