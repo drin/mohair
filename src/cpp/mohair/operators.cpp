@@ -23,46 +23,83 @@
 #include "operators.hpp"
 
 
-
 // ------------------------------
 // Classes and Functions
 
 namespace mohair {
 
+  // >> Accessors for OpVariant that use visitors
+  string OpVariant::table_name() {
+    // auto& rel_op should be a unique_ptr&
+    auto tname_visitor = [](const auto& rel_op) { return rel_op->table_name; }
+
+    return std::visit(tname_visitor, this->op);
+  }
+
+  const Rel* OpVariant::op_wrap() {
+    // auto& rel_op should be a unique_ptr&
+    auto wrap_visitor = [](const auto& rel_op) { return rel_op->op_wrap; }
+
+    return std::visit(wrap_visitor, this->op);
+  }
+
+  unique_ptr<PlanAnchor> OpVariant::plan_anchor() {
+    return std::visit(OpVariant::PlanAnchorVisitor, this->op);
+  }
+
+
   // >> Specific translation functions (from Substrait to Mohair)
   template <typename UnaryRelMsg, typename MohairRel>
-  unique_ptr<QueryOp> FromUnaryOpMsg(Rel *rel_msg, UnaryRelMsg *substrait_op) {
+  OpVariant FromUnaryOpMsg(Rel *rel_msg, UnaryRelMsg *substrait_op) {
+    // recurse on input relation
     auto op_input = MohairFrom(substrait_op->mutable_input());
 
-    // op_inputs is structured as a tuple and we propagate table name
-    auto&& op_inputs = { op_input };
-    auto&& op_tname  = op_input->table_name;
+    // rvals for constructor args
+    tuple<OpVariant> &&op_inputs = { op_input };
+    auto             &&op_tname  = op_input->table_name();
 
-    return std::make_unique<MohairRel>(substrait_op, rel_msg, op_inputs, op_tname);
+    // inline construction of  OpVariant (variant wrapper around a unique pointer)
+    return OpVariant { 
+       std::in_place_type<unique_ptr<MohairRel>>
+      ,std::make_unique<MohairRel>(substrait_op, rel_msg, op_inputs, op_tname)
+    };
   }
 
   template <typename BinaryRelMsg, typename MohairRel>
-  unique_ptr<QueryOp> FromBinaryOpMsg(Rel *rel_msg, BinaryRelMsg *substrait_op) {
+  OpVariant FromBinaryOpMsg(Rel *rel_msg, BinaryRelMsg *substrait_op) {
+    // recurse on input relations
     auto left_input  = MohairFrom(substrait_op->mutable_left() );
     auto right_input = MohairFrom(substrait_op->mutable_right());
 
-    // inputs is structured as a tuple and we propagate table name
-    auto&& op_inputs = { left_input, right_input };
-    auto&& op_tname  = left_input->table_name + "." + right_input->table_name;
+    // rvals for constructor args
+    tuple<OpVariant, OpVariant> &&op_inputs = { left_input, right_input };
+    auto &&op_tname = left_input->table_name() + "." + right_input->table_name();
 
-    return std::make_unique<MohairRel>(substrait_op, rel_msg, op_inputs, op_tname);
+    // inline construction of  OpVariant (variant wrapper around a unique pointer)
+    return OpVariant {
+       std::in_place_type<unique_ptr<MohairRel>>
+      ,std::make_unique<MohairRel>(substrait_op, rel_msg, op_inputs, op_tname)
+    };
   }
 
 
-  unique_ptr<QueryOp> FromReadMsg(Rel *rel_msg, ReadRel *substrait_op) {
+  OpVariant FromReadMsg(Rel *rel_msg, ReadRel *substrait_op) {
     string &&op_tname = std::move(SourceNameForRead(substrait_op));
-    return std::make_unique<OpRead>(substrait_op, rel_msg, {}, op_tname);
+
+    return OpVariant {
+       std::in_place_type<unique_ptr<OpRead>>
+      ,std::make_unique<OpRead>(substrait_op, rel_msg, {}, op_tname)
+    };
   }
 
 
-  // TODO
-  unique_ptr<QueryOp> FromSkyMsg(Rel *rel_msg, SkyRel *substrait_op) {
-    return nullptr;
+  OpVariant FromSkyMsg(Rel *rel_msg, SkyRel *substrait_op) {
+    // TODO: implementation
+    // TODO: validate inline construction of unique pointer
+    return OpVariant {
+       std::in_place_type<unique_ptr<OpSkyRead>>
+      ,unique_ptr<OpSkyRead>{}
+    };
   }
 
 
@@ -70,12 +107,11 @@ namespace mohair {
    * A function to convert a substrait `Rel` message to a Mohair `QueryOp` derived
    * class.
    */
-  unique_ptr<QueryOp> MohairFrom(const Rel *rel_msg) {
+  OpVariant MohairFrom(const Rel *rel_msg) {
     switch(rel_msg.rel_type_case()) {
       // Translate pipeline-able operators
       case Rel::RelTypeCase::kProject: {
-        return FromUnaryOpMsg<ProjectRel, OpProj>(
-          rel_msg, rel_msg->mutable_project());
+        return FromUnaryOpMsg<ProjectRel, OpProj>(rel_msg, rel_msg->mutable_project());
       }
       case Rel::RelTypeCase::kFilter: {
         return FromUnaryOpMsg<FilterRel, OpSel>(rel_msg, rel_msg->mutable_filter());
@@ -127,46 +163,22 @@ namespace mohair {
 
       // Catch all error
       default: {
-        return std::make_unique<OpErr>(
-          rel_msg, "ParseError: Unknown substrait operator"
-        );
+        return OpVariant {
+           std::in_place_type<unique_ptr<OpErr>>
+          ,std::make_unique<OpErr>(rel_msg, "ParseError: Unknown substrait operator")
+        };
       }
     }
   }
 
   // >> Translation from Mohair to Substrait
-  const Rel *SubstraitFrom(unique_ptr<QueryOp>& mohair_op) {
-    return mohair_op->op_wrap;
+  const Rel* SubstraitFrom(OpVariant& mohair_op) {
+    return mohair_op.op_wrap();
   }
 
-
-  /* TODO: needs some non-trivial templating
-  // >> Translation from Mohair to a PlanAnchor
-  unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<QueryOp>& mohair_op) {
-    // Create an ErrRel and set its error details
-    auto anchor_relmsg = std::make_unique<ErrRel>();
-    anchor_relmsg.set_err_msg("UnimplementedError: PlanAnchor must be a JoinRel");
-    anchor_relmsg.set_err_code(ErrRel::ErrType::INVALID_MSG_TYPE);
-
-    // Construct a PlanAnchor using the Rel
-    auto anchor_msg = std::make_unique<PlanAnchor>();
-    anchor_msg.set_allocated_anchor_rel(anchor_relmsg);
-    return anchor_msg;
+  unique_ptr<PlanAnchor> PlanAnchorFrom(OpVariant& mohair_op) {
+    return mohair_op.plan_anchor();
   }
-  */
-
-  unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<OpJoin>& mohair_op) {
-    // Get a Rel and clear its children (an anchor doesn't need that info)
-    auto anchor_relmsg = SubstraitFrom(mohair_op);
-    anchor_relmsg->join().clear_left();
-    anchor_relmsg->join().clear_right();
-
-    // Construct a PlanAnchor using the Rel
-    auto anchor_msg = std::make_unique<PlanAnchor>();
-    anchor_msg.set_allocated_anchor_rel(anchor_relmsg);
-    return anchor_msg;
-  }
-
 
   string SourceNameForRead(const ReadRel *substrait_op) {
     switch (substrait_op->read_type_case()) {
