@@ -29,9 +29,41 @@ fstream StreamForFile(const char *in_fpath) {
   return fstream { in_fpath, std::ios::in | std::ios::binary };
 }
 
-unique_ptr<PlanRel> SubstraitPlanFromFile(fstream plan_fstream) {
+bool FileToString(const char *in_fpath, string &file_data) {
+  // create an IO stream for the file
+  auto file_stream = StreamForFile(in_fpath);
+  if (!file_stream) {
+    std::cerr << "Failed to open IO stream for file" << std::endl;
+    return false;
+  }
+
+  // go to end of stream, read the position, then reset position
+  file_stream.seekg(0, std::ios_base::end);
+  auto size = file_stream.tellg();
+  file_stream.seekg(0);
+  std::cout << "File size: [" << std::to_string(size) << "]" << std::endl;
+
+  // Resize the output and read the file data into it
+  file_data.resize(size);
+  auto output_ptr = &(file_data[0]);
+  file_stream.read(output_ptr, size);
+
+  // On success, the number of characters read will match size
+  return file_stream.gcount() == size;
+}
+
+unique_ptr<PlanRel> SubstraitPlanFromString(string &plan_msg) {
   auto substrait_plan = std::make_unique<PlanRel>();
-  if (substrait_plan->ParseFromIstream(&plan_fstream)) { return substrait_plan; }
+
+  substrait_plan->ParseFromString(plan_msg);
+  substrait_plan->PrintDebugString();
+
+  return substrait_plan;
+}
+
+unique_ptr<PlanRel> SubstraitPlanFromFile(fstream *plan_fstream) {
+  auto substrait_plan = std::make_unique<PlanRel>();
+  if (substrait_plan->ParseFromIstream(plan_fstream)) { return substrait_plan; }
 
   std::cerr << "Failed to parse substrait plan" << std::endl;
   return nullptr;

@@ -18,6 +18,7 @@
 
 // ------------------------------
 // Dependencies
+#pragma once
 
 // >> Standard libs
 #include <fstream>
@@ -29,10 +30,14 @@
 
 // >> Type Aliases
 using std::string;
+using std::fstream;
 
 
 // ------------------------------
 // Functions
 
 fstream StreamForFile(const char *in_fpath);
-unique_ptr<PlanRel> SubstraitPlanFromFile(fstream plan_fstream);
+bool    FileToString(const char *in_fpath, string &file_data);
+
+unique_ptr<PlanRel> SubstraitPlanFromString(string &plan_msg);
+unique_ptr<PlanRel> SubstraitPlanFromFile(fstream *plan_fstream);

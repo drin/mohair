@@ -28,7 +28,6 @@
 #include "../headers/mohair.hpp"
 
 // >> Aliases
-using std::any;
 
 
 // ------------------------------

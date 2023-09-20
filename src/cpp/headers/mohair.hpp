@@ -50,21 +50,33 @@ using mohair::ErrRel;
 
 namespace mohair {
 
-
   // ------------------------------
   // Base classes for operators
 
   // empty base class
-  struct QueryOp {};
+  struct QueryOp {
+    Rel    *op_wrap;
+    string  table_name;
+
+    QueryOp(Rel *rel, string tname): op_wrap(rel), table_name(tname) {}
+
+    virtual unique_ptr<PlanAnchor> plan_anchor();
+    virtual string                 ToString();
+    virtual const string           ViewStr();
+  };
 
   // classes for distinguishing pipeline-able operators from pipeline breakers
   struct PipelineOp : QueryOp {
-    virtual string ToString();
+    PipelineOp(Rel *rel, string tname): QueryOp(rel, tname) {}
+
+    virtual string ToString() override;
     const   string ViewStr() { return u8"← " + this->ToString(); }
   };
 
   struct BreakerOp : QueryOp {
-    virtual string ToString();
+    BreakerOp(Rel *rel, string tname): QueryOp(rel, tname) {}
+
+    virtual string ToString() override;
     const   string ViewStr() { return u8"↤ " + this->ToString(); }
   };
 
@@ -125,9 +137,8 @@ namespace mohair {
 
   // ------------------------------
   // Translation Functions
-  OpVariant              MohairFrom(const Rel *rel_msg);
-  const Rel*             SubstraitFrom(OpVariant &mohair_op);
-  unique_ptr<PlanAnchor> PlanAnchorFrom(OpVariant &mohair_op);
+  unique_ptr<QueryOp>    MohairFrom(Rel *rel_msg);
+  unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<QueryOp> &mohair_op);
 
 
 } // namespace: mohair
