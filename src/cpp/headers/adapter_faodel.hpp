@@ -11,8 +11,13 @@
 
 // >> Standard libs
 #include <functional>
-#include <iostream>
+#include <memory>
+#include <string>
 #include <sstream>
+#include <iostream>
+
+#include <vector>
+#include <map>
 
 // >> Third-party libs
 #include <mpi.h>
@@ -22,8 +27,29 @@
 #include "faodel/lunasa/common/Helpers.hh"
 #include "faodel/kelpie/Kelpie.hh"
 
-// >> Aliases
+// >> Internal libs
+#include "arrow.hpp"
+
+
+// >> Type Aliases
+//  |> Types from standard lib
 using std::string;
+using std::vector;
+using std::map;
+
+//  |> common Faodel types
+
+//      data objects
+using KelpKey = kelpie::Key;
+using LunaDO  = lunasa::DataObject;
+using ArrowDO = faodel::ArrowDataObject;
+
+//      core types
+using FaoBucket = faodel::bucket_t;
+using FaoStatus = faodel::rc_t;
+
+using kelpie::KELPIE_OK;
+
 
 
 // ------------------------------
@@ -38,10 +64,15 @@ namespace mohair::adapters {
   void BootstrapServices(string &faodel_config);
   void PrintStringObj(const string print_msg, const string string_obj);
 
-  struct Faodel {
-    string config_str;
-    string pool_name;
+  NamedTableProvider ProviderForFadoMap(map<KelpKey, LunaDO> &fado_map);
 
+  struct Faodel {
+    // state for managing faodel
+    string               config_str;
+    string               pool_name;
+    map<KelpKey, LunaDO> fado_map;
+
+    // state for managing MPI
     bool initialized;
     int  provided;
     int  mpi_rank;
@@ -50,14 +81,19 @@ namespace mohair::adapters {
     Faodel(const string &kpool_name, const string &service_config);
     Faodel();
 
+    // Functions for interfacing with Faodel libraries
+    kelpie::Pool       ConnectToPool();
+    lunasa::DataObject AllocateString(const string &str_obj);
+
+    // Functions for MPI integration
     void Bootstrap(int argc, char **argv);
     void BootstrapWithKelpie(int argc, char **argv);
-    void Finish();
     void PrintMPIInfo();
-
-    kelpie::Pool ConnectToPool();
-    lunasa::DataObject AllocateString(const string &str_obj);
+    void Finish();
     void FencedRankFn(int target_rank, std::function<void()> target_fn);
+
+    // Functions for Arrow and Acero integration
+    NamedTableProvider FadoTableProvider();
   };
 
 } // namespace mohair::adapters

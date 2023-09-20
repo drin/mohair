@@ -19,7 +19,7 @@
 // ------------------------------
 // Dependencies
 
-#include "mohair/arrow.hpp"
+#include "../headers/arrow.hpp"
 
 
 // ------------------------------
