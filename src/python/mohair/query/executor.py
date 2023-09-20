@@ -48,7 +48,8 @@ from mohair import CreateMohairLogger
 from mohair.query.substrait import SubstraitPlan
 
 #   |> cython
-from scytether import run_query
+# NOTE: cython has been annoyingly difficult to integrate with faodel
+# from scytether import run_query
 
 
 # ------------------------------
