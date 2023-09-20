@@ -9,61 +9,108 @@
 // ------------------------------
 // Dependencies
 
+#include "../headers/mohair.hpp"
 #include "../headers/faodel.hpp"
 
-using mohair::adapters::Faodel;
+#include "../mohair/util.hpp"
+
+#include <google/protobuf/text_format.h>
+
+
+// >> Aliases
+using google::protobuf::TextFormat;
 
 
 // ------------------------------
 // Functions
+int ValidateArgs(int argc, char **argv) {
+  if (argc != 2) {
+    std::cerr << "Usage: mohair <path-to-substrait-plan>" << std::endl;
+    return 1;
+  }
 
-void PrintStringObj(const std::string print_msg, const std::string string_obj) {
-  std::cout << "Printing string obj:"  << std::endl;
-  std::cout << print_msg << string_obj << std::endl;
+  return 0;
 }
 
-void MPIMain(int argc, char **argv) {
+unique_ptr<PlanRel> ReadSubstraitFromFile(const char *plan_fpath) {
+  std::cout << "Reading plan from: '" << plan_fpath  << "'"
+            << std::endl
+  ;
+
+  string plan_msg;
+  if (not FileToString(plan_fpath, plan_msg)) {
+    std::cerr << "Failed to parse file data into string" << std::endl;
+    return nullptr;
+  }
+
+  return SubstraitPlanFromString(plan_msg);
+}
+
+int StringForSubstrait(unique_ptr<PlanRel> &substrait_plan, string *plan_text) {
+  auto success = TextFormat::PrintToString(*substrait_plan, plan_text);
+  if (not success) {
+    std::cerr << "Unable to print substrait plan as string" << std::endl;
+    return 3;
+  }
+
+  return 0;
+}
+
+/**
+ * A function that represents the "main execution core" of a query engine in Faodel.
+ *
+ * This function includes logic for receiving a substrait query, executing the query, and
+ * then returning the results of query execution. The execution of the query is
+ * implemented as a separate function that is registered with Kelpie and is called in this
+ * function.
+ */
+void QueryEngineMain() {
+  // TODO
+}
+
+int ExecWithFaodel(int argc, char **argv, unique_ptr<PlanRel> substrait_plan) {
   Faodel faodel_adapter;
 
   faodel_adapter.BootstrapWithKelpie(argc, argv);
   faodel_adapter.PrintMPIInfo();
 
-  // A for loop to round robin through each rank.
-  for (int rank_id = 0; rank_id < faodel_adapter.mpi_size; ++rank_id) {
-
-    // This is to progressively debug more steps
-    // TODO: build towards a linear chain of ranks that execute and pass pushforward plans
-    if (rank_id >= 0) { break; }
-  }
-
-  // TODO
-  // >> Define the object to put in the pool
-  auto ldo1 = faodel_adapter.AllocateString(testobj_stream.str());
-  kelpie::Key k1 {"myrow", std::to_string(faodel_adapter.mpi_rank)};
-
-  // >> publish key-value pair to pool (default is "/myplace")
-  auto pool = faodel_adapter.ConnectToPool();
-  pool.Publish(k1, ldo1);
-
-  auto sample_fn = [kpool=std::move(pool)]() mutable noexcept {
-    // '*' is a wildcard suffix for "any column with same prefix"
-    kelpie::Key key_myrow("myrow", "*"); 
-
-    lunasa::DataObject ldo_first, ldo_last, ldo_smallest, ldo_largest;
-  };
-
   // execute `sample_fn` on rank 0
   // this also adds barriers around the lambda
-  faodel_adapter.FencedRankFn(/*mpi_rank==*/0, sample_fn);
+  faodel_adapter.FencedRankFn(/*mpi_rank==*/0, QueryEngineMain());
 
   faodel_adapter.Finish();
+
+  return 0;
 }
 
 
 // ------------------------------
 // Main Logic
 int main(int argc, char **argv) {
-  std::cout << argv[0] << std::endl;
+  int validate_status = ValidateArgs(argc, argv);
+  if (validate_status != 0) {
+    std::cerr << "Failed to validate input command-line args" << std::endl;
+    return validate_status;
+  }
+
+  auto substrait_plan = ReadSubstraitFromFile(argv[1]);
+  if (substrait_plan == nullptr) {
+    std::cerr << "Failed to read substrait plan from file" << std::endl;
+    return 2;
+  }
+
+  string plan_text;
+  auto stringify_status = StringForSubstrait(substrait_plan, &plan_text);
+  if (stringify_status != 0) {
+    std::cerr << "Failed to stringify substrait plan" << std::endl;
+    return stringify_status;
+  }
+  std::cout << "Substrait Plan:" << std::endl
+            << plan_text        << std::endl
+  ;
+
+  // Delegate faodel work
+  // return ExecWithFaodel(argc, argv, std::move(substrait_plan));
 
   return 0;
 }
