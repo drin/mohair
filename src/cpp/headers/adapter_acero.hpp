@@ -19,13 +19,38 @@
 // ------------------------------
 // Dependencies
 
+// >> Common Arrow deps
 #include <arrow/api.h>
+
+// >> Acero specific deps
+//    |> Mostly substrait dependencies
 #include <arrow/engine/api.h>
 
-// NOTE: arrow/acero/api.h is in 13.0.0 (dev) but not 12.0.1 (stable)
+//    |> Acero dependencies
+//    |> NOTE: arrow/acero/api.h is in 13.0.0 (dev) but not 12.0.1 (stable)
+//    |> TODO: this should handle version differences with macros
 // #include <arrow/acero/api.h>
 #include <arrow/acero/exec_plan.h>
 #include <arrow/acero/options.h>
+
+// >> Type Aliases
+//    |> Common Arrow type aliases
+using arrow::Result;
+
+using arrow::Buffer;
+using arrow::Table;
+using arrow::Schema;
+
+//    |> Substrait and Acero type aliases
+using arrow::engine::PlanInfo;
+
+using arrow::engine::NamedTableProvider;
+using arrow::engine::ConversionOptions;
+using arrow::engine::ExtensionIdRegistry;
+using arrow::engine::ExtensionSet;
+
+using arrow::acero::Declaration;
+using arrow::acero::TableSourceNodeOptions;
 
 
 // ------------------------------
