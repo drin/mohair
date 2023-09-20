@@ -11,22 +11,26 @@
 #include "google/protobuf/generated_message_reflection.h"
 #include "google/protobuf/reflection_ops.h"
 #include "google/protobuf/wire_format.h"
+#include "google/protobuf/generated_message_tctable_impl.h"
 // @@protoc_insertion_point(includes)
 
 // Must be included last.
 #include "google/protobuf/port_def.inc"
 PROTOBUF_PRAGMA_INIT_SEG
-namespace _pb = ::PROTOBUF_NAMESPACE_ID;
-namespace _pbi = ::PROTOBUF_NAMESPACE_ID::internal;
+namespace _pb = ::google::protobuf;
+namespace _pbi = ::google::protobuf::internal;
+namespace _fl = ::google::protobuf::internal::field_layout;
 namespace substrait {
-PROTOBUF_CONSTEXPR ParameterizedType_TypeParameter::ParameterizedType_TypeParameter(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.bounds_)*/{}
-  , /*decltype(_impl_.name_)*/ {
-    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
-  }
-
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ParameterizedType_TypeParameter::ParameterizedType_TypeParameter(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_.bounds_)*/ {},
+      /*decltype(_impl_.name_)*/ {
+          &::_pbi::fixed_address_empty_string,
+          ::_pbi::ConstantInitialized{},
+      },
+      /*decltype(_impl_._cached_size_)*/ {},
+    } {}
 struct ParameterizedType_TypeParameterDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ParameterizedType_TypeParameterDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ParameterizedType_TypeParameterDefaultTypeInternal() {}
@@ -37,16 +41,18 @@ struct ParameterizedType_TypeParameterDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ParameterizedType_TypeParameterDefaultTypeInternal _ParameterizedType_TypeParameter_default_instance_;
-PROTOBUF_CONSTEXPR ParameterizedType_IntegerParameter::ParameterizedType_IntegerParameter(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.name_)*/ {
-    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
-  }
-
-  , /*decltype(_impl_.range_start_inclusive_)*/nullptr
-  , /*decltype(_impl_.range_end_exclusive_)*/nullptr} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ParameterizedType_IntegerParameter::ParameterizedType_IntegerParameter(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_._has_bits_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_.name_)*/ {
+          &::_pbi::fixed_address_empty_string,
+          ::_pbi::ConstantInitialized{},
+      },
+      /*decltype(_impl_.range_start_inclusive_)*/ nullptr,
+      /*decltype(_impl_.range_end_exclusive_)*/ nullptr,
+    } {}
 struct ParameterizedType_IntegerParameterDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ParameterizedType_IntegerParameterDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ParameterizedType_IntegerParameterDefaultTypeInternal() {}
@@ -57,11 +63,12 @@ struct ParameterizedType_IntegerParameterDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ParameterizedType_IntegerParameterDefaultTypeInternal _ParameterizedType_IntegerParameter_default_instance_;
-PROTOBUF_CONSTEXPR ParameterizedType_NullableInteger::ParameterizedType_NullableInteger(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.value_)*/ ::int64_t{0}
-
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ParameterizedType_NullableInteger::ParameterizedType_NullableInteger(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_.value_)*/ ::int64_t{0},
+      /*decltype(_impl_._cached_size_)*/ {},
+    } {}
 struct ParameterizedType_NullableIntegerDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ParameterizedType_NullableIntegerDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ParameterizedType_NullableIntegerDefaultTypeInternal() {}
@@ -72,15 +79,15 @@ struct ParameterizedType_NullableIntegerDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ParameterizedType_NullableIntegerDefaultTypeInternal _ParameterizedType_NullableInteger_default_instance_;
-PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedFixedChar::ParameterizedType_ParameterizedFixedChar(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.length_)*/nullptr
-  , /*decltype(_impl_.variation_pointer_)*/ 0u
-
-  , /*decltype(_impl_.nullability_)*/ 0
-} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedFixedChar::ParameterizedType_ParameterizedFixedChar(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_._has_bits_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_.length_)*/ nullptr,
+      /*decltype(_impl_.variation_pointer_)*/ 0u,
+      /*decltype(_impl_.nullability_)*/ 0,
+    } {}
 struct ParameterizedType_ParameterizedFixedCharDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedFixedCharDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ParameterizedType_ParameterizedFixedCharDefaultTypeInternal() {}
@@ -91,15 +98,15 @@ struct ParameterizedType_ParameterizedFixedCharDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ParameterizedType_ParameterizedFixedCharDefaultTypeInternal _ParameterizedType_ParameterizedFixedChar_default_instance_;
-PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedVarChar::ParameterizedType_ParameterizedVarChar(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.length_)*/nullptr
-  , /*decltype(_impl_.variation_pointer_)*/ 0u
-
-  , /*decltype(_impl_.nullability_)*/ 0
-} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedVarChar::ParameterizedType_ParameterizedVarChar(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_._has_bits_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_.length_)*/ nullptr,
+      /*decltype(_impl_.variation_pointer_)*/ 0u,
+      /*decltype(_impl_.nullability_)*/ 0,
+    } {}
 struct ParameterizedType_ParameterizedVarCharDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedVarCharDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ParameterizedType_ParameterizedVarCharDefaultTypeInternal() {}
@@ -110,15 +117,15 @@ struct ParameterizedType_ParameterizedVarCharDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ParameterizedType_ParameterizedVarCharDefaultTypeInternal _ParameterizedType_ParameterizedVarChar_default_instance_;
-PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedFixedBinary::ParameterizedType_ParameterizedFixedBinary(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.length_)*/nullptr
-  , /*decltype(_impl_.variation_pointer_)*/ 0u
-
-  , /*decltype(_impl_.nullability_)*/ 0
-} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedFixedBinary::ParameterizedType_ParameterizedFixedBinary(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_._has_bits_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_.length_)*/ nullptr,
+      /*decltype(_impl_.variation_pointer_)*/ 0u,
+      /*decltype(_impl_.nullability_)*/ 0,
+    } {}
 struct ParameterizedType_ParameterizedFixedBinaryDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedFixedBinaryDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ParameterizedType_ParameterizedFixedBinaryDefaultTypeInternal() {}
@@ -129,16 +136,16 @@ struct ParameterizedType_ParameterizedFixedBinaryDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ParameterizedType_ParameterizedFixedBinaryDefaultTypeInternal _ParameterizedType_ParameterizedFixedBinary_default_instance_;
-PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedDecimal::ParameterizedType_ParameterizedDecimal(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.scale_)*/nullptr
-  , /*decltype(_impl_.precision_)*/nullptr
-  , /*decltype(_impl_.variation_pointer_)*/ 0u
-
-  , /*decltype(_impl_.nullability_)*/ 0
-} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedDecimal::ParameterizedType_ParameterizedDecimal(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_._has_bits_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_.scale_)*/ nullptr,
+      /*decltype(_impl_.precision_)*/ nullptr,
+      /*decltype(_impl_.variation_pointer_)*/ 0u,
+      /*decltype(_impl_.nullability_)*/ 0,
+    } {}
 struct ParameterizedType_ParameterizedDecimalDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedDecimalDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ParameterizedType_ParameterizedDecimalDefaultTypeInternal() {}
@@ -149,14 +156,14 @@ struct ParameterizedType_ParameterizedDecimalDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ParameterizedType_ParameterizedDecimalDefaultTypeInternal _ParameterizedType_ParameterizedDecimal_default_instance_;
-PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedStruct::ParameterizedType_ParameterizedStruct(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.types_)*/{}
-  , /*decltype(_impl_.variation_pointer_)*/ 0u
-
-  , /*decltype(_impl_.nullability_)*/ 0
-
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedStruct::ParameterizedType_ParameterizedStruct(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_.types_)*/ {},
+      /*decltype(_impl_.variation_pointer_)*/ 0u,
+      /*decltype(_impl_.nullability_)*/ 0,
+      /*decltype(_impl_._cached_size_)*/ {},
+    } {}
 struct ParameterizedType_ParameterizedStructDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedStructDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ParameterizedType_ParameterizedStructDefaultTypeInternal() {}
@@ -167,12 +174,14 @@ struct ParameterizedType_ParameterizedStructDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ParameterizedType_ParameterizedStructDefaultTypeInternal _ParameterizedType_ParameterizedStruct_default_instance_;
-PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedNamedStruct::ParameterizedType_ParameterizedNamedStruct(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.names_)*/{}
-  , /*decltype(_impl_.struct__)*/nullptr} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedNamedStruct::ParameterizedType_ParameterizedNamedStruct(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_._has_bits_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_.names_)*/ {},
+      /*decltype(_impl_.struct__)*/ nullptr,
+    } {}
 struct ParameterizedType_ParameterizedNamedStructDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedNamedStructDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ParameterizedType_ParameterizedNamedStructDefaultTypeInternal() {}
@@ -183,15 +192,15 @@ struct ParameterizedType_ParameterizedNamedStructDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ParameterizedType_ParameterizedNamedStructDefaultTypeInternal _ParameterizedType_ParameterizedNamedStruct_default_instance_;
-PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedList::ParameterizedType_ParameterizedList(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.type_)*/nullptr
-  , /*decltype(_impl_.variation_pointer_)*/ 0u
-
-  , /*decltype(_impl_.nullability_)*/ 0
-} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedList::ParameterizedType_ParameterizedList(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_._has_bits_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_.type_)*/ nullptr,
+      /*decltype(_impl_.variation_pointer_)*/ 0u,
+      /*decltype(_impl_.nullability_)*/ 0,
+    } {}
 struct ParameterizedType_ParameterizedListDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedListDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ParameterizedType_ParameterizedListDefaultTypeInternal() {}
@@ -202,16 +211,16 @@ struct ParameterizedType_ParameterizedListDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ParameterizedType_ParameterizedListDefaultTypeInternal _ParameterizedType_ParameterizedList_default_instance_;
-PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedMap::ParameterizedType_ParameterizedMap(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.key_)*/nullptr
-  , /*decltype(_impl_.value_)*/nullptr
-  , /*decltype(_impl_.variation_pointer_)*/ 0u
-
-  , /*decltype(_impl_.nullability_)*/ 0
-} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedMap::ParameterizedType_ParameterizedMap(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_._has_bits_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_.key_)*/ nullptr,
+      /*decltype(_impl_.value_)*/ nullptr,
+      /*decltype(_impl_.variation_pointer_)*/ 0u,
+      /*decltype(_impl_.nullability_)*/ 0,
+    } {}
 struct ParameterizedType_ParameterizedMapDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedMapDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ParameterizedType_ParameterizedMapDefaultTypeInternal() {}
@@ -222,15 +231,14 @@ struct ParameterizedType_ParameterizedMapDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ParameterizedType_ParameterizedMapDefaultTypeInternal _ParameterizedType_ParameterizedMap_default_instance_;
-PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedUserDefined::ParameterizedType_ParameterizedUserDefined(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.type_pointer_)*/ 0u
-
-  , /*decltype(_impl_.variation_pointer_)*/ 0u
-
-  , /*decltype(_impl_.nullability_)*/ 0
-
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedUserDefined::ParameterizedType_ParameterizedUserDefined(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_.type_pointer_)*/ 0u,
+      /*decltype(_impl_.variation_pointer_)*/ 0u,
+      /*decltype(_impl_.nullability_)*/ 0,
+      /*decltype(_impl_._cached_size_)*/ {},
+    } {}
 struct ParameterizedType_ParameterizedUserDefinedDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ParameterizedType_ParameterizedUserDefinedDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ParameterizedType_ParameterizedUserDefinedDefaultTypeInternal() {}
@@ -241,11 +249,13 @@ struct ParameterizedType_ParameterizedUserDefinedDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ParameterizedType_ParameterizedUserDefinedDefaultTypeInternal _ParameterizedType_ParameterizedUserDefined_default_instance_;
-PROTOBUF_CONSTEXPR ParameterizedType_IntegerOption::ParameterizedType_IntegerOption(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.integer_type_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_._oneof_case_)*/{}} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ParameterizedType_IntegerOption::ParameterizedType_IntegerOption(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_.integer_type_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_._oneof_case_)*/ {},
+    } {}
 struct ParameterizedType_IntegerOptionDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ParameterizedType_IntegerOptionDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ParameterizedType_IntegerOptionDefaultTypeInternal() {}
@@ -256,11 +266,13 @@ struct ParameterizedType_IntegerOptionDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ParameterizedType_IntegerOptionDefaultTypeInternal _ParameterizedType_IntegerOption_default_instance_;
-PROTOBUF_CONSTEXPR ParameterizedType::ParameterizedType(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.kind_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_._oneof_case_)*/{}} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ParameterizedType::ParameterizedType(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_.kind_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_._oneof_case_)*/ {},
+    } {}
 struct ParameterizedTypeDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ParameterizedTypeDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ParameterizedTypeDefaultTypeInternal() {}
@@ -484,20 +496,20 @@ const ::uint32_t TableStruct_substrait_2fparameterized_5ftypes_2eproto::offsets[
 
 static const ::_pbi::MigrationSchema
     schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-        { 0, -1, -1, sizeof(::substrait::ParameterizedType_TypeParameter)},
-        { 10, 21, -1, sizeof(::substrait::ParameterizedType_IntegerParameter)},
-        { 24, -1, -1, sizeof(::substrait::ParameterizedType_NullableInteger)},
-        { 33, 44, -1, sizeof(::substrait::ParameterizedType_ParameterizedFixedChar)},
-        { 47, 58, -1, sizeof(::substrait::ParameterizedType_ParameterizedVarChar)},
-        { 61, 72, -1, sizeof(::substrait::ParameterizedType_ParameterizedFixedBinary)},
-        { 75, 87, -1, sizeof(::substrait::ParameterizedType_ParameterizedDecimal)},
-        { 91, -1, -1, sizeof(::substrait::ParameterizedType_ParameterizedStruct)},
-        { 102, 112, -1, sizeof(::substrait::ParameterizedType_ParameterizedNamedStruct)},
-        { 114, 125, -1, sizeof(::substrait::ParameterizedType_ParameterizedList)},
-        { 128, 140, -1, sizeof(::substrait::ParameterizedType_ParameterizedMap)},
-        { 144, -1, -1, sizeof(::substrait::ParameterizedType_ParameterizedUserDefined)},
-        { 155, -1, -1, sizeof(::substrait::ParameterizedType_IntegerOption)},
-        { 166, -1, -1, sizeof(::substrait::ParameterizedType)},
+        {0, -1, -1, sizeof(::substrait::ParameterizedType_TypeParameter)},
+        {10, 21, -1, sizeof(::substrait::ParameterizedType_IntegerParameter)},
+        {24, -1, -1, sizeof(::substrait::ParameterizedType_NullableInteger)},
+        {33, 44, -1, sizeof(::substrait::ParameterizedType_ParameterizedFixedChar)},
+        {47, 58, -1, sizeof(::substrait::ParameterizedType_ParameterizedVarChar)},
+        {61, 72, -1, sizeof(::substrait::ParameterizedType_ParameterizedFixedBinary)},
+        {75, 87, -1, sizeof(::substrait::ParameterizedType_ParameterizedDecimal)},
+        {91, -1, -1, sizeof(::substrait::ParameterizedType_ParameterizedStruct)},
+        {102, 112, -1, sizeof(::substrait::ParameterizedType_ParameterizedNamedStruct)},
+        {114, 125, -1, sizeof(::substrait::ParameterizedType_ParameterizedList)},
+        {128, 140, -1, sizeof(::substrait::ParameterizedType_ParameterizedMap)},
+        {144, -1, -1, sizeof(::substrait::ParameterizedType_ParameterizedUserDefined)},
+        {155, -1, -1, sizeof(::substrait::ParameterizedType_IntegerOption)},
+        {166, -1, -1, sizeof(::substrait::ParameterizedType)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -668,21 +680,21 @@ class ParameterizedType_TypeParameter::_Internal {
  public:
 };
 
-ParameterizedType_TypeParameter::ParameterizedType_TypeParameter(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ParameterizedType_TypeParameter::ParameterizedType_TypeParameter(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ParameterizedType.TypeParameter)
 }
-ParameterizedType_TypeParameter::ParameterizedType_TypeParameter(const ParameterizedType_TypeParameter& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  ParameterizedType_TypeParameter* const _this = this; (void)_this;
+ParameterizedType_TypeParameter::ParameterizedType_TypeParameter(const ParameterizedType_TypeParameter& from) : ::google::protobuf::Message() {
+  ParameterizedType_TypeParameter* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.bounds_){from._impl_.bounds_}
-    , decltype(_impl_.name_) {}
-
-    , /*decltype(_impl_._cached_size_)*/{}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_.bounds_){from._impl_.bounds_},
+      decltype(_impl_.name_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   _impl_.name_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.name_.Set("", GetArenaForAllocation());
@@ -690,43 +702,36 @@ ParameterizedType_TypeParameter::ParameterizedType_TypeParameter(const Parameter
   if (!from._internal_name().empty()) {
     _this->_impl_.name_.Set(from._internal_name(), _this->GetArenaForAllocation());
   }
+
   // @@protoc_insertion_point(copy_constructor:substrait.ParameterizedType.TypeParameter)
 }
-
 inline void ParameterizedType_TypeParameter::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_.bounds_){arena}
-    , decltype(_impl_.name_) {}
-
-    , /*decltype(_impl_._cached_size_)*/{}
+      decltype(_impl_.bounds_){arena},
+      decltype(_impl_.name_){},
+      /*decltype(_impl_._cached_size_)*/ {},
   };
   _impl_.name_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.name_.Set("", GetArenaForAllocation());
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
-
 ParameterizedType_TypeParameter::~ParameterizedType_TypeParameter() {
   // @@protoc_insertion_point(destructor:substrait.ParameterizedType.TypeParameter)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ParameterizedType_TypeParameter::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _internal_mutable_bounds()->~RepeatedPtrField();
+  _impl_.bounds_.~RepeatedPtrField();
   _impl_.name_.Destroy();
 }
-
 void ParameterizedType_TypeParameter::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void ParameterizedType_TypeParameter::Clear() {
+PROTOBUF_NOINLINE void ParameterizedType_TypeParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ParameterizedType.TypeParameter)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -734,88 +739,82 @@ void ParameterizedType_TypeParameter::Clear() {
 
   _internal_mutable_bounds()->Clear();
   _impl_.name_.ClearToEmpty();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ParameterizedType_TypeParameter::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // string name = 1 [json_name = "name"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_name();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "substrait.ParameterizedType.TypeParameter.name"));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // repeated .substrait.ParameterizedType bounds = 2 [json_name = "bounds"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_bounds(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
+const char* ParameterizedType_TypeParameter::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 1, 54, 2> ParameterizedType_TypeParameter::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ParameterizedType_TypeParameter_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // repeated .substrait.ParameterizedType bounds = 2 [json_name = "bounds"];
+    {::_pbi::TcParser::FastMtR1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_TypeParameter, _impl_.bounds_)}},
+    // string name = 1 [json_name = "name"];
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_TypeParameter, _impl_.name_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string name = 1 [json_name = "name"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_TypeParameter, _impl_.name_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // repeated .substrait.ParameterizedType bounds = 2 [json_name = "bounds"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_TypeParameter, _impl_.bounds_), 0, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType>()},
+  }}, {{
+    "\51\4\0\0\0\0\0\0"
+    "substrait.ParameterizedType.TypeParameter"
+    "name"
+  }},
+};
 
 ::uint8_t* ParameterizedType_TypeParameter::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ParameterizedType.TypeParameter)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string name = 1 [json_name = "name"];
   if (!this->_internal_name().empty()) {
     const std::string& _s = this->_internal_name();
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "substrait.ParameterizedType.TypeParameter.name");
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "substrait.ParameterizedType.TypeParameter.name");
     target = stream->WriteStringMaybeAliased(1, _s, target);
   }
 
   // repeated .substrait.ParameterizedType bounds = 2 [json_name = "bounds"];
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_bounds_size()); i < n; i++) {
-    const auto& repfield = this->_internal_bounds(i);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    const auto& repfield = this->_internal_bounds().Get(i);
+    target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(2, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ParameterizedType.TypeParameter)
   return target;
@@ -833,26 +832,25 @@ failure:
   total_size += 1UL * this->_internal_bounds_size();
   for (const auto& msg : this->_internal_bounds()) {
     total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+      ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
   }
-
   // string name = 1 [json_name = "name"];
   if (!this->_internal_name().empty()) {
-    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                     this->_internal_name());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ParameterizedType_TypeParameter::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ParameterizedType_TypeParameter::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ParameterizedType_TypeParameter::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ParameterizedType_TypeParameter::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ParameterizedType_TypeParameter::GetClassData() const { return &_class_data_; }
 
 
-void ParameterizedType_TypeParameter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ParameterizedType_TypeParameter::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ParameterizedType_TypeParameter*>(&to_msg);
   auto& from = static_cast<const ParameterizedType_TypeParameter&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ParameterizedType.TypeParameter)
@@ -864,7 +862,7 @@ void ParameterizedType_TypeParameter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message
   if (!from._internal_name().empty()) {
     _this->_internal_set_name(from._internal_name());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ParameterizedType_TypeParameter::CopyFrom(const ParameterizedType_TypeParameter& from) {
@@ -874,7 +872,7 @@ void ParameterizedType_TypeParameter::CopyFrom(const ParameterizedType_TypeParam
   MergeFrom(from);
 }
 
-bool ParameterizedType_TypeParameter::IsInitialized() const {
+PROTOBUF_NOINLINE bool ParameterizedType_TypeParameter::IsInitialized() const {
   return true;
 }
 
@@ -883,12 +881,12 @@ void ParameterizedType_TypeParameter::InternalSwap(ParameterizedType_TypeParamet
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  _internal_mutable_bounds()->InternalSwap(other->_internal_mutable_bounds());
+  _impl_.bounds_.InternalSwap(&other->_impl_.bounds_);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, lhs_arena,
                                        &other->_impl_.name_, rhs_arena);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ParameterizedType_TypeParameter::GetMetadata() const {
+::google::protobuf::Metadata ParameterizedType_TypeParameter::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_getter, &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_once,
       file_level_metadata_substrait_2fparameterized_5ftypes_2eproto[0]);
@@ -910,31 +908,29 @@ class ParameterizedType_IntegerParameter::_Internal {
   }
 };
 
-const ::substrait::ParameterizedType_NullableInteger&
-ParameterizedType_IntegerParameter::_Internal::range_start_inclusive(const ParameterizedType_IntegerParameter* msg) {
+const ::substrait::ParameterizedType_NullableInteger& ParameterizedType_IntegerParameter::_Internal::range_start_inclusive(const ParameterizedType_IntegerParameter* msg) {
   return *msg->_impl_.range_start_inclusive_;
 }
-const ::substrait::ParameterizedType_NullableInteger&
-ParameterizedType_IntegerParameter::_Internal::range_end_exclusive(const ParameterizedType_IntegerParameter* msg) {
+const ::substrait::ParameterizedType_NullableInteger& ParameterizedType_IntegerParameter::_Internal::range_end_exclusive(const ParameterizedType_IntegerParameter* msg) {
   return *msg->_impl_.range_end_exclusive_;
 }
-ParameterizedType_IntegerParameter::ParameterizedType_IntegerParameter(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ParameterizedType_IntegerParameter::ParameterizedType_IntegerParameter(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ParameterizedType.IntegerParameter)
 }
-ParameterizedType_IntegerParameter::ParameterizedType_IntegerParameter(const ParameterizedType_IntegerParameter& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  ParameterizedType_IntegerParameter* const _this = this; (void)_this;
+ParameterizedType_IntegerParameter::ParameterizedType_IntegerParameter(const ParameterizedType_IntegerParameter& from) : ::google::protobuf::Message() {
+  ParameterizedType_IntegerParameter* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.name_) {}
-
-    , decltype(_impl_.range_start_inclusive_){nullptr}
-    , decltype(_impl_.range_end_exclusive_){nullptr}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_._has_bits_){from._impl_._has_bits_},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.name_){},
+      decltype(_impl_.range_start_inclusive_){nullptr},
+      decltype(_impl_.range_end_exclusive_){nullptr},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   _impl_.name_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.name_.Set("", GetArenaForAllocation());
@@ -948,46 +944,39 @@ ParameterizedType_IntegerParameter::ParameterizedType_IntegerParameter(const Par
   if ((from._impl_._has_bits_[0] & 0x00000002u) != 0) {
     _this->_impl_.range_end_exclusive_ = new ::substrait::ParameterizedType_NullableInteger(*from._impl_.range_end_exclusive_);
   }
+
   // @@protoc_insertion_point(copy_constructor:substrait.ParameterizedType.IntegerParameter)
 }
-
 inline void ParameterizedType_IntegerParameter::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.name_) {}
-
-    , decltype(_impl_.range_start_inclusive_){nullptr}
-    , decltype(_impl_.range_end_exclusive_){nullptr}
+      decltype(_impl_._has_bits_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.name_){},
+      decltype(_impl_.range_start_inclusive_){nullptr},
+      decltype(_impl_.range_end_exclusive_){nullptr},
   };
   _impl_.name_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.name_.Set("", GetArenaForAllocation());
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
-
 ParameterizedType_IntegerParameter::~ParameterizedType_IntegerParameter() {
   // @@protoc_insertion_point(destructor:substrait.ParameterizedType.IntegerParameter)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ParameterizedType_IntegerParameter::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.name_.Destroy();
   if (this != internal_default_instance()) delete _impl_.range_start_inclusive_;
   if (this != internal_default_instance()) delete _impl_.range_end_exclusive_;
 }
-
 void ParameterizedType_IntegerParameter::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void ParameterizedType_IntegerParameter::Clear() {
+PROTOBUF_NOINLINE void ParameterizedType_IntegerParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ParameterizedType.IntegerParameter)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -1006,101 +995,97 @@ void ParameterizedType_IntegerParameter::Clear() {
     }
   }
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ParameterizedType_IntegerParameter::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // string name = 1 [json_name = "name"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_name();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "substrait.ParameterizedType.IntegerParameter.name"));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.ParameterizedType.NullableInteger range_start_inclusive = 2 [json_name = "rangeStartInclusive"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          ptr = ctx->ParseMessage(_internal_mutable_range_start_inclusive(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.ParameterizedType.NullableInteger range_end_exclusive = 3 [json_name = "rangeEndExclusive"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
-          ptr = ctx->ParseMessage(_internal_mutable_range_end_exclusive(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* ParameterizedType_IntegerParameter::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 2, 57, 2> ParameterizedType_IntegerParameter::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(ParameterizedType_IntegerParameter, _impl_._has_bits_),
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    2,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ParameterizedType_IntegerParameter_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // string name = 1 [json_name = "name"];
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_IntegerParameter, _impl_.name_)}},
+    // .substrait.ParameterizedType.NullableInteger range_start_inclusive = 2 [json_name = "rangeStartInclusive"];
+    {::_pbi::TcParser::FastMtS1,
+     {18, 0, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_IntegerParameter, _impl_.range_start_inclusive_)}},
+    // .substrait.ParameterizedType.NullableInteger range_end_exclusive = 3 [json_name = "rangeEndExclusive"];
+    {::_pbi::TcParser::FastMtS1,
+     {26, 1, 1, PROTOBUF_FIELD_OFFSET(ParameterizedType_IntegerParameter, _impl_.range_end_exclusive_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string name = 1 [json_name = "name"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_IntegerParameter, _impl_.name_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // .substrait.ParameterizedType.NullableInteger range_start_inclusive = 2 [json_name = "rangeStartInclusive"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_IntegerParameter, _impl_.range_start_inclusive_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.ParameterizedType.NullableInteger range_end_exclusive = 3 [json_name = "rangeEndExclusive"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_IntegerParameter, _impl_.range_end_exclusive_), _Internal::kHasBitsOffset + 1, 1,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_NullableInteger>()},
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_NullableInteger>()},
+  }}, {{
+    "\54\4\0\0\0\0\0\0"
+    "substrait.ParameterizedType.IntegerParameter"
+    "name"
+  }},
+};
 
 ::uint8_t* ParameterizedType_IntegerParameter::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ParameterizedType.IntegerParameter)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string name = 1 [json_name = "name"];
   if (!this->_internal_name().empty()) {
     const std::string& _s = this->_internal_name();
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "substrait.ParameterizedType.IntegerParameter.name");
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "substrait.ParameterizedType.IntegerParameter.name");
     target = stream->WriteStringMaybeAliased(1, _s, target);
   }
 
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.ParameterizedType.NullableInteger range_start_inclusive = 2 [json_name = "rangeStartInclusive"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(2, _Internal::range_start_inclusive(this),
         _Internal::range_start_inclusive(this).GetCachedSize(), target, stream);
   }
 
   // .substrait.ParameterizedType.NullableInteger range_end_exclusive = 3 [json_name = "rangeEndExclusive"];
   if (cached_has_bits & 0x00000002u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(3, _Internal::range_end_exclusive(this),
         _Internal::range_end_exclusive(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ParameterizedType.IntegerParameter)
   return target;
@@ -1116,7 +1101,7 @@ failure:
 
   // string name = 1 [json_name = "name"];
   if (!this->_internal_name().empty()) {
-    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                     this->_internal_name());
   }
 
@@ -1125,14 +1110,14 @@ failure:
     // .substrait.ParameterizedType.NullableInteger range_start_inclusive = 2 [json_name = "rangeStartInclusive"];
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.range_start_inclusive_);
     }
 
     // .substrait.ParameterizedType.NullableInteger range_end_exclusive = 3 [json_name = "rangeEndExclusive"];
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.range_end_exclusive_);
     }
 
@@ -1140,14 +1125,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ParameterizedType_IntegerParameter::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ParameterizedType_IntegerParameter::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ParameterizedType_IntegerParameter::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ParameterizedType_IntegerParameter::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ParameterizedType_IntegerParameter::GetClassData() const { return &_class_data_; }
 
 
-void ParameterizedType_IntegerParameter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ParameterizedType_IntegerParameter::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ParameterizedType_IntegerParameter*>(&to_msg);
   auto& from = static_cast<const ParameterizedType_IntegerParameter&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ParameterizedType.IntegerParameter)
@@ -1169,7 +1154,7 @@ void ParameterizedType_IntegerParameter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Mess
           from._internal_range_end_exclusive());
     }
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ParameterizedType_IntegerParameter::CopyFrom(const ParameterizedType_IntegerParameter& from) {
@@ -1179,7 +1164,7 @@ void ParameterizedType_IntegerParameter::CopyFrom(const ParameterizedType_Intege
   MergeFrom(from);
 }
 
-bool ParameterizedType_IntegerParameter::IsInitialized() const {
+PROTOBUF_NOINLINE bool ParameterizedType_IntegerParameter::IsInitialized() const {
   return true;
 }
 
@@ -1191,7 +1176,7 @@ void ParameterizedType_IntegerParameter::InternalSwap(ParameterizedType_IntegerP
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, lhs_arena,
                                        &other->_impl_.name_, rhs_arena);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(ParameterizedType_IntegerParameter, _impl_.range_end_exclusive_)
       + sizeof(ParameterizedType_IntegerParameter::_impl_.range_end_exclusive_)
       - PROTOBUF_FIELD_OFFSET(ParameterizedType_IntegerParameter, _impl_.range_start_inclusive_)>(
@@ -1199,7 +1184,7 @@ void ParameterizedType_IntegerParameter::InternalSwap(ParameterizedType_IntegerP
           reinterpret_cast<char*>(&other->_impl_.range_start_inclusive_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ParameterizedType_IntegerParameter::GetMetadata() const {
+::google::protobuf::Metadata ParameterizedType_IntegerParameter::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_getter, &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_once,
       file_level_metadata_substrait_2fparameterized_5ftypes_2eproto[1]);
@@ -1210,108 +1195,101 @@ class ParameterizedType_NullableInteger::_Internal {
  public:
 };
 
-ParameterizedType_NullableInteger::ParameterizedType_NullableInteger(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ParameterizedType_NullableInteger::ParameterizedType_NullableInteger(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ParameterizedType.NullableInteger)
 }
 ParameterizedType_NullableInteger::ParameterizedType_NullableInteger(const ParameterizedType_NullableInteger& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message(), _impl_(from._impl_) {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(
+    : ::google::protobuf::Message(), _impl_(from._impl_) {
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:substrait.ParameterizedType.NullableInteger)
 }
-
 inline void ParameterizedType_NullableInteger::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_.value_) { ::int64_t{0} }
-
-    , /*decltype(_impl_._cached_size_)*/{}
+      decltype(_impl_.value_){::int64_t{0}},
+      /*decltype(_impl_._cached_size_)*/ {},
   };
 }
-
 ParameterizedType_NullableInteger::~ParameterizedType_NullableInteger() {
   // @@protoc_insertion_point(destructor:substrait.ParameterizedType.NullableInteger)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ParameterizedType_NullableInteger::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
 }
-
 void ParameterizedType_NullableInteger::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void ParameterizedType_NullableInteger::Clear() {
+PROTOBUF_NOINLINE void ParameterizedType_NullableInteger::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ParameterizedType.NullableInteger)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   _impl_.value_ = ::int64_t{0};
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ParameterizedType_NullableInteger::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // int64 value = 1 [json_name = "value"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 8)) {
-          _impl_.value_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
+const char* ParameterizedType_NullableInteger::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 1, 0, 0, 2> ParameterizedType_NullableInteger::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    1, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967294,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    1,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_ParameterizedType_NullableInteger_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // int64 value = 1 [json_name = "value"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(ParameterizedType_NullableInteger, _impl_.value_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_NullableInteger, _impl_.value_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // int64 value = 1 [json_name = "value"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_NullableInteger, _impl_.value_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kInt64)},
+  }},
+  // no aux_entries
+  {{
+  }},
+};
 
 ::uint8_t* ParameterizedType_NullableInteger::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ParameterizedType.NullableInteger)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // int64 value = 1 [json_name = "value"];
   if (this->_internal_value() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt64ToArray(
-        1, this->_internal_value(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt64ToArrayWithField<1>(
+            stream, this->_internal_value(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ParameterizedType.NullableInteger)
   return target;
@@ -1334,14 +1312,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ParameterizedType_NullableInteger::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ParameterizedType_NullableInteger::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ParameterizedType_NullableInteger::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ParameterizedType_NullableInteger::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ParameterizedType_NullableInteger::GetClassData() const { return &_class_data_; }
 
 
-void ParameterizedType_NullableInteger::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ParameterizedType_NullableInteger::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ParameterizedType_NullableInteger*>(&to_msg);
   auto& from = static_cast<const ParameterizedType_NullableInteger&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ParameterizedType.NullableInteger)
@@ -1352,7 +1330,7 @@ void ParameterizedType_NullableInteger::MergeImpl(::PROTOBUF_NAMESPACE_ID::Messa
   if (from._internal_value() != 0) {
     _this->_internal_set_value(from._internal_value());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ParameterizedType_NullableInteger::CopyFrom(const ParameterizedType_NullableInteger& from) {
@@ -1362,18 +1340,17 @@ void ParameterizedType_NullableInteger::CopyFrom(const ParameterizedType_Nullabl
   MergeFrom(from);
 }
 
-bool ParameterizedType_NullableInteger::IsInitialized() const {
+PROTOBUF_NOINLINE bool ParameterizedType_NullableInteger::IsInitialized() const {
   return true;
 }
 
 void ParameterizedType_NullableInteger::InternalSwap(ParameterizedType_NullableInteger* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-
-  swap(_impl_.value_, other->_impl_.value_);
+        swap(_impl_.value_, other->_impl_.value_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ParameterizedType_NullableInteger::GetMetadata() const {
+::google::protobuf::Metadata ParameterizedType_NullableInteger::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_getter, &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_once,
       file_level_metadata_substrait_2fparameterized_5ftypes_2eproto[2]);
@@ -1391,69 +1368,59 @@ class ParameterizedType_ParameterizedFixedChar::_Internal {
   }
 };
 
-const ::substrait::ParameterizedType_IntegerOption&
-ParameterizedType_ParameterizedFixedChar::_Internal::length(const ParameterizedType_ParameterizedFixedChar* msg) {
+const ::substrait::ParameterizedType_IntegerOption& ParameterizedType_ParameterizedFixedChar::_Internal::length(const ParameterizedType_ParameterizedFixedChar* msg) {
   return *msg->_impl_.length_;
 }
-ParameterizedType_ParameterizedFixedChar::ParameterizedType_ParameterizedFixedChar(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ParameterizedType_ParameterizedFixedChar::ParameterizedType_ParameterizedFixedChar(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ParameterizedType.ParameterizedFixedChar)
 }
-ParameterizedType_ParameterizedFixedChar::ParameterizedType_ParameterizedFixedChar(const ParameterizedType_ParameterizedFixedChar& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  ParameterizedType_ParameterizedFixedChar* const _this = this; (void)_this;
+ParameterizedType_ParameterizedFixedChar::ParameterizedType_ParameterizedFixedChar(const ParameterizedType_ParameterizedFixedChar& from) : ::google::protobuf::Message() {
+  ParameterizedType_ParameterizedFixedChar* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.length_){nullptr}
-    , decltype(_impl_.variation_pointer_) {}
-
-    , decltype(_impl_.nullability_) {}
+      decltype(_impl_._has_bits_){from._impl_._has_bits_},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.length_){nullptr},
+      decltype(_impl_.variation_pointer_){},
+      decltype(_impl_.nullability_){},
   };
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
     _this->_impl_.length_ = new ::substrait::ParameterizedType_IntegerOption(*from._impl_.length_);
   }
   ::memcpy(&_impl_.variation_pointer_, &from._impl_.variation_pointer_,
     static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.nullability_) -
     reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
+
   // @@protoc_insertion_point(copy_constructor:substrait.ParameterizedType.ParameterizedFixedChar)
 }
-
 inline void ParameterizedType_ParameterizedFixedChar::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.length_){nullptr}
-    , decltype(_impl_.variation_pointer_) { 0u }
-
-    , decltype(_impl_.nullability_) { 0 }
-
+      decltype(_impl_._has_bits_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.length_){nullptr},
+      decltype(_impl_.variation_pointer_){0u},
+      decltype(_impl_.nullability_){0},
   };
 }
-
 ParameterizedType_ParameterizedFixedChar::~ParameterizedType_ParameterizedFixedChar() {
   // @@protoc_insertion_point(destructor:substrait.ParameterizedType.ParameterizedFixedChar)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ParameterizedType_ParameterizedFixedChar::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   if (this != internal_default_instance()) delete _impl_.length_;
 }
-
 void ParameterizedType_ParameterizedFixedChar::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void ParameterizedType_ParameterizedFixedChar::Clear() {
+PROTOBUF_NOINLINE void ParameterizedType_ParameterizedFixedChar::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ParameterizedType.ParameterizedFixedChar)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -1468,78 +1435,70 @@ void ParameterizedType_ParameterizedFixedChar::Clear() {
       reinterpret_cast<char*>(&_impl_.nullability_) -
       reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ParameterizedType_ParameterizedFixedChar::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // .substrait.ParameterizedType.IntegerOption length = 1 [json_name = "length"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_length(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // uint32 variation_pointer = 2 [json_name = "variationPointer"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
-          _impl_.variation_pointer_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 24)) {
-          ::int32_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-          _internal_set_nullability(static_cast<::substrait::Type_Nullability>(val));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* ParameterizedType_ParameterizedFixedChar::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 1, 0, 2> ParameterizedType_ParameterizedFixedChar::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedChar, _impl_._has_bits_),
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ParameterizedType_ParameterizedFixedChar_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // .substrait.ParameterizedType.IntegerOption length = 1 [json_name = "length"];
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedChar, _impl_.length_)}},
+    // uint32 variation_pointer = 2 [json_name = "variationPointer"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedFixedChar, _impl_.variation_pointer_), 63>(),
+     {16, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedChar, _impl_.variation_pointer_)}},
+    // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedFixedChar, _impl_.nullability_), 63>(),
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedChar, _impl_.nullability_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .substrait.ParameterizedType.IntegerOption length = 1 [json_name = "length"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedChar, _impl_.length_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // uint32 variation_pointer = 2 [json_name = "variationPointer"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedChar, _impl_.variation_pointer_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUInt32)},
+    // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedChar, _impl_.nullability_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_IntegerOption>()},
+  }}, {{
+  }},
+};
 
 ::uint8_t* ParameterizedType_ParameterizedFixedChar::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ParameterizedType.ParameterizedFixedChar)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.ParameterizedType.IntegerOption length = 1 [json_name = "length"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(1, _Internal::length(this),
         _Internal::length(this).GetCachedSize(), target, stream);
   }
@@ -1559,8 +1518,9 @@ failure:
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ParameterizedType.ParameterizedFixedChar)
   return target;
@@ -1578,7 +1538,7 @@ failure:
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
         *_impl_.length_);
   }
 
@@ -1597,14 +1557,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ParameterizedType_ParameterizedFixedChar::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ParameterizedType_ParameterizedFixedChar::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ParameterizedType_ParameterizedFixedChar::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ParameterizedType_ParameterizedFixedChar::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ParameterizedType_ParameterizedFixedChar::GetClassData() const { return &_class_data_; }
 
 
-void ParameterizedType_ParameterizedFixedChar::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ParameterizedType_ParameterizedFixedChar::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ParameterizedType_ParameterizedFixedChar*>(&to_msg);
   auto& from = static_cast<const ParameterizedType_ParameterizedFixedChar&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ParameterizedType.ParameterizedFixedChar)
@@ -1622,7 +1582,7 @@ void ParameterizedType_ParameterizedFixedChar::MergeImpl(::PROTOBUF_NAMESPACE_ID
   if (from._internal_nullability() != 0) {
     _this->_internal_set_nullability(from._internal_nullability());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ParameterizedType_ParameterizedFixedChar::CopyFrom(const ParameterizedType_ParameterizedFixedChar& from) {
@@ -1632,7 +1592,7 @@ void ParameterizedType_ParameterizedFixedChar::CopyFrom(const ParameterizedType_
   MergeFrom(from);
 }
 
-bool ParameterizedType_ParameterizedFixedChar::IsInitialized() const {
+PROTOBUF_NOINLINE bool ParameterizedType_ParameterizedFixedChar::IsInitialized() const {
   return true;
 }
 
@@ -1640,7 +1600,7 @@ void ParameterizedType_ParameterizedFixedChar::InternalSwap(ParameterizedType_Pa
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedChar, _impl_.nullability_)
       + sizeof(ParameterizedType_ParameterizedFixedChar::_impl_.nullability_)
       - PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedChar, _impl_.length_)>(
@@ -1648,7 +1608,7 @@ void ParameterizedType_ParameterizedFixedChar::InternalSwap(ParameterizedType_Pa
           reinterpret_cast<char*>(&other->_impl_.length_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ParameterizedType_ParameterizedFixedChar::GetMetadata() const {
+::google::protobuf::Metadata ParameterizedType_ParameterizedFixedChar::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_getter, &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_once,
       file_level_metadata_substrait_2fparameterized_5ftypes_2eproto[3]);
@@ -1666,69 +1626,59 @@ class ParameterizedType_ParameterizedVarChar::_Internal {
   }
 };
 
-const ::substrait::ParameterizedType_IntegerOption&
-ParameterizedType_ParameterizedVarChar::_Internal::length(const ParameterizedType_ParameterizedVarChar* msg) {
+const ::substrait::ParameterizedType_IntegerOption& ParameterizedType_ParameterizedVarChar::_Internal::length(const ParameterizedType_ParameterizedVarChar* msg) {
   return *msg->_impl_.length_;
 }
-ParameterizedType_ParameterizedVarChar::ParameterizedType_ParameterizedVarChar(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ParameterizedType_ParameterizedVarChar::ParameterizedType_ParameterizedVarChar(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ParameterizedType.ParameterizedVarChar)
 }
-ParameterizedType_ParameterizedVarChar::ParameterizedType_ParameterizedVarChar(const ParameterizedType_ParameterizedVarChar& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  ParameterizedType_ParameterizedVarChar* const _this = this; (void)_this;
+ParameterizedType_ParameterizedVarChar::ParameterizedType_ParameterizedVarChar(const ParameterizedType_ParameterizedVarChar& from) : ::google::protobuf::Message() {
+  ParameterizedType_ParameterizedVarChar* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.length_){nullptr}
-    , decltype(_impl_.variation_pointer_) {}
-
-    , decltype(_impl_.nullability_) {}
+      decltype(_impl_._has_bits_){from._impl_._has_bits_},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.length_){nullptr},
+      decltype(_impl_.variation_pointer_){},
+      decltype(_impl_.nullability_){},
   };
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
     _this->_impl_.length_ = new ::substrait::ParameterizedType_IntegerOption(*from._impl_.length_);
   }
   ::memcpy(&_impl_.variation_pointer_, &from._impl_.variation_pointer_,
     static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.nullability_) -
     reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
+
   // @@protoc_insertion_point(copy_constructor:substrait.ParameterizedType.ParameterizedVarChar)
 }
-
 inline void ParameterizedType_ParameterizedVarChar::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.length_){nullptr}
-    , decltype(_impl_.variation_pointer_) { 0u }
-
-    , decltype(_impl_.nullability_) { 0 }
-
+      decltype(_impl_._has_bits_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.length_){nullptr},
+      decltype(_impl_.variation_pointer_){0u},
+      decltype(_impl_.nullability_){0},
   };
 }
-
 ParameterizedType_ParameterizedVarChar::~ParameterizedType_ParameterizedVarChar() {
   // @@protoc_insertion_point(destructor:substrait.ParameterizedType.ParameterizedVarChar)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ParameterizedType_ParameterizedVarChar::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   if (this != internal_default_instance()) delete _impl_.length_;
 }
-
 void ParameterizedType_ParameterizedVarChar::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void ParameterizedType_ParameterizedVarChar::Clear() {
+PROTOBUF_NOINLINE void ParameterizedType_ParameterizedVarChar::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ParameterizedType.ParameterizedVarChar)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -1743,78 +1693,70 @@ void ParameterizedType_ParameterizedVarChar::Clear() {
       reinterpret_cast<char*>(&_impl_.nullability_) -
       reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ParameterizedType_ParameterizedVarChar::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // .substrait.ParameterizedType.IntegerOption length = 1 [json_name = "length"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_length(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // uint32 variation_pointer = 2 [json_name = "variationPointer"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
-          _impl_.variation_pointer_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 24)) {
-          ::int32_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-          _internal_set_nullability(static_cast<::substrait::Type_Nullability>(val));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* ParameterizedType_ParameterizedVarChar::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 1, 0, 2> ParameterizedType_ParameterizedVarChar::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedVarChar, _impl_._has_bits_),
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ParameterizedType_ParameterizedVarChar_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // .substrait.ParameterizedType.IntegerOption length = 1 [json_name = "length"];
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedVarChar, _impl_.length_)}},
+    // uint32 variation_pointer = 2 [json_name = "variationPointer"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedVarChar, _impl_.variation_pointer_), 63>(),
+     {16, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedVarChar, _impl_.variation_pointer_)}},
+    // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedVarChar, _impl_.nullability_), 63>(),
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedVarChar, _impl_.nullability_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .substrait.ParameterizedType.IntegerOption length = 1 [json_name = "length"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedVarChar, _impl_.length_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // uint32 variation_pointer = 2 [json_name = "variationPointer"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedVarChar, _impl_.variation_pointer_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUInt32)},
+    // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedVarChar, _impl_.nullability_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_IntegerOption>()},
+  }}, {{
+  }},
+};
 
 ::uint8_t* ParameterizedType_ParameterizedVarChar::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ParameterizedType.ParameterizedVarChar)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.ParameterizedType.IntegerOption length = 1 [json_name = "length"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(1, _Internal::length(this),
         _Internal::length(this).GetCachedSize(), target, stream);
   }
@@ -1834,8 +1776,9 @@ failure:
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ParameterizedType.ParameterizedVarChar)
   return target;
@@ -1853,7 +1796,7 @@ failure:
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
         *_impl_.length_);
   }
 
@@ -1872,14 +1815,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ParameterizedType_ParameterizedVarChar::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ParameterizedType_ParameterizedVarChar::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ParameterizedType_ParameterizedVarChar::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ParameterizedType_ParameterizedVarChar::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ParameterizedType_ParameterizedVarChar::GetClassData() const { return &_class_data_; }
 
 
-void ParameterizedType_ParameterizedVarChar::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ParameterizedType_ParameterizedVarChar::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ParameterizedType_ParameterizedVarChar*>(&to_msg);
   auto& from = static_cast<const ParameterizedType_ParameterizedVarChar&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ParameterizedType.ParameterizedVarChar)
@@ -1897,7 +1840,7 @@ void ParameterizedType_ParameterizedVarChar::MergeImpl(::PROTOBUF_NAMESPACE_ID::
   if (from._internal_nullability() != 0) {
     _this->_internal_set_nullability(from._internal_nullability());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ParameterizedType_ParameterizedVarChar::CopyFrom(const ParameterizedType_ParameterizedVarChar& from) {
@@ -1907,7 +1850,7 @@ void ParameterizedType_ParameterizedVarChar::CopyFrom(const ParameterizedType_Pa
   MergeFrom(from);
 }
 
-bool ParameterizedType_ParameterizedVarChar::IsInitialized() const {
+PROTOBUF_NOINLINE bool ParameterizedType_ParameterizedVarChar::IsInitialized() const {
   return true;
 }
 
@@ -1915,7 +1858,7 @@ void ParameterizedType_ParameterizedVarChar::InternalSwap(ParameterizedType_Para
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedVarChar, _impl_.nullability_)
       + sizeof(ParameterizedType_ParameterizedVarChar::_impl_.nullability_)
       - PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedVarChar, _impl_.length_)>(
@@ -1923,7 +1866,7 @@ void ParameterizedType_ParameterizedVarChar::InternalSwap(ParameterizedType_Para
           reinterpret_cast<char*>(&other->_impl_.length_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ParameterizedType_ParameterizedVarChar::GetMetadata() const {
+::google::protobuf::Metadata ParameterizedType_ParameterizedVarChar::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_getter, &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_once,
       file_level_metadata_substrait_2fparameterized_5ftypes_2eproto[4]);
@@ -1941,69 +1884,59 @@ class ParameterizedType_ParameterizedFixedBinary::_Internal {
   }
 };
 
-const ::substrait::ParameterizedType_IntegerOption&
-ParameterizedType_ParameterizedFixedBinary::_Internal::length(const ParameterizedType_ParameterizedFixedBinary* msg) {
+const ::substrait::ParameterizedType_IntegerOption& ParameterizedType_ParameterizedFixedBinary::_Internal::length(const ParameterizedType_ParameterizedFixedBinary* msg) {
   return *msg->_impl_.length_;
 }
-ParameterizedType_ParameterizedFixedBinary::ParameterizedType_ParameterizedFixedBinary(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ParameterizedType_ParameterizedFixedBinary::ParameterizedType_ParameterizedFixedBinary(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ParameterizedType.ParameterizedFixedBinary)
 }
-ParameterizedType_ParameterizedFixedBinary::ParameterizedType_ParameterizedFixedBinary(const ParameterizedType_ParameterizedFixedBinary& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  ParameterizedType_ParameterizedFixedBinary* const _this = this; (void)_this;
+ParameterizedType_ParameterizedFixedBinary::ParameterizedType_ParameterizedFixedBinary(const ParameterizedType_ParameterizedFixedBinary& from) : ::google::protobuf::Message() {
+  ParameterizedType_ParameterizedFixedBinary* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.length_){nullptr}
-    , decltype(_impl_.variation_pointer_) {}
-
-    , decltype(_impl_.nullability_) {}
+      decltype(_impl_._has_bits_){from._impl_._has_bits_},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.length_){nullptr},
+      decltype(_impl_.variation_pointer_){},
+      decltype(_impl_.nullability_){},
   };
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
     _this->_impl_.length_ = new ::substrait::ParameterizedType_IntegerOption(*from._impl_.length_);
   }
   ::memcpy(&_impl_.variation_pointer_, &from._impl_.variation_pointer_,
     static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.nullability_) -
     reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
+
   // @@protoc_insertion_point(copy_constructor:substrait.ParameterizedType.ParameterizedFixedBinary)
 }
-
 inline void ParameterizedType_ParameterizedFixedBinary::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.length_){nullptr}
-    , decltype(_impl_.variation_pointer_) { 0u }
-
-    , decltype(_impl_.nullability_) { 0 }
-
+      decltype(_impl_._has_bits_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.length_){nullptr},
+      decltype(_impl_.variation_pointer_){0u},
+      decltype(_impl_.nullability_){0},
   };
 }
-
 ParameterizedType_ParameterizedFixedBinary::~ParameterizedType_ParameterizedFixedBinary() {
   // @@protoc_insertion_point(destructor:substrait.ParameterizedType.ParameterizedFixedBinary)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ParameterizedType_ParameterizedFixedBinary::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   if (this != internal_default_instance()) delete _impl_.length_;
 }
-
 void ParameterizedType_ParameterizedFixedBinary::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void ParameterizedType_ParameterizedFixedBinary::Clear() {
+PROTOBUF_NOINLINE void ParameterizedType_ParameterizedFixedBinary::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ParameterizedType.ParameterizedFixedBinary)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -2018,78 +1951,70 @@ void ParameterizedType_ParameterizedFixedBinary::Clear() {
       reinterpret_cast<char*>(&_impl_.nullability_) -
       reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ParameterizedType_ParameterizedFixedBinary::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // .substrait.ParameterizedType.IntegerOption length = 1 [json_name = "length"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_length(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // uint32 variation_pointer = 2 [json_name = "variationPointer"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
-          _impl_.variation_pointer_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 24)) {
-          ::int32_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-          _internal_set_nullability(static_cast<::substrait::Type_Nullability>(val));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* ParameterizedType_ParameterizedFixedBinary::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 1, 0, 2> ParameterizedType_ParameterizedFixedBinary::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedBinary, _impl_._has_bits_),
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ParameterizedType_ParameterizedFixedBinary_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // .substrait.ParameterizedType.IntegerOption length = 1 [json_name = "length"];
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedBinary, _impl_.length_)}},
+    // uint32 variation_pointer = 2 [json_name = "variationPointer"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedFixedBinary, _impl_.variation_pointer_), 63>(),
+     {16, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedBinary, _impl_.variation_pointer_)}},
+    // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedFixedBinary, _impl_.nullability_), 63>(),
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedBinary, _impl_.nullability_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .substrait.ParameterizedType.IntegerOption length = 1 [json_name = "length"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedBinary, _impl_.length_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // uint32 variation_pointer = 2 [json_name = "variationPointer"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedBinary, _impl_.variation_pointer_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUInt32)},
+    // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedBinary, _impl_.nullability_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_IntegerOption>()},
+  }}, {{
+  }},
+};
 
 ::uint8_t* ParameterizedType_ParameterizedFixedBinary::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ParameterizedType.ParameterizedFixedBinary)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.ParameterizedType.IntegerOption length = 1 [json_name = "length"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(1, _Internal::length(this),
         _Internal::length(this).GetCachedSize(), target, stream);
   }
@@ -2109,8 +2034,9 @@ failure:
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ParameterizedType.ParameterizedFixedBinary)
   return target;
@@ -2128,7 +2054,7 @@ failure:
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
         *_impl_.length_);
   }
 
@@ -2147,14 +2073,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ParameterizedType_ParameterizedFixedBinary::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ParameterizedType_ParameterizedFixedBinary::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ParameterizedType_ParameterizedFixedBinary::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ParameterizedType_ParameterizedFixedBinary::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ParameterizedType_ParameterizedFixedBinary::GetClassData() const { return &_class_data_; }
 
 
-void ParameterizedType_ParameterizedFixedBinary::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ParameterizedType_ParameterizedFixedBinary::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ParameterizedType_ParameterizedFixedBinary*>(&to_msg);
   auto& from = static_cast<const ParameterizedType_ParameterizedFixedBinary&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ParameterizedType.ParameterizedFixedBinary)
@@ -2172,7 +2098,7 @@ void ParameterizedType_ParameterizedFixedBinary::MergeImpl(::PROTOBUF_NAMESPACE_
   if (from._internal_nullability() != 0) {
     _this->_internal_set_nullability(from._internal_nullability());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ParameterizedType_ParameterizedFixedBinary::CopyFrom(const ParameterizedType_ParameterizedFixedBinary& from) {
@@ -2182,7 +2108,7 @@ void ParameterizedType_ParameterizedFixedBinary::CopyFrom(const ParameterizedTyp
   MergeFrom(from);
 }
 
-bool ParameterizedType_ParameterizedFixedBinary::IsInitialized() const {
+PROTOBUF_NOINLINE bool ParameterizedType_ParameterizedFixedBinary::IsInitialized() const {
   return true;
 }
 
@@ -2190,7 +2116,7 @@ void ParameterizedType_ParameterizedFixedBinary::InternalSwap(ParameterizedType_
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedBinary, _impl_.nullability_)
       + sizeof(ParameterizedType_ParameterizedFixedBinary::_impl_.nullability_)
       - PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedFixedBinary, _impl_.length_)>(
@@ -2198,7 +2124,7 @@ void ParameterizedType_ParameterizedFixedBinary::InternalSwap(ParameterizedType_
           reinterpret_cast<char*>(&other->_impl_.length_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ParameterizedType_ParameterizedFixedBinary::GetMetadata() const {
+::google::protobuf::Metadata ParameterizedType_ParameterizedFixedBinary::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_getter, &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_once,
       file_level_metadata_substrait_2fparameterized_5ftypes_2eproto[5]);
@@ -2220,33 +2146,30 @@ class ParameterizedType_ParameterizedDecimal::_Internal {
   }
 };
 
-const ::substrait::ParameterizedType_IntegerOption&
-ParameterizedType_ParameterizedDecimal::_Internal::scale(const ParameterizedType_ParameterizedDecimal* msg) {
+const ::substrait::ParameterizedType_IntegerOption& ParameterizedType_ParameterizedDecimal::_Internal::scale(const ParameterizedType_ParameterizedDecimal* msg) {
   return *msg->_impl_.scale_;
 }
-const ::substrait::ParameterizedType_IntegerOption&
-ParameterizedType_ParameterizedDecimal::_Internal::precision(const ParameterizedType_ParameterizedDecimal* msg) {
+const ::substrait::ParameterizedType_IntegerOption& ParameterizedType_ParameterizedDecimal::_Internal::precision(const ParameterizedType_ParameterizedDecimal* msg) {
   return *msg->_impl_.precision_;
 }
-ParameterizedType_ParameterizedDecimal::ParameterizedType_ParameterizedDecimal(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ParameterizedType_ParameterizedDecimal::ParameterizedType_ParameterizedDecimal(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ParameterizedType.ParameterizedDecimal)
 }
-ParameterizedType_ParameterizedDecimal::ParameterizedType_ParameterizedDecimal(const ParameterizedType_ParameterizedDecimal& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  ParameterizedType_ParameterizedDecimal* const _this = this; (void)_this;
+ParameterizedType_ParameterizedDecimal::ParameterizedType_ParameterizedDecimal(const ParameterizedType_ParameterizedDecimal& from) : ::google::protobuf::Message() {
+  ParameterizedType_ParameterizedDecimal* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.scale_){nullptr}
-    , decltype(_impl_.precision_){nullptr}
-    , decltype(_impl_.variation_pointer_) {}
-
-    , decltype(_impl_.nullability_) {}
+      decltype(_impl_._has_bits_){from._impl_._has_bits_},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.scale_){nullptr},
+      decltype(_impl_.precision_){nullptr},
+      decltype(_impl_.variation_pointer_){},
+      decltype(_impl_.nullability_){},
   };
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
     _this->_impl_.scale_ = new ::substrait::ParameterizedType_IntegerOption(*from._impl_.scale_);
   }
@@ -2256,43 +2179,35 @@ ParameterizedType_ParameterizedDecimal::ParameterizedType_ParameterizedDecimal(c
   ::memcpy(&_impl_.variation_pointer_, &from._impl_.variation_pointer_,
     static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.nullability_) -
     reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
+
   // @@protoc_insertion_point(copy_constructor:substrait.ParameterizedType.ParameterizedDecimal)
 }
-
 inline void ParameterizedType_ParameterizedDecimal::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.scale_){nullptr}
-    , decltype(_impl_.precision_){nullptr}
-    , decltype(_impl_.variation_pointer_) { 0u }
-
-    , decltype(_impl_.nullability_) { 0 }
-
+      decltype(_impl_._has_bits_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.scale_){nullptr},
+      decltype(_impl_.precision_){nullptr},
+      decltype(_impl_.variation_pointer_){0u},
+      decltype(_impl_.nullability_){0},
   };
 }
-
 ParameterizedType_ParameterizedDecimal::~ParameterizedType_ParameterizedDecimal() {
   // @@protoc_insertion_point(destructor:substrait.ParameterizedType.ParameterizedDecimal)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ParameterizedType_ParameterizedDecimal::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   if (this != internal_default_instance()) delete _impl_.scale_;
   if (this != internal_default_instance()) delete _impl_.precision_;
 }
-
 void ParameterizedType_ParameterizedDecimal::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void ParameterizedType_ParameterizedDecimal::Clear() {
+PROTOBUF_NOINLINE void ParameterizedType_ParameterizedDecimal::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ParameterizedType.ParameterizedDecimal)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -2313,94 +2228,83 @@ void ParameterizedType_ParameterizedDecimal::Clear() {
       reinterpret_cast<char*>(&_impl_.nullability_) -
       reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ParameterizedType_ParameterizedDecimal::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // .substrait.ParameterizedType.IntegerOption scale = 1 [json_name = "scale"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_scale(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.ParameterizedType.IntegerOption precision = 2 [json_name = "precision"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          ptr = ctx->ParseMessage(_internal_mutable_precision(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // uint32 variation_pointer = 3 [json_name = "variationPointer"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 24)) {
-          _impl_.variation_pointer_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.Nullability nullability = 4 [json_name = "nullability"];
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 32)) {
-          ::int32_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-          _internal_set_nullability(static_cast<::substrait::Type_Nullability>(val));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* ParameterizedType_ParameterizedDecimal::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 4, 2, 0, 2> ParameterizedType_ParameterizedDecimal::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedDecimal, _impl_._has_bits_),
+    0, // no _extensions_
+    4, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967280,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    4,  // num_field_entries
+    2,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ParameterizedType_ParameterizedDecimal_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // .substrait.Type.Nullability nullability = 4 [json_name = "nullability"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedDecimal, _impl_.nullability_), 63>(),
+     {32, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedDecimal, _impl_.nullability_)}},
+    // .substrait.ParameterizedType.IntegerOption scale = 1 [json_name = "scale"];
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedDecimal, _impl_.scale_)}},
+    // .substrait.ParameterizedType.IntegerOption precision = 2 [json_name = "precision"];
+    {::_pbi::TcParser::FastMtS1,
+     {18, 1, 1, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedDecimal, _impl_.precision_)}},
+    // uint32 variation_pointer = 3 [json_name = "variationPointer"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedDecimal, _impl_.variation_pointer_), 63>(),
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedDecimal, _impl_.variation_pointer_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .substrait.ParameterizedType.IntegerOption scale = 1 [json_name = "scale"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedDecimal, _impl_.scale_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.ParameterizedType.IntegerOption precision = 2 [json_name = "precision"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedDecimal, _impl_.precision_), _Internal::kHasBitsOffset + 1, 1,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // uint32 variation_pointer = 3 [json_name = "variationPointer"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedDecimal, _impl_.variation_pointer_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUInt32)},
+    // .substrait.Type.Nullability nullability = 4 [json_name = "nullability"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedDecimal, _impl_.nullability_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_IntegerOption>()},
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_IntegerOption>()},
+  }}, {{
+  }},
+};
 
 ::uint8_t* ParameterizedType_ParameterizedDecimal::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ParameterizedType.ParameterizedDecimal)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.ParameterizedType.IntegerOption scale = 1 [json_name = "scale"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(1, _Internal::scale(this),
         _Internal::scale(this).GetCachedSize(), target, stream);
   }
 
   // .substrait.ParameterizedType.IntegerOption precision = 2 [json_name = "precision"];
   if (cached_has_bits & 0x00000002u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(2, _Internal::precision(this),
         _Internal::precision(this).GetCachedSize(), target, stream);
   }
@@ -2420,8 +2324,9 @@ failure:
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ParameterizedType.ParameterizedDecimal)
   return target;
@@ -2440,14 +2345,14 @@ failure:
     // .substrait.ParameterizedType.IntegerOption scale = 1 [json_name = "scale"];
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.scale_);
     }
 
     // .substrait.ParameterizedType.IntegerOption precision = 2 [json_name = "precision"];
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.precision_);
     }
 
@@ -2467,14 +2372,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ParameterizedType_ParameterizedDecimal::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ParameterizedType_ParameterizedDecimal::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ParameterizedType_ParameterizedDecimal::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ParameterizedType_ParameterizedDecimal::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ParameterizedType_ParameterizedDecimal::GetClassData() const { return &_class_data_; }
 
 
-void ParameterizedType_ParameterizedDecimal::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ParameterizedType_ParameterizedDecimal::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ParameterizedType_ParameterizedDecimal*>(&to_msg);
   auto& from = static_cast<const ParameterizedType_ParameterizedDecimal&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ParameterizedType.ParameterizedDecimal)
@@ -2499,7 +2404,7 @@ void ParameterizedType_ParameterizedDecimal::MergeImpl(::PROTOBUF_NAMESPACE_ID::
   if (from._internal_nullability() != 0) {
     _this->_internal_set_nullability(from._internal_nullability());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ParameterizedType_ParameterizedDecimal::CopyFrom(const ParameterizedType_ParameterizedDecimal& from) {
@@ -2509,7 +2414,7 @@ void ParameterizedType_ParameterizedDecimal::CopyFrom(const ParameterizedType_Pa
   MergeFrom(from);
 }
 
-bool ParameterizedType_ParameterizedDecimal::IsInitialized() const {
+PROTOBUF_NOINLINE bool ParameterizedType_ParameterizedDecimal::IsInitialized() const {
   return true;
 }
 
@@ -2517,7 +2422,7 @@ void ParameterizedType_ParameterizedDecimal::InternalSwap(ParameterizedType_Para
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedDecimal, _impl_.nullability_)
       + sizeof(ParameterizedType_ParameterizedDecimal::_impl_.nullability_)
       - PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedDecimal, _impl_.scale_)>(
@@ -2525,7 +2430,7 @@ void ParameterizedType_ParameterizedDecimal::InternalSwap(ParameterizedType_Para
           reinterpret_cast<char*>(&other->_impl_.scale_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ParameterizedType_ParameterizedDecimal::GetMetadata() const {
+::google::protobuf::Metadata ParameterizedType_ParameterizedDecimal::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_getter, &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_once,
       file_level_metadata_substrait_2fparameterized_5ftypes_2eproto[6]);
@@ -2536,60 +2441,51 @@ class ParameterizedType_ParameterizedStruct::_Internal {
  public:
 };
 
-ParameterizedType_ParameterizedStruct::ParameterizedType_ParameterizedStruct(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ParameterizedType_ParameterizedStruct::ParameterizedType_ParameterizedStruct(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ParameterizedType.ParameterizedStruct)
 }
-ParameterizedType_ParameterizedStruct::ParameterizedType_ParameterizedStruct(const ParameterizedType_ParameterizedStruct& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  ParameterizedType_ParameterizedStruct* const _this = this; (void)_this;
+ParameterizedType_ParameterizedStruct::ParameterizedType_ParameterizedStruct(const ParameterizedType_ParameterizedStruct& from) : ::google::protobuf::Message() {
+  ParameterizedType_ParameterizedStruct* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.types_){from._impl_.types_}
-    , decltype(_impl_.variation_pointer_) {}
-
-    , decltype(_impl_.nullability_) {}
-
-    , /*decltype(_impl_._cached_size_)*/{}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_.types_){from._impl_.types_},
+      decltype(_impl_.variation_pointer_){},
+      decltype(_impl_.nullability_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   ::memcpy(&_impl_.variation_pointer_, &from._impl_.variation_pointer_,
     static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.nullability_) -
     reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
+
   // @@protoc_insertion_point(copy_constructor:substrait.ParameterizedType.ParameterizedStruct)
 }
-
 inline void ParameterizedType_ParameterizedStruct::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_.types_){arena}
-    , decltype(_impl_.variation_pointer_) { 0u }
-
-    , decltype(_impl_.nullability_) { 0 }
-
-    , /*decltype(_impl_._cached_size_)*/{}
+      decltype(_impl_.types_){arena},
+      decltype(_impl_.variation_pointer_){0u},
+      decltype(_impl_.nullability_){0},
+      /*decltype(_impl_._cached_size_)*/ {},
   };
 }
-
 ParameterizedType_ParameterizedStruct::~ParameterizedType_ParameterizedStruct() {
   // @@protoc_insertion_point(destructor:substrait.ParameterizedType.ParameterizedStruct)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ParameterizedType_ParameterizedStruct::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _internal_mutable_types()->~RepeatedPtrField();
+  _impl_.types_.~RepeatedPtrField();
 }
-
 void ParameterizedType_ParameterizedStruct::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void ParameterizedType_ParameterizedStruct::Clear() {
+PROTOBUF_NOINLINE void ParameterizedType_ParameterizedStruct::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ParameterizedType.ParameterizedStruct)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -2599,82 +2495,71 @@ void ParameterizedType_ParameterizedStruct::Clear() {
   ::memset(&_impl_.variation_pointer_, 0, static_cast<::size_t>(
       reinterpret_cast<char*>(&_impl_.nullability_) -
       reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ParameterizedType_ParameterizedStruct::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // repeated .substrait.ParameterizedType types = 1 [json_name = "types"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_types(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // uint32 variation_pointer = 2 [json_name = "variationPointer"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
-          _impl_.variation_pointer_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 24)) {
-          ::int32_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-          _internal_set_nullability(static_cast<::substrait::Type_Nullability>(val));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
+const char* ParameterizedType_ParameterizedStruct::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 1, 0, 2> ParameterizedType_ParameterizedStruct::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ParameterizedType_ParameterizedStruct_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // repeated .substrait.ParameterizedType types = 1 [json_name = "types"];
+    {::_pbi::TcParser::FastMtR1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedStruct, _impl_.types_)}},
+    // uint32 variation_pointer = 2 [json_name = "variationPointer"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedStruct, _impl_.variation_pointer_), 63>(),
+     {16, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedStruct, _impl_.variation_pointer_)}},
+    // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedStruct, _impl_.nullability_), 63>(),
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedStruct, _impl_.nullability_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // repeated .substrait.ParameterizedType types = 1 [json_name = "types"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedStruct, _impl_.types_), 0, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+    // uint32 variation_pointer = 2 [json_name = "variationPointer"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedStruct, _impl_.variation_pointer_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUInt32)},
+    // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedStruct, _impl_.nullability_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType>()},
+  }}, {{
+  }},
+};
 
 ::uint8_t* ParameterizedType_ParameterizedStruct::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ParameterizedType.ParameterizedStruct)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .substrait.ParameterizedType types = 1 [json_name = "types"];
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_types_size()); i < n; i++) {
-    const auto& repfield = this->_internal_types(i);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    const auto& repfield = this->_internal_types().Get(i);
+    target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
   }
 
@@ -2693,8 +2578,9 @@ failure:
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ParameterizedType.ParameterizedStruct)
   return target;
@@ -2712,9 +2598,8 @@ failure:
   total_size += 1UL * this->_internal_types_size();
   for (const auto& msg : this->_internal_types()) {
     total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+      ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
   }
-
   // uint32 variation_pointer = 2 [json_name = "variationPointer"];
   if (this->_internal_variation_pointer() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(
@@ -2730,14 +2615,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ParameterizedType_ParameterizedStruct::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ParameterizedType_ParameterizedStruct::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ParameterizedType_ParameterizedStruct::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ParameterizedType_ParameterizedStruct::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ParameterizedType_ParameterizedStruct::GetClassData() const { return &_class_data_; }
 
 
-void ParameterizedType_ParameterizedStruct::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ParameterizedType_ParameterizedStruct::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ParameterizedType_ParameterizedStruct*>(&to_msg);
   auto& from = static_cast<const ParameterizedType_ParameterizedStruct&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ParameterizedType.ParameterizedStruct)
@@ -2752,7 +2637,7 @@ void ParameterizedType_ParameterizedStruct::MergeImpl(::PROTOBUF_NAMESPACE_ID::M
   if (from._internal_nullability() != 0) {
     _this->_internal_set_nullability(from._internal_nullability());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ParameterizedType_ParameterizedStruct::CopyFrom(const ParameterizedType_ParameterizedStruct& from) {
@@ -2762,15 +2647,15 @@ void ParameterizedType_ParameterizedStruct::CopyFrom(const ParameterizedType_Par
   MergeFrom(from);
 }
 
-bool ParameterizedType_ParameterizedStruct::IsInitialized() const {
+PROTOBUF_NOINLINE bool ParameterizedType_ParameterizedStruct::IsInitialized() const {
   return true;
 }
 
 void ParameterizedType_ParameterizedStruct::InternalSwap(ParameterizedType_ParameterizedStruct* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  _internal_mutable_types()->InternalSwap(other->_internal_mutable_types());
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  _impl_.types_.InternalSwap(&other->_impl_.types_);
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedStruct, _impl_.nullability_)
       + sizeof(ParameterizedType_ParameterizedStruct::_impl_.nullability_)
       - PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedStruct, _impl_.variation_pointer_)>(
@@ -2778,7 +2663,7 @@ void ParameterizedType_ParameterizedStruct::InternalSwap(ParameterizedType_Param
           reinterpret_cast<char*>(&other->_impl_.variation_pointer_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ParameterizedType_ParameterizedStruct::GetMetadata() const {
+::google::protobuf::Metadata ParameterizedType_ParameterizedStruct::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_getter, &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_once,
       file_level_metadata_substrait_2fparameterized_5ftypes_2eproto[7]);
@@ -2796,61 +2681,55 @@ class ParameterizedType_ParameterizedNamedStruct::_Internal {
   }
 };
 
-const ::substrait::ParameterizedType_ParameterizedStruct&
-ParameterizedType_ParameterizedNamedStruct::_Internal::struct_(const ParameterizedType_ParameterizedNamedStruct* msg) {
+const ::substrait::ParameterizedType_ParameterizedStruct& ParameterizedType_ParameterizedNamedStruct::_Internal::struct_(const ParameterizedType_ParameterizedNamedStruct* msg) {
   return *msg->_impl_.struct__;
 }
-ParameterizedType_ParameterizedNamedStruct::ParameterizedType_ParameterizedNamedStruct(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ParameterizedType_ParameterizedNamedStruct::ParameterizedType_ParameterizedNamedStruct(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ParameterizedType.ParameterizedNamedStruct)
 }
-ParameterizedType_ParameterizedNamedStruct::ParameterizedType_ParameterizedNamedStruct(const ParameterizedType_ParameterizedNamedStruct& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  ParameterizedType_ParameterizedNamedStruct* const _this = this; (void)_this;
+ParameterizedType_ParameterizedNamedStruct::ParameterizedType_ParameterizedNamedStruct(const ParameterizedType_ParameterizedNamedStruct& from) : ::google::protobuf::Message() {
+  ParameterizedType_ParameterizedNamedStruct* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.names_){from._impl_.names_}
-    , decltype(_impl_.struct__){nullptr}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_._has_bits_){from._impl_._has_bits_},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.names_){from._impl_.names_},
+      decltype(_impl_.struct__){nullptr},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
     _this->_impl_.struct__ = new ::substrait::ParameterizedType_ParameterizedStruct(*from._impl_.struct__);
   }
+
   // @@protoc_insertion_point(copy_constructor:substrait.ParameterizedType.ParameterizedNamedStruct)
 }
-
 inline void ParameterizedType_ParameterizedNamedStruct::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.names_){arena}
-    , decltype(_impl_.struct__){nullptr}
+      decltype(_impl_._has_bits_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.names_){arena},
+      decltype(_impl_.struct__){nullptr},
   };
 }
-
 ParameterizedType_ParameterizedNamedStruct::~ParameterizedType_ParameterizedNamedStruct() {
   // @@protoc_insertion_point(destructor:substrait.ParameterizedType.ParameterizedNamedStruct)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ParameterizedType_ParameterizedNamedStruct::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   _internal_mutable_names()->~RepeatedPtrField();
   if (this != internal_default_instance()) delete _impl_.struct__;
 }
-
 void ParameterizedType_ParameterizedNamedStruct::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void ParameterizedType_ParameterizedNamedStruct::Clear() {
+PROTOBUF_NOINLINE void ParameterizedType_ParameterizedNamedStruct::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ParameterizedType.ParameterizedNamedStruct)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -2863,90 +2742,82 @@ void ParameterizedType_ParameterizedNamedStruct::Clear() {
     _impl_.struct__->Clear();
   }
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ParameterizedType_ParameterizedNamedStruct::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // repeated string names = 1 [json_name = "names"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            auto str = _internal_add_names();
-            ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-            CHK_(ptr);
-            CHK_(::_pbi::VerifyUTF8(str, "substrait.ParameterizedType.ParameterizedNamedStruct.names"));
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.ParameterizedType.ParameterizedStruct struct = 2 [json_name = "struct"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          ptr = ctx->ParseMessage(_internal_mutable_struct_(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* ParameterizedType_ParameterizedNamedStruct::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 1, 66, 2> ParameterizedType_ParameterizedNamedStruct::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedNamedStruct, _impl_._has_bits_),
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ParameterizedType_ParameterizedNamedStruct_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // .substrait.ParameterizedType.ParameterizedStruct struct = 2 [json_name = "struct"];
+    {::_pbi::TcParser::FastMtS1,
+     {18, 0, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedNamedStruct, _impl_.struct__)}},
+    // repeated string names = 1 [json_name = "names"];
+    {::_pbi::TcParser::FastUR1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedNamedStruct, _impl_.names_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // repeated string names = 1 [json_name = "names"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedNamedStruct, _impl_.names_), -1, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kUtf8String | ::_fl::kRepSString)},
+    // .substrait.ParameterizedType.ParameterizedStruct struct = 2 [json_name = "struct"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedNamedStruct, _impl_.struct__), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_ParameterizedStruct>()},
+  }}, {{
+    "\64\5\0\0\0\0\0\0"
+    "substrait.ParameterizedType.ParameterizedNamedStruct"
+    "names"
+  }},
+};
 
 ::uint8_t* ParameterizedType_ParameterizedNamedStruct::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ParameterizedType.ParameterizedNamedStruct)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated string names = 1 [json_name = "names"];
   for (int i = 0, n = this->_internal_names_size(); i < n; ++i) {
-    const auto& s = this->_internal_names(i);
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-        s.data(), static_cast<int>(s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "substrait.ParameterizedType.ParameterizedNamedStruct.names");
+    const auto& s = this->_internal_names().Get(i);
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+        s.data(), static_cast<int>(s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "substrait.ParameterizedType.ParameterizedNamedStruct.names");
     target = stream->WriteString(1, s, target);
   }
 
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.ParameterizedType.ParameterizedStruct struct = 2 [json_name = "struct"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(2, _Internal::struct_(this),
         _Internal::struct_(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ParameterizedType.ParameterizedNamedStruct)
   return target;
@@ -2961,31 +2832,30 @@ failure:
   (void) cached_has_bits;
 
   // repeated string names = 1 [json_name = "names"];
-  total_size += 1 * ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(_internal_names().size());
+  total_size += 1 * ::google::protobuf::internal::FromIntSize(_internal_names().size());
   for (int i = 0, n = _internal_names().size(); i < n; ++i) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
         _internal_names().Get(i));
   }
-
   // .substrait.ParameterizedType.ParameterizedStruct struct = 2 [json_name = "struct"];
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
         *_impl_.struct__);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ParameterizedType_ParameterizedNamedStruct::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ParameterizedType_ParameterizedNamedStruct::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ParameterizedType_ParameterizedNamedStruct::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ParameterizedType_ParameterizedNamedStruct::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ParameterizedType_ParameterizedNamedStruct::GetClassData() const { return &_class_data_; }
 
 
-void ParameterizedType_ParameterizedNamedStruct::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ParameterizedType_ParameterizedNamedStruct::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ParameterizedType_ParameterizedNamedStruct*>(&to_msg);
   auto& from = static_cast<const ParameterizedType_ParameterizedNamedStruct&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ParameterizedType.ParameterizedNamedStruct)
@@ -2998,7 +2868,7 @@ void ParameterizedType_ParameterizedNamedStruct::MergeImpl(::PROTOBUF_NAMESPACE_
     _this->_internal_mutable_struct_()->::substrait::ParameterizedType_ParameterizedStruct::MergeFrom(
         from._internal_struct_());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ParameterizedType_ParameterizedNamedStruct::CopyFrom(const ParameterizedType_ParameterizedNamedStruct& from) {
@@ -3008,7 +2878,7 @@ void ParameterizedType_ParameterizedNamedStruct::CopyFrom(const ParameterizedTyp
   MergeFrom(from);
 }
 
-bool ParameterizedType_ParameterizedNamedStruct::IsInitialized() const {
+PROTOBUF_NOINLINE bool ParameterizedType_ParameterizedNamedStruct::IsInitialized() const {
   return true;
 }
 
@@ -3016,12 +2886,11 @@ void ParameterizedType_ParameterizedNamedStruct::InternalSwap(ParameterizedType_
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  _internal_mutable_names()->InternalSwap(
-      other->_internal_mutable_names());
+  _impl_.names_.InternalSwap(&other->_impl_.names_);
   swap(_impl_.struct__, other->_impl_.struct__);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ParameterizedType_ParameterizedNamedStruct::GetMetadata() const {
+::google::protobuf::Metadata ParameterizedType_ParameterizedNamedStruct::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_getter, &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_once,
       file_level_metadata_substrait_2fparameterized_5ftypes_2eproto[8]);
@@ -3039,69 +2908,59 @@ class ParameterizedType_ParameterizedList::_Internal {
   }
 };
 
-const ::substrait::ParameterizedType&
-ParameterizedType_ParameterizedList::_Internal::type(const ParameterizedType_ParameterizedList* msg) {
+const ::substrait::ParameterizedType& ParameterizedType_ParameterizedList::_Internal::type(const ParameterizedType_ParameterizedList* msg) {
   return *msg->_impl_.type_;
 }
-ParameterizedType_ParameterizedList::ParameterizedType_ParameterizedList(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ParameterizedType_ParameterizedList::ParameterizedType_ParameterizedList(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ParameterizedType.ParameterizedList)
 }
-ParameterizedType_ParameterizedList::ParameterizedType_ParameterizedList(const ParameterizedType_ParameterizedList& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  ParameterizedType_ParameterizedList* const _this = this; (void)_this;
+ParameterizedType_ParameterizedList::ParameterizedType_ParameterizedList(const ParameterizedType_ParameterizedList& from) : ::google::protobuf::Message() {
+  ParameterizedType_ParameterizedList* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.type_){nullptr}
-    , decltype(_impl_.variation_pointer_) {}
-
-    , decltype(_impl_.nullability_) {}
+      decltype(_impl_._has_bits_){from._impl_._has_bits_},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.type_){nullptr},
+      decltype(_impl_.variation_pointer_){},
+      decltype(_impl_.nullability_){},
   };
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
     _this->_impl_.type_ = new ::substrait::ParameterizedType(*from._impl_.type_);
   }
   ::memcpy(&_impl_.variation_pointer_, &from._impl_.variation_pointer_,
     static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.nullability_) -
     reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
+
   // @@protoc_insertion_point(copy_constructor:substrait.ParameterizedType.ParameterizedList)
 }
-
 inline void ParameterizedType_ParameterizedList::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.type_){nullptr}
-    , decltype(_impl_.variation_pointer_) { 0u }
-
-    , decltype(_impl_.nullability_) { 0 }
-
+      decltype(_impl_._has_bits_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.type_){nullptr},
+      decltype(_impl_.variation_pointer_){0u},
+      decltype(_impl_.nullability_){0},
   };
 }
-
 ParameterizedType_ParameterizedList::~ParameterizedType_ParameterizedList() {
   // @@protoc_insertion_point(destructor:substrait.ParameterizedType.ParameterizedList)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ParameterizedType_ParameterizedList::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   if (this != internal_default_instance()) delete _impl_.type_;
 }
-
 void ParameterizedType_ParameterizedList::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void ParameterizedType_ParameterizedList::Clear() {
+PROTOBUF_NOINLINE void ParameterizedType_ParameterizedList::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ParameterizedType.ParameterizedList)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -3116,78 +2975,70 @@ void ParameterizedType_ParameterizedList::Clear() {
       reinterpret_cast<char*>(&_impl_.nullability_) -
       reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ParameterizedType_ParameterizedList::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // .substrait.ParameterizedType type = 1 [json_name = "type"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_type(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // uint32 variation_pointer = 2 [json_name = "variationPointer"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
-          _impl_.variation_pointer_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 24)) {
-          ::int32_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-          _internal_set_nullability(static_cast<::substrait::Type_Nullability>(val));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* ParameterizedType_ParameterizedList::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 1, 0, 2> ParameterizedType_ParameterizedList::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedList, _impl_._has_bits_),
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ParameterizedType_ParameterizedList_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // .substrait.ParameterizedType type = 1 [json_name = "type"];
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedList, _impl_.type_)}},
+    // uint32 variation_pointer = 2 [json_name = "variationPointer"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedList, _impl_.variation_pointer_), 63>(),
+     {16, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedList, _impl_.variation_pointer_)}},
+    // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedList, _impl_.nullability_), 63>(),
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedList, _impl_.nullability_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .substrait.ParameterizedType type = 1 [json_name = "type"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedList, _impl_.type_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // uint32 variation_pointer = 2 [json_name = "variationPointer"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedList, _impl_.variation_pointer_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUInt32)},
+    // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedList, _impl_.nullability_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType>()},
+  }}, {{
+  }},
+};
 
 ::uint8_t* ParameterizedType_ParameterizedList::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ParameterizedType.ParameterizedList)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.ParameterizedType type = 1 [json_name = "type"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(1, _Internal::type(this),
         _Internal::type(this).GetCachedSize(), target, stream);
   }
@@ -3207,8 +3058,9 @@ failure:
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ParameterizedType.ParameterizedList)
   return target;
@@ -3226,7 +3078,7 @@ failure:
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
         *_impl_.type_);
   }
 
@@ -3245,14 +3097,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ParameterizedType_ParameterizedList::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ParameterizedType_ParameterizedList::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ParameterizedType_ParameterizedList::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ParameterizedType_ParameterizedList::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ParameterizedType_ParameterizedList::GetClassData() const { return &_class_data_; }
 
 
-void ParameterizedType_ParameterizedList::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ParameterizedType_ParameterizedList::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ParameterizedType_ParameterizedList*>(&to_msg);
   auto& from = static_cast<const ParameterizedType_ParameterizedList&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ParameterizedType.ParameterizedList)
@@ -3270,7 +3122,7 @@ void ParameterizedType_ParameterizedList::MergeImpl(::PROTOBUF_NAMESPACE_ID::Mes
   if (from._internal_nullability() != 0) {
     _this->_internal_set_nullability(from._internal_nullability());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ParameterizedType_ParameterizedList::CopyFrom(const ParameterizedType_ParameterizedList& from) {
@@ -3280,7 +3132,7 @@ void ParameterizedType_ParameterizedList::CopyFrom(const ParameterizedType_Param
   MergeFrom(from);
 }
 
-bool ParameterizedType_ParameterizedList::IsInitialized() const {
+PROTOBUF_NOINLINE bool ParameterizedType_ParameterizedList::IsInitialized() const {
   return true;
 }
 
@@ -3288,7 +3140,7 @@ void ParameterizedType_ParameterizedList::InternalSwap(ParameterizedType_Paramet
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedList, _impl_.nullability_)
       + sizeof(ParameterizedType_ParameterizedList::_impl_.nullability_)
       - PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedList, _impl_.type_)>(
@@ -3296,7 +3148,7 @@ void ParameterizedType_ParameterizedList::InternalSwap(ParameterizedType_Paramet
           reinterpret_cast<char*>(&other->_impl_.type_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ParameterizedType_ParameterizedList::GetMetadata() const {
+::google::protobuf::Metadata ParameterizedType_ParameterizedList::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_getter, &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_once,
       file_level_metadata_substrait_2fparameterized_5ftypes_2eproto[9]);
@@ -3318,33 +3170,30 @@ class ParameterizedType_ParameterizedMap::_Internal {
   }
 };
 
-const ::substrait::ParameterizedType&
-ParameterizedType_ParameterizedMap::_Internal::key(const ParameterizedType_ParameterizedMap* msg) {
+const ::substrait::ParameterizedType& ParameterizedType_ParameterizedMap::_Internal::key(const ParameterizedType_ParameterizedMap* msg) {
   return *msg->_impl_.key_;
 }
-const ::substrait::ParameterizedType&
-ParameterizedType_ParameterizedMap::_Internal::value(const ParameterizedType_ParameterizedMap* msg) {
+const ::substrait::ParameterizedType& ParameterizedType_ParameterizedMap::_Internal::value(const ParameterizedType_ParameterizedMap* msg) {
   return *msg->_impl_.value_;
 }
-ParameterizedType_ParameterizedMap::ParameterizedType_ParameterizedMap(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ParameterizedType_ParameterizedMap::ParameterizedType_ParameterizedMap(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ParameterizedType.ParameterizedMap)
 }
-ParameterizedType_ParameterizedMap::ParameterizedType_ParameterizedMap(const ParameterizedType_ParameterizedMap& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  ParameterizedType_ParameterizedMap* const _this = this; (void)_this;
+ParameterizedType_ParameterizedMap::ParameterizedType_ParameterizedMap(const ParameterizedType_ParameterizedMap& from) : ::google::protobuf::Message() {
+  ParameterizedType_ParameterizedMap* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.key_){nullptr}
-    , decltype(_impl_.value_){nullptr}
-    , decltype(_impl_.variation_pointer_) {}
-
-    , decltype(_impl_.nullability_) {}
+      decltype(_impl_._has_bits_){from._impl_._has_bits_},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.key_){nullptr},
+      decltype(_impl_.value_){nullptr},
+      decltype(_impl_.variation_pointer_){},
+      decltype(_impl_.nullability_){},
   };
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
     _this->_impl_.key_ = new ::substrait::ParameterizedType(*from._impl_.key_);
   }
@@ -3354,43 +3203,35 @@ ParameterizedType_ParameterizedMap::ParameterizedType_ParameterizedMap(const Par
   ::memcpy(&_impl_.variation_pointer_, &from._impl_.variation_pointer_,
     static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.nullability_) -
     reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
+
   // @@protoc_insertion_point(copy_constructor:substrait.ParameterizedType.ParameterizedMap)
 }
-
 inline void ParameterizedType_ParameterizedMap::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.key_){nullptr}
-    , decltype(_impl_.value_){nullptr}
-    , decltype(_impl_.variation_pointer_) { 0u }
-
-    , decltype(_impl_.nullability_) { 0 }
-
+      decltype(_impl_._has_bits_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.key_){nullptr},
+      decltype(_impl_.value_){nullptr},
+      decltype(_impl_.variation_pointer_){0u},
+      decltype(_impl_.nullability_){0},
   };
 }
-
 ParameterizedType_ParameterizedMap::~ParameterizedType_ParameterizedMap() {
   // @@protoc_insertion_point(destructor:substrait.ParameterizedType.ParameterizedMap)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ParameterizedType_ParameterizedMap::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   if (this != internal_default_instance()) delete _impl_.key_;
   if (this != internal_default_instance()) delete _impl_.value_;
 }
-
 void ParameterizedType_ParameterizedMap::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void ParameterizedType_ParameterizedMap::Clear() {
+PROTOBUF_NOINLINE void ParameterizedType_ParameterizedMap::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ParameterizedType.ParameterizedMap)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -3411,94 +3252,83 @@ void ParameterizedType_ParameterizedMap::Clear() {
       reinterpret_cast<char*>(&_impl_.nullability_) -
       reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ParameterizedType_ParameterizedMap::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // .substrait.ParameterizedType key = 1 [json_name = "key"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_key(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.ParameterizedType value = 2 [json_name = "value"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          ptr = ctx->ParseMessage(_internal_mutable_value(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // uint32 variation_pointer = 3 [json_name = "variationPointer"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 24)) {
-          _impl_.variation_pointer_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.Nullability nullability = 4 [json_name = "nullability"];
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 32)) {
-          ::int32_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-          _internal_set_nullability(static_cast<::substrait::Type_Nullability>(val));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* ParameterizedType_ParameterizedMap::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 4, 2, 0, 2> ParameterizedType_ParameterizedMap::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedMap, _impl_._has_bits_),
+    0, // no _extensions_
+    4, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967280,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    4,  // num_field_entries
+    2,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ParameterizedType_ParameterizedMap_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // .substrait.Type.Nullability nullability = 4 [json_name = "nullability"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedMap, _impl_.nullability_), 63>(),
+     {32, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedMap, _impl_.nullability_)}},
+    // .substrait.ParameterizedType key = 1 [json_name = "key"];
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedMap, _impl_.key_)}},
+    // .substrait.ParameterizedType value = 2 [json_name = "value"];
+    {::_pbi::TcParser::FastMtS1,
+     {18, 1, 1, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedMap, _impl_.value_)}},
+    // uint32 variation_pointer = 3 [json_name = "variationPointer"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedMap, _impl_.variation_pointer_), 63>(),
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedMap, _impl_.variation_pointer_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .substrait.ParameterizedType key = 1 [json_name = "key"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedMap, _impl_.key_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.ParameterizedType value = 2 [json_name = "value"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedMap, _impl_.value_), _Internal::kHasBitsOffset + 1, 1,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // uint32 variation_pointer = 3 [json_name = "variationPointer"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedMap, _impl_.variation_pointer_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUInt32)},
+    // .substrait.Type.Nullability nullability = 4 [json_name = "nullability"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedMap, _impl_.nullability_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType>()},
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType>()},
+  }}, {{
+  }},
+};
 
 ::uint8_t* ParameterizedType_ParameterizedMap::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ParameterizedType.ParameterizedMap)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.ParameterizedType key = 1 [json_name = "key"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(1, _Internal::key(this),
         _Internal::key(this).GetCachedSize(), target, stream);
   }
 
   // .substrait.ParameterizedType value = 2 [json_name = "value"];
   if (cached_has_bits & 0x00000002u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(2, _Internal::value(this),
         _Internal::value(this).GetCachedSize(), target, stream);
   }
@@ -3518,8 +3348,9 @@ failure:
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ParameterizedType.ParameterizedMap)
   return target;
@@ -3538,14 +3369,14 @@ failure:
     // .substrait.ParameterizedType key = 1 [json_name = "key"];
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.key_);
     }
 
     // .substrait.ParameterizedType value = 2 [json_name = "value"];
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.value_);
     }
 
@@ -3565,14 +3396,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ParameterizedType_ParameterizedMap::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ParameterizedType_ParameterizedMap::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ParameterizedType_ParameterizedMap::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ParameterizedType_ParameterizedMap::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ParameterizedType_ParameterizedMap::GetClassData() const { return &_class_data_; }
 
 
-void ParameterizedType_ParameterizedMap::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ParameterizedType_ParameterizedMap::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ParameterizedType_ParameterizedMap*>(&to_msg);
   auto& from = static_cast<const ParameterizedType_ParameterizedMap&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ParameterizedType.ParameterizedMap)
@@ -3597,7 +3428,7 @@ void ParameterizedType_ParameterizedMap::MergeImpl(::PROTOBUF_NAMESPACE_ID::Mess
   if (from._internal_nullability() != 0) {
     _this->_internal_set_nullability(from._internal_nullability());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ParameterizedType_ParameterizedMap::CopyFrom(const ParameterizedType_ParameterizedMap& from) {
@@ -3607,7 +3438,7 @@ void ParameterizedType_ParameterizedMap::CopyFrom(const ParameterizedType_Parame
   MergeFrom(from);
 }
 
-bool ParameterizedType_ParameterizedMap::IsInitialized() const {
+PROTOBUF_NOINLINE bool ParameterizedType_ParameterizedMap::IsInitialized() const {
   return true;
 }
 
@@ -3615,7 +3446,7 @@ void ParameterizedType_ParameterizedMap::InternalSwap(ParameterizedType_Paramete
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedMap, _impl_.nullability_)
       + sizeof(ParameterizedType_ParameterizedMap::_impl_.nullability_)
       - PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedMap, _impl_.key_)>(
@@ -3623,7 +3454,7 @@ void ParameterizedType_ParameterizedMap::InternalSwap(ParameterizedType_Paramete
           reinterpret_cast<char*>(&other->_impl_.key_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ParameterizedType_ParameterizedMap::GetMetadata() const {
+::google::protobuf::Metadata ParameterizedType_ParameterizedMap::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_getter, &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_once,
       file_level_metadata_substrait_2fparameterized_5ftypes_2eproto[10]);
@@ -3634,49 +3465,39 @@ class ParameterizedType_ParameterizedUserDefined::_Internal {
  public:
 };
 
-ParameterizedType_ParameterizedUserDefined::ParameterizedType_ParameterizedUserDefined(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ParameterizedType_ParameterizedUserDefined::ParameterizedType_ParameterizedUserDefined(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ParameterizedType.ParameterizedUserDefined)
 }
 ParameterizedType_ParameterizedUserDefined::ParameterizedType_ParameterizedUserDefined(const ParameterizedType_ParameterizedUserDefined& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message(), _impl_(from._impl_) {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(
+    : ::google::protobuf::Message(), _impl_(from._impl_) {
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:substrait.ParameterizedType.ParameterizedUserDefined)
 }
-
 inline void ParameterizedType_ParameterizedUserDefined::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_.type_pointer_) { 0u }
-
-    , decltype(_impl_.variation_pointer_) { 0u }
-
-    , decltype(_impl_.nullability_) { 0 }
-
-    , /*decltype(_impl_._cached_size_)*/{}
+      decltype(_impl_.type_pointer_){0u},
+      decltype(_impl_.variation_pointer_){0u},
+      decltype(_impl_.nullability_){0},
+      /*decltype(_impl_._cached_size_)*/ {},
   };
 }
-
 ParameterizedType_ParameterizedUserDefined::~ParameterizedType_ParameterizedUserDefined() {
   // @@protoc_insertion_point(destructor:substrait.ParameterizedType.ParameterizedUserDefined)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ParameterizedType_ParameterizedUserDefined::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
 }
-
 void ParameterizedType_ParameterizedUserDefined::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void ParameterizedType_ParameterizedUserDefined::Clear() {
+PROTOBUF_NOINLINE void ParameterizedType_ParameterizedUserDefined::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ParameterizedType.ParameterizedUserDefined)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -3685,71 +3506,65 @@ void ParameterizedType_ParameterizedUserDefined::Clear() {
   ::memset(&_impl_.type_pointer_, 0, static_cast<::size_t>(
       reinterpret_cast<char*>(&_impl_.nullability_) -
       reinterpret_cast<char*>(&_impl_.type_pointer_)) + sizeof(_impl_.nullability_));
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ParameterizedType_ParameterizedUserDefined::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // uint32 type_pointer = 1 [json_name = "typePointer"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 8)) {
-          _impl_.type_pointer_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // uint32 variation_pointer = 2 [json_name = "variationPointer"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
-          _impl_.variation_pointer_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 24)) {
-          ::int32_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-          _internal_set_nullability(static_cast<::substrait::Type_Nullability>(val));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
+const char* ParameterizedType_ParameterizedUserDefined::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 0, 0, 2> ParameterizedType_ParameterizedUserDefined::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_ParameterizedType_ParameterizedUserDefined_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // uint32 type_pointer = 1 [json_name = "typePointer"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedUserDefined, _impl_.type_pointer_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedUserDefined, _impl_.type_pointer_)}},
+    // uint32 variation_pointer = 2 [json_name = "variationPointer"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedUserDefined, _impl_.variation_pointer_), 63>(),
+     {16, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedUserDefined, _impl_.variation_pointer_)}},
+    // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ParameterizedType_ParameterizedUserDefined, _impl_.nullability_), 63>(),
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedUserDefined, _impl_.nullability_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // uint32 type_pointer = 1 [json_name = "typePointer"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedUserDefined, _impl_.type_pointer_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUInt32)},
+    // uint32 variation_pointer = 2 [json_name = "variationPointer"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedUserDefined, _impl_.variation_pointer_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUInt32)},
+    // .substrait.Type.Nullability nullability = 3 [json_name = "nullability"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedUserDefined, _impl_.nullability_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
+  }},
+  // no aux_entries
+  {{
+  }},
+};
 
 ::uint8_t* ParameterizedType_ParameterizedUserDefined::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ParameterizedType.ParameterizedUserDefined)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // uint32 type_pointer = 1 [json_name = "typePointer"];
   if (this->_internal_type_pointer() != 0) {
@@ -3773,8 +3588,9 @@ failure:
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ParameterizedType.ParameterizedUserDefined)
   return target;
@@ -3809,14 +3625,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ParameterizedType_ParameterizedUserDefined::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ParameterizedType_ParameterizedUserDefined::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ParameterizedType_ParameterizedUserDefined::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ParameterizedType_ParameterizedUserDefined::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ParameterizedType_ParameterizedUserDefined::GetClassData() const { return &_class_data_; }
 
 
-void ParameterizedType_ParameterizedUserDefined::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ParameterizedType_ParameterizedUserDefined::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ParameterizedType_ParameterizedUserDefined*>(&to_msg);
   auto& from = static_cast<const ParameterizedType_ParameterizedUserDefined&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ParameterizedType.ParameterizedUserDefined)
@@ -3833,7 +3649,7 @@ void ParameterizedType_ParameterizedUserDefined::MergeImpl(::PROTOBUF_NAMESPACE_
   if (from._internal_nullability() != 0) {
     _this->_internal_set_nullability(from._internal_nullability());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ParameterizedType_ParameterizedUserDefined::CopyFrom(const ParameterizedType_ParameterizedUserDefined& from) {
@@ -3843,14 +3659,14 @@ void ParameterizedType_ParameterizedUserDefined::CopyFrom(const ParameterizedTyp
   MergeFrom(from);
 }
 
-bool ParameterizedType_ParameterizedUserDefined::IsInitialized() const {
+PROTOBUF_NOINLINE bool ParameterizedType_ParameterizedUserDefined::IsInitialized() const {
   return true;
 }
 
 void ParameterizedType_ParameterizedUserDefined::InternalSwap(ParameterizedType_ParameterizedUserDefined* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedUserDefined, _impl_.nullability_)
       + sizeof(ParameterizedType_ParameterizedUserDefined::_impl_.nullability_)
       - PROTOBUF_FIELD_OFFSET(ParameterizedType_ParameterizedUserDefined, _impl_.type_pointer_)>(
@@ -3858,7 +3674,7 @@ void ParameterizedType_ParameterizedUserDefined::InternalSwap(ParameterizedType_
           reinterpret_cast<char*>(&other->_impl_.type_pointer_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ParameterizedType_ParameterizedUserDefined::GetMetadata() const {
+::google::protobuf::Metadata ParameterizedType_ParameterizedUserDefined::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_getter, &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_once,
       file_level_metadata_substrait_2fparameterized_5ftypes_2eproto[11]);
@@ -3872,18 +3688,17 @@ class ParameterizedType_IntegerOption::_Internal {
   static const ::substrait::ParameterizedType_IntegerParameter& parameter(const ParameterizedType_IntegerOption* msg);
 };
 
-const ::substrait::ParameterizedType_IntegerParameter&
-ParameterizedType_IntegerOption::_Internal::parameter(const ParameterizedType_IntegerOption* msg) {
+const ::substrait::ParameterizedType_IntegerParameter& ParameterizedType_IntegerOption::_Internal::parameter(const ParameterizedType_IntegerOption* msg) {
   return *msg->_impl_.integer_type_.parameter_;
 }
 void ParameterizedType_IntegerOption::set_allocated_parameter(::substrait::ParameterizedType_IntegerParameter* parameter) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_integer_type();
   if (parameter) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(parameter);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(parameter);
     if (message_arena != submessage_arena) {
-      parameter = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      parameter = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, parameter, submessage_arena);
     }
     set_has_parameter();
@@ -3891,20 +3706,21 @@ void ParameterizedType_IntegerOption::set_allocated_parameter(::substrait::Param
   }
   // @@protoc_insertion_point(field_set_allocated:substrait.ParameterizedType.IntegerOption.parameter)
 }
-ParameterizedType_IntegerOption::ParameterizedType_IntegerOption(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ParameterizedType_IntegerOption::ParameterizedType_IntegerOption(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ParameterizedType.IntegerOption)
 }
-ParameterizedType_IntegerOption::ParameterizedType_IntegerOption(const ParameterizedType_IntegerOption& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  ParameterizedType_IntegerOption* const _this = this; (void)_this;
+ParameterizedType_IntegerOption::ParameterizedType_IntegerOption(const ParameterizedType_IntegerOption& from) : ::google::protobuf::Message() {
+  ParameterizedType_IntegerOption* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.integer_type_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , /*decltype(_impl_._oneof_case_)*/{}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_.integer_type_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_._oneof_case_)*/ {},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   clear_has_integer_type();
   switch (from.integer_type_case()) {
     case kLiteral: {
@@ -3920,35 +3736,29 @@ ParameterizedType_IntegerOption::ParameterizedType_IntegerOption(const Parameter
       break;
     }
   }
+
   // @@protoc_insertion_point(copy_constructor:substrait.ParameterizedType.IntegerOption)
 }
-
 inline void ParameterizedType_IntegerOption::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_.integer_type_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , /*decltype(_impl_._oneof_case_)*/{}
+      decltype(_impl_.integer_type_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_._oneof_case_)*/ {},
   };
   clear_has_integer_type();
 }
-
 ParameterizedType_IntegerOption::~ParameterizedType_IntegerOption() {
   // @@protoc_insertion_point(destructor:substrait.ParameterizedType.IntegerOption)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ParameterizedType_IntegerOption::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   if (has_integer_type()) {
     clear_integer_type();
   }
 }
-
 void ParameterizedType_IntegerOption::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
@@ -3974,87 +3784,81 @@ void ParameterizedType_IntegerOption::clear_integer_type() {
 }
 
 
-void ParameterizedType_IntegerOption::Clear() {
+PROTOBUF_NOINLINE void ParameterizedType_IntegerOption::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ParameterizedType.IntegerOption)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   clear_integer_type();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ParameterizedType_IntegerOption::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // int32 literal = 1 [json_name = "literal"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 8)) {
-          _internal_set_literal(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.ParameterizedType.IntegerParameter parameter = 2 [json_name = "parameter"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          ptr = ctx->ParseMessage(_internal_mutable_parameter(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
+const char* ParameterizedType_IntegerOption::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 2, 1, 0, 2> ParameterizedType_IntegerOption::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    2, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ParameterizedType_IntegerOption_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // int32 literal = 1 [json_name = "literal"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_IntegerOption, _impl_.integer_type_.literal_), _Internal::kOneofCaseOffset + 0, 0,
+    (0 | ::_fl::kFcOneof | ::_fl::kInt32)},
+    // .substrait.ParameterizedType.IntegerParameter parameter = 2 [json_name = "parameter"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType_IntegerOption, _impl_.integer_type_.parameter_), _Internal::kOneofCaseOffset + 0, 0,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_IntegerParameter>()},
+  }}, {{
+  }},
+};
 
 ::uint8_t* ParameterizedType_IntegerOption::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ParameterizedType.IntegerOption)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   switch (integer_type_case()) {
     case kLiteral: {
-      target = stream->EnsureSpace(target);
-      target = ::_pbi::WireFormatLite::WriteInt32ToArray(
-          1, this->_internal_literal(), target);
+      target = ::google::protobuf::internal::WireFormatLite::
+          WriteInt32ToArrayWithField<1>(
+              stream, this->_internal_literal(), target);
       break;
     }
     case kParameter: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(2, _Internal::parameter(this),
           _Internal::parameter(this).GetCachedSize(), target, stream);
       break;
     }
-    default: ;
+    default:
+      break;
   }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ParameterizedType.IntegerOption)
   return target;
@@ -4078,7 +3882,7 @@ failure:
     // .substrait.ParameterizedType.IntegerParameter parameter = 2 [json_name = "parameter"];
     case kParameter: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.integer_type_.parameter_);
       break;
     }
@@ -4089,14 +3893,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ParameterizedType_IntegerOption::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ParameterizedType_IntegerOption::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ParameterizedType_IntegerOption::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ParameterizedType_IntegerOption::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ParameterizedType_IntegerOption::GetClassData() const { return &_class_data_; }
 
 
-void ParameterizedType_IntegerOption::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ParameterizedType_IntegerOption::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ParameterizedType_IntegerOption*>(&to_msg);
   auto& from = static_cast<const ParameterizedType_IntegerOption&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ParameterizedType.IntegerOption)
@@ -4118,7 +3922,7 @@ void ParameterizedType_IntegerOption::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message
       break;
     }
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ParameterizedType_IntegerOption::CopyFrom(const ParameterizedType_IntegerOption& from) {
@@ -4128,7 +3932,7 @@ void ParameterizedType_IntegerOption::CopyFrom(const ParameterizedType_IntegerOp
   MergeFrom(from);
 }
 
-bool ParameterizedType_IntegerOption::IsInitialized() const {
+PROTOBUF_NOINLINE bool ParameterizedType_IntegerOption::IsInitialized() const {
   return true;
 }
 
@@ -4139,7 +3943,7 @@ void ParameterizedType_IntegerOption::InternalSwap(ParameterizedType_IntegerOpti
   swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ParameterizedType_IntegerOption::GetMetadata() const {
+::google::protobuf::Metadata ParameterizedType_IntegerOption::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_getter, &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_once,
       file_level_metadata_substrait_2fparameterized_5ftypes_2eproto[12]);
@@ -4177,115 +3981,90 @@ class ParameterizedType::_Internal {
   static const ::substrait::ParameterizedType_TypeParameter& type_parameter(const ParameterizedType* msg);
 };
 
-const ::substrait::Type_Boolean&
-ParameterizedType::_Internal::bool_(const ParameterizedType* msg) {
+const ::substrait::Type_Boolean& ParameterizedType::_Internal::bool_(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.bool__;
 }
-const ::substrait::Type_I8&
-ParameterizedType::_Internal::i8(const ParameterizedType* msg) {
+const ::substrait::Type_I8& ParameterizedType::_Internal::i8(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.i8_;
 }
-const ::substrait::Type_I16&
-ParameterizedType::_Internal::i16(const ParameterizedType* msg) {
+const ::substrait::Type_I16& ParameterizedType::_Internal::i16(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.i16_;
 }
-const ::substrait::Type_I32&
-ParameterizedType::_Internal::i32(const ParameterizedType* msg) {
+const ::substrait::Type_I32& ParameterizedType::_Internal::i32(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.i32_;
 }
-const ::substrait::Type_I64&
-ParameterizedType::_Internal::i64(const ParameterizedType* msg) {
+const ::substrait::Type_I64& ParameterizedType::_Internal::i64(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.i64_;
 }
-const ::substrait::Type_FP32&
-ParameterizedType::_Internal::fp32(const ParameterizedType* msg) {
+const ::substrait::Type_FP32& ParameterizedType::_Internal::fp32(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.fp32_;
 }
-const ::substrait::Type_FP64&
-ParameterizedType::_Internal::fp64(const ParameterizedType* msg) {
+const ::substrait::Type_FP64& ParameterizedType::_Internal::fp64(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.fp64_;
 }
-const ::substrait::Type_String&
-ParameterizedType::_Internal::string(const ParameterizedType* msg) {
+const ::substrait::Type_String& ParameterizedType::_Internal::string(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.string_;
 }
-const ::substrait::Type_Binary&
-ParameterizedType::_Internal::binary(const ParameterizedType* msg) {
+const ::substrait::Type_Binary& ParameterizedType::_Internal::binary(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.binary_;
 }
-const ::substrait::Type_Timestamp&
-ParameterizedType::_Internal::timestamp(const ParameterizedType* msg) {
+const ::substrait::Type_Timestamp& ParameterizedType::_Internal::timestamp(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.timestamp_;
 }
-const ::substrait::Type_Date&
-ParameterizedType::_Internal::date(const ParameterizedType* msg) {
+const ::substrait::Type_Date& ParameterizedType::_Internal::date(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.date_;
 }
-const ::substrait::Type_Time&
-ParameterizedType::_Internal::time(const ParameterizedType* msg) {
+const ::substrait::Type_Time& ParameterizedType::_Internal::time(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.time_;
 }
-const ::substrait::Type_IntervalYear&
-ParameterizedType::_Internal::interval_year(const ParameterizedType* msg) {
+const ::substrait::Type_IntervalYear& ParameterizedType::_Internal::interval_year(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.interval_year_;
 }
-const ::substrait::Type_IntervalDay&
-ParameterizedType::_Internal::interval_day(const ParameterizedType* msg) {
+const ::substrait::Type_IntervalDay& ParameterizedType::_Internal::interval_day(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.interval_day_;
 }
-const ::substrait::Type_TimestampTZ&
-ParameterizedType::_Internal::timestamp_tz(const ParameterizedType* msg) {
+const ::substrait::Type_TimestampTZ& ParameterizedType::_Internal::timestamp_tz(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.timestamp_tz_;
 }
-const ::substrait::Type_UUID&
-ParameterizedType::_Internal::uuid(const ParameterizedType* msg) {
+const ::substrait::Type_UUID& ParameterizedType::_Internal::uuid(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.uuid_;
 }
-const ::substrait::ParameterizedType_ParameterizedFixedChar&
-ParameterizedType::_Internal::fixed_char(const ParameterizedType* msg) {
+const ::substrait::ParameterizedType_ParameterizedFixedChar& ParameterizedType::_Internal::fixed_char(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.fixed_char_;
 }
-const ::substrait::ParameterizedType_ParameterizedVarChar&
-ParameterizedType::_Internal::varchar(const ParameterizedType* msg) {
+const ::substrait::ParameterizedType_ParameterizedVarChar& ParameterizedType::_Internal::varchar(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.varchar_;
 }
-const ::substrait::ParameterizedType_ParameterizedFixedBinary&
-ParameterizedType::_Internal::fixed_binary(const ParameterizedType* msg) {
+const ::substrait::ParameterizedType_ParameterizedFixedBinary& ParameterizedType::_Internal::fixed_binary(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.fixed_binary_;
 }
-const ::substrait::ParameterizedType_ParameterizedDecimal&
-ParameterizedType::_Internal::decimal(const ParameterizedType* msg) {
+const ::substrait::ParameterizedType_ParameterizedDecimal& ParameterizedType::_Internal::decimal(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.decimal_;
 }
-const ::substrait::ParameterizedType_ParameterizedStruct&
-ParameterizedType::_Internal::struct_(const ParameterizedType* msg) {
+const ::substrait::ParameterizedType_ParameterizedStruct& ParameterizedType::_Internal::struct_(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.struct__;
 }
-const ::substrait::ParameterizedType_ParameterizedList&
-ParameterizedType::_Internal::list(const ParameterizedType* msg) {
+const ::substrait::ParameterizedType_ParameterizedList& ParameterizedType::_Internal::list(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.list_;
 }
-const ::substrait::ParameterizedType_ParameterizedMap&
-ParameterizedType::_Internal::map(const ParameterizedType* msg) {
+const ::substrait::ParameterizedType_ParameterizedMap& ParameterizedType::_Internal::map(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.map_;
 }
-const ::substrait::ParameterizedType_ParameterizedUserDefined&
-ParameterizedType::_Internal::user_defined(const ParameterizedType* msg) {
+const ::substrait::ParameterizedType_ParameterizedUserDefined& ParameterizedType::_Internal::user_defined(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.user_defined_;
 }
-const ::substrait::ParameterizedType_TypeParameter&
-ParameterizedType::_Internal::type_parameter(const ParameterizedType* msg) {
+const ::substrait::ParameterizedType_TypeParameter& ParameterizedType::_Internal::type_parameter(const ParameterizedType* msg) {
   return *msg->_impl_.kind_.type_parameter_;
 }
 void ParameterizedType::set_allocated_bool_(::substrait::Type_Boolean* bool_) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (bool_) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(bool_));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(bool_));
     if (message_arena != submessage_arena) {
-      bool_ = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      bool_ = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, bool_, submessage_arena);
     }
     set_has_bool_();
@@ -4302,14 +4081,14 @@ void ParameterizedType::clear_bool_() {
   }
 }
 void ParameterizedType::set_allocated_i8(::substrait::Type_I8* i8) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (i8) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(i8));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(i8));
     if (message_arena != submessage_arena) {
-      i8 = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      i8 = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, i8, submessage_arena);
     }
     set_has_i8();
@@ -4326,14 +4105,14 @@ void ParameterizedType::clear_i8() {
   }
 }
 void ParameterizedType::set_allocated_i16(::substrait::Type_I16* i16) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (i16) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(i16));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(i16));
     if (message_arena != submessage_arena) {
-      i16 = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      i16 = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, i16, submessage_arena);
     }
     set_has_i16();
@@ -4350,14 +4129,14 @@ void ParameterizedType::clear_i16() {
   }
 }
 void ParameterizedType::set_allocated_i32(::substrait::Type_I32* i32) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (i32) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(i32));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(i32));
     if (message_arena != submessage_arena) {
-      i32 = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      i32 = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, i32, submessage_arena);
     }
     set_has_i32();
@@ -4374,14 +4153,14 @@ void ParameterizedType::clear_i32() {
   }
 }
 void ParameterizedType::set_allocated_i64(::substrait::Type_I64* i64) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (i64) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(i64));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(i64));
     if (message_arena != submessage_arena) {
-      i64 = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      i64 = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, i64, submessage_arena);
     }
     set_has_i64();
@@ -4398,14 +4177,14 @@ void ParameterizedType::clear_i64() {
   }
 }
 void ParameterizedType::set_allocated_fp32(::substrait::Type_FP32* fp32) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (fp32) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(fp32));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(fp32));
     if (message_arena != submessage_arena) {
-      fp32 = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      fp32 = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, fp32, submessage_arena);
     }
     set_has_fp32();
@@ -4422,14 +4201,14 @@ void ParameterizedType::clear_fp32() {
   }
 }
 void ParameterizedType::set_allocated_fp64(::substrait::Type_FP64* fp64) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (fp64) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(fp64));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(fp64));
     if (message_arena != submessage_arena) {
-      fp64 = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      fp64 = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, fp64, submessage_arena);
     }
     set_has_fp64();
@@ -4446,14 +4225,14 @@ void ParameterizedType::clear_fp64() {
   }
 }
 void ParameterizedType::set_allocated_string(::substrait::Type_String* string) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (string) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(string));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(string));
     if (message_arena != submessage_arena) {
-      string = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      string = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, string, submessage_arena);
     }
     set_has_string();
@@ -4470,14 +4249,14 @@ void ParameterizedType::clear_string() {
   }
 }
 void ParameterizedType::set_allocated_binary(::substrait::Type_Binary* binary) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (binary) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(binary));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(binary));
     if (message_arena != submessage_arena) {
-      binary = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      binary = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, binary, submessage_arena);
     }
     set_has_binary();
@@ -4494,14 +4273,14 @@ void ParameterizedType::clear_binary() {
   }
 }
 void ParameterizedType::set_allocated_timestamp(::substrait::Type_Timestamp* timestamp) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (timestamp) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(timestamp));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(timestamp));
     if (message_arena != submessage_arena) {
-      timestamp = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      timestamp = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, timestamp, submessage_arena);
     }
     set_has_timestamp();
@@ -4518,14 +4297,14 @@ void ParameterizedType::clear_timestamp() {
   }
 }
 void ParameterizedType::set_allocated_date(::substrait::Type_Date* date) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (date) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(date));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(date));
     if (message_arena != submessage_arena) {
-      date = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      date = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, date, submessage_arena);
     }
     set_has_date();
@@ -4542,14 +4321,14 @@ void ParameterizedType::clear_date() {
   }
 }
 void ParameterizedType::set_allocated_time(::substrait::Type_Time* time) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (time) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(time));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(time));
     if (message_arena != submessage_arena) {
-      time = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      time = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, time, submessage_arena);
     }
     set_has_time();
@@ -4566,14 +4345,14 @@ void ParameterizedType::clear_time() {
   }
 }
 void ParameterizedType::set_allocated_interval_year(::substrait::Type_IntervalYear* interval_year) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (interval_year) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(interval_year));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(interval_year));
     if (message_arena != submessage_arena) {
-      interval_year = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      interval_year = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, interval_year, submessage_arena);
     }
     set_has_interval_year();
@@ -4590,14 +4369,14 @@ void ParameterizedType::clear_interval_year() {
   }
 }
 void ParameterizedType::set_allocated_interval_day(::substrait::Type_IntervalDay* interval_day) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (interval_day) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(interval_day));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(interval_day));
     if (message_arena != submessage_arena) {
-      interval_day = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      interval_day = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, interval_day, submessage_arena);
     }
     set_has_interval_day();
@@ -4614,14 +4393,14 @@ void ParameterizedType::clear_interval_day() {
   }
 }
 void ParameterizedType::set_allocated_timestamp_tz(::substrait::Type_TimestampTZ* timestamp_tz) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (timestamp_tz) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(timestamp_tz));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(timestamp_tz));
     if (message_arena != submessage_arena) {
-      timestamp_tz = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      timestamp_tz = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, timestamp_tz, submessage_arena);
     }
     set_has_timestamp_tz();
@@ -4638,14 +4417,14 @@ void ParameterizedType::clear_timestamp_tz() {
   }
 }
 void ParameterizedType::set_allocated_uuid(::substrait::Type_UUID* uuid) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (uuid) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(uuid));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(uuid));
     if (message_arena != submessage_arena) {
-      uuid = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      uuid = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, uuid, submessage_arena);
     }
     set_has_uuid();
@@ -4662,13 +4441,13 @@ void ParameterizedType::clear_uuid() {
   }
 }
 void ParameterizedType::set_allocated_fixed_char(::substrait::ParameterizedType_ParameterizedFixedChar* fixed_char) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (fixed_char) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(fixed_char);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(fixed_char);
     if (message_arena != submessage_arena) {
-      fixed_char = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      fixed_char = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, fixed_char, submessage_arena);
     }
     set_has_fixed_char();
@@ -4677,13 +4456,13 @@ void ParameterizedType::set_allocated_fixed_char(::substrait::ParameterizedType_
   // @@protoc_insertion_point(field_set_allocated:substrait.ParameterizedType.fixed_char)
 }
 void ParameterizedType::set_allocated_varchar(::substrait::ParameterizedType_ParameterizedVarChar* varchar) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (varchar) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(varchar);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(varchar);
     if (message_arena != submessage_arena) {
-      varchar = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      varchar = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, varchar, submessage_arena);
     }
     set_has_varchar();
@@ -4692,13 +4471,13 @@ void ParameterizedType::set_allocated_varchar(::substrait::ParameterizedType_Par
   // @@protoc_insertion_point(field_set_allocated:substrait.ParameterizedType.varchar)
 }
 void ParameterizedType::set_allocated_fixed_binary(::substrait::ParameterizedType_ParameterizedFixedBinary* fixed_binary) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (fixed_binary) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(fixed_binary);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(fixed_binary);
     if (message_arena != submessage_arena) {
-      fixed_binary = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      fixed_binary = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, fixed_binary, submessage_arena);
     }
     set_has_fixed_binary();
@@ -4707,13 +4486,13 @@ void ParameterizedType::set_allocated_fixed_binary(::substrait::ParameterizedTyp
   // @@protoc_insertion_point(field_set_allocated:substrait.ParameterizedType.fixed_binary)
 }
 void ParameterizedType::set_allocated_decimal(::substrait::ParameterizedType_ParameterizedDecimal* decimal) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (decimal) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(decimal);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(decimal);
     if (message_arena != submessage_arena) {
-      decimal = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      decimal = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, decimal, submessage_arena);
     }
     set_has_decimal();
@@ -4722,13 +4501,13 @@ void ParameterizedType::set_allocated_decimal(::substrait::ParameterizedType_Par
   // @@protoc_insertion_point(field_set_allocated:substrait.ParameterizedType.decimal)
 }
 void ParameterizedType::set_allocated_struct_(::substrait::ParameterizedType_ParameterizedStruct* struct_) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (struct_) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(struct_);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(struct_);
     if (message_arena != submessage_arena) {
-      struct_ = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      struct_ = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, struct_, submessage_arena);
     }
     set_has_struct_();
@@ -4737,13 +4516,13 @@ void ParameterizedType::set_allocated_struct_(::substrait::ParameterizedType_Par
   // @@protoc_insertion_point(field_set_allocated:substrait.ParameterizedType.struct)
 }
 void ParameterizedType::set_allocated_list(::substrait::ParameterizedType_ParameterizedList* list) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (list) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(list);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(list);
     if (message_arena != submessage_arena) {
-      list = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      list = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, list, submessage_arena);
     }
     set_has_list();
@@ -4752,13 +4531,13 @@ void ParameterizedType::set_allocated_list(::substrait::ParameterizedType_Parame
   // @@protoc_insertion_point(field_set_allocated:substrait.ParameterizedType.list)
 }
 void ParameterizedType::set_allocated_map(::substrait::ParameterizedType_ParameterizedMap* map) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (map) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(map);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(map);
     if (message_arena != submessage_arena) {
-      map = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      map = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, map, submessage_arena);
     }
     set_has_map();
@@ -4767,13 +4546,13 @@ void ParameterizedType::set_allocated_map(::substrait::ParameterizedType_Paramet
   // @@protoc_insertion_point(field_set_allocated:substrait.ParameterizedType.map)
 }
 void ParameterizedType::set_allocated_user_defined(::substrait::ParameterizedType_ParameterizedUserDefined* user_defined) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (user_defined) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(user_defined);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(user_defined);
     if (message_arena != submessage_arena) {
-      user_defined = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      user_defined = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, user_defined, submessage_arena);
     }
     set_has_user_defined();
@@ -4782,13 +4561,13 @@ void ParameterizedType::set_allocated_user_defined(::substrait::ParameterizedTyp
   // @@protoc_insertion_point(field_set_allocated:substrait.ParameterizedType.user_defined)
 }
 void ParameterizedType::set_allocated_type_parameter(::substrait::ParameterizedType_TypeParameter* type_parameter) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_kind();
   if (type_parameter) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(type_parameter);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(type_parameter);
     if (message_arena != submessage_arena) {
-      type_parameter = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      type_parameter = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, type_parameter, submessage_arena);
     }
     set_has_type_parameter();
@@ -4796,20 +4575,21 @@ void ParameterizedType::set_allocated_type_parameter(::substrait::ParameterizedT
   }
   // @@protoc_insertion_point(field_set_allocated:substrait.ParameterizedType.type_parameter)
 }
-ParameterizedType::ParameterizedType(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ParameterizedType::ParameterizedType(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ParameterizedType)
 }
-ParameterizedType::ParameterizedType(const ParameterizedType& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  ParameterizedType* const _this = this; (void)_this;
+ParameterizedType::ParameterizedType(const ParameterizedType& from) : ::google::protobuf::Message() {
+  ParameterizedType* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.kind_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , /*decltype(_impl_._oneof_case_)*/{}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_.kind_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_._oneof_case_)*/ {},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   clear_has_kind();
   switch (from.kind_case()) {
     case kBool: {
@@ -4945,35 +4725,29 @@ ParameterizedType::ParameterizedType(const ParameterizedType& from)
       break;
     }
   }
+
   // @@protoc_insertion_point(copy_constructor:substrait.ParameterizedType)
 }
-
 inline void ParameterizedType::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_.kind_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , /*decltype(_impl_._oneof_case_)*/{}
+      decltype(_impl_.kind_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_._oneof_case_)*/ {},
   };
   clear_has_kind();
 }
-
 ParameterizedType::~ParameterizedType() {
   // @@protoc_insertion_point(destructor:substrait.ParameterizedType)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ParameterizedType::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   if (has_kind()) {
     clear_kind();
   }
 }
-
 void ParameterizedType::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
@@ -5143,420 +4917,294 @@ void ParameterizedType::clear_kind() {
 }
 
 
-void ParameterizedType::Clear() {
+PROTOBUF_NOINLINE void ParameterizedType::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ParameterizedType)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   clear_kind();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ParameterizedType::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // .substrait.Type.Boolean bool = 1 [json_name = "bool"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_bool_(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.I8 i8 = 2 [json_name = "i8"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          ptr = ctx->ParseMessage(_internal_mutable_i8(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.I16 i16 = 3 [json_name = "i16"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
-          ptr = ctx->ParseMessage(_internal_mutable_i16(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.I32 i32 = 5 [json_name = "i32"];
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 42)) {
-          ptr = ctx->ParseMessage(_internal_mutable_i32(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.I64 i64 = 7 [json_name = "i64"];
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 58)) {
-          ptr = ctx->ParseMessage(_internal_mutable_i64(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.FP32 fp32 = 10 [json_name = "fp32"];
-      case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 82)) {
-          ptr = ctx->ParseMessage(_internal_mutable_fp32(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.FP64 fp64 = 11 [json_name = "fp64"];
-      case 11:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 90)) {
-          ptr = ctx->ParseMessage(_internal_mutable_fp64(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.String string = 12 [json_name = "string"];
-      case 12:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 98)) {
-          ptr = ctx->ParseMessage(_internal_mutable_string(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.Binary binary = 13 [json_name = "binary"];
-      case 13:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 106)) {
-          ptr = ctx->ParseMessage(_internal_mutable_binary(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.Timestamp timestamp = 14 [json_name = "timestamp"];
-      case 14:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 114)) {
-          ptr = ctx->ParseMessage(_internal_mutable_timestamp(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.Date date = 16 [json_name = "date"];
-      case 16:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 130)) {
-          ptr = ctx->ParseMessage(_internal_mutable_date(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.Time time = 17 [json_name = "time"];
-      case 17:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 138)) {
-          ptr = ctx->ParseMessage(_internal_mutable_time(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.IntervalYear interval_year = 19 [json_name = "intervalYear"];
-      case 19:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 154)) {
-          ptr = ctx->ParseMessage(_internal_mutable_interval_year(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.IntervalDay interval_day = 20 [json_name = "intervalDay"];
-      case 20:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 162)) {
-          ptr = ctx->ParseMessage(_internal_mutable_interval_day(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.ParameterizedType.ParameterizedFixedChar fixed_char = 21 [json_name = "fixedChar"];
-      case 21:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 170)) {
-          ptr = ctx->ParseMessage(_internal_mutable_fixed_char(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.ParameterizedType.ParameterizedVarChar varchar = 22 [json_name = "varchar"];
-      case 22:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 178)) {
-          ptr = ctx->ParseMessage(_internal_mutable_varchar(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.ParameterizedType.ParameterizedFixedBinary fixed_binary = 23 [json_name = "fixedBinary"];
-      case 23:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 186)) {
-          ptr = ctx->ParseMessage(_internal_mutable_fixed_binary(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.ParameterizedType.ParameterizedDecimal decimal = 24 [json_name = "decimal"];
-      case 24:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 194)) {
-          ptr = ctx->ParseMessage(_internal_mutable_decimal(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.ParameterizedType.ParameterizedStruct struct = 25 [json_name = "struct"];
-      case 25:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 202)) {
-          ptr = ctx->ParseMessage(_internal_mutable_struct_(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.ParameterizedType.ParameterizedList list = 27 [json_name = "list"];
-      case 27:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 218)) {
-          ptr = ctx->ParseMessage(_internal_mutable_list(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.ParameterizedType.ParameterizedMap map = 28 [json_name = "map"];
-      case 28:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 226)) {
-          ptr = ctx->ParseMessage(_internal_mutable_map(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.TimestampTZ timestamp_tz = 29 [json_name = "timestampTz"];
-      case 29:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 234)) {
-          ptr = ctx->ParseMessage(_internal_mutable_timestamp_tz(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.ParameterizedType.ParameterizedUserDefined user_defined = 30 [json_name = "userDefined"];
-      case 30:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 242)) {
-          ptr = ctx->ParseMessage(_internal_mutable_user_defined(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // uint32 user_defined_pointer = 31 [json_name = "userDefinedPointer", deprecated = true];
-      case 31:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 248)) {
-          _internal_set_user_defined_pointer(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type.UUID uuid = 32 [json_name = "uuid"];
-      case 32:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 2)) {
-          ptr = ctx->ParseMessage(_internal_mutable_uuid(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.ParameterizedType.TypeParameter type_parameter = 33 [json_name = "typeParameter"];
-      case 33:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_type_parameter(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
+const char* ParameterizedType::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 26, 25, 0, 7> ParameterizedType::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    33, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    33702312,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    26,  // num_field_entries
+    25,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ParameterizedType_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+  }}, {{
+    33, 0, 1,
+    65534, 25,
+    65535, 65535
+  }}, {{
+    // .substrait.Type.Boolean bool = 1 [json_name = "bool"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.bool__), _Internal::kOneofCaseOffset + 0, 0,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.Type.I8 i8 = 2 [json_name = "i8"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.i8_), _Internal::kOneofCaseOffset + 0, 1,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.Type.I16 i16 = 3 [json_name = "i16"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.i16_), _Internal::kOneofCaseOffset + 0, 2,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.Type.I32 i32 = 5 [json_name = "i32"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.i32_), _Internal::kOneofCaseOffset + 0, 3,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.Type.I64 i64 = 7 [json_name = "i64"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.i64_), _Internal::kOneofCaseOffset + 0, 4,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.Type.FP32 fp32 = 10 [json_name = "fp32"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.fp32_), _Internal::kOneofCaseOffset + 0, 5,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.Type.FP64 fp64 = 11 [json_name = "fp64"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.fp64_), _Internal::kOneofCaseOffset + 0, 6,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.Type.String string = 12 [json_name = "string"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.string_), _Internal::kOneofCaseOffset + 0, 7,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.Type.Binary binary = 13 [json_name = "binary"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.binary_), _Internal::kOneofCaseOffset + 0, 8,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.Type.Timestamp timestamp = 14 [json_name = "timestamp"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.timestamp_), _Internal::kOneofCaseOffset + 0, 9,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.Type.Date date = 16 [json_name = "date"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.date_), _Internal::kOneofCaseOffset + 0, 10,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.Type.Time time = 17 [json_name = "time"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.time_), _Internal::kOneofCaseOffset + 0, 11,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.Type.IntervalYear interval_year = 19 [json_name = "intervalYear"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.interval_year_), _Internal::kOneofCaseOffset + 0, 12,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.Type.IntervalDay interval_day = 20 [json_name = "intervalDay"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.interval_day_), _Internal::kOneofCaseOffset + 0, 13,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.ParameterizedType.ParameterizedFixedChar fixed_char = 21 [json_name = "fixedChar"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.fixed_char_), _Internal::kOneofCaseOffset + 0, 14,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.ParameterizedType.ParameterizedVarChar varchar = 22 [json_name = "varchar"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.varchar_), _Internal::kOneofCaseOffset + 0, 15,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.ParameterizedType.ParameterizedFixedBinary fixed_binary = 23 [json_name = "fixedBinary"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.fixed_binary_), _Internal::kOneofCaseOffset + 0, 16,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.ParameterizedType.ParameterizedDecimal decimal = 24 [json_name = "decimal"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.decimal_), _Internal::kOneofCaseOffset + 0, 17,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.ParameterizedType.ParameterizedStruct struct = 25 [json_name = "struct"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.struct__), _Internal::kOneofCaseOffset + 0, 18,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.ParameterizedType.ParameterizedList list = 27 [json_name = "list"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.list_), _Internal::kOneofCaseOffset + 0, 19,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.ParameterizedType.ParameterizedMap map = 28 [json_name = "map"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.map_), _Internal::kOneofCaseOffset + 0, 20,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.Type.TimestampTZ timestamp_tz = 29 [json_name = "timestampTz"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.timestamp_tz_), _Internal::kOneofCaseOffset + 0, 21,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.ParameterizedType.ParameterizedUserDefined user_defined = 30 [json_name = "userDefined"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.user_defined_), _Internal::kOneofCaseOffset + 0, 22,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // uint32 user_defined_pointer = 31 [json_name = "userDefinedPointer", deprecated = true];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.user_defined_pointer_), _Internal::kOneofCaseOffset + 0, 0,
+    (0 | ::_fl::kFcOneof | ::_fl::kUInt32)},
+    // .substrait.Type.UUID uuid = 32 [json_name = "uuid"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.uuid_), _Internal::kOneofCaseOffset + 0, 23,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.ParameterizedType.TypeParameter type_parameter = 33 [json_name = "typeParameter"];
+    {PROTOBUF_FIELD_OFFSET(ParameterizedType, _impl_.kind_.type_parameter_), _Internal::kOneofCaseOffset + 0, 24,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::Type_Boolean>()},
+    {::_pbi::TcParser::GetTable<::substrait::Type_I8>()},
+    {::_pbi::TcParser::GetTable<::substrait::Type_I16>()},
+    {::_pbi::TcParser::GetTable<::substrait::Type_I32>()},
+    {::_pbi::TcParser::GetTable<::substrait::Type_I64>()},
+    {::_pbi::TcParser::GetTable<::substrait::Type_FP32>()},
+    {::_pbi::TcParser::GetTable<::substrait::Type_FP64>()},
+    {::_pbi::TcParser::GetTable<::substrait::Type_String>()},
+    {::_pbi::TcParser::GetTable<::substrait::Type_Binary>()},
+    {::_pbi::TcParser::GetTable<::substrait::Type_Timestamp>()},
+    {::_pbi::TcParser::GetTable<::substrait::Type_Date>()},
+    {::_pbi::TcParser::GetTable<::substrait::Type_Time>()},
+    {::_pbi::TcParser::GetTable<::substrait::Type_IntervalYear>()},
+    {::_pbi::TcParser::GetTable<::substrait::Type_IntervalDay>()},
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_ParameterizedFixedChar>()},
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_ParameterizedVarChar>()},
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_ParameterizedFixedBinary>()},
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_ParameterizedDecimal>()},
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_ParameterizedStruct>()},
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_ParameterizedList>()},
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_ParameterizedMap>()},
+    {::_pbi::TcParser::GetTable<::substrait::Type_TimestampTZ>()},
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_ParameterizedUserDefined>()},
+    {::_pbi::TcParser::GetTable<::substrait::Type_UUID>()},
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType_TypeParameter>()},
+  }}, {{
+  }},
+};
 
 ::uint8_t* ParameterizedType::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ParameterizedType)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   switch (kind_case()) {
     case kBool: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(1, _Internal::bool_(this),
           _Internal::bool_(this).GetCachedSize(), target, stream);
       break;
     }
     case kI8: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(2, _Internal::i8(this),
           _Internal::i8(this).GetCachedSize(), target, stream);
       break;
     }
     case kI16: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(3, _Internal::i16(this),
           _Internal::i16(this).GetCachedSize(), target, stream);
       break;
     }
     case kI32: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(5, _Internal::i32(this),
           _Internal::i32(this).GetCachedSize(), target, stream);
       break;
     }
     case kI64: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(7, _Internal::i64(this),
           _Internal::i64(this).GetCachedSize(), target, stream);
       break;
     }
     case kFp32: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(10, _Internal::fp32(this),
           _Internal::fp32(this).GetCachedSize(), target, stream);
       break;
     }
     case kFp64: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(11, _Internal::fp64(this),
           _Internal::fp64(this).GetCachedSize(), target, stream);
       break;
     }
     case kString: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(12, _Internal::string(this),
           _Internal::string(this).GetCachedSize(), target, stream);
       break;
     }
     case kBinary: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(13, _Internal::binary(this),
           _Internal::binary(this).GetCachedSize(), target, stream);
       break;
     }
     case kTimestamp: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(14, _Internal::timestamp(this),
           _Internal::timestamp(this).GetCachedSize(), target, stream);
       break;
     }
     case kDate: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(16, _Internal::date(this),
           _Internal::date(this).GetCachedSize(), target, stream);
       break;
     }
     case kTime: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(17, _Internal::time(this),
           _Internal::time(this).GetCachedSize(), target, stream);
       break;
     }
     case kIntervalYear: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(19, _Internal::interval_year(this),
           _Internal::interval_year(this).GetCachedSize(), target, stream);
       break;
     }
     case kIntervalDay: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(20, _Internal::interval_day(this),
           _Internal::interval_day(this).GetCachedSize(), target, stream);
       break;
     }
     case kFixedChar: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(21, _Internal::fixed_char(this),
           _Internal::fixed_char(this).GetCachedSize(), target, stream);
       break;
     }
     case kVarchar: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(22, _Internal::varchar(this),
           _Internal::varchar(this).GetCachedSize(), target, stream);
       break;
     }
     case kFixedBinary: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(23, _Internal::fixed_binary(this),
           _Internal::fixed_binary(this).GetCachedSize(), target, stream);
       break;
     }
     case kDecimal: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(24, _Internal::decimal(this),
           _Internal::decimal(this).GetCachedSize(), target, stream);
       break;
     }
     case kStruct: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(25, _Internal::struct_(this),
           _Internal::struct_(this).GetCachedSize(), target, stream);
       break;
     }
     case kList: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(27, _Internal::list(this),
           _Internal::list(this).GetCachedSize(), target, stream);
       break;
     }
     case kMap: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(28, _Internal::map(this),
           _Internal::map(this).GetCachedSize(), target, stream);
       break;
     }
     case kTimestampTz: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(29, _Internal::timestamp_tz(this),
           _Internal::timestamp_tz(this).GetCachedSize(), target, stream);
       break;
     }
     case kUserDefined: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(30, _Internal::user_defined(this),
           _Internal::user_defined(this).GetCachedSize(), target, stream);
       break;
@@ -5568,22 +5216,24 @@ failure:
       break;
     }
     case kUuid: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(32, _Internal::uuid(this),
           _Internal::uuid(this).GetCachedSize(), target, stream);
       break;
     }
     case kTypeParameter: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(33, _Internal::type_parameter(this),
           _Internal::type_parameter(this).GetCachedSize(), target, stream);
       break;
     }
-    default: ;
+    default:
+      break;
   }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ParameterizedType)
   return target;
@@ -5601,168 +5251,168 @@ failure:
     // .substrait.Type.Boolean bool = 1 [json_name = "bool"];
     case kBool: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.bool__);
       break;
     }
     // .substrait.Type.I8 i8 = 2 [json_name = "i8"];
     case kI8: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.i8_);
       break;
     }
     // .substrait.Type.I16 i16 = 3 [json_name = "i16"];
     case kI16: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.i16_);
       break;
     }
     // .substrait.Type.I32 i32 = 5 [json_name = "i32"];
     case kI32: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.i32_);
       break;
     }
     // .substrait.Type.I64 i64 = 7 [json_name = "i64"];
     case kI64: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.i64_);
       break;
     }
     // .substrait.Type.FP32 fp32 = 10 [json_name = "fp32"];
     case kFp32: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.fp32_);
       break;
     }
     // .substrait.Type.FP64 fp64 = 11 [json_name = "fp64"];
     case kFp64: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.fp64_);
       break;
     }
     // .substrait.Type.String string = 12 [json_name = "string"];
     case kString: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.string_);
       break;
     }
     // .substrait.Type.Binary binary = 13 [json_name = "binary"];
     case kBinary: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.binary_);
       break;
     }
     // .substrait.Type.Timestamp timestamp = 14 [json_name = "timestamp"];
     case kTimestamp: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.timestamp_);
       break;
     }
     // .substrait.Type.Date date = 16 [json_name = "date"];
     case kDate: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.date_);
       break;
     }
     // .substrait.Type.Time time = 17 [json_name = "time"];
     case kTime: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.time_);
       break;
     }
     // .substrait.Type.IntervalYear interval_year = 19 [json_name = "intervalYear"];
     case kIntervalYear: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.interval_year_);
       break;
     }
     // .substrait.Type.IntervalDay interval_day = 20 [json_name = "intervalDay"];
     case kIntervalDay: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.interval_day_);
       break;
     }
     // .substrait.Type.TimestampTZ timestamp_tz = 29 [json_name = "timestampTz"];
     case kTimestampTz: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.timestamp_tz_);
       break;
     }
     // .substrait.Type.UUID uuid = 32 [json_name = "uuid"];
     case kUuid: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.uuid_);
       break;
     }
     // .substrait.ParameterizedType.ParameterizedFixedChar fixed_char = 21 [json_name = "fixedChar"];
     case kFixedChar: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.fixed_char_);
       break;
     }
     // .substrait.ParameterizedType.ParameterizedVarChar varchar = 22 [json_name = "varchar"];
     case kVarchar: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.varchar_);
       break;
     }
     // .substrait.ParameterizedType.ParameterizedFixedBinary fixed_binary = 23 [json_name = "fixedBinary"];
     case kFixedBinary: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.fixed_binary_);
       break;
     }
     // .substrait.ParameterizedType.ParameterizedDecimal decimal = 24 [json_name = "decimal"];
     case kDecimal: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.decimal_);
       break;
     }
     // .substrait.ParameterizedType.ParameterizedStruct struct = 25 [json_name = "struct"];
     case kStruct: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.struct__);
       break;
     }
     // .substrait.ParameterizedType.ParameterizedList list = 27 [json_name = "list"];
     case kList: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.list_);
       break;
     }
     // .substrait.ParameterizedType.ParameterizedMap map = 28 [json_name = "map"];
     case kMap: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.map_);
       break;
     }
     // .substrait.ParameterizedType.ParameterizedUserDefined user_defined = 30 [json_name = "userDefined"];
     case kUserDefined: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.user_defined_);
       break;
     }
@@ -5775,7 +5425,7 @@ failure:
     // .substrait.ParameterizedType.TypeParameter type_parameter = 33 [json_name = "typeParameter"];
     case kTypeParameter: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.kind_.type_parameter_);
       break;
     }
@@ -5786,14 +5436,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ParameterizedType::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ParameterizedType::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ParameterizedType::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ParameterizedType::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ParameterizedType::GetClassData() const { return &_class_data_; }
 
 
-void ParameterizedType::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ParameterizedType::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ParameterizedType*>(&to_msg);
   auto& from = static_cast<const ParameterizedType&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ParameterizedType)
@@ -5935,7 +5585,7 @@ void ParameterizedType::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, cons
       break;
     }
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ParameterizedType::CopyFrom(const ParameterizedType& from) {
@@ -5945,7 +5595,7 @@ void ParameterizedType::CopyFrom(const ParameterizedType& from) {
   MergeFrom(from);
 }
 
-bool ParameterizedType::IsInitialized() const {
+PROTOBUF_NOINLINE bool ParameterizedType::IsInitialized() const {
   return true;
 }
 
@@ -5956,70 +5606,16 @@ void ParameterizedType::InternalSwap(ParameterizedType* other) {
   swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ParameterizedType::GetMetadata() const {
+::google::protobuf::Metadata ParameterizedType::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_getter, &descriptor_table_substrait_2fparameterized_5ftypes_2eproto_once,
       file_level_metadata_substrait_2fparameterized_5ftypes_2eproto[13]);
 }
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace substrait
-PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::substrait::ParameterizedType_TypeParameter*
-Arena::CreateMaybeMessage< ::substrait::ParameterizedType_TypeParameter >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ParameterizedType_TypeParameter >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::ParameterizedType_IntegerParameter*
-Arena::CreateMaybeMessage< ::substrait::ParameterizedType_IntegerParameter >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ParameterizedType_IntegerParameter >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::ParameterizedType_NullableInteger*
-Arena::CreateMaybeMessage< ::substrait::ParameterizedType_NullableInteger >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ParameterizedType_NullableInteger >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::ParameterizedType_ParameterizedFixedChar*
-Arena::CreateMaybeMessage< ::substrait::ParameterizedType_ParameterizedFixedChar >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ParameterizedType_ParameterizedFixedChar >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::ParameterizedType_ParameterizedVarChar*
-Arena::CreateMaybeMessage< ::substrait::ParameterizedType_ParameterizedVarChar >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ParameterizedType_ParameterizedVarChar >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::ParameterizedType_ParameterizedFixedBinary*
-Arena::CreateMaybeMessage< ::substrait::ParameterizedType_ParameterizedFixedBinary >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ParameterizedType_ParameterizedFixedBinary >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::ParameterizedType_ParameterizedDecimal*
-Arena::CreateMaybeMessage< ::substrait::ParameterizedType_ParameterizedDecimal >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ParameterizedType_ParameterizedDecimal >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::ParameterizedType_ParameterizedStruct*
-Arena::CreateMaybeMessage< ::substrait::ParameterizedType_ParameterizedStruct >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ParameterizedType_ParameterizedStruct >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::ParameterizedType_ParameterizedNamedStruct*
-Arena::CreateMaybeMessage< ::substrait::ParameterizedType_ParameterizedNamedStruct >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ParameterizedType_ParameterizedNamedStruct >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::ParameterizedType_ParameterizedList*
-Arena::CreateMaybeMessage< ::substrait::ParameterizedType_ParameterizedList >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ParameterizedType_ParameterizedList >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::ParameterizedType_ParameterizedMap*
-Arena::CreateMaybeMessage< ::substrait::ParameterizedType_ParameterizedMap >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ParameterizedType_ParameterizedMap >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::ParameterizedType_ParameterizedUserDefined*
-Arena::CreateMaybeMessage< ::substrait::ParameterizedType_ParameterizedUserDefined >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ParameterizedType_ParameterizedUserDefined >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::ParameterizedType_IntegerOption*
-Arena::CreateMaybeMessage< ::substrait::ParameterizedType_IntegerOption >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ParameterizedType_IntegerOption >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::ParameterizedType*
-Arena::CreateMaybeMessage< ::substrait::ParameterizedType >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ParameterizedType >(arena);
-}
-PROTOBUF_NAMESPACE_CLOSE
+namespace google {
+namespace protobuf {
+}  // namespace protobuf
+}  // namespace google
 // @@protoc_insertion_point(global_scope)
 #include "google/protobuf/port_undef.inc"

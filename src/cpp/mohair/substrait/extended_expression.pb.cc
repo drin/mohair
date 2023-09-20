@@ -11,20 +11,24 @@
 #include "google/protobuf/generated_message_reflection.h"
 #include "google/protobuf/reflection_ops.h"
 #include "google/protobuf/wire_format.h"
+#include "google/protobuf/generated_message_tctable_impl.h"
 // @@protoc_insertion_point(includes)
 
 // Must be included last.
 #include "google/protobuf/port_def.inc"
 PROTOBUF_PRAGMA_INIT_SEG
-namespace _pb = ::PROTOBUF_NAMESPACE_ID;
-namespace _pbi = ::PROTOBUF_NAMESPACE_ID::internal;
+namespace _pb = ::google::protobuf;
+namespace _pbi = ::google::protobuf::internal;
+namespace _fl = ::google::protobuf::internal::field_layout;
 namespace substrait {
-PROTOBUF_CONSTEXPR ExpressionReference::ExpressionReference(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.output_names_)*/{}
-  , /*decltype(_impl_.expr_type_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_._oneof_case_)*/{}} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ExpressionReference::ExpressionReference(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_.output_names_)*/ {},
+      /*decltype(_impl_.expr_type_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_._oneof_case_)*/ {},
+    } {}
 struct ExpressionReferenceDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ExpressionReferenceDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ExpressionReferenceDefaultTypeInternal() {}
@@ -35,17 +39,19 @@ struct ExpressionReferenceDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ExpressionReferenceDefaultTypeInternal _ExpressionReference_default_instance_;
-PROTOBUF_CONSTEXPR ExtendedExpression::ExtendedExpression(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.extension_uris_)*/{}
-  , /*decltype(_impl_.extensions_)*/{}
-  , /*decltype(_impl_.referred_expr_)*/{}
-  , /*decltype(_impl_.expected_type_urls_)*/{}
-  , /*decltype(_impl_.base_schema_)*/nullptr
-  , /*decltype(_impl_.advanced_extensions_)*/nullptr
-  , /*decltype(_impl_.version_)*/nullptr} {}
+        template <typename>
+PROTOBUF_CONSTEXPR ExtendedExpression::ExtendedExpression(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_._has_bits_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_.extension_uris_)*/ {},
+      /*decltype(_impl_.extensions_)*/ {},
+      /*decltype(_impl_.referred_expr_)*/ {},
+      /*decltype(_impl_.expected_type_urls_)*/ {},
+      /*decltype(_impl_.base_schema_)*/ nullptr,
+      /*decltype(_impl_.advanced_extensions_)*/ nullptr,
+      /*decltype(_impl_.version_)*/ nullptr,
+    } {}
 struct ExtendedExpressionDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ExtendedExpressionDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ExtendedExpressionDefaultTypeInternal() {}
@@ -102,8 +108,8 @@ const ::uint32_t TableStruct_substrait_2fextended_5fexpression_2eproto::offsets[
 
 static const ::_pbi::MigrationSchema
     schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-        { 0, -1, -1, sizeof(::substrait::ExpressionReference)},
-        { 12, 27, -1, sizeof(::substrait::ExtendedExpression)},
+        {0, -1, -1, sizeof(::substrait::ExpressionReference)},
+        {12, 27, -1, sizeof(::substrait::ExtendedExpression)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -191,23 +197,21 @@ class ExpressionReference::_Internal {
   static const ::substrait::AggregateFunction& measure(const ExpressionReference* msg);
 };
 
-const ::substrait::Expression&
-ExpressionReference::_Internal::expression(const ExpressionReference* msg) {
+const ::substrait::Expression& ExpressionReference::_Internal::expression(const ExpressionReference* msg) {
   return *msg->_impl_.expr_type_.expression_;
 }
-const ::substrait::AggregateFunction&
-ExpressionReference::_Internal::measure(const ExpressionReference* msg) {
+const ::substrait::AggregateFunction& ExpressionReference::_Internal::measure(const ExpressionReference* msg) {
   return *msg->_impl_.expr_type_.measure_;
 }
 void ExpressionReference::set_allocated_expression(::substrait::Expression* expression) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_expr_type();
   if (expression) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(expression));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(expression));
     if (message_arena != submessage_arena) {
-      expression = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      expression = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, expression, submessage_arena);
     }
     set_has_expression();
@@ -224,14 +228,14 @@ void ExpressionReference::clear_expression() {
   }
 }
 void ExpressionReference::set_allocated_measure(::substrait::AggregateFunction* measure) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_expr_type();
   if (measure) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
-                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(measure));
+    ::google::protobuf::Arena* submessage_arena =
+        ::google::protobuf::Arena::InternalGetOwningArena(
+                reinterpret_cast<::google::protobuf::MessageLite*>(measure));
     if (message_arena != submessage_arena) {
-      measure = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      measure = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, measure, submessage_arena);
     }
     set_has_measure();
@@ -247,21 +251,22 @@ void ExpressionReference::clear_measure() {
     clear_has_expr_type();
   }
 }
-ExpressionReference::ExpressionReference(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ExpressionReference::ExpressionReference(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ExpressionReference)
 }
-ExpressionReference::ExpressionReference(const ExpressionReference& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  ExpressionReference* const _this = this; (void)_this;
+ExpressionReference::ExpressionReference(const ExpressionReference& from) : ::google::protobuf::Message() {
+  ExpressionReference* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.output_names_){from._impl_.output_names_}
-    , decltype(_impl_.expr_type_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , /*decltype(_impl_._oneof_case_)*/{}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_.output_names_){from._impl_.output_names_},
+      decltype(_impl_.expr_type_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_._oneof_case_)*/ {},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   clear_has_expr_type();
   switch (from.expr_type_case()) {
     case kExpression: {
@@ -278,29 +283,24 @@ ExpressionReference::ExpressionReference(const ExpressionReference& from)
       break;
     }
   }
+
   // @@protoc_insertion_point(copy_constructor:substrait.ExpressionReference)
 }
-
 inline void ExpressionReference::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_.output_names_){arena}
-    , decltype(_impl_.expr_type_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , /*decltype(_impl_._oneof_case_)*/{}
+      decltype(_impl_.output_names_){arena},
+      decltype(_impl_.expr_type_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_._oneof_case_)*/ {},
   };
   clear_has_expr_type();
 }
-
 ExpressionReference::~ExpressionReference() {
   // @@protoc_insertion_point(destructor:substrait.ExpressionReference)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ExpressionReference::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   _internal_mutable_output_names()->~RepeatedPtrField();
@@ -308,7 +308,6 @@ inline void ExpressionReference::SharedDtor() {
     clear_expr_type();
   }
 }
-
 void ExpressionReference::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
@@ -336,7 +335,7 @@ void ExpressionReference::clear_expr_type() {
 }
 
 
-void ExpressionReference::Clear() {
+PROTOBUF_NOINLINE void ExpressionReference::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ExpressionReference)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -344,104 +343,91 @@ void ExpressionReference::Clear() {
 
   _internal_mutable_output_names()->Clear();
   clear_expr_type();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ExpressionReference::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // .substrait.Expression expression = 1 [json_name = "expression"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_expression(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.AggregateFunction measure = 2 [json_name = "measure"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          ptr = ctx->ParseMessage(_internal_mutable_measure(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // repeated string output_names = 3 [json_name = "outputNames"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            auto str = _internal_add_output_names();
-            ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-            CHK_(ptr);
-            CHK_(::_pbi::VerifyUTF8(str, "substrait.ExpressionReference.output_names"));
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
+const char* ExpressionReference::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 3, 2, 50, 2> ExpressionReference::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    3, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    2,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ExpressionReference_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // repeated string output_names = 3 [json_name = "outputNames"];
+    {::_pbi::TcParser::FastUR1,
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(ExpressionReference, _impl_.output_names_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .substrait.Expression expression = 1 [json_name = "expression"];
+    {PROTOBUF_FIELD_OFFSET(ExpressionReference, _impl_.expr_type_.expression_), _Internal::kOneofCaseOffset + 0, 0,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.AggregateFunction measure = 2 [json_name = "measure"];
+    {PROTOBUF_FIELD_OFFSET(ExpressionReference, _impl_.expr_type_.measure_), _Internal::kOneofCaseOffset + 0, 1,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // repeated string output_names = 3 [json_name = "outputNames"];
+    {PROTOBUF_FIELD_OFFSET(ExpressionReference, _impl_.output_names_), 0, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kUtf8String | ::_fl::kRepSString)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::Expression>()},
+    {::_pbi::TcParser::GetTable<::substrait::AggregateFunction>()},
+  }}, {{
+    "\35\0\0\14\0\0\0\0"
+    "substrait.ExpressionReference"
+    "output_names"
+  }},
+};
 
 ::uint8_t* ExpressionReference::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ExpressionReference)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   switch (expr_type_case()) {
     case kExpression: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(1, _Internal::expression(this),
           _Internal::expression(this).GetCachedSize(), target, stream);
       break;
     }
     case kMeasure: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(2, _Internal::measure(this),
           _Internal::measure(this).GetCachedSize(), target, stream);
       break;
     }
-    default: ;
+    default:
+      break;
   }
   // repeated string output_names = 3 [json_name = "outputNames"];
   for (int i = 0, n = this->_internal_output_names_size(); i < n; ++i) {
-    const auto& s = this->_internal_output_names(i);
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-        s.data(), static_cast<int>(s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "substrait.ExpressionReference.output_names");
+    const auto& s = this->_internal_output_names().Get(i);
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+        s.data(), static_cast<int>(s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "substrait.ExpressionReference.output_names");
     target = stream->WriteString(3, s, target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ExpressionReference)
   return target;
@@ -456,24 +442,23 @@ failure:
   (void) cached_has_bits;
 
   // repeated string output_names = 3 [json_name = "outputNames"];
-  total_size += 1 * ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(_internal_output_names().size());
+  total_size += 1 * ::google::protobuf::internal::FromIntSize(_internal_output_names().size());
   for (int i = 0, n = _internal_output_names().size(); i < n; ++i) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
         _internal_output_names().Get(i));
   }
-
   switch (expr_type_case()) {
     // .substrait.Expression expression = 1 [json_name = "expression"];
     case kExpression: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.expr_type_.expression_);
       break;
     }
     // .substrait.AggregateFunction measure = 2 [json_name = "measure"];
     case kMeasure: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.expr_type_.measure_);
       break;
     }
@@ -484,14 +469,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ExpressionReference::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ExpressionReference::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ExpressionReference::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ExpressionReference::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ExpressionReference::GetClassData() const { return &_class_data_; }
 
 
-void ExpressionReference::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ExpressionReference::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ExpressionReference*>(&to_msg);
   auto& from = static_cast<const ExpressionReference&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ExpressionReference)
@@ -515,7 +500,7 @@ void ExpressionReference::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, co
       break;
     }
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ExpressionReference::CopyFrom(const ExpressionReference& from) {
@@ -525,20 +510,19 @@ void ExpressionReference::CopyFrom(const ExpressionReference& from) {
   MergeFrom(from);
 }
 
-bool ExpressionReference::IsInitialized() const {
+PROTOBUF_NOINLINE bool ExpressionReference::IsInitialized() const {
   return true;
 }
 
 void ExpressionReference::InternalSwap(ExpressionReference* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  _internal_mutable_output_names()->InternalSwap(
-      other->_internal_mutable_output_names());
+  _impl_.output_names_.InternalSwap(&other->_impl_.output_names_);
   swap(_impl_.expr_type_, other->_impl_.expr_type_);
   swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ExpressionReference::GetMetadata() const {
+::google::protobuf::Metadata ExpressionReference::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fextended_5fexpression_2eproto_getter, &descriptor_table_substrait_2fextended_5fexpression_2eproto_once,
       file_level_metadata_substrait_2fextended_5fexpression_2eproto[0]);
@@ -564,16 +548,13 @@ class ExtendedExpression::_Internal {
   }
 };
 
-const ::substrait::Version&
-ExtendedExpression::_Internal::version(const ExtendedExpression* msg) {
+const ::substrait::Version& ExtendedExpression::_Internal::version(const ExtendedExpression* msg) {
   return *msg->_impl_.version_;
 }
-const ::substrait::NamedStruct&
-ExtendedExpression::_Internal::base_schema(const ExtendedExpression* msg) {
+const ::substrait::NamedStruct& ExtendedExpression::_Internal::base_schema(const ExtendedExpression* msg) {
   return *msg->_impl_.base_schema_;
 }
-const ::substrait::extensions::AdvancedExtension&
-ExtendedExpression::_Internal::advanced_extensions(const ExtendedExpression* msg) {
+const ::substrait::extensions::AdvancedExtension& ExtendedExpression::_Internal::advanced_extensions(const ExtendedExpression* msg) {
   return *msg->_impl_.advanced_extensions_;
 }
 void ExtendedExpression::clear_version() {
@@ -594,26 +575,27 @@ void ExtendedExpression::clear_advanced_extensions() {
   if (_impl_.advanced_extensions_ != nullptr) _impl_.advanced_extensions_->Clear();
   _impl_._has_bits_[0] &= ~0x00000002u;
 }
-ExtendedExpression::ExtendedExpression(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+ExtendedExpression::ExtendedExpression(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ExtendedExpression)
 }
-ExtendedExpression::ExtendedExpression(const ExtendedExpression& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  ExtendedExpression* const _this = this; (void)_this;
+ExtendedExpression::ExtendedExpression(const ExtendedExpression& from) : ::google::protobuf::Message() {
+  ExtendedExpression* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.extension_uris_){from._impl_.extension_uris_}
-    , decltype(_impl_.extensions_){from._impl_.extensions_}
-    , decltype(_impl_.referred_expr_){from._impl_.referred_expr_}
-    , decltype(_impl_.expected_type_urls_){from._impl_.expected_type_urls_}
-    , decltype(_impl_.base_schema_){nullptr}
-    , decltype(_impl_.advanced_extensions_){nullptr}
-    , decltype(_impl_.version_){nullptr}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_._has_bits_){from._impl_._has_bits_},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.extension_uris_){from._impl_.extension_uris_},
+      decltype(_impl_.extensions_){from._impl_.extensions_},
+      decltype(_impl_.referred_expr_){from._impl_.referred_expr_},
+      decltype(_impl_.expected_type_urls_){from._impl_.expected_type_urls_},
+      decltype(_impl_.base_schema_){nullptr},
+      decltype(_impl_.advanced_extensions_){nullptr},
+      decltype(_impl_.version_){nullptr},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
     _this->_impl_.base_schema_ = new ::substrait::NamedStruct(*from._impl_.base_schema_);
   }
@@ -623,49 +605,43 @@ ExtendedExpression::ExtendedExpression(const ExtendedExpression& from)
   if ((from._impl_._has_bits_[0] & 0x00000004u) != 0) {
     _this->_impl_.version_ = new ::substrait::Version(*from._impl_.version_);
   }
+
   // @@protoc_insertion_point(copy_constructor:substrait.ExtendedExpression)
 }
-
 inline void ExtendedExpression::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.extension_uris_){arena}
-    , decltype(_impl_.extensions_){arena}
-    , decltype(_impl_.referred_expr_){arena}
-    , decltype(_impl_.expected_type_urls_){arena}
-    , decltype(_impl_.base_schema_){nullptr}
-    , decltype(_impl_.advanced_extensions_){nullptr}
-    , decltype(_impl_.version_){nullptr}
+      decltype(_impl_._has_bits_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.extension_uris_){arena},
+      decltype(_impl_.extensions_){arena},
+      decltype(_impl_.referred_expr_){arena},
+      decltype(_impl_.expected_type_urls_){arena},
+      decltype(_impl_.base_schema_){nullptr},
+      decltype(_impl_.advanced_extensions_){nullptr},
+      decltype(_impl_.version_){nullptr},
   };
 }
-
 ExtendedExpression::~ExtendedExpression() {
   // @@protoc_insertion_point(destructor:substrait.ExtendedExpression)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void ExtendedExpression::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _internal_mutable_extension_uris()->~RepeatedPtrField();
-  _internal_mutable_extensions()->~RepeatedPtrField();
-  _internal_mutable_referred_expr()->~RepeatedPtrField();
+  _impl_.extension_uris_.~RepeatedPtrField();
+  _impl_.extensions_.~RepeatedPtrField();
+  _impl_.referred_expr_.~RepeatedPtrField();
   _internal_mutable_expected_type_urls()->~RepeatedPtrField();
   if (this != internal_default_instance()) delete _impl_.base_schema_;
   if (this != internal_default_instance()) delete _impl_.advanced_extensions_;
   if (this != internal_default_instance()) delete _impl_.version_;
 }
-
 void ExtendedExpression::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void ExtendedExpression::Clear() {
+PROTOBUF_NOINLINE void ExtendedExpression::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ExtendedExpression)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -691,188 +667,156 @@ void ExtendedExpression::Clear() {
     }
   }
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* ExtendedExpression::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // repeated .substrait.extensions.SimpleExtensionURI extension_uris = 1 [json_name = "extensionUris"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_extension_uris(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // repeated .substrait.extensions.SimpleExtensionDeclaration extensions = 2 [json_name = "extensions"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_extensions(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // repeated .substrait.ExpressionReference referred_expr = 3 [json_name = "referredExpr"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_referred_expr(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.NamedStruct base_schema = 4 [json_name = "baseSchema"];
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_base_schema(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.extensions.AdvancedExtension advanced_extensions = 5 [json_name = "advancedExtensions"];
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 42)) {
-          ptr = ctx->ParseMessage(_internal_mutable_advanced_extensions(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // repeated string expected_type_urls = 6 [json_name = "expectedTypeUrls"];
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 50)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            auto str = _internal_add_expected_type_urls();
-            ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-            CHK_(ptr);
-            CHK_(::_pbi::VerifyUTF8(str, "substrait.ExtendedExpression.expected_type_urls"));
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<50>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Version version = 7 [json_name = "version"];
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 58)) {
-          ptr = ctx->ParseMessage(_internal_mutable_version(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* ExtendedExpression::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<3, 7, 6, 55, 2> ExtendedExpression::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_._has_bits_),
+    0, // no _extensions_
+    7, 56,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967168,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    7,  // num_field_entries
+    6,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ExtendedExpression_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // repeated .substrait.extensions.SimpleExtensionURI extension_uris = 1 [json_name = "extensionUris"];
+    {::_pbi::TcParser::FastMtR1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.extension_uris_)}},
+    // repeated .substrait.extensions.SimpleExtensionDeclaration extensions = 2 [json_name = "extensions"];
+    {::_pbi::TcParser::FastMtR1,
+     {18, 63, 1, PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.extensions_)}},
+    // repeated .substrait.ExpressionReference referred_expr = 3 [json_name = "referredExpr"];
+    {::_pbi::TcParser::FastMtR1,
+     {26, 63, 2, PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.referred_expr_)}},
+    // .substrait.NamedStruct base_schema = 4 [json_name = "baseSchema"];
+    {::_pbi::TcParser::FastMtS1,
+     {34, 0, 3, PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.base_schema_)}},
+    // .substrait.extensions.AdvancedExtension advanced_extensions = 5 [json_name = "advancedExtensions"];
+    {::_pbi::TcParser::FastMtS1,
+     {42, 1, 4, PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.advanced_extensions_)}},
+    // repeated string expected_type_urls = 6 [json_name = "expectedTypeUrls"];
+    {::_pbi::TcParser::FastUR1,
+     {50, 63, 0, PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.expected_type_urls_)}},
+    // .substrait.Version version = 7 [json_name = "version"];
+    {::_pbi::TcParser::FastMtS1,
+     {58, 2, 5, PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.version_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // repeated .substrait.extensions.SimpleExtensionURI extension_uris = 1 [json_name = "extensionUris"];
+    {PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.extension_uris_), -1, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+    // repeated .substrait.extensions.SimpleExtensionDeclaration extensions = 2 [json_name = "extensions"];
+    {PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.extensions_), -1, 1,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+    // repeated .substrait.ExpressionReference referred_expr = 3 [json_name = "referredExpr"];
+    {PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.referred_expr_), -1, 2,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.NamedStruct base_schema = 4 [json_name = "baseSchema"];
+    {PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.base_schema_), _Internal::kHasBitsOffset + 0, 3,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.extensions.AdvancedExtension advanced_extensions = 5 [json_name = "advancedExtensions"];
+    {PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.advanced_extensions_), _Internal::kHasBitsOffset + 1, 4,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // repeated string expected_type_urls = 6 [json_name = "expectedTypeUrls"];
+    {PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.expected_type_urls_), -1, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kUtf8String | ::_fl::kRepSString)},
+    // .substrait.Version version = 7 [json_name = "version"];
+    {PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.version_), _Internal::kHasBitsOffset + 2, 5,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::extensions::SimpleExtensionURI>()},
+    {::_pbi::TcParser::GetTable<::substrait::extensions::SimpleExtensionDeclaration>()},
+    {::_pbi::TcParser::GetTable<::substrait::ExpressionReference>()},
+    {::_pbi::TcParser::GetTable<::substrait::NamedStruct>()},
+    {::_pbi::TcParser::GetTable<::substrait::extensions::AdvancedExtension>()},
+    {::_pbi::TcParser::GetTable<::substrait::Version>()},
+  }}, {{
+    "\34\0\0\0\0\0\22\0"
+    "substrait.ExtendedExpression"
+    "expected_type_urls"
+  }},
+};
 
 ::uint8_t* ExtendedExpression::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.ExtendedExpression)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .substrait.extensions.SimpleExtensionURI extension_uris = 1 [json_name = "extensionUris"];
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_extension_uris_size()); i < n; i++) {
-    const auto& repfield = this->_internal_extension_uris(i);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    const auto& repfield = this->_internal_extension_uris().Get(i);
+    target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   // repeated .substrait.extensions.SimpleExtensionDeclaration extensions = 2 [json_name = "extensions"];
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_extensions_size()); i < n; i++) {
-    const auto& repfield = this->_internal_extensions(i);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    const auto& repfield = this->_internal_extensions().Get(i);
+    target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(2, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   // repeated .substrait.ExpressionReference referred_expr = 3 [json_name = "referredExpr"];
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_referred_expr_size()); i < n; i++) {
-    const auto& repfield = this->_internal_referred_expr(i);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    const auto& repfield = this->_internal_referred_expr().Get(i);
+    target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(3, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.NamedStruct base_schema = 4 [json_name = "baseSchema"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(4, _Internal::base_schema(this),
         _Internal::base_schema(this).GetCachedSize(), target, stream);
   }
 
   // .substrait.extensions.AdvancedExtension advanced_extensions = 5 [json_name = "advancedExtensions"];
   if (cached_has_bits & 0x00000002u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(5, _Internal::advanced_extensions(this),
         _Internal::advanced_extensions(this).GetCachedSize(), target, stream);
   }
 
   // repeated string expected_type_urls = 6 [json_name = "expectedTypeUrls"];
   for (int i = 0, n = this->_internal_expected_type_urls_size(); i < n; ++i) {
-    const auto& s = this->_internal_expected_type_urls(i);
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-        s.data(), static_cast<int>(s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "substrait.ExtendedExpression.expected_type_urls");
+    const auto& s = this->_internal_expected_type_urls().Get(i);
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+        s.data(), static_cast<int>(s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "substrait.ExtendedExpression.expected_type_urls");
     target = stream->WriteString(6, s, target);
   }
 
   // .substrait.Version version = 7 [json_name = "version"];
   if (cached_has_bits & 0x00000004u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(7, _Internal::version(this),
         _Internal::version(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.ExtendedExpression)
   return target;
@@ -890,50 +834,46 @@ failure:
   total_size += 1UL * this->_internal_extension_uris_size();
   for (const auto& msg : this->_internal_extension_uris()) {
     total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+      ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
   }
-
   // repeated .substrait.extensions.SimpleExtensionDeclaration extensions = 2 [json_name = "extensions"];
   total_size += 1UL * this->_internal_extensions_size();
   for (const auto& msg : this->_internal_extensions()) {
     total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+      ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
   }
-
   // repeated .substrait.ExpressionReference referred_expr = 3 [json_name = "referredExpr"];
   total_size += 1UL * this->_internal_referred_expr_size();
   for (const auto& msg : this->_internal_referred_expr()) {
     total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+      ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
   }
-
   // repeated string expected_type_urls = 6 [json_name = "expectedTypeUrls"];
-  total_size += 1 * ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(_internal_expected_type_urls().size());
+  total_size += 1 * ::google::protobuf::internal::FromIntSize(_internal_expected_type_urls().size());
   for (int i = 0, n = _internal_expected_type_urls().size(); i < n; ++i) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
         _internal_expected_type_urls().Get(i));
   }
-
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000007u) {
     // .substrait.NamedStruct base_schema = 4 [json_name = "baseSchema"];
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.base_schema_);
     }
 
     // .substrait.extensions.AdvancedExtension advanced_extensions = 5 [json_name = "advancedExtensions"];
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.advanced_extensions_);
     }
 
     // .substrait.Version version = 7 [json_name = "version"];
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.version_);
     }
 
@@ -941,14 +881,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ExtendedExpression::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData ExtendedExpression::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     ExtendedExpression::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ExtendedExpression::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*ExtendedExpression::GetClassData() const { return &_class_data_; }
 
 
-void ExtendedExpression::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void ExtendedExpression::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ExtendedExpression*>(&to_msg);
   auto& from = static_cast<const ExtendedExpression&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.ExtendedExpression)
@@ -975,7 +915,7 @@ void ExtendedExpression::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, con
           from._internal_version());
     }
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void ExtendedExpression::CopyFrom(const ExtendedExpression& from) {
@@ -985,7 +925,7 @@ void ExtendedExpression::CopyFrom(const ExtendedExpression& from) {
   MergeFrom(from);
 }
 
-bool ExtendedExpression::IsInitialized() const {
+PROTOBUF_NOINLINE bool ExtendedExpression::IsInitialized() const {
   return true;
 }
 
@@ -993,12 +933,11 @@ void ExtendedExpression::InternalSwap(ExtendedExpression* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  _internal_mutable_extension_uris()->InternalSwap(other->_internal_mutable_extension_uris());
-  _internal_mutable_extensions()->InternalSwap(other->_internal_mutable_extensions());
-  _internal_mutable_referred_expr()->InternalSwap(other->_internal_mutable_referred_expr());
-  _internal_mutable_expected_type_urls()->InternalSwap(
-      other->_internal_mutable_expected_type_urls());
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  _impl_.extension_uris_.InternalSwap(&other->_impl_.extension_uris_);
+  _impl_.extensions_.InternalSwap(&other->_impl_.extensions_);
+  _impl_.referred_expr_.InternalSwap(&other->_impl_.referred_expr_);
+  _impl_.expected_type_urls_.InternalSwap(&other->_impl_.expected_type_urls_);
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.version_)
       + sizeof(ExtendedExpression::_impl_.version_)
       - PROTOBUF_FIELD_OFFSET(ExtendedExpression, _impl_.base_schema_)>(
@@ -1006,22 +945,16 @@ void ExtendedExpression::InternalSwap(ExtendedExpression* other) {
           reinterpret_cast<char*>(&other->_impl_.base_schema_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ExtendedExpression::GetMetadata() const {
+::google::protobuf::Metadata ExtendedExpression::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2fextended_5fexpression_2eproto_getter, &descriptor_table_substrait_2fextended_5fexpression_2eproto_once,
       file_level_metadata_substrait_2fextended_5fexpression_2eproto[1]);
 }
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace substrait
-PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::substrait::ExpressionReference*
-Arena::CreateMaybeMessage< ::substrait::ExpressionReference >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ExpressionReference >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::ExtendedExpression*
-Arena::CreateMaybeMessage< ::substrait::ExtendedExpression >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::ExtendedExpression >(arena);
-}
-PROTOBUF_NAMESPACE_CLOSE
+namespace google {
+namespace protobuf {
+}  // namespace protobuf
+}  // namespace google
 // @@protoc_insertion_point(global_scope)
 #include "google/protobuf/port_undef.inc"

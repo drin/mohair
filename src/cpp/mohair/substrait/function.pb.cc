@@ -11,23 +11,24 @@
 #include "google/protobuf/generated_message_reflection.h"
 #include "google/protobuf/reflection_ops.h"
 #include "google/protobuf/wire_format.h"
+#include "google/protobuf/generated_message_tctable_impl.h"
 // @@protoc_insertion_point(includes)
 
 // Must be included last.
 #include "google/protobuf/port_def.inc"
 PROTOBUF_PRAGMA_INIT_SEG
-namespace _pb = ::PROTOBUF_NAMESPACE_ID;
-namespace _pbi = ::PROTOBUF_NAMESPACE_ID::internal;
+namespace _pb = ::google::protobuf;
+namespace _pbi = ::google::protobuf::internal;
+namespace _fl = ::google::protobuf::internal::field_layout;
 namespace substrait {
-PROTOBUF_CONSTEXPR FunctionSignature_FinalArgVariadic::FunctionSignature_FinalArgVariadic(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.min_args_)*/ ::int64_t{0}
-
-  , /*decltype(_impl_.max_args_)*/ ::int64_t{0}
-
-  , /*decltype(_impl_.consistency_)*/ 0
-
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+        template <typename>
+PROTOBUF_CONSTEXPR FunctionSignature_FinalArgVariadic::FunctionSignature_FinalArgVariadic(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_.min_args_)*/ ::int64_t{0},
+      /*decltype(_impl_.max_args_)*/ ::int64_t{0},
+      /*decltype(_impl_.consistency_)*/ 0,
+      /*decltype(_impl_._cached_size_)*/ {},
+    } {}
 struct FunctionSignature_FinalArgVariadicDefaultTypeInternal {
   PROTOBUF_CONSTEXPR FunctionSignature_FinalArgVariadicDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~FunctionSignature_FinalArgVariadicDefaultTypeInternal() {}
@@ -38,8 +39,8 @@ struct FunctionSignature_FinalArgVariadicDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FunctionSignature_FinalArgVariadicDefaultTypeInternal _FunctionSignature_FinalArgVariadic_default_instance_;
-PROTOBUF_CONSTEXPR FunctionSignature_FinalArgNormal::FunctionSignature_FinalArgNormal(
-    ::_pbi::ConstantInitialized) {}
+      template <typename>
+PROTOBUF_CONSTEXPR FunctionSignature_FinalArgNormal::FunctionSignature_FinalArgNormal(::_pbi::ConstantInitialized) {}
 struct FunctionSignature_FinalArgNormalDefaultTypeInternal {
   PROTOBUF_CONSTEXPR FunctionSignature_FinalArgNormalDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~FunctionSignature_FinalArgNormalDefaultTypeInternal() {}
@@ -50,21 +51,21 @@ struct FunctionSignature_FinalArgNormalDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FunctionSignature_FinalArgNormalDefaultTypeInternal _FunctionSignature_FinalArgNormal_default_instance_;
-PROTOBUF_CONSTEXPR FunctionSignature_Scalar::FunctionSignature_Scalar(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.arguments_)*/{}
-  , /*decltype(_impl_.name_)*/{}
-  , /*decltype(_impl_.implementations_)*/{}
-  , /*decltype(_impl_.description_)*/nullptr
-  , /*decltype(_impl_.output_type_)*/nullptr
-  , /*decltype(_impl_.deterministic_)*/ false
-
-  , /*decltype(_impl_.session_dependent_)*/ false
-
-  , /*decltype(_impl_.final_variable_behavior_)*/{}
-  , /*decltype(_impl_._oneof_case_)*/{}} {}
+        template <typename>
+PROTOBUF_CONSTEXPR FunctionSignature_Scalar::FunctionSignature_Scalar(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_._has_bits_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_.arguments_)*/ {},
+      /*decltype(_impl_.name_)*/ {},
+      /*decltype(_impl_.implementations_)*/ {},
+      /*decltype(_impl_.description_)*/ nullptr,
+      /*decltype(_impl_.output_type_)*/ nullptr,
+      /*decltype(_impl_.deterministic_)*/ false,
+      /*decltype(_impl_.session_dependent_)*/ false,
+      /*decltype(_impl_.final_variable_behavior_)*/ {},
+      /*decltype(_impl_._oneof_case_)*/ {},
+    } {}
 struct FunctionSignature_ScalarDefaultTypeInternal {
   PROTOBUF_CONSTEXPR FunctionSignature_ScalarDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~FunctionSignature_ScalarDefaultTypeInternal() {}
@@ -75,29 +76,27 @@ struct FunctionSignature_ScalarDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FunctionSignature_ScalarDefaultTypeInternal _FunctionSignature_Scalar_default_instance_;
-PROTOBUF_CONSTEXPR FunctionSignature_Aggregate::FunctionSignature_Aggregate(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.arguments_)*/{}
-  , /*decltype(_impl_.implementations_)*/{}
-  , /*decltype(_impl_.name_)*/ {
-    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
-  }
-
-  , /*decltype(_impl_.description_)*/nullptr
-  , /*decltype(_impl_.output_type_)*/nullptr
-  , /*decltype(_impl_.intermediate_type_)*/nullptr
-  , /*decltype(_impl_.max_set_)*/ ::uint64_t{0u}
-
-  , /*decltype(_impl_.deterministic_)*/ false
-
-  , /*decltype(_impl_.session_dependent_)*/ false
-
-  , /*decltype(_impl_.ordered_)*/ false
-
-  , /*decltype(_impl_.final_variable_behavior_)*/{}
-  , /*decltype(_impl_._oneof_case_)*/{}} {}
+        template <typename>
+PROTOBUF_CONSTEXPR FunctionSignature_Aggregate::FunctionSignature_Aggregate(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_._has_bits_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_.arguments_)*/ {},
+      /*decltype(_impl_.implementations_)*/ {},
+      /*decltype(_impl_.name_)*/ {
+          &::_pbi::fixed_address_empty_string,
+          ::_pbi::ConstantInitialized{},
+      },
+      /*decltype(_impl_.description_)*/ nullptr,
+      /*decltype(_impl_.output_type_)*/ nullptr,
+      /*decltype(_impl_.intermediate_type_)*/ nullptr,
+      /*decltype(_impl_.max_set_)*/ ::uint64_t{0u},
+      /*decltype(_impl_.deterministic_)*/ false,
+      /*decltype(_impl_.session_dependent_)*/ false,
+      /*decltype(_impl_.ordered_)*/ false,
+      /*decltype(_impl_.final_variable_behavior_)*/ {},
+      /*decltype(_impl_._oneof_case_)*/ {},
+    } {}
 struct FunctionSignature_AggregateDefaultTypeInternal {
   PROTOBUF_CONSTEXPR FunctionSignature_AggregateDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~FunctionSignature_AggregateDefaultTypeInternal() {}
@@ -108,28 +107,25 @@ struct FunctionSignature_AggregateDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FunctionSignature_AggregateDefaultTypeInternal _FunctionSignature_Aggregate_default_instance_;
-PROTOBUF_CONSTEXPR FunctionSignature_Window::FunctionSignature_Window(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.arguments_)*/{}
-  , /*decltype(_impl_.name_)*/{}
-  , /*decltype(_impl_.implementations_)*/{}
-  , /*decltype(_impl_.description_)*/nullptr
-  , /*decltype(_impl_.intermediate_type_)*/nullptr
-  , /*decltype(_impl_.output_type_)*/nullptr
-  , /*decltype(_impl_.deterministic_)*/ false
-
-  , /*decltype(_impl_.session_dependent_)*/ false
-
-  , /*decltype(_impl_.ordered_)*/ false
-
-  , /*decltype(_impl_.window_type_)*/ 0
-
-  , /*decltype(_impl_.max_set_)*/ ::uint64_t{0u}
-
-  , /*decltype(_impl_.final_variable_behavior_)*/{}
-  , /*decltype(_impl_._oneof_case_)*/{}} {}
+        template <typename>
+PROTOBUF_CONSTEXPR FunctionSignature_Window::FunctionSignature_Window(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_._has_bits_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_.arguments_)*/ {},
+      /*decltype(_impl_.name_)*/ {},
+      /*decltype(_impl_.implementations_)*/ {},
+      /*decltype(_impl_.description_)*/ nullptr,
+      /*decltype(_impl_.intermediate_type_)*/ nullptr,
+      /*decltype(_impl_.output_type_)*/ nullptr,
+      /*decltype(_impl_.deterministic_)*/ false,
+      /*decltype(_impl_.session_dependent_)*/ false,
+      /*decltype(_impl_.ordered_)*/ false,
+      /*decltype(_impl_.window_type_)*/ 0,
+      /*decltype(_impl_.max_set_)*/ ::uint64_t{0u},
+      /*decltype(_impl_.final_variable_behavior_)*/ {},
+      /*decltype(_impl_._oneof_case_)*/ {},
+    } {}
 struct FunctionSignature_WindowDefaultTypeInternal {
   PROTOBUF_CONSTEXPR FunctionSignature_WindowDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~FunctionSignature_WindowDefaultTypeInternal() {}
@@ -140,17 +136,19 @@ struct FunctionSignature_WindowDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FunctionSignature_WindowDefaultTypeInternal _FunctionSignature_Window_default_instance_;
-PROTOBUF_CONSTEXPR FunctionSignature_Description::FunctionSignature_Description(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.language_)*/ {
-    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
-  }
-
-  , /*decltype(_impl_.body_)*/ {
-    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
-  }
-
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+        template <typename>
+PROTOBUF_CONSTEXPR FunctionSignature_Description::FunctionSignature_Description(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_.language_)*/ {
+          &::_pbi::fixed_address_empty_string,
+          ::_pbi::ConstantInitialized{},
+      },
+      /*decltype(_impl_.body_)*/ {
+          &::_pbi::fixed_address_empty_string,
+          ::_pbi::ConstantInitialized{},
+      },
+      /*decltype(_impl_._cached_size_)*/ {},
+    } {}
 struct FunctionSignature_DescriptionDefaultTypeInternal {
   PROTOBUF_CONSTEXPR FunctionSignature_DescriptionDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~FunctionSignature_DescriptionDefaultTypeInternal() {}
@@ -161,15 +159,16 @@ struct FunctionSignature_DescriptionDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FunctionSignature_DescriptionDefaultTypeInternal _FunctionSignature_Description_default_instance_;
-PROTOBUF_CONSTEXPR FunctionSignature_Implementation::FunctionSignature_Implementation(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.uri_)*/ {
-    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
-  }
-
-  , /*decltype(_impl_.type_)*/ 0
-
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+        template <typename>
+PROTOBUF_CONSTEXPR FunctionSignature_Implementation::FunctionSignature_Implementation(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_.uri_)*/ {
+          &::_pbi::fixed_address_empty_string,
+          ::_pbi::ConstantInitialized{},
+      },
+      /*decltype(_impl_.type_)*/ 0,
+      /*decltype(_impl_._cached_size_)*/ {},
+    } {}
 struct FunctionSignature_ImplementationDefaultTypeInternal {
   PROTOBUF_CONSTEXPR FunctionSignature_ImplementationDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~FunctionSignature_ImplementationDefaultTypeInternal() {}
@@ -180,13 +179,14 @@ struct FunctionSignature_ImplementationDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FunctionSignature_ImplementationDefaultTypeInternal _FunctionSignature_Implementation_default_instance_;
-PROTOBUF_CONSTEXPR FunctionSignature_Argument_ValueArgument::FunctionSignature_Argument_ValueArgument(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.type_)*/nullptr
-  , /*decltype(_impl_.constant_)*/ false
-} {}
+        template <typename>
+PROTOBUF_CONSTEXPR FunctionSignature_Argument_ValueArgument::FunctionSignature_Argument_ValueArgument(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_._has_bits_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_.type_)*/ nullptr,
+      /*decltype(_impl_.constant_)*/ false,
+    } {}
 struct FunctionSignature_Argument_ValueArgumentDefaultTypeInternal {
   PROTOBUF_CONSTEXPR FunctionSignature_Argument_ValueArgumentDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~FunctionSignature_Argument_ValueArgumentDefaultTypeInternal() {}
@@ -197,11 +197,13 @@ struct FunctionSignature_Argument_ValueArgumentDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FunctionSignature_Argument_ValueArgumentDefaultTypeInternal _FunctionSignature_Argument_ValueArgument_default_instance_;
-PROTOBUF_CONSTEXPR FunctionSignature_Argument_TypeArgument::FunctionSignature_Argument_TypeArgument(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_._has_bits_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_.type_)*/nullptr} {}
+        template <typename>
+PROTOBUF_CONSTEXPR FunctionSignature_Argument_TypeArgument::FunctionSignature_Argument_TypeArgument(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_._has_bits_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_.type_)*/ nullptr,
+    } {}
 struct FunctionSignature_Argument_TypeArgumentDefaultTypeInternal {
   PROTOBUF_CONSTEXPR FunctionSignature_Argument_TypeArgumentDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~FunctionSignature_Argument_TypeArgumentDefaultTypeInternal() {}
@@ -212,12 +214,13 @@ struct FunctionSignature_Argument_TypeArgumentDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FunctionSignature_Argument_TypeArgumentDefaultTypeInternal _FunctionSignature_Argument_TypeArgument_default_instance_;
-PROTOBUF_CONSTEXPR FunctionSignature_Argument_EnumArgument::FunctionSignature_Argument_EnumArgument(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.options_)*/{}
-  , /*decltype(_impl_.optional_)*/ false
-
-  , /*decltype(_impl_._cached_size_)*/{}} {}
+        template <typename>
+PROTOBUF_CONSTEXPR FunctionSignature_Argument_EnumArgument::FunctionSignature_Argument_EnumArgument(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_.options_)*/ {},
+      /*decltype(_impl_.optional_)*/ false,
+      /*decltype(_impl_._cached_size_)*/ {},
+    } {}
 struct FunctionSignature_Argument_EnumArgumentDefaultTypeInternal {
   PROTOBUF_CONSTEXPR FunctionSignature_Argument_EnumArgumentDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~FunctionSignature_Argument_EnumArgumentDefaultTypeInternal() {}
@@ -228,15 +231,17 @@ struct FunctionSignature_Argument_EnumArgumentDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FunctionSignature_Argument_EnumArgumentDefaultTypeInternal _FunctionSignature_Argument_EnumArgument_default_instance_;
-PROTOBUF_CONSTEXPR FunctionSignature_Argument::FunctionSignature_Argument(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.name_)*/ {
-    &::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized {}
-  }
-
-  , /*decltype(_impl_.argument_kind_)*/{}
-  , /*decltype(_impl_._cached_size_)*/{}
-  , /*decltype(_impl_._oneof_case_)*/{}} {}
+        template <typename>
+PROTOBUF_CONSTEXPR FunctionSignature_Argument::FunctionSignature_Argument(::_pbi::ConstantInitialized)
+    : _impl_{
+      /*decltype(_impl_.name_)*/ {
+          &::_pbi::fixed_address_empty_string,
+          ::_pbi::ConstantInitialized{},
+      },
+      /*decltype(_impl_.argument_kind_)*/ {},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_._oneof_case_)*/ {},
+    } {}
 struct FunctionSignature_ArgumentDefaultTypeInternal {
   PROTOBUF_CONSTEXPR FunctionSignature_ArgumentDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~FunctionSignature_ArgumentDefaultTypeInternal() {}
@@ -247,8 +252,8 @@ struct FunctionSignature_ArgumentDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FunctionSignature_ArgumentDefaultTypeInternal _FunctionSignature_Argument_default_instance_;
-PROTOBUF_CONSTEXPR FunctionSignature::FunctionSignature(
-    ::_pbi::ConstantInitialized) {}
+      template <typename>
+PROTOBUF_CONSTEXPR FunctionSignature::FunctionSignature(::_pbi::ConstantInitialized) {}
 struct FunctionSignatureDefaultTypeInternal {
   PROTOBUF_CONSTEXPR FunctionSignatureDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~FunctionSignatureDefaultTypeInternal() {}
@@ -457,18 +462,18 @@ const ::uint32_t TableStruct_substrait_2ffunction_2eproto::offsets[] PROTOBUF_SE
 
 static const ::_pbi::MigrationSchema
     schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-        { 0, -1, -1, sizeof(::substrait::FunctionSignature_FinalArgVariadic)},
-        { 11, -1, -1, sizeof(::substrait::FunctionSignature_FinalArgNormal)},
-        { 19, 37, -1, sizeof(::substrait::FunctionSignature_Scalar)},
-        { 46, 67, -1, sizeof(::substrait::FunctionSignature_Aggregate)},
-        { 79, 101, -1, sizeof(::substrait::FunctionSignature_Window)},
-        { 114, -1, -1, sizeof(::substrait::FunctionSignature_Description)},
-        { 124, -1, -1, sizeof(::substrait::FunctionSignature_Implementation)},
-        { 134, 144, -1, sizeof(::substrait::FunctionSignature_Argument_ValueArgument)},
-        { 146, 155, -1, sizeof(::substrait::FunctionSignature_Argument_TypeArgument)},
-        { 156, -1, -1, sizeof(::substrait::FunctionSignature_Argument_EnumArgument)},
-        { 166, -1, -1, sizeof(::substrait::FunctionSignature_Argument)},
-        { 179, -1, -1, sizeof(::substrait::FunctionSignature)},
+        {0, -1, -1, sizeof(::substrait::FunctionSignature_FinalArgVariadic)},
+        {11, -1, -1, sizeof(::substrait::FunctionSignature_FinalArgNormal)},
+        {19, 37, -1, sizeof(::substrait::FunctionSignature_Scalar)},
+        {46, 67, -1, sizeof(::substrait::FunctionSignature_Aggregate)},
+        {79, 101, -1, sizeof(::substrait::FunctionSignature_Window)},
+        {114, -1, -1, sizeof(::substrait::FunctionSignature_Description)},
+        {124, -1, -1, sizeof(::substrait::FunctionSignature_Implementation)},
+        {134, 144, -1, sizeof(::substrait::FunctionSignature_Argument_ValueArgument)},
+        {146, 155, -1, sizeof(::substrait::FunctionSignature_Argument_TypeArgument)},
+        {156, -1, -1, sizeof(::substrait::FunctionSignature_Argument_EnumArgument)},
+        {166, -1, -1, sizeof(::substrait::FunctionSignature_Argument)},
+        {179, -1, -1, sizeof(::substrait::FunctionSignature)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -620,8 +625,8 @@ PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_substrai
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY2
 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_substrait_2ffunction_2eproto(&descriptor_table_substrait_2ffunction_2eproto);
 namespace substrait {
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* FunctionSignature_FinalArgVariadic_ParameterConsistency_descriptor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_substrait_2ffunction_2eproto);
+const ::google::protobuf::EnumDescriptor* FunctionSignature_FinalArgVariadic_ParameterConsistency_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_substrait_2ffunction_2eproto);
   return file_level_enum_descriptors_substrait_2ffunction_2eproto[0];
 }
 bool FunctionSignature_FinalArgVariadic_ParameterConsistency_IsValid(int value) {
@@ -646,8 +651,8 @@ constexpr int FunctionSignature_FinalArgVariadic::ParameterConsistency_ARRAYSIZE
 
 #endif  // (__cplusplus < 201703) &&
         // (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* FunctionSignature_Window_WindowType_descriptor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_substrait_2ffunction_2eproto);
+const ::google::protobuf::EnumDescriptor* FunctionSignature_Window_WindowType_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_substrait_2ffunction_2eproto);
   return file_level_enum_descriptors_substrait_2ffunction_2eproto[1];
 }
 bool FunctionSignature_Window_WindowType_IsValid(int value) {
@@ -672,8 +677,8 @@ constexpr int FunctionSignature_Window::WindowType_ARRAYSIZE;
 
 #endif  // (__cplusplus < 201703) &&
         // (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* FunctionSignature_Implementation_Type_descriptor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_substrait_2ffunction_2eproto);
+const ::google::protobuf::EnumDescriptor* FunctionSignature_Implementation_Type_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_substrait_2ffunction_2eproto);
   return file_level_enum_descriptors_substrait_2ffunction_2eproto[2];
 }
 bool FunctionSignature_Implementation_Type_IsValid(int value) {
@@ -704,49 +709,39 @@ class FunctionSignature_FinalArgVariadic::_Internal {
  public:
 };
 
-FunctionSignature_FinalArgVariadic::FunctionSignature_FinalArgVariadic(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+FunctionSignature_FinalArgVariadic::FunctionSignature_FinalArgVariadic(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.FunctionSignature.FinalArgVariadic)
 }
 FunctionSignature_FinalArgVariadic::FunctionSignature_FinalArgVariadic(const FunctionSignature_FinalArgVariadic& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message(), _impl_(from._impl_) {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(
+    : ::google::protobuf::Message(), _impl_(from._impl_) {
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:substrait.FunctionSignature.FinalArgVariadic)
 }
-
 inline void FunctionSignature_FinalArgVariadic::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_.min_args_) { ::int64_t{0} }
-
-    , decltype(_impl_.max_args_) { ::int64_t{0} }
-
-    , decltype(_impl_.consistency_) { 0 }
-
-    , /*decltype(_impl_._cached_size_)*/{}
+      decltype(_impl_.min_args_){::int64_t{0}},
+      decltype(_impl_.max_args_){::int64_t{0}},
+      decltype(_impl_.consistency_){0},
+      /*decltype(_impl_._cached_size_)*/ {},
   };
 }
-
 FunctionSignature_FinalArgVariadic::~FunctionSignature_FinalArgVariadic() {
   // @@protoc_insertion_point(destructor:substrait.FunctionSignature.FinalArgVariadic)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void FunctionSignature_FinalArgVariadic::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
 }
-
 void FunctionSignature_FinalArgVariadic::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void FunctionSignature_FinalArgVariadic::Clear() {
+PROTOBUF_NOINLINE void FunctionSignature_FinalArgVariadic::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.FunctionSignature.FinalArgVariadic)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -755,84 +750,78 @@ void FunctionSignature_FinalArgVariadic::Clear() {
   ::memset(&_impl_.min_args_, 0, static_cast<::size_t>(
       reinterpret_cast<char*>(&_impl_.consistency_) -
       reinterpret_cast<char*>(&_impl_.min_args_)) + sizeof(_impl_.consistency_));
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* FunctionSignature_FinalArgVariadic::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // int64 min_args = 1 [json_name = "minArgs"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 8)) {
-          _impl_.min_args_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // int64 max_args = 2 [json_name = "maxArgs"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
-          _impl_.max_args_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.FunctionSignature.FinalArgVariadic.ParameterConsistency consistency = 3 [json_name = "consistency"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 24)) {
-          ::int32_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-          _internal_set_consistency(static_cast<::substrait::FunctionSignature_FinalArgVariadic_ParameterConsistency>(val));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
+const char* FunctionSignature_FinalArgVariadic::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 0, 0, 2> FunctionSignature_FinalArgVariadic::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_FunctionSignature_FinalArgVariadic_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // int64 min_args = 1 [json_name = "minArgs"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(FunctionSignature_FinalArgVariadic, _impl_.min_args_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_FinalArgVariadic, _impl_.min_args_)}},
+    // int64 max_args = 2 [json_name = "maxArgs"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(FunctionSignature_FinalArgVariadic, _impl_.max_args_), 63>(),
+     {16, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_FinalArgVariadic, _impl_.max_args_)}},
+    // .substrait.FunctionSignature.FinalArgVariadic.ParameterConsistency consistency = 3 [json_name = "consistency"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(FunctionSignature_FinalArgVariadic, _impl_.consistency_), 63>(),
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_FinalArgVariadic, _impl_.consistency_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // int64 min_args = 1 [json_name = "minArgs"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_FinalArgVariadic, _impl_.min_args_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kInt64)},
+    // int64 max_args = 2 [json_name = "maxArgs"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_FinalArgVariadic, _impl_.max_args_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kInt64)},
+    // .substrait.FunctionSignature.FinalArgVariadic.ParameterConsistency consistency = 3 [json_name = "consistency"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_FinalArgVariadic, _impl_.consistency_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
+  }},
+  // no aux_entries
+  {{
+  }},
+};
 
 ::uint8_t* FunctionSignature_FinalArgVariadic::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.FunctionSignature.FinalArgVariadic)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // int64 min_args = 1 [json_name = "minArgs"];
   if (this->_internal_min_args() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt64ToArray(
-        1, this->_internal_min_args(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt64ToArrayWithField<1>(
+            stream, this->_internal_min_args(), target);
   }
 
   // int64 max_args = 2 [json_name = "maxArgs"];
   if (this->_internal_max_args() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt64ToArray(
-        2, this->_internal_max_args(), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt64ToArrayWithField<2>(
+            stream, this->_internal_max_args(), target);
   }
 
   // .substrait.FunctionSignature.FinalArgVariadic.ParameterConsistency consistency = 3 [json_name = "consistency"];
@@ -843,8 +832,9 @@ failure:
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.FunctionSignature.FinalArgVariadic)
   return target;
@@ -879,14 +869,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData FunctionSignature_FinalArgVariadic::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData FunctionSignature_FinalArgVariadic::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     FunctionSignature_FinalArgVariadic::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FunctionSignature_FinalArgVariadic::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*FunctionSignature_FinalArgVariadic::GetClassData() const { return &_class_data_; }
 
 
-void FunctionSignature_FinalArgVariadic::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void FunctionSignature_FinalArgVariadic::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<FunctionSignature_FinalArgVariadic*>(&to_msg);
   auto& from = static_cast<const FunctionSignature_FinalArgVariadic&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.FunctionSignature.FinalArgVariadic)
@@ -903,7 +893,7 @@ void FunctionSignature_FinalArgVariadic::MergeImpl(::PROTOBUF_NAMESPACE_ID::Mess
   if (from._internal_consistency() != 0) {
     _this->_internal_set_consistency(from._internal_consistency());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void FunctionSignature_FinalArgVariadic::CopyFrom(const FunctionSignature_FinalArgVariadic& from) {
@@ -913,14 +903,14 @@ void FunctionSignature_FinalArgVariadic::CopyFrom(const FunctionSignature_FinalA
   MergeFrom(from);
 }
 
-bool FunctionSignature_FinalArgVariadic::IsInitialized() const {
+PROTOBUF_NOINLINE bool FunctionSignature_FinalArgVariadic::IsInitialized() const {
   return true;
 }
 
 void FunctionSignature_FinalArgVariadic::InternalSwap(FunctionSignature_FinalArgVariadic* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(FunctionSignature_FinalArgVariadic, _impl_.consistency_)
       + sizeof(FunctionSignature_FinalArgVariadic::_impl_.consistency_)
       - PROTOBUF_FIELD_OFFSET(FunctionSignature_FinalArgVariadic, _impl_.min_args_)>(
@@ -928,7 +918,7 @@ void FunctionSignature_FinalArgVariadic::InternalSwap(FunctionSignature_FinalArg
           reinterpret_cast<char*>(&other->_impl_.min_args_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata FunctionSignature_FinalArgVariadic::GetMetadata() const {
+::google::protobuf::Metadata FunctionSignature_FinalArgVariadic::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2ffunction_2eproto_getter, &descriptor_table_substrait_2ffunction_2eproto_once,
       file_level_metadata_substrait_2ffunction_2eproto[0]);
@@ -939,26 +929,27 @@ class FunctionSignature_FinalArgNormal::_Internal {
  public:
 };
 
-FunctionSignature_FinalArgNormal::FunctionSignature_FinalArgNormal(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena) {
+FunctionSignature_FinalArgNormal::FunctionSignature_FinalArgNormal(::google::protobuf::Arena* arena)
+    : ::google::protobuf::internal::ZeroFieldsBase(arena) {
   // @@protoc_insertion_point(arena_constructor:substrait.FunctionSignature.FinalArgNormal)
 }
-FunctionSignature_FinalArgNormal::FunctionSignature_FinalArgNormal(const FunctionSignature_FinalArgNormal& from)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
-  FunctionSignature_FinalArgNormal* const _this = this; (void)_this;
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+FunctionSignature_FinalArgNormal::FunctionSignature_FinalArgNormal(const FunctionSignature_FinalArgNormal& from) : ::google::protobuf::internal::ZeroFieldsBase() {
+  FunctionSignature_FinalArgNormal* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+
   // @@protoc_insertion_point(copy_constructor:substrait.FunctionSignature.FinalArgNormal)
 }
 
 
 
 
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData FunctionSignature_FinalArgNormal::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
+const ::google::protobuf::Message::ClassData FunctionSignature_FinalArgNormal::_class_data_ = {
+    ::google::protobuf::internal::ZeroFieldsBase::CopyImpl,
+    ::google::protobuf::internal::ZeroFieldsBase::MergeImpl,
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FunctionSignature_FinalArgNormal::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*FunctionSignature_FinalArgNormal::GetClassData() const { return &_class_data_; }
 
 
 
@@ -966,7 +957,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FunctionSignature_FinalArgNorm
 
 
 
-::PROTOBUF_NAMESPACE_ID::Metadata FunctionSignature_FinalArgNormal::GetMetadata() const {
+::google::protobuf::Metadata FunctionSignature_FinalArgNormal::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2ffunction_2eproto_getter, &descriptor_table_substrait_2ffunction_2eproto_once,
       file_level_metadata_substrait_2ffunction_2eproto[1]);
@@ -992,20 +983,16 @@ class FunctionSignature_Scalar::_Internal {
   static const ::substrait::FunctionSignature_FinalArgNormal& normal(const FunctionSignature_Scalar* msg);
 };
 
-const ::substrait::FunctionSignature_Description&
-FunctionSignature_Scalar::_Internal::description(const FunctionSignature_Scalar* msg) {
+const ::substrait::FunctionSignature_Description& FunctionSignature_Scalar::_Internal::description(const FunctionSignature_Scalar* msg) {
   return *msg->_impl_.description_;
 }
-const ::substrait::DerivationExpression&
-FunctionSignature_Scalar::_Internal::output_type(const FunctionSignature_Scalar* msg) {
+const ::substrait::DerivationExpression& FunctionSignature_Scalar::_Internal::output_type(const FunctionSignature_Scalar* msg) {
   return *msg->_impl_.output_type_;
 }
-const ::substrait::FunctionSignature_FinalArgVariadic&
-FunctionSignature_Scalar::_Internal::variadic(const FunctionSignature_Scalar* msg) {
+const ::substrait::FunctionSignature_FinalArgVariadic& FunctionSignature_Scalar::_Internal::variadic(const FunctionSignature_Scalar* msg) {
   return *msg->_impl_.final_variable_behavior_.variadic_;
 }
-const ::substrait::FunctionSignature_FinalArgNormal&
-FunctionSignature_Scalar::_Internal::normal(const FunctionSignature_Scalar* msg) {
+const ::substrait::FunctionSignature_FinalArgNormal& FunctionSignature_Scalar::_Internal::normal(const FunctionSignature_Scalar* msg) {
   return *msg->_impl_.final_variable_behavior_.normal_;
 }
 void FunctionSignature_Scalar::clear_output_type() {
@@ -1013,13 +1000,13 @@ void FunctionSignature_Scalar::clear_output_type() {
   _impl_._has_bits_[0] &= ~0x00000002u;
 }
 void FunctionSignature_Scalar::set_allocated_variadic(::substrait::FunctionSignature_FinalArgVariadic* variadic) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_final_variable_behavior();
   if (variadic) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(variadic);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(variadic);
     if (message_arena != submessage_arena) {
-      variadic = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      variadic = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, variadic, submessage_arena);
     }
     set_has_variadic();
@@ -1028,13 +1015,13 @@ void FunctionSignature_Scalar::set_allocated_variadic(::substrait::FunctionSigna
   // @@protoc_insertion_point(field_set_allocated:substrait.FunctionSignature.Scalar.variadic)
 }
 void FunctionSignature_Scalar::set_allocated_normal(::substrait::FunctionSignature_FinalArgNormal* normal) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_final_variable_behavior();
   if (normal) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(normal);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(normal);
     if (message_arena != submessage_arena) {
-      normal = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      normal = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, normal, submessage_arena);
     }
     set_has_normal();
@@ -1042,30 +1029,29 @@ void FunctionSignature_Scalar::set_allocated_normal(::substrait::FunctionSignatu
   }
   // @@protoc_insertion_point(field_set_allocated:substrait.FunctionSignature.Scalar.normal)
 }
-FunctionSignature_Scalar::FunctionSignature_Scalar(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+FunctionSignature_Scalar::FunctionSignature_Scalar(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.FunctionSignature.Scalar)
 }
-FunctionSignature_Scalar::FunctionSignature_Scalar(const FunctionSignature_Scalar& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  FunctionSignature_Scalar* const _this = this; (void)_this;
+FunctionSignature_Scalar::FunctionSignature_Scalar(const FunctionSignature_Scalar& from) : ::google::protobuf::Message() {
+  FunctionSignature_Scalar* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.arguments_){from._impl_.arguments_}
-    , decltype(_impl_.name_){from._impl_.name_}
-    , decltype(_impl_.implementations_){from._impl_.implementations_}
-    , decltype(_impl_.description_){nullptr}
-    , decltype(_impl_.output_type_){nullptr}
-    , decltype(_impl_.deterministic_) {}
-
-    , decltype(_impl_.session_dependent_) {}
-
-    , decltype(_impl_.final_variable_behavior_){}
-    , /*decltype(_impl_._oneof_case_)*/{}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_._has_bits_){from._impl_._has_bits_},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.arguments_){from._impl_.arguments_},
+      decltype(_impl_.name_){from._impl_.name_},
+      decltype(_impl_.implementations_){from._impl_.implementations_},
+      decltype(_impl_.description_){nullptr},
+      decltype(_impl_.output_type_){nullptr},
+      decltype(_impl_.deterministic_){},
+      decltype(_impl_.session_dependent_){},
+      decltype(_impl_.final_variable_behavior_){},
+      /*decltype(_impl_._oneof_case_)*/ {},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
     _this->_impl_.description_ = new ::substrait::FunctionSignature_Description(*from._impl_.description_);
   }
@@ -1091,50 +1077,42 @@ FunctionSignature_Scalar::FunctionSignature_Scalar(const FunctionSignature_Scala
       break;
     }
   }
+
   // @@protoc_insertion_point(copy_constructor:substrait.FunctionSignature.Scalar)
 }
-
 inline void FunctionSignature_Scalar::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.arguments_){arena}
-    , decltype(_impl_.name_){arena}
-    , decltype(_impl_.implementations_){arena}
-    , decltype(_impl_.description_){nullptr}
-    , decltype(_impl_.output_type_){nullptr}
-    , decltype(_impl_.deterministic_) { false }
-
-    , decltype(_impl_.session_dependent_) { false }
-
-    , decltype(_impl_.final_variable_behavior_){}
-    , /*decltype(_impl_._oneof_case_)*/{}
+      decltype(_impl_._has_bits_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.arguments_){arena},
+      decltype(_impl_.name_){arena},
+      decltype(_impl_.implementations_){arena},
+      decltype(_impl_.description_){nullptr},
+      decltype(_impl_.output_type_){nullptr},
+      decltype(_impl_.deterministic_){false},
+      decltype(_impl_.session_dependent_){false},
+      decltype(_impl_.final_variable_behavior_){},
+      /*decltype(_impl_._oneof_case_)*/ {},
   };
   clear_has_final_variable_behavior();
 }
-
 FunctionSignature_Scalar::~FunctionSignature_Scalar() {
   // @@protoc_insertion_point(destructor:substrait.FunctionSignature.Scalar)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void FunctionSignature_Scalar::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _internal_mutable_arguments()->~RepeatedPtrField();
+  _impl_.arguments_.~RepeatedPtrField();
   _internal_mutable_name()->~RepeatedPtrField();
-  _internal_mutable_implementations()->~RepeatedPtrField();
+  _impl_.implementations_.~RepeatedPtrField();
   if (this != internal_default_instance()) delete _impl_.description_;
   if (this != internal_default_instance()) delete _impl_.output_type_;
   if (has_final_variable_behavior()) {
     clear_final_variable_behavior();
   }
 }
-
 void FunctionSignature_Scalar::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
@@ -1162,7 +1140,7 @@ void FunctionSignature_Scalar::clear_final_variable_behavior() {
 }
 
 
-void FunctionSignature_Scalar::Clear() {
+PROTOBUF_NOINLINE void FunctionSignature_Scalar::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.FunctionSignature.Scalar)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -1187,164 +1165,132 @@ void FunctionSignature_Scalar::Clear() {
       reinterpret_cast<char*>(&_impl_.deterministic_)) + sizeof(_impl_.session_dependent_));
   clear_final_variable_behavior();
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* FunctionSignature_Scalar::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // repeated .substrait.FunctionSignature.Argument arguments = 2 [json_name = "arguments"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_arguments(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // repeated string name = 3 [json_name = "name"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            auto str = _internal_add_name();
-            ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-            CHK_(ptr);
-            CHK_(::_pbi::VerifyUTF8(str, "substrait.FunctionSignature.Scalar.name"));
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.FunctionSignature.Description description = 4 [json_name = "description"];
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_description(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // bool deterministic = 7 [json_name = "deterministic"];
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 56)) {
-          _impl_.deterministic_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // bool session_dependent = 8 [json_name = "sessionDependent"];
-      case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 64)) {
-          _impl_.session_dependent_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.DerivationExpression output_type = 9 [json_name = "outputType"];
-      case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 74)) {
-          ptr = ctx->ParseMessage(_internal_mutable_output_type(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.FunctionSignature.FinalArgVariadic variadic = 10 [json_name = "variadic"];
-      case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 82)) {
-          ptr = ctx->ParseMessage(_internal_mutable_variadic(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.FunctionSignature.FinalArgNormal normal = 11 [json_name = "normal"];
-      case 11:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 90)) {
-          ptr = ctx->ParseMessage(_internal_mutable_normal(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // repeated .substrait.FunctionSignature.Implementation implementations = 12 [json_name = "implementations"];
-      case 12:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 98)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_implementations(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<98>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* FunctionSignature_Scalar::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<4, 9, 6, 55, 2> FunctionSignature_Scalar::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_._has_bits_),
+    0, // no _extensions_
+    12, 120,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294963249,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    9,  // num_field_entries
+    6,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_FunctionSignature_Scalar_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    // repeated .substrait.FunctionSignature.Argument arguments = 2 [json_name = "arguments"];
+    {::_pbi::TcParser::FastMtR1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.arguments_)}},
+    // repeated string name = 3 [json_name = "name"];
+    {::_pbi::TcParser::FastUR1,
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.name_)}},
+    // .substrait.FunctionSignature.Description description = 4 [json_name = "description"];
+    {::_pbi::TcParser::FastMtS1,
+     {34, 0, 1, PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.description_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    // bool deterministic = 7 [json_name = "deterministic"];
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(FunctionSignature_Scalar, _impl_.deterministic_), 63>(),
+     {56, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.deterministic_)}},
+    // bool session_dependent = 8 [json_name = "sessionDependent"];
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(FunctionSignature_Scalar, _impl_.session_dependent_), 63>(),
+     {64, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.session_dependent_)}},
+    // .substrait.DerivationExpression output_type = 9 [json_name = "outputType"];
+    {::_pbi::TcParser::FastMtS1,
+     {74, 1, 2, PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.output_type_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    // repeated .substrait.FunctionSignature.Implementation implementations = 12 [json_name = "implementations"];
+    {::_pbi::TcParser::FastMtR1,
+     {98, 63, 5, PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.implementations_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // repeated .substrait.FunctionSignature.Argument arguments = 2 [json_name = "arguments"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.arguments_), -1, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+    // repeated string name = 3 [json_name = "name"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.name_), -1, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kUtf8String | ::_fl::kRepSString)},
+    // .substrait.FunctionSignature.Description description = 4 [json_name = "description"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.description_), _Internal::kHasBitsOffset + 0, 1,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // bool deterministic = 7 [json_name = "deterministic"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.deterministic_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // bool session_dependent = 8 [json_name = "sessionDependent"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.session_dependent_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // .substrait.DerivationExpression output_type = 9 [json_name = "outputType"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.output_type_), _Internal::kHasBitsOffset + 1, 2,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.FunctionSignature.FinalArgVariadic variadic = 10 [json_name = "variadic"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.final_variable_behavior_.variadic_), _Internal::kOneofCaseOffset + 0, 3,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.FunctionSignature.FinalArgNormal normal = 11 [json_name = "normal"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.final_variable_behavior_.normal_), _Internal::kOneofCaseOffset + 0, 4,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvDefault)},
+    // repeated .substrait.FunctionSignature.Implementation implementations = 12 [json_name = "implementations"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.implementations_), -1, 5,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::FunctionSignature_Argument>()},
+    {::_pbi::TcParser::GetTable<::substrait::FunctionSignature_Description>()},
+    {::_pbi::TcParser::GetTable<::substrait::DerivationExpression>()},
+    {::_pbi::TcParser::GetTable<::substrait::FunctionSignature_FinalArgVariadic>()},
+    {::_pbi::FieldAuxDefaultMessage{}, &::substrait::_FunctionSignature_FinalArgNormal_default_instance_},
+    {::_pbi::TcParser::GetTable<::substrait::FunctionSignature_Implementation>()},
+  }}, {{
+    "\42\0\4\0\0\0\0\0\0\0\0\0\0\0\0\0"
+    "substrait.FunctionSignature.Scalar"
+    "name"
+  }},
+};
 
 ::uint8_t* FunctionSignature_Scalar::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.FunctionSignature.Scalar)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .substrait.FunctionSignature.Argument arguments = 2 [json_name = "arguments"];
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_arguments_size()); i < n; i++) {
-    const auto& repfield = this->_internal_arguments(i);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    const auto& repfield = this->_internal_arguments().Get(i);
+    target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(2, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   // repeated string name = 3 [json_name = "name"];
   for (int i = 0, n = this->_internal_name_size(); i < n; ++i) {
-    const auto& s = this->_internal_name(i);
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-        s.data(), static_cast<int>(s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Scalar.name");
+    const auto& s = this->_internal_name().Get(i);
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+        s.data(), static_cast<int>(s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Scalar.name");
     target = stream->WriteString(3, s, target);
   }
 
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.FunctionSignature.Description description = 4 [json_name = "description"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(4, _Internal::description(this),
         _Internal::description(this).GetCachedSize(), target, stream);
   }
@@ -1365,37 +1311,39 @@ failure:
 
   // .substrait.DerivationExpression output_type = 9 [json_name = "outputType"];
   if (cached_has_bits & 0x00000002u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(9, _Internal::output_type(this),
         _Internal::output_type(this).GetCachedSize(), target, stream);
   }
 
   switch (final_variable_behavior_case()) {
     case kVariadic: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(10, _Internal::variadic(this),
           _Internal::variadic(this).GetCachedSize(), target, stream);
       break;
     }
     case kNormal: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(11, _Internal::normal(this),
           _Internal::normal(this).GetCachedSize(), target, stream);
       break;
     }
-    default: ;
+    default:
+      break;
   }
   // repeated .substrait.FunctionSignature.Implementation implementations = 12 [json_name = "implementations"];
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_implementations_size()); i < n; i++) {
-    const auto& repfield = this->_internal_implementations(i);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    const auto& repfield = this->_internal_implementations().Get(i);
+    target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(12, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.FunctionSignature.Scalar)
   return target;
@@ -1413,36 +1361,33 @@ failure:
   total_size += 1UL * this->_internal_arguments_size();
   for (const auto& msg : this->_internal_arguments()) {
     total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+      ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
   }
-
   // repeated string name = 3 [json_name = "name"];
-  total_size += 1 * ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(_internal_name().size());
+  total_size += 1 * ::google::protobuf::internal::FromIntSize(_internal_name().size());
   for (int i = 0, n = _internal_name().size(); i < n; ++i) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
         _internal_name().Get(i));
   }
-
   // repeated .substrait.FunctionSignature.Implementation implementations = 12 [json_name = "implementations"];
   total_size += 1UL * this->_internal_implementations_size();
   for (const auto& msg : this->_internal_implementations()) {
     total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+      ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
   }
-
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000003u) {
     // .substrait.FunctionSignature.Description description = 4 [json_name = "description"];
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.description_);
     }
 
     // .substrait.DerivationExpression output_type = 9 [json_name = "outputType"];
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.output_type_);
     }
 
@@ -1461,14 +1406,14 @@ failure:
     // .substrait.FunctionSignature.FinalArgVariadic variadic = 10 [json_name = "variadic"];
     case kVariadic: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.final_variable_behavior_.variadic_);
       break;
     }
     // .substrait.FunctionSignature.FinalArgNormal normal = 11 [json_name = "normal"];
     case kNormal: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.final_variable_behavior_.normal_);
       break;
     }
@@ -1479,14 +1424,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData FunctionSignature_Scalar::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData FunctionSignature_Scalar::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     FunctionSignature_Scalar::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FunctionSignature_Scalar::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*FunctionSignature_Scalar::GetClassData() const { return &_class_data_; }
 
 
-void FunctionSignature_Scalar::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void FunctionSignature_Scalar::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<FunctionSignature_Scalar*>(&to_msg);
   auto& from = static_cast<const FunctionSignature_Scalar&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.FunctionSignature.Scalar)
@@ -1529,7 +1474,7 @@ void FunctionSignature_Scalar::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_ms
       break;
     }
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void FunctionSignature_Scalar::CopyFrom(const FunctionSignature_Scalar& from) {
@@ -1539,7 +1484,7 @@ void FunctionSignature_Scalar::CopyFrom(const FunctionSignature_Scalar& from) {
   MergeFrom(from);
 }
 
-bool FunctionSignature_Scalar::IsInitialized() const {
+PROTOBUF_NOINLINE bool FunctionSignature_Scalar::IsInitialized() const {
   return true;
 }
 
@@ -1547,11 +1492,10 @@ void FunctionSignature_Scalar::InternalSwap(FunctionSignature_Scalar* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  _internal_mutable_arguments()->InternalSwap(other->_internal_mutable_arguments());
-  _internal_mutable_name()->InternalSwap(
-      other->_internal_mutable_name());
-  _internal_mutable_implementations()->InternalSwap(other->_internal_mutable_implementations());
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  _impl_.arguments_.InternalSwap(&other->_impl_.arguments_);
+  _impl_.name_.InternalSwap(&other->_impl_.name_);
+  _impl_.implementations_.InternalSwap(&other->_impl_.implementations_);
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.session_dependent_)
       + sizeof(FunctionSignature_Scalar::_impl_.session_dependent_)
       - PROTOBUF_FIELD_OFFSET(FunctionSignature_Scalar, _impl_.description_)>(
@@ -1561,7 +1505,7 @@ void FunctionSignature_Scalar::InternalSwap(FunctionSignature_Scalar* other) {
   swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata FunctionSignature_Scalar::GetMetadata() const {
+::google::protobuf::Metadata FunctionSignature_Scalar::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2ffunction_2eproto_getter, &descriptor_table_substrait_2ffunction_2eproto_once,
       file_level_metadata_substrait_2ffunction_2eproto[2]);
@@ -1591,24 +1535,19 @@ class FunctionSignature_Aggregate::_Internal {
   }
 };
 
-const ::substrait::FunctionSignature_Description&
-FunctionSignature_Aggregate::_Internal::description(const FunctionSignature_Aggregate* msg) {
+const ::substrait::FunctionSignature_Description& FunctionSignature_Aggregate::_Internal::description(const FunctionSignature_Aggregate* msg) {
   return *msg->_impl_.description_;
 }
-const ::substrait::DerivationExpression&
-FunctionSignature_Aggregate::_Internal::output_type(const FunctionSignature_Aggregate* msg) {
+const ::substrait::DerivationExpression& FunctionSignature_Aggregate::_Internal::output_type(const FunctionSignature_Aggregate* msg) {
   return *msg->_impl_.output_type_;
 }
-const ::substrait::FunctionSignature_FinalArgVariadic&
-FunctionSignature_Aggregate::_Internal::variadic(const FunctionSignature_Aggregate* msg) {
+const ::substrait::FunctionSignature_FinalArgVariadic& FunctionSignature_Aggregate::_Internal::variadic(const FunctionSignature_Aggregate* msg) {
   return *msg->_impl_.final_variable_behavior_.variadic_;
 }
-const ::substrait::FunctionSignature_FinalArgNormal&
-FunctionSignature_Aggregate::_Internal::normal(const FunctionSignature_Aggregate* msg) {
+const ::substrait::FunctionSignature_FinalArgNormal& FunctionSignature_Aggregate::_Internal::normal(const FunctionSignature_Aggregate* msg) {
   return *msg->_impl_.final_variable_behavior_.normal_;
 }
-const ::substrait::Type&
-FunctionSignature_Aggregate::_Internal::intermediate_type(const FunctionSignature_Aggregate* msg) {
+const ::substrait::Type& FunctionSignature_Aggregate::_Internal::intermediate_type(const FunctionSignature_Aggregate* msg) {
   return *msg->_impl_.intermediate_type_;
 }
 void FunctionSignature_Aggregate::clear_output_type() {
@@ -1616,13 +1555,13 @@ void FunctionSignature_Aggregate::clear_output_type() {
   _impl_._has_bits_[0] &= ~0x00000002u;
 }
 void FunctionSignature_Aggregate::set_allocated_variadic(::substrait::FunctionSignature_FinalArgVariadic* variadic) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_final_variable_behavior();
   if (variadic) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(variadic);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(variadic);
     if (message_arena != submessage_arena) {
-      variadic = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      variadic = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, variadic, submessage_arena);
     }
     set_has_variadic();
@@ -1631,13 +1570,13 @@ void FunctionSignature_Aggregate::set_allocated_variadic(::substrait::FunctionSi
   // @@protoc_insertion_point(field_set_allocated:substrait.FunctionSignature.Aggregate.variadic)
 }
 void FunctionSignature_Aggregate::set_allocated_normal(::substrait::FunctionSignature_FinalArgNormal* normal) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_final_variable_behavior();
   if (normal) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(normal);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(normal);
     if (message_arena != submessage_arena) {
-      normal = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      normal = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, normal, submessage_arena);
     }
     set_has_normal();
@@ -1649,36 +1588,32 @@ void FunctionSignature_Aggregate::clear_intermediate_type() {
   if (_impl_.intermediate_type_ != nullptr) _impl_.intermediate_type_->Clear();
   _impl_._has_bits_[0] &= ~0x00000004u;
 }
-FunctionSignature_Aggregate::FunctionSignature_Aggregate(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+FunctionSignature_Aggregate::FunctionSignature_Aggregate(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.FunctionSignature.Aggregate)
 }
-FunctionSignature_Aggregate::FunctionSignature_Aggregate(const FunctionSignature_Aggregate& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  FunctionSignature_Aggregate* const _this = this; (void)_this;
+FunctionSignature_Aggregate::FunctionSignature_Aggregate(const FunctionSignature_Aggregate& from) : ::google::protobuf::Message() {
+  FunctionSignature_Aggregate* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.arguments_){from._impl_.arguments_}
-    , decltype(_impl_.implementations_){from._impl_.implementations_}
-    , decltype(_impl_.name_) {}
-
-    , decltype(_impl_.description_){nullptr}
-    , decltype(_impl_.output_type_){nullptr}
-    , decltype(_impl_.intermediate_type_){nullptr}
-    , decltype(_impl_.max_set_) {}
-
-    , decltype(_impl_.deterministic_) {}
-
-    , decltype(_impl_.session_dependent_) {}
-
-    , decltype(_impl_.ordered_) {}
-
-    , decltype(_impl_.final_variable_behavior_){}
-    , /*decltype(_impl_._oneof_case_)*/{}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_._has_bits_){from._impl_._has_bits_},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.arguments_){from._impl_.arguments_},
+      decltype(_impl_.implementations_){from._impl_.implementations_},
+      decltype(_impl_.name_){},
+      decltype(_impl_.description_){nullptr},
+      decltype(_impl_.output_type_){nullptr},
+      decltype(_impl_.intermediate_type_){nullptr},
+      decltype(_impl_.max_set_){},
+      decltype(_impl_.deterministic_){},
+      decltype(_impl_.session_dependent_){},
+      decltype(_impl_.ordered_){},
+      decltype(_impl_.final_variable_behavior_){},
+      /*decltype(_impl_._oneof_case_)*/ {},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   _impl_.name_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.name_.Set("", GetArenaForAllocation());
@@ -1714,31 +1649,26 @@ FunctionSignature_Aggregate::FunctionSignature_Aggregate(const FunctionSignature
       break;
     }
   }
+
   // @@protoc_insertion_point(copy_constructor:substrait.FunctionSignature.Aggregate)
 }
-
 inline void FunctionSignature_Aggregate::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.arguments_){arena}
-    , decltype(_impl_.implementations_){arena}
-    , decltype(_impl_.name_) {}
-
-    , decltype(_impl_.description_){nullptr}
-    , decltype(_impl_.output_type_){nullptr}
-    , decltype(_impl_.intermediate_type_){nullptr}
-    , decltype(_impl_.max_set_) { ::uint64_t{0u} }
-
-    , decltype(_impl_.deterministic_) { false }
-
-    , decltype(_impl_.session_dependent_) { false }
-
-    , decltype(_impl_.ordered_) { false }
-
-    , decltype(_impl_.final_variable_behavior_){}
-    , /*decltype(_impl_._oneof_case_)*/{}
+      decltype(_impl_._has_bits_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.arguments_){arena},
+      decltype(_impl_.implementations_){arena},
+      decltype(_impl_.name_){},
+      decltype(_impl_.description_){nullptr},
+      decltype(_impl_.output_type_){nullptr},
+      decltype(_impl_.intermediate_type_){nullptr},
+      decltype(_impl_.max_set_){::uint64_t{0u}},
+      decltype(_impl_.deterministic_){false},
+      decltype(_impl_.session_dependent_){false},
+      decltype(_impl_.ordered_){false},
+      decltype(_impl_.final_variable_behavior_){},
+      /*decltype(_impl_._oneof_case_)*/ {},
   };
   _impl_.name_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -1746,20 +1676,15 @@ inline void FunctionSignature_Aggregate::SharedCtor(::_pb::Arena* arena) {
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   clear_has_final_variable_behavior();
 }
-
 FunctionSignature_Aggregate::~FunctionSignature_Aggregate() {
   // @@protoc_insertion_point(destructor:substrait.FunctionSignature.Aggregate)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void FunctionSignature_Aggregate::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _internal_mutable_arguments()->~RepeatedPtrField();
-  _internal_mutable_implementations()->~RepeatedPtrField();
+  _impl_.arguments_.~RepeatedPtrField();
+  _impl_.implementations_.~RepeatedPtrField();
   _impl_.name_.Destroy();
   if (this != internal_default_instance()) delete _impl_.description_;
   if (this != internal_default_instance()) delete _impl_.output_type_;
@@ -1768,7 +1693,6 @@ inline void FunctionSignature_Aggregate::SharedDtor() {
     clear_final_variable_behavior();
   }
 }
-
 void FunctionSignature_Aggregate::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
@@ -1796,7 +1720,7 @@ void FunctionSignature_Aggregate::clear_final_variable_behavior() {
 }
 
 
-void FunctionSignature_Aggregate::Clear() {
+PROTOBUF_NOINLINE void FunctionSignature_Aggregate::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.FunctionSignature.Aggregate)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -1825,186 +1749,148 @@ void FunctionSignature_Aggregate::Clear() {
       reinterpret_cast<char*>(&_impl_.max_set_)) + sizeof(_impl_.ordered_));
   clear_final_variable_behavior();
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* FunctionSignature_Aggregate::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // repeated .substrait.FunctionSignature.Argument arguments = 2 [json_name = "arguments"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_arguments(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // string name = 3 [json_name = "name"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
-          auto str = _internal_mutable_name();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "substrait.FunctionSignature.Aggregate.name"));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.FunctionSignature.Description description = 4 [json_name = "description"];
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_description(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // bool deterministic = 7 [json_name = "deterministic"];
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 56)) {
-          _impl_.deterministic_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // bool session_dependent = 8 [json_name = "sessionDependent"];
-      case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 64)) {
-          _impl_.session_dependent_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.DerivationExpression output_type = 9 [json_name = "outputType"];
-      case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 74)) {
-          ptr = ctx->ParseMessage(_internal_mutable_output_type(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.FunctionSignature.FinalArgVariadic variadic = 10 [json_name = "variadic"];
-      case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 82)) {
-          ptr = ctx->ParseMessage(_internal_mutable_variadic(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.FunctionSignature.FinalArgNormal normal = 11 [json_name = "normal"];
-      case 11:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 90)) {
-          ptr = ctx->ParseMessage(_internal_mutable_normal(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // uint64 max_set = 12 [json_name = "maxSet"];
-      case 12:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 96)) {
-          _impl_.max_set_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.Type intermediate_type = 13 [json_name = "intermediateType"];
-      case 13:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 106)) {
-          ptr = ctx->ParseMessage(_internal_mutable_intermediate_type(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // bool ordered = 14 [json_name = "ordered"];
-      case 14:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 112)) {
-          _impl_.ordered_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // repeated .substrait.FunctionSignature.Implementation implementations = 15 [json_name = "implementations"];
-      case 15:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 122)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_implementations(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<122>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* FunctionSignature_Aggregate::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<4, 12, 7, 58, 2> FunctionSignature_Aggregate::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_._has_bits_),
+    0, // no _extensions_
+    15, 120,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294934577,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    12,  // num_field_entries
+    7,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_FunctionSignature_Aggregate_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    // repeated .substrait.FunctionSignature.Argument arguments = 2 [json_name = "arguments"];
+    {::_pbi::TcParser::FastMtR1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.arguments_)}},
+    // string name = 3 [json_name = "name"];
+    {::_pbi::TcParser::FastUS1,
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.name_)}},
+    // .substrait.FunctionSignature.Description description = 4 [json_name = "description"];
+    {::_pbi::TcParser::FastMtS1,
+     {34, 0, 1, PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.description_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    // bool deterministic = 7 [json_name = "deterministic"];
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(FunctionSignature_Aggregate, _impl_.deterministic_), 63>(),
+     {56, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.deterministic_)}},
+    // bool session_dependent = 8 [json_name = "sessionDependent"];
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(FunctionSignature_Aggregate, _impl_.session_dependent_), 63>(),
+     {64, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.session_dependent_)}},
+    // .substrait.DerivationExpression output_type = 9 [json_name = "outputType"];
+    {::_pbi::TcParser::FastMtS1,
+     {74, 1, 2, PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.output_type_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    // uint64 max_set = 12 [json_name = "maxSet"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(FunctionSignature_Aggregate, _impl_.max_set_), 63>(),
+     {96, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.max_set_)}},
+    // .substrait.Type intermediate_type = 13 [json_name = "intermediateType"];
+    {::_pbi::TcParser::FastMtS1,
+     {106, 2, 5, PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.intermediate_type_)}},
+    // bool ordered = 14 [json_name = "ordered"];
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(FunctionSignature_Aggregate, _impl_.ordered_), 63>(),
+     {112, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.ordered_)}},
+    // repeated .substrait.FunctionSignature.Implementation implementations = 15 [json_name = "implementations"];
+    {::_pbi::TcParser::FastMtR1,
+     {122, 63, 6, PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.implementations_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // repeated .substrait.FunctionSignature.Argument arguments = 2 [json_name = "arguments"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.arguments_), -1, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+    // string name = 3 [json_name = "name"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.name_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // .substrait.FunctionSignature.Description description = 4 [json_name = "description"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.description_), _Internal::kHasBitsOffset + 0, 1,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // bool deterministic = 7 [json_name = "deterministic"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.deterministic_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // bool session_dependent = 8 [json_name = "sessionDependent"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.session_dependent_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // .substrait.DerivationExpression output_type = 9 [json_name = "outputType"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.output_type_), _Internal::kHasBitsOffset + 1, 2,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.FunctionSignature.FinalArgVariadic variadic = 10 [json_name = "variadic"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.final_variable_behavior_.variadic_), _Internal::kOneofCaseOffset + 0, 3,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.FunctionSignature.FinalArgNormal normal = 11 [json_name = "normal"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.final_variable_behavior_.normal_), _Internal::kOneofCaseOffset + 0, 4,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvDefault)},
+    // uint64 max_set = 12 [json_name = "maxSet"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.max_set_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUInt64)},
+    // .substrait.Type intermediate_type = 13 [json_name = "intermediateType"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.intermediate_type_), _Internal::kHasBitsOffset + 2, 5,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // bool ordered = 14 [json_name = "ordered"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.ordered_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // repeated .substrait.FunctionSignature.Implementation implementations = 15 [json_name = "implementations"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.implementations_), -1, 6,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::FunctionSignature_Argument>()},
+    {::_pbi::TcParser::GetTable<::substrait::FunctionSignature_Description>()},
+    {::_pbi::TcParser::GetTable<::substrait::DerivationExpression>()},
+    {::_pbi::TcParser::GetTable<::substrait::FunctionSignature_FinalArgVariadic>()},
+    {::_pbi::FieldAuxDefaultMessage{}, &::substrait::_FunctionSignature_FinalArgNormal_default_instance_},
+    {::_pbi::TcParser::GetTable<::substrait::Type>()},
+    {::_pbi::TcParser::GetTable<::substrait::FunctionSignature_Implementation>()},
+  }}, {{
+    "\45\0\4\0\0\0\0\0\0\0\0\0\0\0\0\0"
+    "substrait.FunctionSignature.Aggregate"
+    "name"
+  }},
+};
 
 ::uint8_t* FunctionSignature_Aggregate::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.FunctionSignature.Aggregate)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .substrait.FunctionSignature.Argument arguments = 2 [json_name = "arguments"];
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_arguments_size()); i < n; i++) {
-    const auto& repfield = this->_internal_arguments(i);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    const auto& repfield = this->_internal_arguments().Get(i);
+    target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(2, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   // string name = 3 [json_name = "name"];
   if (!this->_internal_name().empty()) {
     const std::string& _s = this->_internal_name();
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Aggregate.name");
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Aggregate.name");
     target = stream->WriteStringMaybeAliased(3, _s, target);
   }
 
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.FunctionSignature.Description description = 4 [json_name = "description"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(4, _Internal::description(this),
         _Internal::description(this).GetCachedSize(), target, stream);
   }
@@ -2025,25 +1911,26 @@ failure:
 
   // .substrait.DerivationExpression output_type = 9 [json_name = "outputType"];
   if (cached_has_bits & 0x00000002u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(9, _Internal::output_type(this),
         _Internal::output_type(this).GetCachedSize(), target, stream);
   }
 
   switch (final_variable_behavior_case()) {
     case kVariadic: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(10, _Internal::variadic(this),
           _Internal::variadic(this).GetCachedSize(), target, stream);
       break;
     }
     case kNormal: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(11, _Internal::normal(this),
           _Internal::normal(this).GetCachedSize(), target, stream);
       break;
     }
-    default: ;
+    default:
+      break;
   }
   // uint64 max_set = 12 [json_name = "maxSet"];
   if (this->_internal_max_set() != 0) {
@@ -2054,7 +1941,7 @@ failure:
 
   // .substrait.Type intermediate_type = 13 [json_name = "intermediateType"];
   if (cached_has_bits & 0x00000004u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(13, _Internal::intermediate_type(this),
         _Internal::intermediate_type(this).GetCachedSize(), target, stream);
   }
@@ -2069,14 +1956,15 @@ failure:
   // repeated .substrait.FunctionSignature.Implementation implementations = 15 [json_name = "implementations"];
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_implementations_size()); i < n; i++) {
-    const auto& repfield = this->_internal_implementations(i);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    const auto& repfield = this->_internal_implementations().Get(i);
+    target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(15, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.FunctionSignature.Aggregate)
   return target;
@@ -2094,19 +1982,17 @@ failure:
   total_size += 1UL * this->_internal_arguments_size();
   for (const auto& msg : this->_internal_arguments()) {
     total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+      ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
   }
-
   // repeated .substrait.FunctionSignature.Implementation implementations = 15 [json_name = "implementations"];
   total_size += 1UL * this->_internal_implementations_size();
   for (const auto& msg : this->_internal_implementations()) {
     total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+      ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
   }
-
   // string name = 3 [json_name = "name"];
   if (!this->_internal_name().empty()) {
-    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                     this->_internal_name());
   }
 
@@ -2115,21 +2001,21 @@ failure:
     // .substrait.FunctionSignature.Description description = 4 [json_name = "description"];
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.description_);
     }
 
     // .substrait.DerivationExpression output_type = 9 [json_name = "outputType"];
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.output_type_);
     }
 
     // .substrait.Type intermediate_type = 13 [json_name = "intermediateType"];
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.intermediate_type_);
     }
 
@@ -2159,14 +2045,14 @@ failure:
     // .substrait.FunctionSignature.FinalArgVariadic variadic = 10 [json_name = "variadic"];
     case kVariadic: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.final_variable_behavior_.variadic_);
       break;
     }
     // .substrait.FunctionSignature.FinalArgNormal normal = 11 [json_name = "normal"];
     case kNormal: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.final_variable_behavior_.normal_);
       break;
     }
@@ -2177,14 +2063,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData FunctionSignature_Aggregate::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData FunctionSignature_Aggregate::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     FunctionSignature_Aggregate::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FunctionSignature_Aggregate::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*FunctionSignature_Aggregate::GetClassData() const { return &_class_data_; }
 
 
-void FunctionSignature_Aggregate::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void FunctionSignature_Aggregate::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<FunctionSignature_Aggregate*>(&to_msg);
   auto& from = static_cast<const FunctionSignature_Aggregate&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.FunctionSignature.Aggregate)
@@ -2239,7 +2125,7 @@ void FunctionSignature_Aggregate::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to
       break;
     }
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void FunctionSignature_Aggregate::CopyFrom(const FunctionSignature_Aggregate& from) {
@@ -2249,7 +2135,7 @@ void FunctionSignature_Aggregate::CopyFrom(const FunctionSignature_Aggregate& fr
   MergeFrom(from);
 }
 
-bool FunctionSignature_Aggregate::IsInitialized() const {
+PROTOBUF_NOINLINE bool FunctionSignature_Aggregate::IsInitialized() const {
   return true;
 }
 
@@ -2259,11 +2145,11 @@ void FunctionSignature_Aggregate::InternalSwap(FunctionSignature_Aggregate* othe
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  _internal_mutable_arguments()->InternalSwap(other->_internal_mutable_arguments());
-  _internal_mutable_implementations()->InternalSwap(other->_internal_mutable_implementations());
+  _impl_.arguments_.InternalSwap(&other->_impl_.arguments_);
+  _impl_.implementations_.InternalSwap(&other->_impl_.implementations_);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, lhs_arena,
                                        &other->_impl_.name_, rhs_arena);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.ordered_)
       + sizeof(FunctionSignature_Aggregate::_impl_.ordered_)
       - PROTOBUF_FIELD_OFFSET(FunctionSignature_Aggregate, _impl_.description_)>(
@@ -2273,7 +2159,7 @@ void FunctionSignature_Aggregate::InternalSwap(FunctionSignature_Aggregate* othe
   swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata FunctionSignature_Aggregate::GetMetadata() const {
+::google::protobuf::Metadata FunctionSignature_Aggregate::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2ffunction_2eproto_getter, &descriptor_table_substrait_2ffunction_2eproto_once,
       file_level_metadata_substrait_2ffunction_2eproto[3]);
@@ -2303,24 +2189,19 @@ class FunctionSignature_Window::_Internal {
   static const ::substrait::FunctionSignature_FinalArgNormal& normal(const FunctionSignature_Window* msg);
 };
 
-const ::substrait::FunctionSignature_Description&
-FunctionSignature_Window::_Internal::description(const FunctionSignature_Window* msg) {
+const ::substrait::FunctionSignature_Description& FunctionSignature_Window::_Internal::description(const FunctionSignature_Window* msg) {
   return *msg->_impl_.description_;
 }
-const ::substrait::DerivationExpression&
-FunctionSignature_Window::_Internal::intermediate_type(const FunctionSignature_Window* msg) {
+const ::substrait::DerivationExpression& FunctionSignature_Window::_Internal::intermediate_type(const FunctionSignature_Window* msg) {
   return *msg->_impl_.intermediate_type_;
 }
-const ::substrait::DerivationExpression&
-FunctionSignature_Window::_Internal::output_type(const FunctionSignature_Window* msg) {
+const ::substrait::DerivationExpression& FunctionSignature_Window::_Internal::output_type(const FunctionSignature_Window* msg) {
   return *msg->_impl_.output_type_;
 }
-const ::substrait::FunctionSignature_FinalArgVariadic&
-FunctionSignature_Window::_Internal::variadic(const FunctionSignature_Window* msg) {
+const ::substrait::FunctionSignature_FinalArgVariadic& FunctionSignature_Window::_Internal::variadic(const FunctionSignature_Window* msg) {
   return *msg->_impl_.final_variable_behavior_.variadic_;
 }
-const ::substrait::FunctionSignature_FinalArgNormal&
-FunctionSignature_Window::_Internal::normal(const FunctionSignature_Window* msg) {
+const ::substrait::FunctionSignature_FinalArgNormal& FunctionSignature_Window::_Internal::normal(const FunctionSignature_Window* msg) {
   return *msg->_impl_.final_variable_behavior_.normal_;
 }
 void FunctionSignature_Window::clear_intermediate_type() {
@@ -2332,13 +2213,13 @@ void FunctionSignature_Window::clear_output_type() {
   _impl_._has_bits_[0] &= ~0x00000004u;
 }
 void FunctionSignature_Window::set_allocated_variadic(::substrait::FunctionSignature_FinalArgVariadic* variadic) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_final_variable_behavior();
   if (variadic) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(variadic);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(variadic);
     if (message_arena != submessage_arena) {
-      variadic = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      variadic = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, variadic, submessage_arena);
     }
     set_has_variadic();
@@ -2347,13 +2228,13 @@ void FunctionSignature_Window::set_allocated_variadic(::substrait::FunctionSigna
   // @@protoc_insertion_point(field_set_allocated:substrait.FunctionSignature.Window.variadic)
 }
 void FunctionSignature_Window::set_allocated_normal(::substrait::FunctionSignature_FinalArgNormal* normal) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_final_variable_behavior();
   if (normal) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(normal);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(normal);
     if (message_arena != submessage_arena) {
-      normal = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      normal = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, normal, submessage_arena);
     }
     set_has_normal();
@@ -2361,37 +2242,33 @@ void FunctionSignature_Window::set_allocated_normal(::substrait::FunctionSignatu
   }
   // @@protoc_insertion_point(field_set_allocated:substrait.FunctionSignature.Window.normal)
 }
-FunctionSignature_Window::FunctionSignature_Window(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+FunctionSignature_Window::FunctionSignature_Window(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.FunctionSignature.Window)
 }
-FunctionSignature_Window::FunctionSignature_Window(const FunctionSignature_Window& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  FunctionSignature_Window* const _this = this; (void)_this;
+FunctionSignature_Window::FunctionSignature_Window(const FunctionSignature_Window& from) : ::google::protobuf::Message() {
+  FunctionSignature_Window* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.arguments_){from._impl_.arguments_}
-    , decltype(_impl_.name_){from._impl_.name_}
-    , decltype(_impl_.implementations_){from._impl_.implementations_}
-    , decltype(_impl_.description_){nullptr}
-    , decltype(_impl_.intermediate_type_){nullptr}
-    , decltype(_impl_.output_type_){nullptr}
-    , decltype(_impl_.deterministic_) {}
-
-    , decltype(_impl_.session_dependent_) {}
-
-    , decltype(_impl_.ordered_) {}
-
-    , decltype(_impl_.window_type_) {}
-
-    , decltype(_impl_.max_set_) {}
-
-    , decltype(_impl_.final_variable_behavior_){}
-    , /*decltype(_impl_._oneof_case_)*/{}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_._has_bits_){from._impl_._has_bits_},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.arguments_){from._impl_.arguments_},
+      decltype(_impl_.name_){from._impl_.name_},
+      decltype(_impl_.implementations_){from._impl_.implementations_},
+      decltype(_impl_.description_){nullptr},
+      decltype(_impl_.intermediate_type_){nullptr},
+      decltype(_impl_.output_type_){nullptr},
+      decltype(_impl_.deterministic_){},
+      decltype(_impl_.session_dependent_){},
+      decltype(_impl_.ordered_){},
+      decltype(_impl_.window_type_){},
+      decltype(_impl_.max_set_){},
+      decltype(_impl_.final_variable_behavior_){},
+      /*decltype(_impl_._oneof_case_)*/ {},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
     _this->_impl_.description_ = new ::substrait::FunctionSignature_Description(*from._impl_.description_);
   }
@@ -2420,50 +2297,40 @@ FunctionSignature_Window::FunctionSignature_Window(const FunctionSignature_Windo
       break;
     }
   }
+
   // @@protoc_insertion_point(copy_constructor:substrait.FunctionSignature.Window)
 }
-
 inline void FunctionSignature_Window::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.arguments_){arena}
-    , decltype(_impl_.name_){arena}
-    , decltype(_impl_.implementations_){arena}
-    , decltype(_impl_.description_){nullptr}
-    , decltype(_impl_.intermediate_type_){nullptr}
-    , decltype(_impl_.output_type_){nullptr}
-    , decltype(_impl_.deterministic_) { false }
-
-    , decltype(_impl_.session_dependent_) { false }
-
-    , decltype(_impl_.ordered_) { false }
-
-    , decltype(_impl_.window_type_) { 0 }
-
-    , decltype(_impl_.max_set_) { ::uint64_t{0u} }
-
-    , decltype(_impl_.final_variable_behavior_){}
-    , /*decltype(_impl_._oneof_case_)*/{}
+      decltype(_impl_._has_bits_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.arguments_){arena},
+      decltype(_impl_.name_){arena},
+      decltype(_impl_.implementations_){arena},
+      decltype(_impl_.description_){nullptr},
+      decltype(_impl_.intermediate_type_){nullptr},
+      decltype(_impl_.output_type_){nullptr},
+      decltype(_impl_.deterministic_){false},
+      decltype(_impl_.session_dependent_){false},
+      decltype(_impl_.ordered_){false},
+      decltype(_impl_.window_type_){0},
+      decltype(_impl_.max_set_){::uint64_t{0u}},
+      decltype(_impl_.final_variable_behavior_){},
+      /*decltype(_impl_._oneof_case_)*/ {},
   };
   clear_has_final_variable_behavior();
 }
-
 FunctionSignature_Window::~FunctionSignature_Window() {
   // @@protoc_insertion_point(destructor:substrait.FunctionSignature.Window)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void FunctionSignature_Window::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _internal_mutable_arguments()->~RepeatedPtrField();
+  _impl_.arguments_.~RepeatedPtrField();
   _internal_mutable_name()->~RepeatedPtrField();
-  _internal_mutable_implementations()->~RepeatedPtrField();
+  _impl_.implementations_.~RepeatedPtrField();
   if (this != internal_default_instance()) delete _impl_.description_;
   if (this != internal_default_instance()) delete _impl_.intermediate_type_;
   if (this != internal_default_instance()) delete _impl_.output_type_;
@@ -2471,7 +2338,6 @@ inline void FunctionSignature_Window::SharedDtor() {
     clear_final_variable_behavior();
   }
 }
-
 void FunctionSignature_Window::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
@@ -2499,7 +2365,7 @@ void FunctionSignature_Window::clear_final_variable_behavior() {
 }
 
 
-void FunctionSignature_Window::Clear() {
+PROTOBUF_NOINLINE void FunctionSignature_Window::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.FunctionSignature.Window)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -2528,201 +2394,153 @@ void FunctionSignature_Window::Clear() {
       reinterpret_cast<char*>(&_impl_.deterministic_)) + sizeof(_impl_.max_set_));
   clear_final_variable_behavior();
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* FunctionSignature_Window::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // repeated .substrait.FunctionSignature.Argument arguments = 2 [json_name = "arguments"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_arguments(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // repeated string name = 3 [json_name = "name"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            auto str = _internal_add_name();
-            ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-            CHK_(ptr);
-            CHK_(::_pbi::VerifyUTF8(str, "substrait.FunctionSignature.Window.name"));
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.FunctionSignature.Description description = 4 [json_name = "description"];
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_description(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // bool deterministic = 7 [json_name = "deterministic"];
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 56)) {
-          _impl_.deterministic_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // bool session_dependent = 8 [json_name = "sessionDependent"];
-      case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 64)) {
-          _impl_.session_dependent_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.DerivationExpression intermediate_type = 9 [json_name = "intermediateType"];
-      case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 74)) {
-          ptr = ctx->ParseMessage(_internal_mutable_intermediate_type(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.DerivationExpression output_type = 10 [json_name = "outputType"];
-      case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 82)) {
-          ptr = ctx->ParseMessage(_internal_mutable_output_type(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // bool ordered = 11 [json_name = "ordered"];
-      case 11:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 88)) {
-          _impl_.ordered_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // uint64 max_set = 12 [json_name = "maxSet"];
-      case 12:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 96)) {
-          _impl_.max_set_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.FunctionSignature.Window.WindowType window_type = 14 [json_name = "windowType"];
-      case 14:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 112)) {
-          ::int32_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-          _internal_set_window_type(static_cast<::substrait::FunctionSignature_Window_WindowType>(val));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // repeated .substrait.FunctionSignature.Implementation implementations = 15 [json_name = "implementations"];
-      case 15:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 122)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_implementations(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<122>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.FunctionSignature.FinalArgVariadic variadic = 16 [json_name = "variadic"];
-      case 16:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 130)) {
-          ptr = ctx->ParseMessage(_internal_mutable_variadic(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.FunctionSignature.FinalArgNormal normal = 17 [json_name = "normal"];
-      case 17:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 138)) {
-          ptr = ctx->ParseMessage(_internal_mutable_normal(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* FunctionSignature_Window::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<4, 13, 7, 55, 2> FunctionSignature_Window::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_._has_bits_),
+    0, // no _extensions_
+    17, 120,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294840369,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    13,  // num_field_entries
+    7,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_FunctionSignature_Window_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    // repeated .substrait.FunctionSignature.Argument arguments = 2 [json_name = "arguments"];
+    {::_pbi::TcParser::FastMtR1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.arguments_)}},
+    // repeated string name = 3 [json_name = "name"];
+    {::_pbi::TcParser::FastUR1,
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.name_)}},
+    // .substrait.FunctionSignature.Description description = 4 [json_name = "description"];
+    {::_pbi::TcParser::FastMtS1,
+     {34, 0, 1, PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.description_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    // bool deterministic = 7 [json_name = "deterministic"];
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(FunctionSignature_Window, _impl_.deterministic_), 63>(),
+     {56, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.deterministic_)}},
+    // bool session_dependent = 8 [json_name = "sessionDependent"];
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(FunctionSignature_Window, _impl_.session_dependent_), 63>(),
+     {64, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.session_dependent_)}},
+    // .substrait.DerivationExpression intermediate_type = 9 [json_name = "intermediateType"];
+    {::_pbi::TcParser::FastMtS1,
+     {74, 1, 2, PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.intermediate_type_)}},
+    // .substrait.DerivationExpression output_type = 10 [json_name = "outputType"];
+    {::_pbi::TcParser::FastMtS1,
+     {82, 2, 3, PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.output_type_)}},
+    // bool ordered = 11 [json_name = "ordered"];
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(FunctionSignature_Window, _impl_.ordered_), 63>(),
+     {88, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.ordered_)}},
+    // uint64 max_set = 12 [json_name = "maxSet"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(FunctionSignature_Window, _impl_.max_set_), 63>(),
+     {96, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.max_set_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    // .substrait.FunctionSignature.Window.WindowType window_type = 14 [json_name = "windowType"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(FunctionSignature_Window, _impl_.window_type_), 63>(),
+     {112, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.window_type_)}},
+    // repeated .substrait.FunctionSignature.Implementation implementations = 15 [json_name = "implementations"];
+    {::_pbi::TcParser::FastMtR1,
+     {122, 63, 4, PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.implementations_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // repeated .substrait.FunctionSignature.Argument arguments = 2 [json_name = "arguments"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.arguments_), -1, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+    // repeated string name = 3 [json_name = "name"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.name_), -1, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kUtf8String | ::_fl::kRepSString)},
+    // .substrait.FunctionSignature.Description description = 4 [json_name = "description"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.description_), _Internal::kHasBitsOffset + 0, 1,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // bool deterministic = 7 [json_name = "deterministic"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.deterministic_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // bool session_dependent = 8 [json_name = "sessionDependent"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.session_dependent_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // .substrait.DerivationExpression intermediate_type = 9 [json_name = "intermediateType"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.intermediate_type_), _Internal::kHasBitsOffset + 1, 2,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.DerivationExpression output_type = 10 [json_name = "outputType"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.output_type_), _Internal::kHasBitsOffset + 2, 3,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // bool ordered = 11 [json_name = "ordered"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.ordered_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // uint64 max_set = 12 [json_name = "maxSet"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.max_set_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUInt64)},
+    // .substrait.FunctionSignature.Window.WindowType window_type = 14 [json_name = "windowType"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.window_type_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
+    // repeated .substrait.FunctionSignature.Implementation implementations = 15 [json_name = "implementations"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.implementations_), -1, 4,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.FunctionSignature.FinalArgVariadic variadic = 16 [json_name = "variadic"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.final_variable_behavior_.variadic_), _Internal::kOneofCaseOffset + 0, 5,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.FunctionSignature.FinalArgNormal normal = 17 [json_name = "normal"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.final_variable_behavior_.normal_), _Internal::kOneofCaseOffset + 0, 6,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvDefault)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::FunctionSignature_Argument>()},
+    {::_pbi::TcParser::GetTable<::substrait::FunctionSignature_Description>()},
+    {::_pbi::TcParser::GetTable<::substrait::DerivationExpression>()},
+    {::_pbi::TcParser::GetTable<::substrait::DerivationExpression>()},
+    {::_pbi::TcParser::GetTable<::substrait::FunctionSignature_Implementation>()},
+    {::_pbi::TcParser::GetTable<::substrait::FunctionSignature_FinalArgVariadic>()},
+    {::_pbi::FieldAuxDefaultMessage{}, &::substrait::_FunctionSignature_FinalArgNormal_default_instance_},
+  }}, {{
+    "\42\0\4\0\0\0\0\0\0\0\0\0\0\0\0\0"
+    "substrait.FunctionSignature.Window"
+    "name"
+  }},
+};
 
 ::uint8_t* FunctionSignature_Window::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.FunctionSignature.Window)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .substrait.FunctionSignature.Argument arguments = 2 [json_name = "arguments"];
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_arguments_size()); i < n; i++) {
-    const auto& repfield = this->_internal_arguments(i);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    const auto& repfield = this->_internal_arguments().Get(i);
+    target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(2, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   // repeated string name = 3 [json_name = "name"];
   for (int i = 0, n = this->_internal_name_size(); i < n; ++i) {
-    const auto& s = this->_internal_name(i);
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-        s.data(), static_cast<int>(s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Window.name");
+    const auto& s = this->_internal_name().Get(i);
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+        s.data(), static_cast<int>(s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Window.name");
     target = stream->WriteString(3, s, target);
   }
 
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.FunctionSignature.Description description = 4 [json_name = "description"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(4, _Internal::description(this),
         _Internal::description(this).GetCachedSize(), target, stream);
   }
@@ -2743,14 +2561,14 @@ failure:
 
   // .substrait.DerivationExpression intermediate_type = 9 [json_name = "intermediateType"];
   if (cached_has_bits & 0x00000002u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(9, _Internal::intermediate_type(this),
         _Internal::intermediate_type(this).GetCachedSize(), target, stream);
   }
 
   // .substrait.DerivationExpression output_type = 10 [json_name = "outputType"];
   if (cached_has_bits & 0x00000004u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(10, _Internal::output_type(this),
         _Internal::output_type(this).GetCachedSize(), target, stream);
   }
@@ -2779,29 +2597,31 @@ failure:
   // repeated .substrait.FunctionSignature.Implementation implementations = 15 [json_name = "implementations"];
   for (unsigned i = 0,
       n = static_cast<unsigned>(this->_internal_implementations_size()); i < n; i++) {
-    const auto& repfield = this->_internal_implementations(i);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    const auto& repfield = this->_internal_implementations().Get(i);
+    target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(15, repfield, repfield.GetCachedSize(), target, stream);
   }
 
   switch (final_variable_behavior_case()) {
     case kVariadic: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(16, _Internal::variadic(this),
           _Internal::variadic(this).GetCachedSize(), target, stream);
       break;
     }
     case kNormal: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(17, _Internal::normal(this),
           _Internal::normal(this).GetCachedSize(), target, stream);
       break;
     }
-    default: ;
+    default:
+      break;
   }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.FunctionSignature.Window)
   return target;
@@ -2819,43 +2639,40 @@ failure:
   total_size += 1UL * this->_internal_arguments_size();
   for (const auto& msg : this->_internal_arguments()) {
     total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+      ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
   }
-
   // repeated string name = 3 [json_name = "name"];
-  total_size += 1 * ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(_internal_name().size());
+  total_size += 1 * ::google::protobuf::internal::FromIntSize(_internal_name().size());
   for (int i = 0, n = _internal_name().size(); i < n; ++i) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
         _internal_name().Get(i));
   }
-
   // repeated .substrait.FunctionSignature.Implementation implementations = 15 [json_name = "implementations"];
   total_size += 1UL * this->_internal_implementations_size();
   for (const auto& msg : this->_internal_implementations()) {
     total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+      ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
   }
-
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000007u) {
     // .substrait.FunctionSignature.Description description = 4 [json_name = "description"];
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.description_);
     }
 
     // .substrait.DerivationExpression intermediate_type = 9 [json_name = "intermediateType"];
     if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.intermediate_type_);
     }
 
     // .substrait.DerivationExpression output_type = 10 [json_name = "outputType"];
     if (cached_has_bits & 0x00000004u) {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.output_type_);
     }
 
@@ -2891,14 +2708,14 @@ failure:
     // .substrait.FunctionSignature.FinalArgVariadic variadic = 16 [json_name = "variadic"];
     case kVariadic: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.final_variable_behavior_.variadic_);
       break;
     }
     // .substrait.FunctionSignature.FinalArgNormal normal = 17 [json_name = "normal"];
     case kNormal: {
       total_size += 2 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.final_variable_behavior_.normal_);
       break;
     }
@@ -2909,14 +2726,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData FunctionSignature_Window::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData FunctionSignature_Window::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     FunctionSignature_Window::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FunctionSignature_Window::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*FunctionSignature_Window::GetClassData() const { return &_class_data_; }
 
 
-void FunctionSignature_Window::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void FunctionSignature_Window::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<FunctionSignature_Window*>(&to_msg);
   auto& from = static_cast<const FunctionSignature_Window&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.FunctionSignature.Window)
@@ -2972,7 +2789,7 @@ void FunctionSignature_Window::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_ms
       break;
     }
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void FunctionSignature_Window::CopyFrom(const FunctionSignature_Window& from) {
@@ -2982,7 +2799,7 @@ void FunctionSignature_Window::CopyFrom(const FunctionSignature_Window& from) {
   MergeFrom(from);
 }
 
-bool FunctionSignature_Window::IsInitialized() const {
+PROTOBUF_NOINLINE bool FunctionSignature_Window::IsInitialized() const {
   return true;
 }
 
@@ -2990,11 +2807,10 @@ void FunctionSignature_Window::InternalSwap(FunctionSignature_Window* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  _internal_mutable_arguments()->InternalSwap(other->_internal_mutable_arguments());
-  _internal_mutable_name()->InternalSwap(
-      other->_internal_mutable_name());
-  _internal_mutable_implementations()->InternalSwap(other->_internal_mutable_implementations());
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  _impl_.arguments_.InternalSwap(&other->_impl_.arguments_);
+  _impl_.name_.InternalSwap(&other->_impl_.name_);
+  _impl_.implementations_.InternalSwap(&other->_impl_.implementations_);
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.max_set_)
       + sizeof(FunctionSignature_Window::_impl_.max_set_)
       - PROTOBUF_FIELD_OFFSET(FunctionSignature_Window, _impl_.description_)>(
@@ -3004,7 +2820,7 @@ void FunctionSignature_Window::InternalSwap(FunctionSignature_Window* other) {
   swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata FunctionSignature_Window::GetMetadata() const {
+::google::protobuf::Metadata FunctionSignature_Window::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2ffunction_2eproto_getter, &descriptor_table_substrait_2ffunction_2eproto_once,
       file_level_metadata_substrait_2ffunction_2eproto[4]);
@@ -3015,22 +2831,21 @@ class FunctionSignature_Description::_Internal {
  public:
 };
 
-FunctionSignature_Description::FunctionSignature_Description(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+FunctionSignature_Description::FunctionSignature_Description(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.FunctionSignature.Description)
 }
-FunctionSignature_Description::FunctionSignature_Description(const FunctionSignature_Description& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  FunctionSignature_Description* const _this = this; (void)_this;
+FunctionSignature_Description::FunctionSignature_Description(const FunctionSignature_Description& from) : ::google::protobuf::Message() {
+  FunctionSignature_Description* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.language_) {}
-
-    , decltype(_impl_.body_) {}
-
-    , /*decltype(_impl_._cached_size_)*/{}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_.language_){},
+      decltype(_impl_.body_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   _impl_.language_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.language_.Set("", GetArenaForAllocation());
@@ -3045,17 +2860,15 @@ FunctionSignature_Description::FunctionSignature_Description(const FunctionSigna
   if (!from._internal_body().empty()) {
     _this->_impl_.body_.Set(from._internal_body(), _this->GetArenaForAllocation());
   }
+
   // @@protoc_insertion_point(copy_constructor:substrait.FunctionSignature.Description)
 }
-
 inline void FunctionSignature_Description::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_.language_) {}
-
-    , decltype(_impl_.body_) {}
-
-    , /*decltype(_impl_._cached_size_)*/{}
+      decltype(_impl_.language_){},
+      decltype(_impl_.body_){},
+      /*decltype(_impl_._cached_size_)*/ {},
   };
   _impl_.language_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -3066,27 +2879,21 @@ inline void FunctionSignature_Description::SharedCtor(::_pb::Arena* arena) {
         _impl_.body_.Set("", GetArenaForAllocation());
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
-
 FunctionSignature_Description::~FunctionSignature_Description() {
   // @@protoc_insertion_point(destructor:substrait.FunctionSignature.Description)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void FunctionSignature_Description::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.language_.Destroy();
   _impl_.body_.Destroy();
 }
-
 void FunctionSignature_Description::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void FunctionSignature_Description::Clear() {
+PROTOBUF_NOINLINE void FunctionSignature_Description::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.FunctionSignature.Description)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -3094,85 +2901,83 @@ void FunctionSignature_Description::Clear() {
 
   _impl_.language_.ClearToEmpty();
   _impl_.body_.ClearToEmpty();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* FunctionSignature_Description::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // string language = 1 [json_name = "language"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_language();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "substrait.FunctionSignature.Description.language"));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // string body = 2 [json_name = "body"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          auto str = _internal_mutable_body();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "substrait.FunctionSignature.Description.body"));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
+const char* FunctionSignature_Description::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 0, 60, 2> FunctionSignature_Description::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_FunctionSignature_Description_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // string body = 2 [json_name = "body"];
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Description, _impl_.body_)}},
+    // string language = 1 [json_name = "language"];
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Description, _impl_.language_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string language = 1 [json_name = "language"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Description, _impl_.language_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string body = 2 [json_name = "body"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Description, _impl_.body_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+  }},
+  // no aux_entries
+  {{
+    "\47\10\4\0\0\0\0\0"
+    "substrait.FunctionSignature.Description"
+    "language"
+    "body"
+  }},
+};
 
 ::uint8_t* FunctionSignature_Description::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.FunctionSignature.Description)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string language = 1 [json_name = "language"];
   if (!this->_internal_language().empty()) {
     const std::string& _s = this->_internal_language();
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Description.language");
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Description.language");
     target = stream->WriteStringMaybeAliased(1, _s, target);
   }
 
   // string body = 2 [json_name = "body"];
   if (!this->_internal_body().empty()) {
     const std::string& _s = this->_internal_body();
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Description.body");
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Description.body");
     target = stream->WriteStringMaybeAliased(2, _s, target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.FunctionSignature.Description)
   return target;
@@ -3188,27 +2993,27 @@ failure:
 
   // string language = 1 [json_name = "language"];
   if (!this->_internal_language().empty()) {
-    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                     this->_internal_language());
   }
 
   // string body = 2 [json_name = "body"];
   if (!this->_internal_body().empty()) {
-    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                     this->_internal_body());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData FunctionSignature_Description::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData FunctionSignature_Description::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     FunctionSignature_Description::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FunctionSignature_Description::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*FunctionSignature_Description::GetClassData() const { return &_class_data_; }
 
 
-void FunctionSignature_Description::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void FunctionSignature_Description::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<FunctionSignature_Description*>(&to_msg);
   auto& from = static_cast<const FunctionSignature_Description&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.FunctionSignature.Description)
@@ -3222,7 +3027,7 @@ void FunctionSignature_Description::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& 
   if (!from._internal_body().empty()) {
     _this->_internal_set_body(from._internal_body());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void FunctionSignature_Description::CopyFrom(const FunctionSignature_Description& from) {
@@ -3232,7 +3037,7 @@ void FunctionSignature_Description::CopyFrom(const FunctionSignature_Description
   MergeFrom(from);
 }
 
-bool FunctionSignature_Description::IsInitialized() const {
+PROTOBUF_NOINLINE bool FunctionSignature_Description::IsInitialized() const {
   return true;
 }
 
@@ -3247,7 +3052,7 @@ void FunctionSignature_Description::InternalSwap(FunctionSignature_Description* 
                                        &other->_impl_.body_, rhs_arena);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata FunctionSignature_Description::GetMetadata() const {
+::google::protobuf::Metadata FunctionSignature_Description::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2ffunction_2eproto_getter, &descriptor_table_substrait_2ffunction_2eproto_once,
       file_level_metadata_substrait_2ffunction_2eproto[5]);
@@ -3258,22 +3063,21 @@ class FunctionSignature_Implementation::_Internal {
  public:
 };
 
-FunctionSignature_Implementation::FunctionSignature_Implementation(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+FunctionSignature_Implementation::FunctionSignature_Implementation(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.FunctionSignature.Implementation)
 }
-FunctionSignature_Implementation::FunctionSignature_Implementation(const FunctionSignature_Implementation& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  FunctionSignature_Implementation* const _this = this; (void)_this;
+FunctionSignature_Implementation::FunctionSignature_Implementation(const FunctionSignature_Implementation& from) : ::google::protobuf::Message() {
+  FunctionSignature_Implementation* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.uri_) {}
-
-    , decltype(_impl_.type_) {}
-
-    , /*decltype(_impl_._cached_size_)*/{}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_.uri_){},
+      decltype(_impl_.type_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   _impl_.uri_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.uri_.Set("", GetArenaForAllocation());
@@ -3282,43 +3086,35 @@ FunctionSignature_Implementation::FunctionSignature_Implementation(const Functio
     _this->_impl_.uri_.Set(from._internal_uri(), _this->GetArenaForAllocation());
   }
   _this->_impl_.type_ = from._impl_.type_;
+
   // @@protoc_insertion_point(copy_constructor:substrait.FunctionSignature.Implementation)
 }
-
 inline void FunctionSignature_Implementation::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_.uri_) {}
-
-    , decltype(_impl_.type_) { 0 }
-
-    , /*decltype(_impl_._cached_size_)*/{}
+      decltype(_impl_.uri_){},
+      decltype(_impl_.type_){0},
+      /*decltype(_impl_._cached_size_)*/ {},
   };
   _impl_.uri_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.uri_.Set("", GetArenaForAllocation());
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
-
 FunctionSignature_Implementation::~FunctionSignature_Implementation() {
   // @@protoc_insertion_point(destructor:substrait.FunctionSignature.Implementation)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void FunctionSignature_Implementation::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.uri_.Destroy();
 }
-
 void FunctionSignature_Implementation::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void FunctionSignature_Implementation::Clear() {
+PROTOBUF_NOINLINE void FunctionSignature_Implementation::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.FunctionSignature.Implementation)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -3326,64 +3122,61 @@ void FunctionSignature_Implementation::Clear() {
 
   _impl_.uri_.ClearToEmpty();
   _impl_.type_ = 0;
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* FunctionSignature_Implementation::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // .substrait.FunctionSignature.Implementation.Type type = 1 [json_name = "type"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 8)) {
-          ::int32_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-          _internal_set_type(static_cast<::substrait::FunctionSignature_Implementation_Type>(val));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // string uri = 2 [json_name = "uri"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          auto str = _internal_mutable_uri();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "substrait.FunctionSignature.Implementation.uri"));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
+const char* FunctionSignature_Implementation::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 0, 54, 2> FunctionSignature_Implementation::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_FunctionSignature_Implementation_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // string uri = 2 [json_name = "uri"];
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Implementation, _impl_.uri_)}},
+    // .substrait.FunctionSignature.Implementation.Type type = 1 [json_name = "type"];
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(FunctionSignature_Implementation, _impl_.type_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Implementation, _impl_.type_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .substrait.FunctionSignature.Implementation.Type type = 1 [json_name = "type"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Implementation, _impl_.type_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
+    // string uri = 2 [json_name = "uri"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Implementation, _impl_.uri_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+  }},
+  // no aux_entries
+  {{
+    "\52\0\3\0\0\0\0\0"
+    "substrait.FunctionSignature.Implementation"
+    "uri"
+  }},
+};
 
 ::uint8_t* FunctionSignature_Implementation::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.FunctionSignature.Implementation)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // .substrait.FunctionSignature.Implementation.Type type = 1 [json_name = "type"];
   if (this->_internal_type() != 0) {
@@ -3395,14 +3188,15 @@ failure:
   // string uri = 2 [json_name = "uri"];
   if (!this->_internal_uri().empty()) {
     const std::string& _s = this->_internal_uri();
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Implementation.uri");
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Implementation.uri");
     target = stream->WriteStringMaybeAliased(2, _s, target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.FunctionSignature.Implementation)
   return target;
@@ -3418,7 +3212,7 @@ failure:
 
   // string uri = 2 [json_name = "uri"];
   if (!this->_internal_uri().empty()) {
-    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                     this->_internal_uri());
   }
 
@@ -3431,14 +3225,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData FunctionSignature_Implementation::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData FunctionSignature_Implementation::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     FunctionSignature_Implementation::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FunctionSignature_Implementation::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*FunctionSignature_Implementation::GetClassData() const { return &_class_data_; }
 
 
-void FunctionSignature_Implementation::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void FunctionSignature_Implementation::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<FunctionSignature_Implementation*>(&to_msg);
   auto& from = static_cast<const FunctionSignature_Implementation&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.FunctionSignature.Implementation)
@@ -3452,7 +3246,7 @@ void FunctionSignature_Implementation::MergeImpl(::PROTOBUF_NAMESPACE_ID::Messag
   if (from._internal_type() != 0) {
     _this->_internal_set_type(from._internal_type());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void FunctionSignature_Implementation::CopyFrom(const FunctionSignature_Implementation& from) {
@@ -3462,7 +3256,7 @@ void FunctionSignature_Implementation::CopyFrom(const FunctionSignature_Implemen
   MergeFrom(from);
 }
 
-bool FunctionSignature_Implementation::IsInitialized() const {
+PROTOBUF_NOINLINE bool FunctionSignature_Implementation::IsInitialized() const {
   return true;
 }
 
@@ -3476,7 +3270,7 @@ void FunctionSignature_Implementation::InternalSwap(FunctionSignature_Implementa
   swap(_impl_.type_, other->_impl_.type_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata FunctionSignature_Implementation::GetMetadata() const {
+::google::protobuf::Metadata FunctionSignature_Implementation::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2ffunction_2eproto_getter, &descriptor_table_substrait_2ffunction_2eproto_once,
       file_level_metadata_substrait_2ffunction_2eproto[6]);
@@ -3494,67 +3288,59 @@ class FunctionSignature_Argument_ValueArgument::_Internal {
   }
 };
 
-const ::substrait::ParameterizedType&
-FunctionSignature_Argument_ValueArgument::_Internal::type(const FunctionSignature_Argument_ValueArgument* msg) {
+const ::substrait::ParameterizedType& FunctionSignature_Argument_ValueArgument::_Internal::type(const FunctionSignature_Argument_ValueArgument* msg) {
   return *msg->_impl_.type_;
 }
 void FunctionSignature_Argument_ValueArgument::clear_type() {
   if (_impl_.type_ != nullptr) _impl_.type_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-FunctionSignature_Argument_ValueArgument::FunctionSignature_Argument_ValueArgument(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+FunctionSignature_Argument_ValueArgument::FunctionSignature_Argument_ValueArgument(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.FunctionSignature.Argument.ValueArgument)
 }
-FunctionSignature_Argument_ValueArgument::FunctionSignature_Argument_ValueArgument(const FunctionSignature_Argument_ValueArgument& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  FunctionSignature_Argument_ValueArgument* const _this = this; (void)_this;
+FunctionSignature_Argument_ValueArgument::FunctionSignature_Argument_ValueArgument(const FunctionSignature_Argument_ValueArgument& from) : ::google::protobuf::Message() {
+  FunctionSignature_Argument_ValueArgument* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.type_){nullptr}
-    , decltype(_impl_.constant_) {}
+      decltype(_impl_._has_bits_){from._impl_._has_bits_},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.type_){nullptr},
+      decltype(_impl_.constant_){},
   };
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
     _this->_impl_.type_ = new ::substrait::ParameterizedType(*from._impl_.type_);
   }
   _this->_impl_.constant_ = from._impl_.constant_;
+
   // @@protoc_insertion_point(copy_constructor:substrait.FunctionSignature.Argument.ValueArgument)
 }
-
 inline void FunctionSignature_Argument_ValueArgument::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.type_){nullptr}
-    , decltype(_impl_.constant_) { false }
-
+      decltype(_impl_._has_bits_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.type_){nullptr},
+      decltype(_impl_.constant_){false},
   };
 }
-
 FunctionSignature_Argument_ValueArgument::~FunctionSignature_Argument_ValueArgument() {
   // @@protoc_insertion_point(destructor:substrait.FunctionSignature.Argument.ValueArgument)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void FunctionSignature_Argument_ValueArgument::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   if (this != internal_default_instance()) delete _impl_.type_;
 }
-
 void FunctionSignature_Argument_ValueArgument::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void FunctionSignature_Argument_ValueArgument::Clear() {
+PROTOBUF_NOINLINE void FunctionSignature_Argument_ValueArgument::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.FunctionSignature.Argument.ValueArgument)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -3567,68 +3353,63 @@ void FunctionSignature_Argument_ValueArgument::Clear() {
   }
   _impl_.constant_ = false;
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* FunctionSignature_Argument_ValueArgument::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // .substrait.ParameterizedType type = 1 [json_name = "type"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_type(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // bool constant = 2 [json_name = "constant"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
-          _impl_.constant_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* FunctionSignature_Argument_ValueArgument::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 1, 0, 2> FunctionSignature_Argument_ValueArgument::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument_ValueArgument, _impl_._has_bits_),
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_FunctionSignature_Argument_ValueArgument_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // bool constant = 2 [json_name = "constant"];
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(FunctionSignature_Argument_ValueArgument, _impl_.constant_), 63>(),
+     {16, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument_ValueArgument, _impl_.constant_)}},
+    // .substrait.ParameterizedType type = 1 [json_name = "type"];
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument_ValueArgument, _impl_.type_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .substrait.ParameterizedType type = 1 [json_name = "type"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument_ValueArgument, _impl_.type_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // bool constant = 2 [json_name = "constant"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument_ValueArgument, _impl_.constant_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType>()},
+  }}, {{
+  }},
+};
 
 ::uint8_t* FunctionSignature_Argument_ValueArgument::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.FunctionSignature.Argument.ValueArgument)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.ParameterizedType type = 1 [json_name = "type"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(1, _Internal::type(this),
         _Internal::type(this).GetCachedSize(), target, stream);
   }
@@ -3641,8 +3422,9 @@ failure:
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.FunctionSignature.Argument.ValueArgument)
   return target;
@@ -3660,7 +3442,7 @@ failure:
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
         *_impl_.type_);
   }
 
@@ -3672,14 +3454,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData FunctionSignature_Argument_ValueArgument::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData FunctionSignature_Argument_ValueArgument::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     FunctionSignature_Argument_ValueArgument::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FunctionSignature_Argument_ValueArgument::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*FunctionSignature_Argument_ValueArgument::GetClassData() const { return &_class_data_; }
 
 
-void FunctionSignature_Argument_ValueArgument::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void FunctionSignature_Argument_ValueArgument::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<FunctionSignature_Argument_ValueArgument*>(&to_msg);
   auto& from = static_cast<const FunctionSignature_Argument_ValueArgument&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.FunctionSignature.Argument.ValueArgument)
@@ -3694,7 +3476,7 @@ void FunctionSignature_Argument_ValueArgument::MergeImpl(::PROTOBUF_NAMESPACE_ID
   if (from._internal_constant() != 0) {
     _this->_internal_set_constant(from._internal_constant());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void FunctionSignature_Argument_ValueArgument::CopyFrom(const FunctionSignature_Argument_ValueArgument& from) {
@@ -3704,7 +3486,7 @@ void FunctionSignature_Argument_ValueArgument::CopyFrom(const FunctionSignature_
   MergeFrom(from);
 }
 
-bool FunctionSignature_Argument_ValueArgument::IsInitialized() const {
+PROTOBUF_NOINLINE bool FunctionSignature_Argument_ValueArgument::IsInitialized() const {
   return true;
 }
 
@@ -3712,7 +3494,7 @@ void FunctionSignature_Argument_ValueArgument::InternalSwap(FunctionSignature_Ar
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+  ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument_ValueArgument, _impl_.constant_)
       + sizeof(FunctionSignature_Argument_ValueArgument::_impl_.constant_)
       - PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument_ValueArgument, _impl_.type_)>(
@@ -3720,7 +3502,7 @@ void FunctionSignature_Argument_ValueArgument::InternalSwap(FunctionSignature_Ar
           reinterpret_cast<char*>(&other->_impl_.type_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata FunctionSignature_Argument_ValueArgument::GetMetadata() const {
+::google::protobuf::Metadata FunctionSignature_Argument_ValueArgument::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2ffunction_2eproto_getter, &descriptor_table_substrait_2ffunction_2eproto_once,
       file_level_metadata_substrait_2ffunction_2eproto[7]);
@@ -3738,62 +3520,56 @@ class FunctionSignature_Argument_TypeArgument::_Internal {
   }
 };
 
-const ::substrait::ParameterizedType&
-FunctionSignature_Argument_TypeArgument::_Internal::type(const FunctionSignature_Argument_TypeArgument* msg) {
+const ::substrait::ParameterizedType& FunctionSignature_Argument_TypeArgument::_Internal::type(const FunctionSignature_Argument_TypeArgument* msg) {
   return *msg->_impl_.type_;
 }
 void FunctionSignature_Argument_TypeArgument::clear_type() {
   if (_impl_.type_ != nullptr) _impl_.type_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-FunctionSignature_Argument_TypeArgument::FunctionSignature_Argument_TypeArgument(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+FunctionSignature_Argument_TypeArgument::FunctionSignature_Argument_TypeArgument(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.FunctionSignature.Argument.TypeArgument)
 }
-FunctionSignature_Argument_TypeArgument::FunctionSignature_Argument_TypeArgument(const FunctionSignature_Argument_TypeArgument& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  FunctionSignature_Argument_TypeArgument* const _this = this; (void)_this;
+FunctionSignature_Argument_TypeArgument::FunctionSignature_Argument_TypeArgument(const FunctionSignature_Argument_TypeArgument& from) : ::google::protobuf::Message() {
+  FunctionSignature_Argument_TypeArgument* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.type_){nullptr}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_._has_bits_){from._impl_._has_bits_},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.type_){nullptr},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
     _this->_impl_.type_ = new ::substrait::ParameterizedType(*from._impl_.type_);
   }
+
   // @@protoc_insertion_point(copy_constructor:substrait.FunctionSignature.Argument.TypeArgument)
 }
-
 inline void FunctionSignature_Argument_TypeArgument::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , decltype(_impl_.type_){nullptr}
+      decltype(_impl_._has_bits_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      decltype(_impl_.type_){nullptr},
   };
 }
-
 FunctionSignature_Argument_TypeArgument::~FunctionSignature_Argument_TypeArgument() {
   // @@protoc_insertion_point(destructor:substrait.FunctionSignature.Argument.TypeArgument)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void FunctionSignature_Argument_TypeArgument::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   if (this != internal_default_instance()) delete _impl_.type_;
 }
-
 void FunctionSignature_Argument_TypeArgument::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void FunctionSignature_Argument_TypeArgument::Clear() {
+PROTOBUF_NOINLINE void FunctionSignature_Argument_TypeArgument::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.FunctionSignature.Argument.TypeArgument)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -3805,66 +3581,65 @@ void FunctionSignature_Argument_TypeArgument::Clear() {
     _impl_.type_->Clear();
   }
   _impl_._has_bits_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* FunctionSignature_Argument_TypeArgument::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  _Internal::HasBits has_bits{};
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // .substrait.ParameterizedType type = 1 [json_name = "type"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_type(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  _impl_._has_bits_.Or(has_bits);
+const char* FunctionSignature_Argument_TypeArgument::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 1, 1, 0, 2> FunctionSignature_Argument_TypeArgument::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument_TypeArgument, _impl_._has_bits_),
+    0, // no _extensions_
+    1, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967294,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    1,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_FunctionSignature_Argument_TypeArgument_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // .substrait.ParameterizedType type = 1 [json_name = "type"];
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument_TypeArgument, _impl_.type_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .substrait.ParameterizedType type = 1 [json_name = "type"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument_TypeArgument, _impl_.type_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::ParameterizedType>()},
+  }}, {{
+  }},
+};
 
 ::uint8_t* FunctionSignature_Argument_TypeArgument::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.FunctionSignature.Argument.TypeArgument)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.ParameterizedType type = 1 [json_name = "type"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+    target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessage(1, _Internal::type(this),
         _Internal::type(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.FunctionSignature.Argument.TypeArgument)
   return target;
@@ -3882,21 +3657,21 @@ failure:
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
         *_impl_.type_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData FunctionSignature_Argument_TypeArgument::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData FunctionSignature_Argument_TypeArgument::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     FunctionSignature_Argument_TypeArgument::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FunctionSignature_Argument_TypeArgument::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*FunctionSignature_Argument_TypeArgument::GetClassData() const { return &_class_data_; }
 
 
-void FunctionSignature_Argument_TypeArgument::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void FunctionSignature_Argument_TypeArgument::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<FunctionSignature_Argument_TypeArgument*>(&to_msg);
   auto& from = static_cast<const FunctionSignature_Argument_TypeArgument&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.FunctionSignature.Argument.TypeArgument)
@@ -3908,7 +3683,7 @@ void FunctionSignature_Argument_TypeArgument::MergeImpl(::PROTOBUF_NAMESPACE_ID:
     _this->_internal_mutable_type()->::substrait::ParameterizedType::MergeFrom(
         from._internal_type());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void FunctionSignature_Argument_TypeArgument::CopyFrom(const FunctionSignature_Argument_TypeArgument& from) {
@@ -3918,7 +3693,7 @@ void FunctionSignature_Argument_TypeArgument::CopyFrom(const FunctionSignature_A
   MergeFrom(from);
 }
 
-bool FunctionSignature_Argument_TypeArgument::IsInitialized() const {
+PROTOBUF_NOINLINE bool FunctionSignature_Argument_TypeArgument::IsInitialized() const {
   return true;
 }
 
@@ -3929,7 +3704,7 @@ void FunctionSignature_Argument_TypeArgument::InternalSwap(FunctionSignature_Arg
   swap(_impl_.type_, other->_impl_.type_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata FunctionSignature_Argument_TypeArgument::GetMetadata() const {
+::google::protobuf::Metadata FunctionSignature_Argument_TypeArgument::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2ffunction_2eproto_getter, &descriptor_table_substrait_2ffunction_2eproto_once,
       file_level_metadata_substrait_2ffunction_2eproto[8]);
@@ -3940,54 +3715,47 @@ class FunctionSignature_Argument_EnumArgument::_Internal {
  public:
 };
 
-FunctionSignature_Argument_EnumArgument::FunctionSignature_Argument_EnumArgument(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+FunctionSignature_Argument_EnumArgument::FunctionSignature_Argument_EnumArgument(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.FunctionSignature.Argument.EnumArgument)
 }
-FunctionSignature_Argument_EnumArgument::FunctionSignature_Argument_EnumArgument(const FunctionSignature_Argument_EnumArgument& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  FunctionSignature_Argument_EnumArgument* const _this = this; (void)_this;
+FunctionSignature_Argument_EnumArgument::FunctionSignature_Argument_EnumArgument(const FunctionSignature_Argument_EnumArgument& from) : ::google::protobuf::Message() {
+  FunctionSignature_Argument_EnumArgument* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.options_){from._impl_.options_}
-    , decltype(_impl_.optional_) {}
-
-    , /*decltype(_impl_._cached_size_)*/{}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_.options_){from._impl_.options_},
+      decltype(_impl_.optional_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   _this->_impl_.optional_ = from._impl_.optional_;
+
   // @@protoc_insertion_point(copy_constructor:substrait.FunctionSignature.Argument.EnumArgument)
 }
-
 inline void FunctionSignature_Argument_EnumArgument::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_.options_){arena}
-    , decltype(_impl_.optional_) { false }
-
-    , /*decltype(_impl_._cached_size_)*/{}
+      decltype(_impl_.options_){arena},
+      decltype(_impl_.optional_){false},
+      /*decltype(_impl_._cached_size_)*/ {},
   };
 }
-
 FunctionSignature_Argument_EnumArgument::~FunctionSignature_Argument_EnumArgument() {
   // @@protoc_insertion_point(destructor:substrait.FunctionSignature.Argument.EnumArgument)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void FunctionSignature_Argument_EnumArgument::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   _internal_mutable_options()->~RepeatedPtrField();
 }
-
 void FunctionSignature_Argument_EnumArgument::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void FunctionSignature_Argument_EnumArgument::Clear() {
+PROTOBUF_NOINLINE void FunctionSignature_Argument_EnumArgument::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.FunctionSignature.Argument.EnumArgument)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -3995,74 +3763,67 @@ void FunctionSignature_Argument_EnumArgument::Clear() {
 
   _internal_mutable_options()->Clear();
   _impl_.optional_ = false;
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* FunctionSignature_Argument_EnumArgument::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // repeated string options = 1 [json_name = "options"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            auto str = _internal_add_options();
-            ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-            CHK_(ptr);
-            CHK_(::_pbi::VerifyUTF8(str, "substrait.FunctionSignature.Argument.EnumArgument.options"));
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // bool optional = 2 [json_name = "optional"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 16)) {
-          _impl_.optional_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
+const char* FunctionSignature_Argument_EnumArgument::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 0, 65, 2> FunctionSignature_Argument_EnumArgument::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_FunctionSignature_Argument_EnumArgument_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // bool optional = 2 [json_name = "optional"];
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(FunctionSignature_Argument_EnumArgument, _impl_.optional_), 63>(),
+     {16, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument_EnumArgument, _impl_.optional_)}},
+    // repeated string options = 1 [json_name = "options"];
+    {::_pbi::TcParser::FastUR1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument_EnumArgument, _impl_.options_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // repeated string options = 1 [json_name = "options"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument_EnumArgument, _impl_.options_), 0, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kUtf8String | ::_fl::kRepSString)},
+    // bool optional = 2 [json_name = "optional"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument_EnumArgument, _impl_.optional_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+  }},
+  // no aux_entries
+  {{
+    "\61\7\0\0\0\0\0\0"
+    "substrait.FunctionSignature.Argument.EnumArgument"
+    "options"
+  }},
+};
 
 ::uint8_t* FunctionSignature_Argument_EnumArgument::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.FunctionSignature.Argument.EnumArgument)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated string options = 1 [json_name = "options"];
   for (int i = 0, n = this->_internal_options_size(); i < n; ++i) {
-    const auto& s = this->_internal_options(i);
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-        s.data(), static_cast<int>(s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Argument.EnumArgument.options");
+    const auto& s = this->_internal_options().Get(i);
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+        s.data(), static_cast<int>(s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Argument.EnumArgument.options");
     target = stream->WriteString(1, s, target);
   }
 
@@ -4074,8 +3835,9 @@ failure:
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.FunctionSignature.Argument.EnumArgument)
   return target;
@@ -4090,12 +3852,11 @@ failure:
   (void) cached_has_bits;
 
   // repeated string options = 1 [json_name = "options"];
-  total_size += 1 * ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(_internal_options().size());
+  total_size += 1 * ::google::protobuf::internal::FromIntSize(_internal_options().size());
   for (int i = 0, n = _internal_options().size(); i < n; ++i) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
         _internal_options().Get(i));
   }
-
   // bool optional = 2 [json_name = "optional"];
   if (this->_internal_optional() != 0) {
     total_size += 2;
@@ -4104,14 +3865,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData FunctionSignature_Argument_EnumArgument::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData FunctionSignature_Argument_EnumArgument::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     FunctionSignature_Argument_EnumArgument::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FunctionSignature_Argument_EnumArgument::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*FunctionSignature_Argument_EnumArgument::GetClassData() const { return &_class_data_; }
 
 
-void FunctionSignature_Argument_EnumArgument::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void FunctionSignature_Argument_EnumArgument::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<FunctionSignature_Argument_EnumArgument*>(&to_msg);
   auto& from = static_cast<const FunctionSignature_Argument_EnumArgument&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.FunctionSignature.Argument.EnumArgument)
@@ -4123,7 +3884,7 @@ void FunctionSignature_Argument_EnumArgument::MergeImpl(::PROTOBUF_NAMESPACE_ID:
   if (from._internal_optional() != 0) {
     _this->_internal_set_optional(from._internal_optional());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void FunctionSignature_Argument_EnumArgument::CopyFrom(const FunctionSignature_Argument_EnumArgument& from) {
@@ -4133,20 +3894,18 @@ void FunctionSignature_Argument_EnumArgument::CopyFrom(const FunctionSignature_A
   MergeFrom(from);
 }
 
-bool FunctionSignature_Argument_EnumArgument::IsInitialized() const {
+PROTOBUF_NOINLINE bool FunctionSignature_Argument_EnumArgument::IsInitialized() const {
   return true;
 }
 
 void FunctionSignature_Argument_EnumArgument::InternalSwap(FunctionSignature_Argument_EnumArgument* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  _internal_mutable_options()->InternalSwap(
-      other->_internal_mutable_options());
-
-  swap(_impl_.optional_, other->_impl_.optional_);
+  _impl_.options_.InternalSwap(&other->_impl_.options_);
+        swap(_impl_.optional_, other->_impl_.optional_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata FunctionSignature_Argument_EnumArgument::GetMetadata() const {
+::google::protobuf::Metadata FunctionSignature_Argument_EnumArgument::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2ffunction_2eproto_getter, &descriptor_table_substrait_2ffunction_2eproto_once,
       file_level_metadata_substrait_2ffunction_2eproto[9]);
@@ -4162,26 +3921,23 @@ class FunctionSignature_Argument::_Internal {
   static const ::substrait::FunctionSignature_Argument_EnumArgument& enum_(const FunctionSignature_Argument* msg);
 };
 
-const ::substrait::FunctionSignature_Argument_ValueArgument&
-FunctionSignature_Argument::_Internal::value(const FunctionSignature_Argument* msg) {
+const ::substrait::FunctionSignature_Argument_ValueArgument& FunctionSignature_Argument::_Internal::value(const FunctionSignature_Argument* msg) {
   return *msg->_impl_.argument_kind_.value_;
 }
-const ::substrait::FunctionSignature_Argument_TypeArgument&
-FunctionSignature_Argument::_Internal::type(const FunctionSignature_Argument* msg) {
+const ::substrait::FunctionSignature_Argument_TypeArgument& FunctionSignature_Argument::_Internal::type(const FunctionSignature_Argument* msg) {
   return *msg->_impl_.argument_kind_.type_;
 }
-const ::substrait::FunctionSignature_Argument_EnumArgument&
-FunctionSignature_Argument::_Internal::enum_(const FunctionSignature_Argument* msg) {
+const ::substrait::FunctionSignature_Argument_EnumArgument& FunctionSignature_Argument::_Internal::enum_(const FunctionSignature_Argument* msg) {
   return *msg->_impl_.argument_kind_.enum__;
 }
 void FunctionSignature_Argument::set_allocated_value(::substrait::FunctionSignature_Argument_ValueArgument* value) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_argument_kind();
   if (value) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(value);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(value);
     if (message_arena != submessage_arena) {
-      value = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      value = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, value, submessage_arena);
     }
     set_has_value();
@@ -4190,13 +3946,13 @@ void FunctionSignature_Argument::set_allocated_value(::substrait::FunctionSignat
   // @@protoc_insertion_point(field_set_allocated:substrait.FunctionSignature.Argument.value)
 }
 void FunctionSignature_Argument::set_allocated_type(::substrait::FunctionSignature_Argument_TypeArgument* type) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_argument_kind();
   if (type) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(type);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(type);
     if (message_arena != submessage_arena) {
-      type = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      type = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, type, submessage_arena);
     }
     set_has_type();
@@ -4205,13 +3961,13 @@ void FunctionSignature_Argument::set_allocated_type(::substrait::FunctionSignatu
   // @@protoc_insertion_point(field_set_allocated:substrait.FunctionSignature.Argument.type)
 }
 void FunctionSignature_Argument::set_allocated_enum_(::substrait::FunctionSignature_Argument_EnumArgument* enum_) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
   clear_argument_kind();
   if (enum_) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(enum_);
+    ::google::protobuf::Arena* submessage_arena =
+      ::google::protobuf::Arena::InternalGetOwningArena(enum_);
     if (message_arena != submessage_arena) {
-      enum_ = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+      enum_ = ::google::protobuf::internal::GetOwnedMessage(
           message_arena, enum_, submessage_arena);
     }
     set_has_enum_();
@@ -4219,22 +3975,22 @@ void FunctionSignature_Argument::set_allocated_enum_(::substrait::FunctionSignat
   }
   // @@protoc_insertion_point(field_set_allocated:substrait.FunctionSignature.Argument.enum)
 }
-FunctionSignature_Argument::FunctionSignature_Argument(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+FunctionSignature_Argument::FunctionSignature_Argument(::google::protobuf::Arena* arena)
+    : ::google::protobuf::Message(arena) {
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.FunctionSignature.Argument)
 }
-FunctionSignature_Argument::FunctionSignature_Argument(const FunctionSignature_Argument& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  FunctionSignature_Argument* const _this = this; (void)_this;
+FunctionSignature_Argument::FunctionSignature_Argument(const FunctionSignature_Argument& from) : ::google::protobuf::Message() {
+  FunctionSignature_Argument* const _this = this;
+  (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.name_) {}
-
-    , decltype(_impl_.argument_kind_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , /*decltype(_impl_._oneof_case_)*/{}};
-
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+      decltype(_impl_.name_){},
+      decltype(_impl_.argument_kind_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_._oneof_case_)*/ {},
+  };
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
   _impl_.name_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
         _impl_.name_.Set("", GetArenaForAllocation());
@@ -4263,17 +4019,16 @@ FunctionSignature_Argument::FunctionSignature_Argument(const FunctionSignature_A
       break;
     }
   }
+
   // @@protoc_insertion_point(copy_constructor:substrait.FunctionSignature.Argument)
 }
-
 inline void FunctionSignature_Argument::SharedCtor(::_pb::Arena* arena) {
   (void)arena;
   new (&_impl_) Impl_{
-      decltype(_impl_.name_) {}
-
-    , decltype(_impl_.argument_kind_){}
-    , /*decltype(_impl_._cached_size_)*/{}
-    , /*decltype(_impl_._oneof_case_)*/{}
+      decltype(_impl_.name_){},
+      decltype(_impl_.argument_kind_){},
+      /*decltype(_impl_._cached_size_)*/ {},
+      /*decltype(_impl_._oneof_case_)*/ {},
   };
   _impl_.name_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -4281,16 +4036,11 @@ inline void FunctionSignature_Argument::SharedCtor(::_pb::Arena* arena) {
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   clear_has_argument_kind();
 }
-
 FunctionSignature_Argument::~FunctionSignature_Argument() {
   // @@protoc_insertion_point(destructor:substrait.FunctionSignature.Argument)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
+  _internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   SharedDtor();
 }
-
 inline void FunctionSignature_Argument::SharedDtor() {
   ABSL_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.name_.Destroy();
@@ -4298,7 +4048,6 @@ inline void FunctionSignature_Argument::SharedDtor() {
     clear_argument_kind();
   }
 }
-
 void FunctionSignature_Argument::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
@@ -4332,7 +4081,7 @@ void FunctionSignature_Argument::clear_argument_kind() {
 }
 
 
-void FunctionSignature_Argument::Clear() {
+PROTOBUF_NOINLINE void FunctionSignature_Argument::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.FunctionSignature.Argument)
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -4340,114 +4089,101 @@ void FunctionSignature_Argument::Clear() {
 
   _impl_.name_.ClearToEmpty();
   clear_argument_kind();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
-const char* FunctionSignature_Argument::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    ::uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // string name = 1 [json_name = "name"];
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_name();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "substrait.FunctionSignature.Argument.name"));
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.FunctionSignature.Argument.ValueArgument value = 2 [json_name = "value"];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 18)) {
-          ptr = ctx->ParseMessage(_internal_mutable_value(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.FunctionSignature.Argument.TypeArgument type = 3 [json_name = "type"];
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 26)) {
-          ptr = ctx->ParseMessage(_internal_mutable_type(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      // .substrait.FunctionSignature.Argument.EnumArgument enum = 4 [json_name = "enum"];
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_enum_(), ptr);
-          CHK_(ptr);
-        } else {
-          goto handle_unusual;
-        }
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
+const char* FunctionSignature_Argument::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
   return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
 }
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 4, 3, 49, 2> FunctionSignature_Argument::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    4, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967280,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    4,  // num_field_entries
+    3,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_FunctionSignature_Argument_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // string name = 1 [json_name = "name"];
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument, _impl_.name_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string name = 1 [json_name = "name"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument, _impl_.name_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // .substrait.FunctionSignature.Argument.ValueArgument value = 2 [json_name = "value"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument, _impl_.argument_kind_.value_), _Internal::kOneofCaseOffset + 0, 0,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.FunctionSignature.Argument.TypeArgument type = 3 [json_name = "type"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument, _impl_.argument_kind_.type_), _Internal::kOneofCaseOffset + 0, 1,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .substrait.FunctionSignature.Argument.EnumArgument enum = 4 [json_name = "enum"];
+    {PROTOBUF_FIELD_OFFSET(FunctionSignature_Argument, _impl_.argument_kind_.enum__), _Internal::kOneofCaseOffset + 0, 2,
+    (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::substrait::FunctionSignature_Argument_ValueArgument>()},
+    {::_pbi::TcParser::GetTable<::substrait::FunctionSignature_Argument_TypeArgument>()},
+    {::_pbi::TcParser::GetTable<::substrait::FunctionSignature_Argument_EnumArgument>()},
+  }}, {{
+    "\44\4\0\0\0\0\0\0"
+    "substrait.FunctionSignature.Argument"
+    "name"
+  }},
+};
 
 ::uint8_t* FunctionSignature_Argument::_InternalSerialize(
-    ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+    ::uint8_t* target,
+    ::google::protobuf::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:substrait.FunctionSignature.Argument)
   ::uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string name = 1 [json_name = "name"];
   if (!this->_internal_name().empty()) {
     const std::string& _s = this->_internal_name();
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Argument.name");
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "substrait.FunctionSignature.Argument.name");
     target = stream->WriteStringMaybeAliased(1, _s, target);
   }
 
   switch (argument_kind_case()) {
     case kValue: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(2, _Internal::value(this),
           _Internal::value(this).GetCachedSize(), target, stream);
       break;
     }
     case kType: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(3, _Internal::type(this),
           _Internal::type(this).GetCachedSize(), target, stream);
       break;
     }
     case kEnum: {
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      target = ::google::protobuf::internal::WireFormatLite::
         InternalWriteMessage(4, _Internal::enum_(this),
           _Internal::enum_(this).GetCachedSize(), target, stream);
       break;
     }
-    default: ;
+    default:
+      break;
   }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:substrait.FunctionSignature.Argument)
   return target;
@@ -4463,7 +4199,7 @@ failure:
 
   // string name = 1 [json_name = "name"];
   if (!this->_internal_name().empty()) {
-    total_size += 1 + ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                     this->_internal_name());
   }
 
@@ -4471,21 +4207,21 @@ failure:
     // .substrait.FunctionSignature.Argument.ValueArgument value = 2 [json_name = "value"];
     case kValue: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.argument_kind_.value_);
       break;
     }
     // .substrait.FunctionSignature.Argument.TypeArgument type = 3 [json_name = "type"];
     case kType: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.argument_kind_.type_);
       break;
     }
     // .substrait.FunctionSignature.Argument.EnumArgument enum = 4 [json_name = "enum"];
     case kEnum: {
       total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
           *_impl_.argument_kind_.enum__);
       break;
     }
@@ -4496,14 +4232,14 @@ failure:
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData FunctionSignature_Argument::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+const ::google::protobuf::Message::ClassData FunctionSignature_Argument::_class_data_ = {
+    ::google::protobuf::Message::CopyWithSourceCheck,
     FunctionSignature_Argument::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FunctionSignature_Argument::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*FunctionSignature_Argument::GetClassData() const { return &_class_data_; }
 
 
-void FunctionSignature_Argument::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+void FunctionSignature_Argument::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<FunctionSignature_Argument*>(&to_msg);
   auto& from = static_cast<const FunctionSignature_Argument&>(from_msg);
   // @@protoc_insertion_point(class_specific_merge_from_start:substrait.FunctionSignature.Argument)
@@ -4534,7 +4270,7 @@ void FunctionSignature_Argument::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_
       break;
     }
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void FunctionSignature_Argument::CopyFrom(const FunctionSignature_Argument& from) {
@@ -4544,7 +4280,7 @@ void FunctionSignature_Argument::CopyFrom(const FunctionSignature_Argument& from
   MergeFrom(from);
 }
 
-bool FunctionSignature_Argument::IsInitialized() const {
+PROTOBUF_NOINLINE bool FunctionSignature_Argument::IsInitialized() const {
   return true;
 }
 
@@ -4559,7 +4295,7 @@ void FunctionSignature_Argument::InternalSwap(FunctionSignature_Argument* other)
   swap(_impl_._oneof_case_[0], other->_impl_._oneof_case_[0]);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata FunctionSignature_Argument::GetMetadata() const {
+::google::protobuf::Metadata FunctionSignature_Argument::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2ffunction_2eproto_getter, &descriptor_table_substrait_2ffunction_2eproto_once,
       file_level_metadata_substrait_2ffunction_2eproto[10]);
@@ -4570,26 +4306,27 @@ class FunctionSignature::_Internal {
  public:
 };
 
-FunctionSignature::FunctionSignature(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena) {
+FunctionSignature::FunctionSignature(::google::protobuf::Arena* arena)
+    : ::google::protobuf::internal::ZeroFieldsBase(arena) {
   // @@protoc_insertion_point(arena_constructor:substrait.FunctionSignature)
 }
-FunctionSignature::FunctionSignature(const FunctionSignature& from)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
-  FunctionSignature* const _this = this; (void)_this;
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+FunctionSignature::FunctionSignature(const FunctionSignature& from) : ::google::protobuf::internal::ZeroFieldsBase() {
+  FunctionSignature* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+
   // @@protoc_insertion_point(copy_constructor:substrait.FunctionSignature)
 }
 
 
 
 
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData FunctionSignature::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
+const ::google::protobuf::Message::ClassData FunctionSignature::_class_data_ = {
+    ::google::protobuf::internal::ZeroFieldsBase::CopyImpl,
+    ::google::protobuf::internal::ZeroFieldsBase::MergeImpl,
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FunctionSignature::GetClassData() const { return &_class_data_; }
+const ::google::protobuf::Message::ClassData*FunctionSignature::GetClassData() const { return &_class_data_; }
 
 
 
@@ -4597,62 +4334,16 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FunctionSignature::GetClassDat
 
 
 
-::PROTOBUF_NAMESPACE_ID::Metadata FunctionSignature::GetMetadata() const {
+::google::protobuf::Metadata FunctionSignature::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_substrait_2ffunction_2eproto_getter, &descriptor_table_substrait_2ffunction_2eproto_once,
       file_level_metadata_substrait_2ffunction_2eproto[11]);
 }
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace substrait
-PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::substrait::FunctionSignature_FinalArgVariadic*
-Arena::CreateMaybeMessage< ::substrait::FunctionSignature_FinalArgVariadic >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::FunctionSignature_FinalArgVariadic >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::FunctionSignature_FinalArgNormal*
-Arena::CreateMaybeMessage< ::substrait::FunctionSignature_FinalArgNormal >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::FunctionSignature_FinalArgNormal >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::FunctionSignature_Scalar*
-Arena::CreateMaybeMessage< ::substrait::FunctionSignature_Scalar >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::FunctionSignature_Scalar >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::FunctionSignature_Aggregate*
-Arena::CreateMaybeMessage< ::substrait::FunctionSignature_Aggregate >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::FunctionSignature_Aggregate >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::FunctionSignature_Window*
-Arena::CreateMaybeMessage< ::substrait::FunctionSignature_Window >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::FunctionSignature_Window >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::FunctionSignature_Description*
-Arena::CreateMaybeMessage< ::substrait::FunctionSignature_Description >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::FunctionSignature_Description >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::FunctionSignature_Implementation*
-Arena::CreateMaybeMessage< ::substrait::FunctionSignature_Implementation >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::FunctionSignature_Implementation >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::FunctionSignature_Argument_ValueArgument*
-Arena::CreateMaybeMessage< ::substrait::FunctionSignature_Argument_ValueArgument >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::FunctionSignature_Argument_ValueArgument >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::FunctionSignature_Argument_TypeArgument*
-Arena::CreateMaybeMessage< ::substrait::FunctionSignature_Argument_TypeArgument >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::FunctionSignature_Argument_TypeArgument >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::FunctionSignature_Argument_EnumArgument*
-Arena::CreateMaybeMessage< ::substrait::FunctionSignature_Argument_EnumArgument >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::FunctionSignature_Argument_EnumArgument >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::FunctionSignature_Argument*
-Arena::CreateMaybeMessage< ::substrait::FunctionSignature_Argument >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::FunctionSignature_Argument >(arena);
-}
-template<> PROTOBUF_NOINLINE ::substrait::FunctionSignature*
-Arena::CreateMaybeMessage< ::substrait::FunctionSignature >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::substrait::FunctionSignature >(arena);
-}
-PROTOBUF_NAMESPACE_CLOSE
+namespace google {
+namespace protobuf {
+}  // namespace protobuf
+}  // namespace google
 // @@protoc_insertion_point(global_scope)
 #include "google/protobuf/port_undef.inc"
