@@ -22,7 +22,6 @@ _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'substrait.algebra_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
-
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'\n\rcom.substraitB\014AlgebraProtoP\001Z*github.com/substrait-io/substrait-go/proto\242\002\003SXX\252\002\tSubstrait\312\002\tSubstrait\342\002\025Substrait\\GPBMetadata\352\002\tSubstrait'
   _EXPRESSION_ENUM_EMPTY._options = None

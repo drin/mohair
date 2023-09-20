@@ -20,7 +20,6 @@ _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'substrait.extensions.extensions_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
-
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'\n\030com.substrait.extensionsB\017ExtensionsProtoP\001Z5github.com/substrait-io/substrait-go/proto/extensions\242\002\003SEX\252\002\024Substrait.Extensions\312\002\024Substrait\\Extensions\342\002 Substrait\\Extensions\\GPBMetadata\352\002\025Substrait::Extensions'
   _globals['_SIMPLEEXTENSIONURI']._serialized_start=90
