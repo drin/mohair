@@ -68,3 +68,29 @@ unique_ptr<PlanRel> SubstraitPlanFromFile(fstream *plan_fstream) {
   std::cerr << "Failed to parse substrait plan" << std::endl;
   return nullptr;
 }
+
+namespace mohair {
+
+  // >> Convenience Functions
+  /** Simple function to print a string literal and an arrow status. */
+  void PrintError(const char *msg, const Status arrow_status) {
+      std::cerr << msg                             << std::endl
+                << "\t" << arrow_status.ToString() << std::endl
+      ;
+  }
+
+  /**
+   * Join each string in a vector using a given delimiter string literal.
+   */
+  string JoinStr(vector<string> str_parts, const char *delim) {
+    stringstream join_stream;
+
+    join_stream << str_parts[0];
+    for (size_t ndx = 1; ndx < str_parts.size(); ++ndx) {
+      join_stream << delim << str_parts[ndx];
+    }
+
+    return join_stream.str();
+  }
+
+} // namespace: mohair
