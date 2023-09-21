@@ -10,9 +10,10 @@ project('mohair-faodel'
 
 
 # >> dependencies
+dep_arrow  = dependency('arrow-substrait')
 dep_ompi   = dependency('ompi-cxx')
 dep_faodel = dependency('faodel')
-dep_arrow  = dependency('arrow')
+# dep_fado   = dependency('faodel-arrow')
 
 #   |> protobuf dependencies?
 dep_proto   = dependency('protobuf')
@@ -42,6 +43,9 @@ cpp_coredir   = cpp_srcdir / 'mohair'
 
 # dir for adapters (execution engines)
 cpp_enginedir = cpp_srcdir / 'engines'
+
+# dir for flight services
+cpp_servicedir = cpp_srcdir / 'services'
 
 # dir for binary sources (1-1 with binaries)
 cpp_tooldir   = cpp_srcdir / 'toolbox'
@@ -81,25 +85,22 @@ substrait_srclist = [
 mohair_hdrlist = (
     substrait_hdrlist
   + [
-     cpp_headerdir / 'arrow.hpp'
-    ,cpp_headerdir / 'faodel.hpp'
+     cpp_headerdir / 'arrow_deps.hpp'
+    ,cpp_headerdir / 'adapter_faodel.hpp'
   ]
 )
 
 mohair_srclist = (
     substrait_srclist
   + [
-     cpp_enginedir /    'faodel.cpp'
-    ,cpp_enginedir /     'acero.cpp'
-    ,cpp_coredir   /      'util.cpp'
-    ,cpp_coredir   / 'operators.cpp'
-    ,cpp_coredir   /     'plans.cpp'
-  ]
+       cpp_enginedir /    'faodel.cpp'
+      ,cpp_enginedir /     'acero.cpp'
+      ,cpp_enginedir / 'execution.cpp'
+      ,cpp_coredir   /      'util.cpp'
+      ,cpp_coredir   / 'operators.cpp'
+      ,cpp_coredir   /     'plans.cpp'
+    ]
 )
-
-# >> For faodel testing binary
-#   |> include dirs and source list
-faodel_srclist = [cpp_enginedir / 'faodel.cpp']
 
 
 # ------------------------------
@@ -136,15 +137,16 @@ mohair_bin = executable('mohair'
   ,install            : false
 )
 
-# >> Executable for faodel testing binary
-testfaodel_binsources = (
-    [ cpp_tooldir / 'test-faodel.cpp' ]
-  + faodel_srclist
+# >> Executable for faodel flight service
+faodelserver_binsources = (
+    [ cpp_tooldir / 'faodel-service.cpp' ]
+  + mohair_srclist
+  + [ cpp_servicedir / 'faodel.cpp' ]
 )
 
-test_faodel = executable('test-faodel'
-  ,testfaodel_binsources
-  ,dependencies       : [dep_ompi, dep_faodel, dep_arrow]
+faodelserver_bin = executable('faodel-service'
+  ,mohair_binsources
+  ,dependencies       : [dep_ompi, dep_faodel, dep_arrow, dep_proto, dep_absllog ]
   ,include_directories: cpp_headerdir
   ,install            : false
 )
