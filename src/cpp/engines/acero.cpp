@@ -19,18 +19,12 @@
 // ------------------------------
 // Dependencies
 
-#include "../headers/arrow.hpp"
+#include "../headers/arrow_deps.hpp"
 
 
 // ------------------------------
 // Classes and Functions
 
 namespace mohair::adapters {
-
-  /*
-  SubstraitPlan FromMessageBytes(const uint8_t *data, int64_t size) {
-    return NULL;
-  }
-  */
 
 } // mohair::adapters
