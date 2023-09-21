@@ -20,25 +20,9 @@ using std::endl;
 
 
 // ------------------------------
-// Module variables
-
-
-// ------------------------------
 // Classes and Functions
 
 // >> Convenience functions
-string JoinStr(vector<string> str_parts, const char *delim) {
-  stringstream join_stream;
-
-  join_stream << str_parts[0];
-  for (int ndx = 1; ndx < str_parts.size(); ++ndx) {
-    join_stream << delim << str_parts[ndx];
-  }
-
-  return std::move(join_stream.str());
-}
-
-
 namespace mohair::adapters {
 
   // >> Static functions (not part of a class or struct)
@@ -59,64 +43,6 @@ namespace mohair::adapters {
     ;
 
     return config_ss.str();
-  }
-
-
-  /**
-   * Convenience higher-order function that returns a `NamedTableProvider`.
-   *
-   * A NamedTableProvider is a function that takes 2 parameters and returns a
-   * `Declaration`.
-   *
-   * The 2 parameters describe a requested table:
-   *  - a decomposed table name (vector<string> that represents a single table)
-   *  - a table schema
-   *
-   * The resulting Declaration describes a Source Node for a query plan.
-   */
-  NamedTableProvider ProviderForFadoMap(map<KelpKey, LunaDO> &fado_map) {
-    /**
-     * A lambda that captures the given fado_map by reference and takes two parameters:
-     *  - tname  : a vector of strings that collectively make up a single table name
-     *  - tschema: an expected schema of the table, only used with early binding
-     */
-    return [&fado_map]( const vector<string> &tname
-                       ,const Schema         &tschema) -> Result<Declaration> {
-
-      // gather the parts of the table name
-      auto requested_tname = JoinStr(tname, ".");
-
-      // lookup the name in the fado_map, store entry into a structured binding
-      if (not fado_map.contains(requested_tname)) {
-        return arrow::Status::KeyError(
-           "Fado table provider could not find table: [", requested_tname, "]"
-        );
-      }
-
-      // wrap the lunasa data object in a faodel arrow data object
-      auto [&key_name, &key_val] = fado_map[requested_tname];
-      ArrowDO fado { key_val };
-
-      vector<shared_ptr<Table>> fado_chunks;
-      fado_chunks.reserve(fado.NumberOfTables());
-
-      // extract each table from the data object (also called chunks)
-      for (int table_ndx = 0; table_ndx < fado.NumberOfTables(); ++table_ndx) {
-        ARROW_ASSIGN_OR_RAISE(auto fado_chunk, fado.ExtractTable(table_index));
-        fado_chunks.push_back(fado_chunk);
-      }
-
-      // concatenate into a single table which we wrap in a Declaration
-      // the Declaration essentially represents a scan node
-      ARROW_ASSIGN_OR_RAISE(auto fado_as_table, arrow::ConcatenateTables(fado_chunks));
-      auto options = arrow::acero::TableSourceNodeOptions(std::move(fado_as_table));
-
-      return Declaration<TableSourceNodeOptions>(
-         "table_source"
-        ,TableSourceNodeOptions { std::move(fado_as_table) }
-        ,requested_tname
-      );
-    };
   }
   
 
@@ -219,7 +145,7 @@ namespace mohair::adapters {
    * approach is for transitional purposes.
    */
   NamedTableProvider Faodel::FadoTableProvider() {
-    return ProviderForFadoMap(this->fado_map);
+    return mohair::adapters::ProviderForFadoMap(this->fado_map);
   }
 
   // end of Faodel class functions

@@ -8,33 +8,31 @@
 
 // ------------------------------
 // Dependencies
+#pragma once
+
+// >> Internal libs
+#include "mohair.hpp"
 
 // >> Standard libs
-#include <functional>
-#include <memory>
-#include <string>
-#include <sstream>
-#include <iostream>
-
-#include <vector>
 #include <map>
 
 // >> Third-party libs
 #include <mpi.h>
 
-#include "faodel/faodel-common/Common.hh"
-#include "faodel/faodel-services/MPISyncStart.hh"
-#include "faodel/lunasa/common/Helpers.hh"
-#include "faodel/kelpie/Kelpie.hh"
+//  |> Core faodel and MPI interface
+#include <faodel/faodel-services/MPISyncStart.hh>
+#include <faodel/faodel-common/Common.hh>
+#include <faodel/faodel-common/FaodelTypes.hh>
 
-// >> Internal libs
-#include "arrow.hpp"
+//  |> Faodel "plugins" (kelpie, faodel-arrow, etc.)
+#include <faodel/lunasa/common/Helpers.hh>
+
+#include <faodel/kelpie/Kelpie.hh>
+#include <faodel-arrow/ArrowDataObject.hh>
 
 
 // >> Type Aliases
 //  |> Types from standard lib
-using std::string;
-using std::vector;
 using std::map;
 
 //  |> common Faodel types
@@ -47,9 +45,6 @@ using ArrowDO = faodel::ArrowDataObject;
 //      core types
 using FaoBucket = faodel::bucket_t;
 using FaoStatus = faodel::rc_t;
-
-using kelpie::KELPIE_OK;
-
 
 
 // ------------------------------
@@ -64,7 +59,13 @@ namespace mohair::adapters {
   void BootstrapServices(string &faodel_config);
   void PrintStringObj(const string print_msg, const string string_obj);
 
+  // Functions to support interfacing with Acero and other execution engines
   NamedTableProvider ProviderForFadoMap(map<KelpKey, LunaDO> &fado_map);
+  FaoStatus ExecuteSubstrait(        FaoBucket       b
+                              ,const KelpKey         k
+                              ,const string         &args
+                              ,map<KelpKey, LunaDO>  fado_map
+                              ,LunaDO               *ext_ldo);
 
   struct Faodel {
     // state for managing faodel
@@ -97,3 +98,55 @@ namespace mohair::adapters {
   };
 
 } // namespace mohair::adapters
+
+
+namespace mohair::services {
+
+  // >> Convenience functions
+  Result<Location> default_location();
+
+  // >> Classes
+  struct FaodelService : public FlightServerBase {
+    mohair::adapters::Faodel faodel_if;
+
+    Status Init(const FlightServerOptions &options);
+
+    FlightInfo MakeFlightInfo();
+
+    Status ListFlights( const ServerCallContext   &context
+                       ,const Criteria            *criteria
+                       ,unique_ptr<FlightListing> *listings) override;
+
+    Status GetFlightInfo( const ServerCallContext &context
+                         ,const FlightDescriptor  &request
+                         ,unique_ptr<FlightInfo>  *info);
+
+    Status GetSchema( const ServerCallContext  &context
+                     ,const FlightDescriptor   &request
+                     ,unique_ptr<SchemaResult> *schema);
+
+    Status DoExchange( const ServerCallContext         &context
+                      ,unique_ptr<FlightMessageReader>  reader
+                      ,unique_ptr<FlightMessageWriter>  writer);
+
+    Status DoPut( const ServerCallContext          &context
+                 ,unique_ptr<FlightMessageReader>   reader
+                 ,unique_ptr<FlightMetadataWriter>  writer);
+
+    Status DoGet( const ServerCallContext         &context
+                 ,const Ticket                    &request
+                 ,unique_ptr<FlightMessageWriter>  writer);
+
+    Status DoAction( const ServerCallContext  &context
+                    ,const Action             &action
+                    ,unique_ptr<ResultStream> *result);
+
+    Status ActionQuery( const ServerCallContext  &context
+                       ,shared_ptr<Buffer>       &plan_msg
+                       ,unique_ptr<ResultStream> *result);
+
+    Status ActionUnknown(const ServerCallContext &context, string &action_type);
+
+  };
+
+} // namespace: mohair::services
