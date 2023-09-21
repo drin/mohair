@@ -18,24 +18,27 @@
 
 // ------------------------------
 // Dependencies
+#pragma once
 
 // >> Common Arrow deps
 #include <arrow/api.h>
 
-// >> Acero specific deps
-//    |> Mostly substrait dependencies
+// >> Acero deps
 #include <arrow/engine/api.h>
 
-//    |> Acero dependencies
-//    |> NOTE: arrow/acero/api.h is in 13.0.0 (dev) but not 12.0.1 (stable)
-//    |> TODO: this should handle version differences with macros
+//  |> NOTE: arrow/acero/api.h is in 13.0.0 (dev) but not 12.0.1 (stable)
+//  |> TODO: this should handle version differences with macros
 // #include <arrow/acero/api.h>
 #include <arrow/acero/exec_plan.h>
 #include <arrow/acero/options.h>
 
+// >> Flight deps
+#include <arrow/flight/api.h>
+
 // >> Type Aliases
 //    |> Common Arrow type aliases
 using arrow::Result;
+using arrow::Status;
 
 using arrow::Buffer;
 using arrow::Table;
@@ -51,25 +54,24 @@ using arrow::engine::ExtensionSet;
 
 using arrow::acero::Declaration;
 using arrow::acero::TableSourceNodeOptions;
+using arrow::acero::QueryOptions;
 
+//    |> Flight type aliases
+using arrow::flight::FlightServerBase;
+using arrow::flight::FlightServerOptions;
 
-// ------------------------------
-// Classes and Functions
+using arrow::flight::FlightMessageReader;
+using arrow::flight::FlightMessageWriter;
+using arrow::flight::FlightMetadataWriter;
+using arrow::flight::SchemaResult;
+using arrow::flight::ResultStream;
 
-namespace mohair::adapters {
+using arrow::flight::FlightInfo;
+using arrow::flight::FlightListing;
 
-  // TODO: use the following for simple execution
-  //  Result<std::shared_ptr<RecordBatchReader>> ExecuteSerializedPlan(
-  //     const Buffer& substrait_buffer
-  //    ,const ExtensionIdRegistry* registry
-  //    ,compute::FunctionRegistry* func_registry
-  //    ,const ConversionOptions& conversion_options
-  //    ,bool use_threads
-  //    ,MemoryPool* memory_pool
-  //  )
-  struct SubstraitPlan {
-  };
-
-  SubstraitPlan FromMessageBytes(const uint8_t *data, int64_t size);
-
-} // mohair::adapters
+using arrow::flight::ServerCallContext;
+using arrow::flight::Criteria;
+using arrow::flight::FlightDescriptor;
+using arrow::flight::Ticket;
+using arrow::flight::Location;
+using arrow::flight::Action;

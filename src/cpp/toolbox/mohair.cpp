@@ -10,7 +10,7 @@
 // Dependencies
 
 #include "../headers/mohair.hpp"
-#include "../headers/faodel.hpp"
+#include "../headers/adapter_faodel.hpp"
 
 #include "../mohair/util.hpp"
 
@@ -56,27 +56,20 @@ int StringForSubstrait(unique_ptr<PlanRel> &substrait_plan, string *plan_text) {
   return 0;
 }
 
-/**
- * A function that represents the "main execution core" of a query engine in Faodel.
- *
- * This function includes logic for receiving a substrait query, executing the query, and
- * then returning the results of query execution. The execution of the query is
- * implemented as a separate function that is registered with Kelpie and is called in this
- * function.
- */
-void QueryEngineMain() {
-  // TODO
-}
-
 int ExecWithFaodel(int argc, char **argv, unique_ptr<PlanRel> substrait_plan) {
-  Faodel faodel_adapter;
+  mohair::adapters::Faodel faodel_adapter;
 
+  // bootstrap and display configuration
   faodel_adapter.BootstrapWithKelpie(argc, argv);
   faodel_adapter.PrintMPIInfo();
 
+  // register a compute function with kelpie
+  kelpie::RegisterComputeFunction("ExecuteWithAcero", mohair::adapters::ExecuteSubstrait);
+
+  // TODO:
   // execute `sample_fn` on rank 0
   // this also adds barriers around the lambda
-  faodel_adapter.FencedRankFn(/*mpi_rank==*/0, QueryEngineMain());
+  // faodel_adapter.FencedRankFn(/*mpi_rank==*/0, QueryEngineMain());
 
   faodel_adapter.Finish();
 
@@ -110,7 +103,7 @@ int main(int argc, char **argv) {
   ;
 
   // Delegate faodel work
-  // return ExecWithFaodel(argc, argv, std::move(substrait_plan));
+  return ExecWithFaodel(argc, argv, std::move(substrait_plan));
 
   return 0;
 }
