@@ -21,10 +21,19 @@
 #pragma once
 
 // >> Standard libs
+#include <functional>
 #include <memory>
+
+#include <string>
 #include <iostream>
 
+#include <vector>
+
 // >> Internal libs
+
+//  |> all arrow dependencies and aliases
+#include "arrow_deps.hpp"
+
 //  |> generated protobuf code
 #include "../mohair/substrait/algebra.pb.h"
 #include "../mohair/substrait/plan.pb.h"
@@ -37,6 +46,7 @@ using std::shared_ptr;
 using std::unique_ptr;
 
 using std::string;
+using std::vector;
 
 //  |> For substrait
 using substrait::PlanRel;
@@ -134,11 +144,8 @@ namespace mohair {
    */
   struct EnginePlan : QueryPlan {};
 
-
-  // ------------------------------
-  // Translation Functions
+  // >> Translation Functions
   unique_ptr<QueryOp>    MohairFrom(Rel *rel_msg);
   unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<QueryOp> &mohair_op);
-
 
 } // namespace: mohair

@@ -23,6 +23,7 @@
 // >> Standard libs
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 // >> Internal libs
 #include "../headers/mohair.hpp"
@@ -31,6 +32,7 @@
 // >> Type Aliases
 using std::string;
 using std::fstream;
+using std::stringstream;
 
 
 // ------------------------------
@@ -41,3 +43,14 @@ bool    FileToString(const char *in_fpath, string &file_data);
 
 unique_ptr<PlanRel> SubstraitPlanFromString(string &plan_msg);
 unique_ptr<PlanRel> SubstraitPlanFromFile(fstream *plan_fstream);
+
+
+namespace mohair {
+
+  // >> Convenience Functions
+  string JoinStr(vector<string> str_parts, const char *delim);
+
+  // >> Debugging Functions
+  void PrintError(const char *msg, const Status arrow_status);
+
+} // namespace: mohair
