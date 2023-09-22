@@ -21,14 +21,13 @@
 #pragma once
 
 //  >> Internal libs
+#include "mohair.hpp"
+
 //    |> generated protobuf code
 #include "substrait/algebra.pb.h"
 #include "substrait/plan.pb.h"
 
 #include "mohair/algebra.pb.h"
-
-//  >> Internal libs
-#include "mohair.hpp"
 
 
 // ------------------------------
@@ -43,21 +42,7 @@ using mohair::ErrRel;
 
 
 // ------------------------------
-// Functions and Classes
-
-//  >> Functions
-namespace mohair {
-
-  // >> Reader Functions
-  unique_ptr<PlanRel> SubstraitPlanFromString(string &plan_msg);
-  unique_ptr<PlanRel> SubstraitPlanFromFile(fstream *plan_fstream);
-
-  // >> Translation Functions
-  unique_ptr<QueryOp>    MohairFrom(Rel *rel_msg);
-  unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<QueryOp> &mohair_op);
-
-} // namespace: mohair
-
+// Classes and Functions
 
 //  >> Classes and Methods
 namespace mohair {
@@ -145,5 +130,19 @@ namespace mohair {
    * engine would produce and execute.
    */
   struct EnginePlan : QueryPlan {};
+
+} // namespace: mohair
+
+
+//  >> Functions
+namespace mohair {
+
+  // >> Reader Functions
+  unique_ptr<PlanRel> SubstraitPlanFromString(string &plan_msg);
+  unique_ptr<PlanRel> SubstraitPlanFromFile(fstream *plan_fstream);
+
+  // >> Translation Functions
+  unique_ptr<QueryOp>    MohairFrom(Rel *rel_msg);
+  unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<QueryOp> &mohair_op);
 
 } // namespace: mohair

@@ -20,6 +20,9 @@
 // Dependencies
 #pragma once
 
+//  >> Internal libs
+#include "../mohair/mohair.hpp"
+
 //  >> Acero deps
 #include <arrow/engine/api.h>
 

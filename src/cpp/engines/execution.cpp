@@ -9,8 +9,7 @@
 // ------------------------------
 // Dependencies
 
-#include "../headers/adapter_faodel.hpp"
-#include "../mohair/util.hpp"
+#include "adapter_faodel.hpp"
 
 
 // ------------------------------

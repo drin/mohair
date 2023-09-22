@@ -9,10 +9,9 @@
 // ------------------------------
 // Dependencies
 
-#include "../headers/mohair.hpp"
-#include "../headers/adapter_faodel.hpp"
-
-#include "../mohair/util.hpp"
+#include "../mohair/mohair.hpp"
+#include "../mohair/plans.hpp"
+// #include "../engines/adapter_faodel.hpp"
 
 #include <google/protobuf/text_format.h>
 
@@ -38,12 +37,12 @@ unique_ptr<PlanRel> ReadSubstraitFromFile(const char *plan_fpath) {
   ;
 
   string plan_msg;
-  if (not FileToString(plan_fpath, plan_msg)) {
+  if (not mohair::FileToString(plan_fpath, plan_msg)) {
     std::cerr << "Failed to parse file data into string" << std::endl;
     return nullptr;
   }
 
-  return SubstraitPlanFromString(plan_msg);
+  return mohair::SubstraitPlanFromString(plan_msg);
 }
 
 int StringForSubstrait(unique_ptr<PlanRel> &substrait_plan, string *plan_text) {
@@ -56,6 +55,7 @@ int StringForSubstrait(unique_ptr<PlanRel> &substrait_plan, string *plan_text) {
   return 0;
 }
 
+/*
 int ExecWithFaodel(int argc, char **argv, unique_ptr<PlanRel> substrait_plan) {
   mohair::adapters::Faodel faodel_adapter;
 
@@ -69,12 +69,13 @@ int ExecWithFaodel(int argc, char **argv, unique_ptr<PlanRel> substrait_plan) {
   // TODO:
   // execute `sample_fn` on rank 0
   // this also adds barriers around the lambda
-  // faodel_adapter.FencedRankFn(/*mpi_rank==*/0, QueryEngineMain());
+  // faodel_adapter.FencedRankFn(0, QueryEngineMain());
 
   faodel_adapter.Finish();
 
   return 0;
 }
+*/
 
 
 // ------------------------------
@@ -103,7 +104,7 @@ int main(int argc, char **argv) {
   ;
 
   // Delegate faodel work
-  return ExecWithFaodel(argc, argv, std::move(substrait_plan));
+  // return ExecWithFaodel(argc, argv, std::move(substrait_plan));
 
   return 0;
 }

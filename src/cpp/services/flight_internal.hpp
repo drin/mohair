@@ -20,6 +20,9 @@
 // Dependencies
 #pragma once
 
+//  >> Internal libs
+#include "../mohair/mohair.hpp"
+
 //  >> Third-party libs
 //    |> Arrow flight
 #include <arrow/flight/api.h>
@@ -32,14 +35,18 @@
 using arrow::flight::FlightServerBase;
 using arrow::flight::FlightServerOptions;
 
+using arrow::flight::FlightDataStream;
 using arrow::flight::FlightMessageReader;
 using arrow::flight::FlightMessageWriter;
 using arrow::flight::FlightMetadataWriter;
 using arrow::flight::SchemaResult;
 using arrow::flight::ResultStream;
 
+// >= 13.0.0
+// using arrow::flight::PollInfo;
 using arrow::flight::FlightInfo;
 using arrow::flight::FlightListing;
+using arrow::flight::SimpleFlightListing;
 
 using arrow::flight::ServerCallContext;
 using arrow::flight::Criteria;
@@ -47,3 +54,4 @@ using arrow::flight::FlightDescriptor;
 using arrow::flight::Ticket;
 using arrow::flight::Location;
 using arrow::flight::Action;
+using arrow::flight::ActionType;
