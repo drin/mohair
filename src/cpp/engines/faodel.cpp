@@ -9,20 +9,19 @@
 // ------------------------------
 // Dependencies
 
-#include "../headers/adapter_faodel.hpp"
+#include "adapter_faodel.hpp"
 
 
+// ------------------------------
 // Type Aliases
-using std::string;
-using std::stringstream;
 
+//  >> Standard types
 using std::endl;
 
 
 // ------------------------------
-// Classes and Functions
+// Functions
 
-// >> Convenience functions
 namespace mohair::adapters {
 
   // >> Static functions (not part of a class or struct)
@@ -44,10 +43,15 @@ namespace mohair::adapters {
 
     return config_ss.str();
   }
-  
 
-  // >> Faodel class functions
+} // namespace: mohair::adapters
 
+
+// ------------------------------
+// Classes and Methods
+
+namespace mohair::adapters {
+  //  >> Faodel adapter
   Faodel::Faodel(const string &kpool_name, const string &service_config)
     :  config_str(service_config)
       ,pool_name(kpool_name)
@@ -60,31 +64,17 @@ namespace mohair::adapters {
 
   Faodel::Faodel(): Faodel(default_pool_name, DefaultFaodelConfig(default_pool_name)) {}
 
+  //  >> Convenience methods that interface with Faodel libraries
+  /** Simple wrapper that connects to a kelpie pool. */
+  kelpie::Pool Faodel::ConnectToPool() { return kelpie::Connect(pool_name); }
 
-  // ------------------------------
-  // Functions for interfacing with Faodel libraries
-
-  /**
-   * Simple wrapper that connects to a kelpie pool.
-   */
-  kelpie::Pool Faodel::ConnectToPool() {
-    return kelpie::Connect(pool_name);
-  }
-
-  /**
-   * Simple wrapper that allocates a String object via lunasa.
-   */
+  /** Simple wrapper that allocates a String object via lunasa. */
   lunasa::DataObject Faodel::AllocateString(const string &str_obj) {
     return lunasa::AllocateStringObject(str_obj);
   }
 
-
-  // ------------------------------
-  // Functions for MPI integration
-
-  /**
-   * Simple wrapper that uses mpisyncstart to setup dirman.
-   */
+  //  >> Convenience methods that interface with MPI
+  /** Simple wrapper that uses mpisyncstart to setup dirman. */
   void Faodel::Bootstrap(int argc, char **argv) {
     MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &provided);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
@@ -104,26 +94,20 @@ namespace mohair::adapters {
     faodel::bootstrap::Start(faodel::Configuration(config_str), kelpie::bootstrap);
   }
 
-  /**
-   * Simple wrapper that finishes the bootstrap and finalizes MPI.
-   */
+  /** Simple wrapper that finishes the bootstrap and finalizes MPI. */
   void Faodel::Finish() {
     faodel::bootstrap::Finish();
     MPI_Finalize();
   }
 
-  /**
-   * Simple wrapper that prints our MPI rank and the size of the MPI pool.
-   */
+  /** Simple wrapper that prints our MPI rank and the size of the MPI pool. */
   void Faodel::PrintMPIInfo() {
     std::cout << "\tMPI Size: " << std::to_string(mpi_size) << std::endl
               << "\tMPI rank: " << std::to_string(mpi_rank) << std::endl
     ;
   }
 
-  /**
-   * Wrapper that runs a lambda on a particular MPI rank.
-   */
+  /** Wrapper that runs a lambda on a particular MPI rank. */
   void Faodel::FencedRankFn(int target_rank, std::function<void()> target_fn) {
     // start and end with a fence
     MPI_Barrier(MPI_COMM_WORLD);
@@ -135,8 +119,7 @@ namespace mohair::adapters {
   }
 
 
-  // ------------------------------
-  // Functions for Arrow and Acero integration
+  //  >> Methods for Acero integration
 
   /**
    * Convenience function that calls `ProviderForFadoMap` and passes the member fado_map.

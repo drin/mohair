@@ -9,17 +9,6 @@ project('mohair-faodel'
 )
 
 
-# >> dependencies
-dep_arrow  = dependency('arrow-substrait')
-dep_ompi   = dependency('ompi-cxx')
-dep_faodel = dependency('faodel')
-# dep_fado   = dependency('faodel-arrow')
-
-#   |> protobuf dependencies?
-dep_proto   = dependency('protobuf')
-dep_absllog = dependency('absl_log')
-
-
 # ------------------------------
 # Meson dependencies (modules)
 
@@ -28,18 +17,40 @@ module_pkgcfg = import('pkgconfig')
 
 
 # ------------------------------
+# Library dependencies
+
+# >> Individual dependencies
+#   |> Arrow
+dep_arrow  = dependency('arrow-substrait')
+
+#   |> Faodel
+dep_ompi   = dependency('ompi-cxx')
+dep_faodel = dependency('faodel')
+# dep_fado   = dependency('faodel-arrow')
+
+#   |> Protobuf (for substrait)
+dep_proto   = dependency('protobuf')
+dep_absllog = dependency('absl_log')
+
+# >> Grouped dependencies
+dep_engine    = [dep_arrow, dep_ompi, dep_faodel]
+
+dep_substrait = [dep_proto, dep_absllog]
+dep_queryplan = [dep_arrow] + dep_substrait
+
+
+# ------------------------------
 # Build variables (convenience)
 
 # base directory
 cpp_srcdir    = 'src' / 'cpp'
 
-# dir for headers
-cpp_headerdir       = cpp_srcdir / 'headers'
-cpp_proto_substrait = cpp_srcdir / 'mohair' / 'substrait'
-cpp_proto_mohair    = cpp_srcdir / 'mohair' / 'mohair'
-
 # dir for core mohair sources
 cpp_coredir   = cpp_srcdir / 'mohair'
+
+# dir for generated protobuf code
+cpp_proto_substrait = cpp_srcdir / 'mohair' / 'substrait'
+cpp_proto_mohair    = cpp_srcdir / 'mohair' / 'mohair'
 
 # dir for adapters (execution engines)
 cpp_enginedir = cpp_srcdir / 'engines'
@@ -52,10 +63,9 @@ cpp_tooldir   = cpp_srcdir / 'toolbox'
 
 
 # ------------------------------
-# Headers and Sources
+# Composable lists of headers
 
-# >> For primary mohair binary
-#   |> include dirs and source list
+# >> For substrait definitions
 substrait_hdrlist = [
    cpp_proto_mohair    / 'algebra.pb.h'
   ,cpp_proto_substrait / 'algebra.pb.h'
@@ -69,6 +79,27 @@ substrait_hdrlist = [
   ,cpp_proto_substrait / 'plan.pb.h'
 ]
 
+# >> For decomposable queries
+queryplan_hdrlist = [
+   cpp_coredir / 'mohair.hpp'
+  ,cpp_coredir / 'plans.hpp'
+  ,cpp_coredir / 'operators.hpp'
+]
+
+# >> For flight services
+services_hdrlist = [
+   cpp_coredir    / 'mohair.hpp'
+  ,cpp_enginedir  / 'adapter_acero.hpp'
+  ,cpp_servicedir / 'flight_internal.hpp'
+  ,cpp_enginedir  / 'adapter_faodel.hpp'
+  ,cpp_servicedir / 'service_faodel.hpp'
+]
+
+
+# ------------------------------
+# Composable lists of sources
+
+# >> For substrait implementations
 substrait_srclist = [
    cpp_proto_mohair    / 'algebra.pb.cc'
   ,cpp_proto_substrait / 'algebra.pb.cc'
@@ -82,71 +113,74 @@ substrait_srclist = [
   ,cpp_proto_substrait / 'plan.pb.cc'
 ]
 
-mohair_hdrlist = (
-    substrait_hdrlist
-  + [
-     cpp_headerdir / 'arrow_deps.hpp'
-    ,cpp_headerdir / 'adapter_faodel.hpp'
-  ]
-)
+# >> For decomposable queries
+queryplan_srclist = [
+   cpp_coredir / 'util.cpp'
+  ,cpp_coredir / 'plans.cpp'
+  ,cpp_coredir / 'operators.cpp'
+]
 
-mohair_srclist = (
-    substrait_srclist
-  + [
-       cpp_enginedir /    'faodel.cpp'
-      ,cpp_enginedir /     'acero.cpp'
-      ,cpp_enginedir / 'execution.cpp'
-      ,cpp_coredir   /      'util.cpp'
-      ,cpp_coredir   / 'operators.cpp'
-      ,cpp_coredir   /     'plans.cpp'
-    ]
-)
+# >> For flight services
+services_srclist = [
+   cpp_enginedir  / 'execution.cpp'
+  ,cpp_enginedir  / 'faodel.cpp'
+  ,cpp_servicedir / 'flight_internal.cpp'
+  ,cpp_servicedir / 'service_faodel.cpp'
+]
+
+
+# ------------------------------
+# Composed header and source lists (organized by library/binary)
+
+# >> Library for mohair query processing
+lib_mohairquery_hdrlist = (substrait_hdrlist + queryplan_hdrlist)
+lib_mohairquery_srclist = (substrait_srclist + queryplan_srclist)
+
+# >> Binary for mohair flight services
+bin_mohairservice_hdrlist = services_hdrlist
+bin_mohairservice_srclist = services_srclist
 
 
 # ------------------------------
 # Library definitions
 
-mohair_lib = library('mohair'
-  ,mohair_srclist
-  ,dependencies: [ dep_ompi, dep_faodel, dep_arrow, dep_proto, dep_absllog ]
-  ,include_directories: cpp_headerdir
-  ,install            : true
+lib_mohairquery = library('mohair_query'
+  ,lib_mohairquery_srclist
+  ,dependencies: dep_queryplan
+  ,install     : true
 )
 
-module_pkgcfg.generate(mohair_lib)
+module_pkgcfg.generate(lib_mohairquery)
 
 # ------------------------------
 # Installation
 
-install_headers(mohair_hdrlist, subdir: 'mohair')
+install_headers(queryplan_hdrlist, subdir: 'mohair')
 
 
 # ------------------------------
 # Binaries
 
-# >> Executable for primary mohair binary
-mohair_binsources = (
+# >> Executable for simple mohair binary (just query processing)
+bin_mohairquery_srclist = (
     [ cpp_tooldir / 'mohair.cpp' ]
-  + mohair_srclist
+  + lib_mohairquery_srclist
 )
 
-mohair_bin = executable('mohair'
-  ,mohair_binsources
-  ,dependencies       : [dep_ompi, dep_faodel, dep_arrow, dep_proto, dep_absllog ]
-  ,include_directories: cpp_headerdir
-  ,install            : false
+bin_mohair = executable('mohair-query'
+  ,bin_mohairquery_srclist
+  ,dependencies: dep_queryplan
+  ,install     : false
 )
 
 # >> Executable for faodel flight service
-faodelserver_binsources = (
+bin_faodelservice_srclist = (
     [ cpp_tooldir / 'faodel-service.cpp' ]
-  + mohair_srclist
-  + [ cpp_servicedir / 'faodel.cpp' ]
+  + bin_mohairservice_srclist
 )
 
-faodelserver_bin = executable('faodel-service'
-  ,mohair_binsources
-  ,dependencies       : [dep_ompi, dep_faodel, dep_arrow, dep_proto, dep_absllog ]
-  ,include_directories: cpp_headerdir
-  ,install            : false
+bin_faodelservice = executable('faodel-service'
+  ,bin_faodelservice_srclist
+  ,dependencies: (dep_engine + dep_substrait)
+  ,install     : false
 )

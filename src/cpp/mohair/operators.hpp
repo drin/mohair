@@ -20,22 +20,19 @@
 // Dependencies
 #pragma once
 
-// >> Standard libs
-#include <functional>
-#include <sstream>
-#include <variant>
-
 // >> Internal libs
 #include "plans.hpp"
 
 
-// >> Type Aliases
-//  |> For standard libs
+// ------------------------------
+// Type Aliases
+
+//  >> Standard types
 using std::tuple;
 using std::get;
 using std::get_if;
 
-//  |> For substrait
+//  >> Substrait types
 using substrait::ProjectRel;
 using substrait::FilterRel;
 using substrait::FetchRel;
@@ -55,12 +52,12 @@ using mohair::SkyRel;
 
 
 // ------------------------------
-// Functions
+// Classes and Methods
 
 namespace mohair {
 
   // ------------------------------
-  // Operator Classes
+  // Operators
 
   // >> Leaf operators
   struct OpErr : QueryOp {

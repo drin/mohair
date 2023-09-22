@@ -9,10 +9,7 @@
 // ------------------------------
 // Dependencies
 
-#include "../headers/mohair.hpp"
-#include "../headers/adapter_faodel.hpp"
-
-#include "../mohair/util.hpp"
+#include "../services/service_faodel.hpp"
 
 #include <google/protobuf/text_format.h>
 
@@ -41,12 +38,12 @@ int ValidateArgs(int argc, char **argv) {
 int StartService() {
   auto faodel_service = mohair::services::FaodelServiceWithDefaultLocation();
 
-  std::cout << "Faodel service listening on localhost:" << service->port()
+  std::cout << "Faodel service listening on localhost:" << faodel_service->port()
             << std::endl
   ;
-  status_start = service->Serve();
+  auto status_start = faodel_service->Serve();
   if (not status_start.ok()) {
-    PrintError("Unable to start Faodel service", status_start);
+    mohair::PrintError("Unable to start Faodel service", status_start);
     return 2;
   }
 
