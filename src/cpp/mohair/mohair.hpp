@@ -21,36 +21,57 @@
 #pragma once
 
 // >> Standard libs
-#include <fstream>
+#include <functional>
+#include <memory>
+
+#include <string>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
-// >> Internal libs
-#include "../headers/mohair.hpp"
+#include <vector>
 
-
-// >> Type Aliases
-using std::string;
-using std::fstream;
-using std::stringstream;
+// >> Third-party libs
+//  |> Arrow
+#include <arrow/api.h>
 
 
 // ------------------------------
-// Functions
+// Type aliases
 
-fstream StreamForFile(const char *in_fpath);
-bool    FileToString(const char *in_fpath, string &file_data);
+//  >> Standard types
+using std::shared_ptr;
+using std::unique_ptr;
 
-unique_ptr<PlanRel> SubstraitPlanFromString(string &plan_msg);
-unique_ptr<PlanRel> SubstraitPlanFromFile(fstream *plan_fstream);
+using std::string;
+using std::stringstream;
+using std::fstream;
 
+using std::vector;
+
+
+//  >> Arrow types
+using arrow::Result;
+using arrow::Status;
+
+using arrow::Buffer;
+using arrow::Table;
+using arrow::Schema;
+
+
+// ------------------------------
+// Public classes and functions
 
 namespace mohair {
 
-  // >> Convenience Functions
+  //  >> Reader functions (from files)
+  fstream StreamForFile(const char *in_fpath);
+  bool    FileToString(const char *in_fpath, string &file_data);
+
+  //  >> Convenience Functions
   string JoinStr(vector<string> str_parts, const char *delim);
 
-  // >> Debugging Functions
+  //  >> Debugging Functions
   void PrintError(const char *msg, const Status arrow_status);
 
 } // namespace: mohair
