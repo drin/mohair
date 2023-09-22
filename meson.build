@@ -21,7 +21,9 @@ module_pkgcfg = import('pkgconfig')
 
 # >> Individual dependencies
 #   |> Arrow
-dep_arrow  = dependency('arrow-substrait')
+dep_arrow  = dependency('arrow')
+dep_acero  = dependency('arrow-substrait') # this is Acero + substrait
+dep_flight = dependency('arrow-flight')
 
 #   |> Faodel
 dep_ompi   = dependency('ompi-cxx')
@@ -33,10 +35,8 @@ dep_proto   = dependency('protobuf')
 dep_absllog = dependency('absl_log')
 
 # >> Grouped dependencies
-dep_engine    = [dep_arrow, dep_ompi, dep_faodel]
-
-dep_substrait = [dep_proto, dep_absllog]
-dep_queryplan = [dep_arrow] + dep_substrait
+dep_service   = [dep_acero, dep_flight, dep_ompi, dep_faodel, dep_proto, dep_absllog]
+dep_queryplan = [dep_arrow, dep_proto, dep_absllog]
 
 
 # ------------------------------
@@ -122,7 +122,8 @@ queryplan_srclist = [
 
 # >> For flight services
 services_srclist = [
-   cpp_enginedir  / 'execution.cpp'
+   cpp_coredir / 'util.cpp'
+  ,cpp_enginedir  / 'execution.cpp'
   ,cpp_enginedir  / 'faodel.cpp'
   ,cpp_servicedir / 'flight_internal.cpp'
   ,cpp_servicedir / 'service_faodel.cpp'
@@ -181,6 +182,6 @@ bin_faodelservice_srclist = (
 
 bin_faodelservice = executable('faodel-service'
   ,bin_faodelservice_srclist
-  ,dependencies: (dep_engine + dep_substrait)
+  ,dependencies: dep_service
   ,install     : false
 )

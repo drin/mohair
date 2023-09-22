@@ -30,27 +30,6 @@ int ValidateArgs(int argc, char **argv) {
 }
 
 
-/**
- * Function to start a Faodel flight service.
- *
- * This function blocks until the service is terminated.
- */
-int StartService() {
-  auto faodel_service = mohair::services::FaodelServiceWithDefaultLocation();
-
-  std::cout << "Faodel service listening on localhost:" << faodel_service->port()
-            << std::endl
-  ;
-  auto status_start = faodel_service->Serve();
-  if (not status_start.ok()) {
-    mohair::PrintError("Unable to start Faodel service", status_start);
-    return 2;
-  }
-
-  return 0;
-}
-
-
 // ------------------------------
 // Main Logic
 int main(int argc, char **argv) {
@@ -61,5 +40,11 @@ int main(int argc, char **argv) {
   }
 
   // Start the flight service
-  return StartService();
+  auto status_service = mohair::services::StartDefaultFaodelService();
+  if (not status_service.ok()) {
+    mohair::PrintError("Error running faodel service", status_service);
+    return 2;
+  }
+
+  return 0;
 }
