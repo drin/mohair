@@ -22,7 +22,7 @@ namespace mohair::services {
 
   // >> Convenience functions
   Result<Location> default_location();
-  unique_ptr<FlightServerBase> FaodelServiceWithDefaultLocation();
+  Status StartDefaultFaodelService();
 
 } // namespace: mohair::services
 

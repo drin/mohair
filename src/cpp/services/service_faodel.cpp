@@ -22,34 +22,29 @@
 namespace mohair::services {
 
 
-  unique_ptr<FlightServerBase> FaodelServiceWithDefaultLocation() {
+  Status StartDefaultFaodelService() {
     // grab a default location
-    auto result_loc = default_location();
-    if (not result_loc.ok()) {
-      PrintError("Unable to construct default flight location", result_loc.status());
-      return nullptr;
-    }
+    ARROW_ASSIGN_OR_RAISE(auto service_loc, default_location());
 
-    FlightServerOptions options { *result_loc };
-    unique_ptr<FlightServerBase> service;
+    FlightServerOptions options { service_loc };
+    unique_ptr<FlightServerBase> faodel_service;
 
     // initialize the service
-    auto status_init = service->Init(options);
-    if (not status_init.ok()) {
-      PrintError("Unable to initialize Faodel flight service", status_init);
-      return nullptr;
-    }
+    ARROW_RETURN_NOT_OK(faodel_service->Init(options));
 
     // tell it to shutdown when SIGTERM is received
-    auto status_handler = service->SetShutdownOnSignals({SIGTERM});
-    if (not status_handler.ok()) {
-      PrintError("Unable to set handler for SIGTERM", status_handler);
-      return nullptr;
-    }
+    ARROW_RETURN_NOT_OK(faodel_service->SetShutdownOnSignals({SIGTERM}));
 
-    // return the service, ready to start
-    return std::move(service);
+    std::cout << "Starting service [localhost:"
+              << faodel_service->port() << "]"
+              << std::endl
+    ;
+
+    ARROW_RETURN_NOT_OK(faodel_service->Serve());
+
+    return Status::OK();
   }
+
 } // namespace: mohair::services
 
 
