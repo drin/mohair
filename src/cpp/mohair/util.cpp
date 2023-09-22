@@ -19,65 +19,47 @@
 // ------------------------------
 // Dependencies
 
-#include "util.hpp"
+#include "mohair.hpp"
 
 
 // ------------------------------
 // Functions
 
-fstream StreamForFile(const char *in_fpath) {
-  return fstream { in_fpath, std::ios::in | std::ios::binary };
-}
-
-bool FileToString(const char *in_fpath, string &file_data) {
-  // create an IO stream for the file
-  auto file_stream = StreamForFile(in_fpath);
-  if (!file_stream) {
-    std::cerr << "Failed to open IO stream for file" << std::endl;
-    return false;
-  }
-
-  // go to end of stream, read the position, then reset position
-  file_stream.seekg(0, std::ios_base::end);
-  auto size = file_stream.tellg();
-  file_stream.seekg(0);
-  std::cout << "File size: [" << std::to_string(size) << "]" << std::endl;
-
-  // Resize the output and read the file data into it
-  file_data.resize(size);
-  auto output_ptr = &(file_data[0]);
-  file_stream.read(output_ptr, size);
-
-  // On success, the number of characters read will match size
-  return file_stream.gcount() == size;
-}
-
-unique_ptr<PlanRel> SubstraitPlanFromString(string &plan_msg) {
-  auto substrait_plan = std::make_unique<PlanRel>();
-
-  substrait_plan->ParseFromString(plan_msg);
-  substrait_plan->PrintDebugString();
-
-  return substrait_plan;
-}
-
-unique_ptr<PlanRel> SubstraitPlanFromFile(fstream *plan_fstream) {
-  auto substrait_plan = std::make_unique<PlanRel>();
-  if (substrait_plan->ParseFromIstream(plan_fstream)) { return substrait_plan; }
-
-  std::cerr << "Failed to parse substrait plan" << std::endl;
-  return nullptr;
-}
-
 namespace mohair {
 
-  // >> Convenience Functions
-  /** Simple function to print a string literal and an arrow status. */
-  void PrintError(const char *msg, const Status arrow_status) {
-      std::cerr << msg                             << std::endl
-                << "\t" << arrow_status.ToString() << std::endl
-      ;
+  //  >> Reader functions
+
+  /** Given a file path, return a binary input stream. */
+  fstream StreamForFile(const char *in_fpath) {
+    return fstream { in_fpath, std::ios::in | std::ios::binary };
   }
+
+  /** Given a file path, read the file data as binary into an output string. */
+  bool FileToString(const char *in_fpath, string &file_data) {
+    // create an IO stream for the file
+    auto file_stream = StreamForFile(in_fpath);
+    if (!file_stream) {
+      std::cerr << "Failed to open IO stream for file" << std::endl;
+      return false;
+    }
+
+    // go to end of stream, read the position, then reset position
+    file_stream.seekg(0, std::ios_base::end);
+    auto size = file_stream.tellg();
+    file_stream.seekg(0);
+    std::cout << "File size: [" << std::to_string(size) << "]" << std::endl;
+
+    // Resize the output and read the file data into it
+    file_data.resize(size);
+    auto output_ptr = &(file_data[0]);
+    file_stream.read(output_ptr, size);
+
+    // On success, the number of characters read will match size
+    return file_stream.gcount() == size;
+  }
+
+
+  //  >> Convenience Functions
 
   /**
    * Join each string in a vector using a given delimiter string literal.
@@ -91,6 +73,15 @@ namespace mohair {
     }
 
     return join_stream.str();
+  }
+
+  //  >> Debugging Functions
+
+  /** Simple function to print a string literal and an arrow status. */
+  void PrintError(const char *msg, const Status arrow_status) {
+      std::cerr << msg                             << std::endl
+                << "\t" << arrow_status.ToString() << std::endl
+      ;
   }
 
 } // namespace: mohair

@@ -18,4 +18,30 @@
 
 // ------------------------------
 // Dependencies
+
 #include "plans.hpp"
+
+
+// ------------------------------
+// Functions
+//
+namespace mohair {
+
+  unique_ptr<PlanRel> SubstraitPlanFromString(string &plan_msg) {
+    auto substrait_plan = std::make_unique<PlanRel>();
+
+    substrait_plan->ParseFromString(plan_msg);
+    substrait_plan->PrintDebugString();
+
+    return substrait_plan;
+  }
+
+  unique_ptr<PlanRel> SubstraitPlanFromFile(fstream *plan_fstream) {
+    auto substrait_plan = std::make_unique<PlanRel>();
+    if (substrait_plan->ParseFromIstream(plan_fstream)) { return substrait_plan; }
+
+    std::cerr << "Failed to parse substrait plan" << std::endl;
+    return nullptr;
+  }
+
+} // namespace: mohair
