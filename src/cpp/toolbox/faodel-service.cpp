@@ -22,7 +22,7 @@ using google::protobuf::TextFormat;
 // Functions
 int ValidateArgs(int argc, char **argv) {
   if (argc != 1) {
-    std::cerr << "Usage: mohair <path-to-substrait-plan>" << std::endl;
+    std::cerr << "Usage: faodel-service" << std::endl;
     return 1;
   }
 
