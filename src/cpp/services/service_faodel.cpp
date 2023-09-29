@@ -27,9 +27,10 @@ namespace mohair::services {
     ARROW_ASSIGN_OR_RAISE(auto service_loc, default_location());
 
     FlightServerOptions options { service_loc };
-    unique_ptr<FlightServerBase> faodel_service;
+    unique_ptr<FlightServerBase> faodel_service = std::make_unique<FaodelService>();
 
     // initialize the service
+    std::cout << "Initializing service " << std::endl;
     ARROW_RETURN_NOT_OK(faodel_service->Init(options));
 
     // tell it to shutdown when SIGTERM is received
@@ -57,14 +58,17 @@ namespace mohair::services {
 
   Status FaodelService::Init(const FlightServerOptions &options) {
     // Call base Init and return if an error occurred
+    std::cout << "Initializing Base Server" << std::endl;
     auto parent_status = FlightServerBase::Init(options);
     if (not parent_status.ok()) { return parent_status; }
 
     // Initialize a Faodel adapter for this service to interact with
+    std::cout << "Bootstrapping Faodel" << std::endl;
     faodel_if.BootstrapWithKelpie(/*argc=*/0, /*argv=*/nullptr);
     faodel_if.PrintMPIInfo();
 
     // register a compute function with kelpie
+    std::cout << "Registering Execution Engine" << std::endl;
     kelpie::RegisterComputeFunction(
       "ExecuteWithAcero", mohair::adapters::ExecuteSubstrait
     );

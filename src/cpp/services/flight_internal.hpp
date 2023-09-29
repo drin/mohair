@@ -32,7 +32,10 @@
 // Type aliases
 
 //  >> Flight type aliases
+using arrow::flight::FlightClient;
 using arrow::flight::FlightServerBase;
+
+using arrow::flight::FlightCallOptions;
 using arrow::flight::FlightServerOptions;
 
 using arrow::flight::FlightDataStream;
