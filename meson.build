@@ -185,3 +185,15 @@ bin_faodelservice = executable('faodel-service'
   ,dependencies: dep_service
   ,install     : false
 )
+
+# >> Executable for faodel flight client
+bin_faodelclient_srclist = (
+    [ cpp_tooldir / 'faodel-client.cpp' ]
+  + bin_mohairservice_srclist
+)
+
+bin_faodelclient = executable('faodel-client'
+  ,bin_faodelclient_srclist
+  ,dependencies: dep_service
+  ,install     : false
+)
