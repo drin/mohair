@@ -93,7 +93,17 @@ namespace mohair {
    * knows nothing about decomposition or execution. This is the query plan that is
    * received by a computational storage system.
    */
-  struct AppPlan : QueryPlan {};
+  struct AppPlan : QueryPlan {
+    const shared_ptr<Buffer> &original_msg;
+    unique_ptr<PlanRel>       substrait_plan;
+    std::vector<string>       source_names;
+
+    AppPlan(const shared_ptr<Buffer> &plan_msg): original_msg(plan_msg) {
+      substrait_plan = std::move(SubstraitPlanFromBuffer(plan_msg));
+    }
+
+    void CollectSources();
+  };
 
   /**
    * A query plan that may contain a mix of:
@@ -110,8 +120,21 @@ namespace mohair {
    *
    * TODO: do some analysis on whether we can have an optimal distribution and what that
    * would mean, etc.
+   *
+   * TODO: this is next step. I thought I was splitting plans in C++ already but I was
+   * not. First thing to do is just do query execution, but find source names so that I
+   * can access them from the kelpie pool.
    */
-  struct SysPlan : QueryPlan {};
+  struct SysPlan : QueryPlan {
+    unique_ptr<PlanRel>    substrait_plan;
+    std::vector<string>    source_names;
+    std::vector<BreakerOp> breaker_list;
+
+    int plan_width     { 0 };
+    int plan_height    { 0 };
+    int breaker_height { 0 };
+    int breaker_count  { 0 };
+  };
 
   /**
    * A query plan that contains distributed data flow operators and physical data
@@ -129,7 +152,10 @@ namespace mohair {
    * limit, an EnginePlan is the exact physical execution plan that a particular query
    * engine would produce and execute.
    */
-  struct EnginePlan : QueryPlan {};
+  struct EnginePlan : QueryPlan {
+    unique_ptr<PlanRel> substrait_plan;
+  };
+
 
 } // namespace: mohair
 
@@ -139,10 +165,15 @@ namespace mohair {
 
   // >> Reader Functions
   unique_ptr<PlanRel> SubstraitPlanFromString(string &plan_msg);
+  unique_ptr<PlanRel> SubstraitPlanFromBuffer(const shared_ptr<Buffer> &plan_msg);
   unique_ptr<PlanRel> SubstraitPlanFromFile(fstream *plan_fstream);
 
   // >> Translation Functions
   unique_ptr<QueryOp>    MohairFrom(Rel *rel_msg);
   unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<QueryOp> &mohair_op);
+
+
+  // >> Functions for query plan traversal
+
 
 } // namespace: mohair

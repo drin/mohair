@@ -24,7 +24,7 @@
 
 // ------------------------------
 // Functions
-//
+
 namespace mohair {
 
   unique_ptr<PlanRel> SubstraitPlanFromString(string &plan_msg) {
@@ -36,12 +36,28 @@ namespace mohair {
     return substrait_plan;
   }
 
+  unique_ptr<PlanRel> SubstraitPlanFromBuffer(const shared_ptr<Buffer> &plan_msg) {
+    return SubstraitPlanFromString(plan_msg->ToString());
+  }
+
   unique_ptr<PlanRel> SubstraitPlanFromFile(fstream *plan_fstream) {
     auto substrait_plan = std::make_unique<PlanRel>();
     if (substrait_plan->ParseFromIstream(plan_fstream)) { return substrait_plan; }
 
     std::cerr << "Failed to parse substrait plan" << std::endl;
     return nullptr;
+  }
+
+} // namespace: mohair
+
+
+// ------------------------------
+// Classes
+
+namespace mohair {
+
+  void AppPlan::CollectSources() {
+
   }
 
 } // namespace: mohair
