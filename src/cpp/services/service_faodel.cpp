@@ -68,10 +68,8 @@ namespace mohair::services {
     faodel_if.PrintMPIInfo();
 
     // register a compute function with kelpie
-    std::cout << "Registering Execution Engine" << std::endl;
-    kelpie::RegisterComputeFunction(
-      "ExecuteWithAcero", mohair::adapters::ExecuteSubstrait
-    );
+    faodel_if.RegisterEngineAcero();
+    faodel_pool = std::move(faodel_if.ConnectToPool());
   }
 
   Status FaodelService::ListFlights( const ServerCallContext   &context
@@ -147,7 +145,8 @@ namespace mohair::services {
                                     ,const shared_ptr<Buffer>  plan_msg
                                     ,unique_ptr<ResultStream> *result) {
     // TODO receive the plan then execute it with Faodel.
-    // This should use kelpie::Pool::Compute(<key>, "ExecuteWithAcero", plan_msg, <out_arg>)
+    // faodel_if.ExecuteEngineAcero(faodel_pool, <key>, plan_msg);
+    auto substrait_plan = mohair::SubstraitPlanFromBuffer(plan_msg);
     return Status::NotImplemented("TODO: query service");
   }
 
