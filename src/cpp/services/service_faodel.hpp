@@ -11,8 +11,15 @@
 #pragma once
 
 // >> Internal libs
+
+//    |> flight deps
 #include "flight_internal.hpp"
+
+//    |> integration with faodel and faodel-arrow
 #include "../engines/adapter_faodel.hpp"
+
+//    |> integration with mohair query processing
+#include "../mohair/plans.hpp"
 
 
 // ------------------------------
@@ -35,6 +42,7 @@ namespace mohair::services {
   // >> Classes
   struct FaodelService : public FlightServerBase {
     mohair::adapters::Faodel faodel_if;
+    kelpie::Pool             faodel_pool;
 
     //  >> FlightServerBase functions to override
 
