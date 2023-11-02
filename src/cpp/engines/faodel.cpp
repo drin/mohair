@@ -65,12 +65,50 @@ namespace mohair::adapters {
   Faodel::Faodel(): Faodel(default_pool_name, DefaultFaodelConfig(default_pool_name)) {}
 
   //  >> Convenience methods that interface with Faodel libraries
+  /** Simple wrapper that registers a function. */
+  void Faodel::RegisterEngineAcero() {
+    std::cout << "Registering Execution Engine: Acero" << std::endl;
+    kelpie::RegisterComputeFunction("ExecuteEngineAcero", mohair::adapters::ExecuteSubstrait);
+  }
+
   /** Simple wrapper that connects to a kelpie pool. */
-  kelpie::Pool Faodel::ConnectToPool() { return kelpie::Connect(pool_name); }
+  KelpPool Faodel::ConnectToPool() { return kelpie::Connect(pool_name); }
 
   /** Simple wrapper that allocates a String object via lunasa. */
-  lunasa::DataObject Faodel::AllocateString(const string &str_obj) {
+  LunaDO Faodel::AllocateString(const string &str_obj) {
     return lunasa::AllocateStringObject(str_obj);
+  }
+
+  void Faodel::PublishTable(const shared_ptr<Table> &data, KelpPool &kpool, KelpKey &kkey) {
+    // NOTE: arrow::Compression is in arrow/util/type_fwd which is transitively imported
+    // by arrow/ipc/api.h. For now, just store the Table uncompressed (this tells faodel
+    // how to store it, not how to access it)
+    ArrowDO fado { data, arrow::Compression::UNCOMPRESSED };
+
+    kpool.Publish(kkey, fado.ExportDataObject());
+  }
+
+  Result<shared_ptr<Table>>
+  Faodel::ExecuteEngineAcero(KelpPool &kpool, KelpKey &kkey, const shared_ptr<Buffer> &plan_msg) {
+    // Execute the compute function and put the result in `ldo_result`
+    LunaDO ldo_result;
+    kpool.Compute(kkey, "ExecuteEngineAcero", plan_msg->ToString(), &ldo_result);
+
+    // Wrap the faodel result in an arrow data object (faodel-lunasa -> faodel-arrow)
+    ArrowDO fado_result { ldo_result };
+    const auto table_count = fado_result.NumberOfTables();
+
+    // Prepare a vector to store each table result
+    std::vector<shared_ptr<Table>> table_list;
+    table_list.reserve(table_count);
+
+    // Walk each table in the faodel object and extract each into the vector
+    for (int table_ndx = 0; table_ndx < table_count; ++table_ndx) {
+      ARROW_ASSIGN_OR_RAISE(auto fado_subtable, fado_result.ExtractTable(table_ndx));
+      table_list.emplace_back(fado_subtable);
+    }
+
+    return arrow::ConcatenateTables(table_list);
   }
 
   //  >> Convenience methods that interface with MPI

@@ -34,18 +34,24 @@
 // ------------------------------
 // Type Aliases
 
-//  >> Standard types
+// >> Standard types
 using std::map;
 
-//  >> Faodel types
+// >> Faodel types
+//    |> core types
+using FaoBucket = faodel::bucket_t;
+using FaoStatus = faodel::rc_t;
+
 //    |> data objects
 using KelpKey = kelpie::Key;
 using LunaDO  = lunasa::DataObject;
 using ArrowDO = faodel::ArrowDataObject;
 
-//    |> core types
-using FaoBucket = faodel::bucket_t;
-using FaoStatus = faodel::rc_t;
+//    |> container types
+using KelpPool = kelpie::Pool;
+
+// >> Arrow types
+using arrow::Table;
 
 
 // ------------------------------
@@ -84,8 +90,16 @@ namespace mohair::adapters {
     Faodel();
 
     // Functions for interfacing with Faodel libraries
-    kelpie::Pool       ConnectToPool();
-    lunasa::DataObject AllocateString(const string &str_obj);
+    LunaDO   AllocateString(const string &str_obj);
+
+    void     RegisterEngineAcero();
+    KelpPool ConnectToPool();
+
+    void
+    PublishTable(const shared_ptr<Table> &data, KelpPool &kpool, KelpKey &kkey);
+
+    Result<shared_ptr<Table>>
+    ExecuteEngineAcero(KelpPool &kpool, KelpKey &kkey, const shared_ptr<Buffer> &plan_msg);
 
     // Functions for MPI integration
     void Bootstrap(int argc, char **argv);
