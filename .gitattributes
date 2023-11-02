@@ -4,3 +4,4 @@ resources/examples/average-expression.substrait filter=lfs diff=lfs merge=lfs -t
 resources/examples/average-expression.substrait.txt filter=lfs diff=lfs merge=lfs -text
 resources/examples/select-expr.substrait filter=lfs diff=lfs merge=lfs -text
 resources/examples/sample-data.tsv filter=lfs diff=lfs merge=lfs -text
+resources/examples/E-GEOD-76312.48-2152.x565.feather filter=lfs diff=lfs merge=lfs -text
