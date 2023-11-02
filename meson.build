@@ -159,7 +159,7 @@ queryplan_srclist = [
 
 # >> For flight services
 services_srclist = [
-   cpp_coredir / 'util.cpp'
+   cpp_coredir    / 'util.cpp'
   ,cpp_enginedir  / 'execution.cpp'
   ,cpp_enginedir  / 'faodel.cpp'
   ,cpp_servicedir / 'flight_internal.cpp'
@@ -199,13 +199,23 @@ install_headers(queryplan_hdrlist, subdir: 'mohair')
 # ------------------------------
 # Binaries
 
-# >> Executable for simple mohair binary (just query processing)
+# >> Executable for simple read-arrow binary (prints a table from an Arrow file)
+bin_readarrow = executable('read-arrow'
+  ,[
+      cpp_tooldir / 'read-arrow.cpp'
+     ,cpp_coredir / 'util.cpp'
+   ]
+  ,dependencies: dep_arrow
+  ,install     : false
+)
+
+# >> Executable for mohair-query binary (does query processing)
 bin_mohairquery_srclist = (
     [ cpp_tooldir / 'mohair.cpp' ]
   + lib_mohairquery_srclist
 )
 
-bin_mohair = executable('mohair-query'
+bin_mohairquery = executable('mohair-query'
   ,bin_mohairquery_srclist
   ,dependencies: dep_queryplan
   ,install     : false

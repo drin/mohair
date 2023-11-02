@@ -34,6 +34,8 @@
 // >> Third-party libs
 //  |> Arrow
 #include <arrow/api.h>
+#include <arrow/ipc/api.h>
+#include <arrow/filesystem/api.h>
 
 
 // ------------------------------
@@ -68,7 +70,14 @@ namespace mohair {
   fstream StreamForFile(const char *in_fpath);
   bool    FileToString(const char *in_fpath, string &file_data);
 
+  Result<shared_ptr<Table>>
+  ReadIPCFile(const std::string &path_to_file);
+
+  Result<shared_ptr<Table>>
+  ReadIPCStream(const std::string &path_to_file);
+
   //  >> Convenience Functions
+  void PrintTable(shared_ptr<Table> table_data, int64_t offset, int64_t length);
   string JoinStr(vector<string> str_parts, const char *delim);
 
   //  >> Debugging Functions

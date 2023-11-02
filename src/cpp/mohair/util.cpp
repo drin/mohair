@@ -22,10 +22,61 @@
 #include "mohair.hpp"
 
 
+// >> Aliases
+
+using arrow::RecordBatchVector;
+
+using arrow::io::RandomAccessFile;
+
+using arrow::ipc::RecordBatchStreamReader;
+using arrow::ipc::RecordBatchFileReader;
+
+using IPCReadOpts = arrow::ipc::IpcReadOptions;
+
+
 // ------------------------------
 // Functions
 
 namespace mohair {
+
+  // >> Internal functions only
+  namespace {
+    /** Given a file path, return an arrow::ReadableFile. */
+    Result<shared_ptr<RandomAccessFile>> HandleForIPCFile(const std::string &path_as_uri) {
+      std::cout << "Creating handle for arrow IPC-formatted file: " << path_as_uri << std::endl;
+      std::string path_to_file;
+
+      // get a `FileSystem` instance (local fs scheme is "file://")
+      ARROW_ASSIGN_OR_RAISE(auto localfs, arrow::fs::FileSystemFromUri(path_as_uri, &path_to_file));
+
+      // use the `FileSystem` instance to open a handle to the file
+      return localfs->OpenInputFile(path_to_file);
+    }
+
+    /** Given a file path, create a RecordBatchStreamReader. */
+    Result<shared_ptr<RecordBatchStreamReader>>
+    ReaderForIPCStream(const std::string &path_as_uri) {
+      std::cout << "Creating reader for IPC stream" << std::endl;
+
+      // use the `FileSystem` instance to open a handle to the file
+      ARROW_ASSIGN_OR_RAISE(auto input_file_handle, HandleForIPCFile(path_as_uri));
+
+      // read from the handle using `RecordBatchStreamReader`
+      return RecordBatchStreamReader::Open(input_file_handle, IPCReadOpts::Defaults());
+    }
+
+    /** Given a file path, create a RecordBatchFileReader. */
+    Result<shared_ptr<RecordBatchFileReader>>
+    ReaderForIPCFile(const std::string &path_as_uri) {
+      std::cout << "Creating reader for IPC file" << std::endl;
+
+      // use the `FileSystem` instance to open a handle to the file
+      ARROW_ASSIGN_OR_RAISE(auto input_file_handle, HandleForIPCFile(path_as_uri));
+
+      // read from the handle using `RecordBatchStreamReader`
+      return RecordBatchFileReader::Open(input_file_handle, IPCReadOpts::Defaults());
+    }
+  } // anonymous namespace for internal functions
 
   //  >> Reader functions
 
@@ -58,8 +109,63 @@ namespace mohair {
     return file_stream.gcount() == size;
   }
 
+  /** Given a file path to an Arrow IPC stream, return a Table. */
+  Result<shared_ptr<Table>> ReadIPCStream(const std::string& path_to_file) {
+    std::cout << "Parsing file: " << path_to_file << std::endl;
 
-  //  >> Convenience Functions
+    // Declares and initializes `batch_reader`
+    ARROW_ASSIGN_OR_RAISE(auto batch_reader, ReaderForIPCStream(path_to_file));
+
+    return arrow::Table::FromRecordBatchReader(batch_reader.get());
+  }
+
+  /** Given a file path to an Arrow IPC file, return a Table. */
+  Result<shared_ptr<Table>> ReadIPCFile(const std::string& path_to_file) {
+    std::cout << "Reading file: " << path_to_file << std::endl;
+
+    // Declares and initializes `ipc_file_reader`
+    ARROW_ASSIGN_OR_RAISE(auto ipc_file_reader, ReaderForIPCFile(path_to_file));
+
+    // Based on RecordBatchFileReader::ToTable (Arrow >12.0.1)
+    // https://github.com/apache/arrow/blob/main/cpp/src/arrow/ipc/reader.h#L236-L237
+    RecordBatchVector batches;
+
+    const auto batch_count = ipc_file_reader->num_record_batches();
+    for (int batch_ndx = 0; batch_ndx < batch_count; ++batch_ndx) {
+      ARROW_ASSIGN_OR_RAISE(auto batch, ipc_file_reader->ReadRecordBatch(batch_ndx));
+      batches.emplace_back(batch);
+    }
+
+    return arrow::Table::FromRecordBatches(ipc_file_reader->schema(), batches);
+  }
+
+
+  // >> Convenience Functions
+
+  /** Print an Arrow Table to stdout given an offset and length (row count). */
+  void PrintTable(shared_ptr<Table> table_data, int64_t offset, int64_t length) {
+    shared_ptr<Table> table_slice;
+    int64_t           row_count = table_data->num_rows();
+
+    std::cout << "Table Excerpt ";
+
+    if (length > 0) {
+      int64_t max_rowndx = length < row_count ? length : row_count;
+      table_slice = table_data->Slice(offset, max_rowndx);
+      std::cout << "(" << max_rowndx << " of " << row_count << ")";
+    }
+
+    else {
+      table_slice = table_data->Slice(offset);
+      std::cout << "(" << row_count << " of " << row_count << ")";
+    }
+
+    std::cout << std::endl
+              << "--------------" << std::endl
+              << table_slice->ToString()
+              << std::endl
+    ;
+  }
 
   /**
    * Join each string in a vector using a given delimiter string literal.
