@@ -16,14 +16,51 @@ project('mohair-faodel'
 module_pkgcfg = import('pkgconfig')
 
 
+# >> Determine the system we're building on
+buildsys_type = 'unknown'
+
+os_name = run_command('uname', '-s').stdout().strip()
+if os_name == 'Darwin'
+    buildsys_type = 'macosx'
+
+elif os_name == 'Linux'
+    os_is_arch   = run_command('grep', '--silent', 'NAME="Arch Linux"', '/etc/os-release')
+    os_is_ubuntu = run_command('grep', '--silent', 'NAME="Ubuntu"'    , '/etc/os-release')
+
+    if os_is_arch.returncode() == 0
+        buildsys_type = 'archlinux'
+
+    elif os_is_ubuntu.returncode() == 0
+        buildsys_type = 'ubuntu'
+
+    endif
+
+endif
+
+
 # ------------------------------
 # Library dependencies
 
+# >> System-dependent dependencies
+if   buildsys_type == 'macosx'
+  cpp_compiler = meson.get_compiler('cpp')
+  prefix_local = '/usr' / 'local' / 'arrow-dev' / 'lib'
+
+  #   |> Arrow
+  dep_arrow  = cpp_compiler.find_library('arrow'          , dirs: prefix_local, static: false)
+  dep_acero  = cpp_compiler.find_library('arrow-substrait', dirs: prefix_local, static: false)
+  dep_flight = cpp_compiler.find_library('arrow-flight'   , dirs: prefix_local, static: false)
+
+elif buildsys_type == 'archlinux'
+
+  #   |> Arrow
+  dep_arrow  = dependency('arrow')
+  dep_acero  = dependency('arrow-substrait') # this is Acero + substrait
+  dep_flight = dependency('arrow-flight')
+endif
+
+
 # >> Individual dependencies
-#   |> Arrow
-dep_arrow  = dependency('arrow')
-dep_acero  = dependency('arrow-substrait') # this is Acero + substrait
-dep_flight = dependency('arrow-flight')
 
 #   |> Faodel
 dep_ompi   = dependency('ompi-cxx')
