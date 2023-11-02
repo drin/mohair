@@ -167,7 +167,6 @@ namespace mohair {
     return binary_op;
   }
 
-
   unique_ptr<QueryOp> FromReadMsg(Rel *rel_msg, ReadRel *substrait_op) {
     // prep params for the operator
     string  op_tname  = SourceNameForRead(substrait_op);
@@ -179,7 +178,6 @@ namespace mohair {
 
     return read_op;
   }
-
 
   /*
   unique_ptr<QueryOp> FromSkyMsg(Rel *rel_msg, unique_ptr<SkyRel> substrait_op) {
