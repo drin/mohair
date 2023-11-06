@@ -27,12 +27,12 @@
 // ------------------------------
 // Type Aliases
 
-//  >> Standard types
+// >> Standard types
 using std::tuple;
 using std::get;
 using std::get_if;
 
-//  >> Substrait types
+// >> Substrait types
 using substrait::ProjectRel;
 using substrait::FilterRel;
 using substrait::FetchRel;
@@ -49,6 +49,9 @@ using substrait::MergeJoinRel;
 using substrait::ReadRel;
 
 using mohair::SkyRel;
+
+// >> Internal types
+using QueryOpVec = std::vector<QueryOp *>;
 
 
 // ------------------------------
@@ -74,6 +77,7 @@ namespace mohair {
       : PipelineOp(rel, tname), plan_op(op) {}
 
     unique_ptr<PlanAnchor> plan_anchor() override { return nullptr; }
+    std::vector<QueryOp *> GetOpInputs() override { return {}; };
   };
 
   // TODO: figure out how this should bridge to skytether
@@ -81,6 +85,7 @@ namespace mohair {
     SkyRel  *plan_op;
 
     unique_ptr<PlanAnchor> plan_anchor() override { return nullptr; }
+    std::vector<QueryOp *> GetOpInputs() override { return {}; };
   };
 
   // >> Complete definitions of query operators
@@ -95,6 +100,7 @@ namespace mohair {
       : PipelineOp(rel, tname), plan_op(op) {}
 
     unique_ptr<PlanAnchor> plan_anchor() override;
+    std::vector<QueryOp *> GetOpInputs() override;
   };
 
   struct OpSel : PipelineOp {
@@ -107,6 +113,7 @@ namespace mohair {
       : PipelineOp(rel, tname), plan_op(op) {}
 
     unique_ptr<PlanAnchor> plan_anchor() override;
+    std::vector<QueryOp *> GetOpInputs() override;
   };
 
   struct OpLimit : PipelineOp {
@@ -119,6 +126,7 @@ namespace mohair {
       : PipelineOp(rel, tname), plan_op(op) {}
 
     unique_ptr<PlanAnchor> plan_anchor() override;
+    std::vector<QueryOp *> GetOpInputs() override;
   };
 
 
@@ -133,6 +141,7 @@ namespace mohair {
       : BreakerOp(rel, tname), plan_op(op) {}
 
     unique_ptr<PlanAnchor> plan_anchor() override;
+    std::vector<QueryOp *> GetOpInputs() override;
   };
 
   struct OpAggr : BreakerOp {
@@ -145,6 +154,7 @@ namespace mohair {
       : BreakerOp(rel, tname), plan_op(op) {}
 
     unique_ptr<PlanAnchor> plan_anchor() override;
+    std::vector<QueryOp *> GetOpInputs() override;
   };
 
   struct OpCrossJoin : BreakerOp {
@@ -157,6 +167,7 @@ namespace mohair {
       : BreakerOp(rel, tname), plan_op(op) {}
 
     unique_ptr<PlanAnchor> plan_anchor() override;
+    std::vector<QueryOp *> GetOpInputs() override;
   };
 
   struct OpJoin : BreakerOp {
@@ -169,6 +180,7 @@ namespace mohair {
       : BreakerOp(rel, tname), plan_op(op) {}
 
     unique_ptr<PlanAnchor> plan_anchor() override;
+    std::vector<QueryOp *> GetOpInputs() override;
   };
 
   struct OpHashJoin : BreakerOp {
@@ -181,18 +193,20 @@ namespace mohair {
       : BreakerOp(rel, tname), plan_op(op) {}
 
     unique_ptr<PlanAnchor> plan_anchor() override;
+    std::vector<QueryOp *> GetOpInputs() override;
   };
 
   struct OpMergeJoin : BreakerOp {
     using InputsType = tuple<unique_ptr<QueryOp>, unique_ptr<QueryOp>>;
 
-    MergeJoinRel                                    *plan_op;
-    InputsType  op_inputs;
+    MergeJoinRel *plan_op;
+    InputsType    op_inputs;
 
     OpMergeJoin(MergeJoinRel *op, Rel *rel, string tname)
       : BreakerOp(rel, tname), plan_op(op) {}
 
     unique_ptr<PlanAnchor> plan_anchor() override;
+    std::vector<QueryOp *> GetOpInputs() override;
   };
 
   /* TODO: needs variadic op_inputs
