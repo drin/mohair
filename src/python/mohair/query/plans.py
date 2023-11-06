@@ -148,7 +148,7 @@ class PlanExplorer:
         # Set plan properties
         mohair_plan.pipeline_len   = pipeline_len
         mohair_plan.plan_width     = plan_width or 1
-        mohair_plan.plan_height    = plan_height
+        mohair_plan.plan_height    = plan_height + 1
         mohair_plan.breaker_count  = breaker_count
         mohair_plan.breaker_height = breaker_height
         mohair_plan.breaker_leaves = breaker_leaves
@@ -170,3 +170,4 @@ class PlanExplorer:
             return mohair_plan.IncrementPipelineLength()
 
         return sorted(input_plans, key=GetPipeLen)
+
