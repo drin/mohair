@@ -60,31 +60,67 @@ namespace mohair {
     virtual unique_ptr<PlanAnchor> plan_anchor();
     virtual string                 ToString();
     virtual const string           ViewStr();
+    virtual const bool             IsBreaker();
+
+    virtual std::vector<unique_ptr<QueryOp>> InputOps();
   };
 
   // Classes for distinguishing pipeline-able operators from pipeline breakers
   struct PipelineOp : QueryOp {
     PipelineOp(Rel *rel, string tname): QueryOp(rel, tname) {}
 
-    virtual string ToString() override;
-    const   string ViewStr() { return u8"← " + this->ToString(); }
+    virtual string ToString()  override;
+    const   string ViewStr()   override { return u8"← " + this->ToString(); }
+    const   bool   IsBreaker() override { return false; }
   };
 
   struct BreakerOp : QueryOp {
     BreakerOp(Rel *rel, string tname): QueryOp(rel, tname) {}
 
-    virtual string ToString() override;
-    const   string ViewStr() { return u8"↤ " + this->ToString(); }
+    virtual string ToString()  override;
+    const   string ViewStr()   override { return u8"↤ " + this->ToString(); }
+    const   bool   IsBreaker() override { return true; }
   };
 
 
   // ------------------------------
   // Base classes for query plans
 
-  // empty base class
-  struct QueryPlan {};
+  /**
+   * QueryPlan is a simple wrapper around a QueryOp that is the root operator of a plan.
+   *
+   * `plan_root` is a non-owning pointer (for now) and QueryPlan represents a read-only
+   * view onto operators of a substrait plan with various tree properties that we're
+   * interested in.
+   */
+  struct QueryPlan {
+    QueryOp *plan_op;
+  };
 
-  // classes for distinguishing between query plans of different abstractions
+
+  // ------------------------------
+  // Derived classes for query plans representing different levels of abstraction
+
+  // Forward declare AppPlan (query plan with application-level intent)
+  struct AppPlan;
+
+  // Declare a struct of various tree properties that an AppPlan will have
+  struct DecomposableProperties {
+    int pipeline_len   { 0 };
+    int plan_width     { 0 };
+    int plan_height    { 0 };
+    int breaker_height { 0 };
+    int breaker_count  { 0 };
+
+    std::vector<AppPlan*> breakers;
+    std::vector<AppPlan*> breaker_leaves;
+
+    DecomposableProperties( int plen, int pwidth, int pheight, int bheight, int bcount
+                           ,std::vector<AppPlan*> vec_b
+                           ,std::vector<AppPlan*> vec_bl);
+
+    static DecomposableProperties ForPlanInputs(std::vector<AppPlan> &child_plans);
+  }
 
   /**
    * A query plan that contains logical data manipulation operators only.
@@ -92,17 +128,22 @@ namespace mohair {
    * This is a query plan that is at the same abstraction level as an application and
    * knows nothing about decomposition or execution. This is the query plan that is
    * received by a computational storage system.
+   *
+   * The properties of an AppPlan are used for:
+   *  - splitting a query into a super-plan and many sub-plans
+   *  - merging a sub-plan into a super-plan (repeated to merge many sub-plans)
    */
   struct AppPlan : QueryPlan {
-    const shared_ptr<Buffer> &original_msg;
-    unique_ptr<PlanRel>       substrait_plan;
-    std::vector<string>       source_names;
+    // A set of attributes that a node in an AppPlan has
+    DecomposableProperties attrs;
+    unique_ptr<QueryOp>    plan_root { nullptr };
 
-    AppPlan(const shared_ptr<Buffer> &plan_msg): original_msg(plan_msg) {
-      substrait_plan = std::move(SubstraitPlanFromBuffer(plan_msg));
-    }
+    std::vector<string>    source_names;
 
-    void CollectSources();
+    static AppPlan FromPlanMessage(const shared_ptr<Buffer> &plan_msg);
+    static AppPlan TraversePlan(unique_ptr<QueryOp> &op);
+
+    AppPlan(QueryOp *op) : QueryPlan(op) {};
   };
 
   /**
@@ -170,6 +211,7 @@ namespace mohair {
 
   // >> Translation Functions
   unique_ptr<QueryOp>    MohairFrom(Rel *rel_msg);
+  unique_ptr<QueryOp>    MohairPlanFrom(unique_ptr<PlanRel> &substrait_plan);
   unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<QueryOp> &mohair_op);
 
 
