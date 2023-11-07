@@ -33,6 +33,7 @@ namespace mohair {
   string                 QueryOp::ToString()    { return table_name;       }
   const string           QueryOp::ViewStr()     { return this->ToString(); }
   bool                   QueryOp::IsBreaker()   { return false;            }
+  std::vector<QueryOp *> QueryOp::GetOpInputs() { return {};               };
 
   string                 PipelineOp::ToString() { return table_name;       }
   string                 BreakerOp::ToString()  { return table_name;       }
@@ -159,6 +160,7 @@ namespace mohair {
     };
   }
 
+  QueryOpVec OpJoin::GetOpInputs()      { return GetInputsBinary(this); }
   QueryOpVec OpCrossJoin::GetOpInputs() { return GetInputsBinary(this); }
   QueryOpVec OpHashJoin::GetOpInputs()  { return GetInputsBinary(this); }
   QueryOpVec OpMergeJoin::GetOpInputs() { return GetInputsBinary(this); }

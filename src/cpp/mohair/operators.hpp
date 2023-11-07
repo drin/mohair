@@ -65,6 +65,9 @@ namespace mohair {
 
     OpErr(Rel *rel, const char *msg)
       : QueryOp(rel, string {""}), err_msg(msg) {}
+
+    unique_ptr<PlanAnchor> plan_anchor() override { return QueryOp::plan_anchor(); }
+    std::vector<QueryOp *> GetOpInputs() override { return QueryOp::GetOpInputs(); }
   };
 
   struct OpRead : PipelineOp {
@@ -73,16 +76,13 @@ namespace mohair {
     OpRead(ReadRel *op, Rel *rel, string tname)
       : PipelineOp(rel, tname), plan_op(op) {}
 
-    // unique_ptr<PlanAnchor> plan_anchor() override { return nullptr; }
-    // std::vector<QueryOp *> GetOpInputs() override { return {}; };
+    unique_ptr<PlanAnchor> plan_anchor() override { return QueryOp::plan_anchor(); }
+    std::vector<QueryOp *> GetOpInputs() override { return QueryOp::GetOpInputs(); }
   };
 
   // TODO: figure out how this should bridge to skytether
   struct OpSkyRead : PipelineOp {
     SkyRel  *plan_op;
-
-    // unique_ptr<PlanAnchor> plan_anchor() override { return nullptr; }
-    // std::vector<QueryOp *> GetOpInputs() override { return {}; };
   };
 
   // >> Complete definitions of query operators
