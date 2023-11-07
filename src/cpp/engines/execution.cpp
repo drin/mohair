@@ -65,7 +65,7 @@ namespace mohair::adapters {
      *  - tschema: an expected schema of the table, only used with early binding
      */
     return [&fado_map]( const vector<string> &tname
-                       ,const Schema         &tschema) -> Result<Declaration> {
+                       ,const Schema         &) -> Result<Declaration> {
 
       // gather the parts of the table name
       auto requested_tname = mohair::JoinStr(tname, ".");
@@ -111,8 +111,8 @@ namespace mohair::adapters {
    * NOTE: based on an example, FaoBucket and KelpKey are unused, so we will figure that
    * out later.
    */
-  FaoStatus ExecuteSubstrait(        FaoBucket       b
-                              ,const KelpKey         k
+  FaoStatus ExecuteSubstrait(        FaoBucket    /* b */
+                              ,const KelpKey      /* k */
                               ,const string         &args
                               ,map<KelpKey, LunaDO>  fado_map
                               ,LunaDO               *ext_ldo) {

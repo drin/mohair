@@ -30,11 +30,8 @@ namespace mohair::services {
   // ------------------------------
   // Convenience Methods for Arrow Flight
   Result<Location> default_location() {
-    Location default_loc;
-    auto status_setloc = Location::ForGrpcTcp("0.0.0.0", 0, &default_loc);
-    if (status_setloc.ok()) { return std::move(default_loc); }
-
-    return status_setloc;
+    ARROW_ASSIGN_OR_RAISE(Location default_loc, Location::ForGrpcTcp("0.0.0.0", 0));
+    return default_loc;
   }
 
 } // namespace: mohair::services
