@@ -208,7 +208,7 @@ namespace mohair {
 namespace mohair {
 
   // >> Reader Functions
-  unique_ptr<PlanRel> SubstraitPlanFromString(string &plan_msg);
+  unique_ptr<PlanRel> SubstraitPlanFromString(string plan_msg);
   unique_ptr<PlanRel> SubstraitPlanFromBuffer(const shared_ptr<Buffer> &plan_msg);
   unique_ptr<PlanRel> SubstraitPlanFromFile(fstream *plan_fstream);
 
