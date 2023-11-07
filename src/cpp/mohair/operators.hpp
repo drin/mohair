@@ -50,9 +50,6 @@ using substrait::ReadRel;
 
 using mohair::SkyRel;
 
-// >> Internal types
-using QueryOpVec = std::vector<QueryOp *>;
-
 
 // ------------------------------
 // Classes and Methods
@@ -76,16 +73,16 @@ namespace mohair {
     OpRead(ReadRel *op, Rel *rel, string tname)
       : PipelineOp(rel, tname), plan_op(op) {}
 
-    unique_ptr<PlanAnchor> plan_anchor() override { return nullptr; }
-    std::vector<QueryOp *> GetOpInputs() override { return {}; };
+    // unique_ptr<PlanAnchor> plan_anchor() override { return nullptr; }
+    // std::vector<QueryOp *> GetOpInputs() override { return {}; };
   };
 
   // TODO: figure out how this should bridge to skytether
   struct OpSkyRead : PipelineOp {
     SkyRel  *plan_op;
 
-    unique_ptr<PlanAnchor> plan_anchor() override { return nullptr; }
-    std::vector<QueryOp *> GetOpInputs() override { return {}; };
+    // unique_ptr<PlanAnchor> plan_anchor() override { return nullptr; }
+    // std::vector<QueryOp *> GetOpInputs() override { return {}; };
   };
 
   // >> Complete definitions of query operators

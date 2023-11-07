@@ -60,9 +60,9 @@ namespace mohair {
     virtual unique_ptr<PlanAnchor> plan_anchor();
     virtual string                 ToString();
     virtual const string           ViewStr();
-    virtual const bool             IsBreaker();
+    virtual bool                   IsBreaker();
 
-    virtual std::vector<unique_ptr<QueryOp>> InputOps();
+    virtual std::vector<QueryOp *> GetOpInputs();
   };
 
   // Classes for distinguishing pipeline-able operators from pipeline breakers
@@ -71,7 +71,7 @@ namespace mohair {
 
     virtual string ToString()  override;
     const   string ViewStr()   override { return u8"← " + this->ToString(); }
-    const   bool   IsBreaker() override { return false; }
+    bool           IsBreaker() override { return false; }
   };
 
   struct BreakerOp : QueryOp {
@@ -79,7 +79,7 @@ namespace mohair {
 
     virtual string ToString()  override;
     const   string ViewStr()   override { return u8"↤ " + this->ToString(); }
-    const   bool   IsBreaker() override { return true; }
+    bool           IsBreaker() override { return true; }
   };
 
 
@@ -95,6 +95,8 @@ namespace mohair {
    */
   struct QueryPlan {
     QueryOp *plan_op;
+
+    QueryPlan(QueryOp *op) : plan_op(op) {};
   };
 
 
@@ -106,21 +108,22 @@ namespace mohair {
 
   // Declare a struct of various tree properties that an AppPlan will have
   struct DecomposableProperties {
-    int pipeline_len   { 0 };
-    int plan_width     { 0 };
-    int plan_height    { 0 };
-    int breaker_height { 0 };
-    int breaker_count  { 0 };
+    int pipeline_len   = 0;
+    int plan_width     = 0;
+    int plan_height    = 0;
+    int breaker_height = 0;
+    int breaker_count  = 0;
 
     std::vector<AppPlan*> breakers;
     std::vector<AppPlan*> breaker_leaves;
 
+    DecomposableProperties();
     DecomposableProperties( int plen, int pwidth, int pheight, int bheight, int bcount
                            ,std::vector<AppPlan*> vec_b
                            ,std::vector<AppPlan*> vec_bl);
+  };
 
-    static DecomposableProperties ForPlanInputs(std::vector<AppPlan> &child_plans);
-  }
+  DecomposableProperties PropertiesForPlanInputs(std::vector<AppPlan> &child_plans);
 
   /**
    * A query plan that contains logical data manipulation operators only.
@@ -140,11 +143,11 @@ namespace mohair {
 
     std::vector<string>    source_names;
 
-    static AppPlan FromPlanMessage(const shared_ptr<Buffer> &plan_msg);
-    static AppPlan TraversePlan(unique_ptr<QueryOp> &op);
-
     AppPlan(QueryOp *op) : QueryPlan(op) {};
   };
+
+  AppPlan FromPlanMessage(const shared_ptr<Buffer> &plan_msg);
+  AppPlan TraversePlan(QueryOp *op);
 
   /**
    * A query plan that may contain a mix of:

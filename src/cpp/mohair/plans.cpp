@@ -29,7 +29,7 @@ namespace mohair {
 
   // >> Conversion functions
 
-  unique_ptr<PlanRel> SubstraitPlanFromString(string &plan_msg) {
+  unique_ptr<PlanRel> SubstraitPlanFromString(string plan_msg) {
     auto substrait_plan = std::make_unique<PlanRel>();
 
     substrait_plan->ParseFromString(plan_msg);
@@ -54,8 +54,8 @@ namespace mohair {
     switch (substrait_plan->rel_type_case()) {
 
       case PlanRel::RelTypeCase::kRoot: {
-        // unique_ptr<PlanRel> -> &RootRel -> *Rel
-        return MohairFrom(substrait_plan->root().mutable_input());
+        // unique_ptr<PlanRel> -> *RootRel -> *Rel
+        return MohairFrom(substrait_plan->mutable_root()->mutable_input());
       }
 
       default: { std::cerr << "Expected a PlanRel with a root" << std::endl; }
@@ -77,41 +77,35 @@ namespace mohair {
 
   // >> Helper functions
 
-  void InsertionSortAppPlans(std::vector<AppPlan> &plans, AppPlan &new_plan) {
-    int      plan_ndx { 0 };
-    AppPlan *other;
+  void InsertionSortAppPlans(std::vector<AppPlan> &plans, AppPlan new_plan) {
+    auto plans_it = plans.begin();
 
     // find the spot to insert
-    for (; plan_ndx < plans.size(); ++plan_ndx) {
-      if (new_plan.pipeline_len > plans[plan_ndx].pipeline_len) { break; }
+    for (; plans_it != plans.end(); plans_it = std::next(plans_it)) {
+      if (new_plan.attrs.pipeline_len > plans_it->attrs.pipeline_len) { break; }
     }
 
     // we always insert, even if its at the end of the list
-    plans.insert(plan_ndx, new_plan);
+    plans.insert(plans_it, std::move(new_plan));
   }
 
-  int CalcMaxPipelineLength(std::vector<AppPlan> &plans) {
-    int pipeline_len { 0 };
-
-    for (auto &plan : plans) {
-      if (plan.plan_root->IsBreaker())      { continue; }
-      if (plan.pipeline_len > pipeline_len) { pipeline_len = plan.pipeline_len; }
+  int SumPlanProperties( std::vector<AppPlan> &plans
+                        ,std::function<int(AppPlan*)> fn_get) {
+    int prop_val = 0;
+    for (size_t ndx = 0; ndx < plans.size(); ++ndx) {
+      auto *plan  = &(plans[ndx]);
+      prop_val   += fn_get(plan);
     }
 
-    return pipeline_len;
-  }
-
-  int SumPlanProperties(std::vector<AppPlan> &plans, std::function<int(AppPlan&)> fn_get) {
-    int prop_val { 0 };
-    for (auto &plan : plans) { prop_val += fn_get(plan); }
     return prop_val;
   }
 
-  int MaxPlanProperties(std::vector<AppPlan> &plans, std::function<int(AppPlan&)> fn_get) {
-    int prop_val { 0 };
-
-    for (auto &plan : plans) {
-      int plan_val = fn_get(plan);
+  int MaxPlanProperties( std::vector<AppPlan> &plans
+                        ,std::function<int(AppPlan*)> fn_get) {
+    int prop_val = 0;
+    for (size_t ndx = 0; ndx < plans.size(); ++ndx) {
+      auto *plan     = &(plans[ndx]);
+      int   plan_val = fn_get(plan);
       if (plan_val > prop_val) { prop_val = plan_val; }
     }
 
@@ -119,20 +113,23 @@ namespace mohair {
   }
 
   template <typename StoredType>
-  std::vector<StoredType>
+  std::vector<StoredType*>
   GatherPlanProperties( std::vector<AppPlan> &plans
-                       ,std::function<std::vector<StoredType>(AppPlan&)> fn_get) {
-    std::vector<StoredType> gathered_props;
+                       ,std::function<std::vector<StoredType*>(AppPlan*)> fn_get) {
+    std::vector<StoredType*> gathered;
 
-    for (auto &plan : plans) {
-      auto &plan_props = fn_get(plan);
-      gathered_props.insert(0, plan_props.cbegin(), plan_props.cend());
+    for (size_t ndx = 0; ndx < plans.size(); ++ndx) {
+      auto *plan  = &(plans[ndx]);
+      auto  props = fn_get(plan);
+
+      gathered.insert(gathered.cbegin(), props.cbegin(), props.cend());
     }
 
-    return std::move(gathered_props);
+    return std::move(gathered);
   }
 
   // >> DecomposableProperties functions
+  DecomposableProperties::DecomposableProperties() {}
   DecomposableProperties::DecomposableProperties( int plen, int pwidth, int pheight
                                                  ,int bheight, int bcount
                                                  ,std::vector<AppPlan*> vec_b
@@ -147,21 +144,20 @@ namespace mohair {
   {
   }
 
-  static DecomposableProperties
-  DecomposableProperties::ForPlanInputs(std::vector<AppPlan> &child_plans) {
+  DecomposableProperties PropertiesForPlanInputs(std::vector<AppPlan> &plans) {
     // closures for property access
-    auto get_planwidth     = [](AppPlan &plan) { return plan.attrs.plan_width;     }
-    auto get_planheight    = [](AppPlan &plan) { return plan.attrs.plan_height;    }
-    auto get_breakerheight = [](AppPlan &plan) { return plan.attrs.breaker_height; }
-    auto get_breakercount  = [](AppPlan &plan) { return plan.attrs.breaker_coount; }
+    auto get_planwidth     = [](AppPlan *plan) { return plan->attrs.plan_width;     };
+    auto get_planheight    = [](AppPlan *plan) { return plan->attrs.plan_height;    };
+    auto get_breakerheight = [](AppPlan *plan) { return plan->attrs.breaker_height; };
+    auto get_breakercount  = [](AppPlan *plan) { return plan->attrs.breaker_count;  };
 
-    auto get_breakers       =  [](AppPlan &plan) { return plan.attrs.breakers;       }
-    auto get_breaker_leaves =  [](AppPlan &plan) { return plan.attrs.breaker_leaves; }
+    auto get_breakers      =  [](AppPlan *plan) { return plan->attrs.breakers;       };
+    auto get_breakerleaves =  [](AppPlan *plan) { return plan->attrs.breaker_leaves; };
 
-    auto get_pipelen = [](AppPlan &plan) {
-      if (plan.plan_root->IsBreaker()) { return 0; }
-      return plan.attrs.pipeline_len;
-    }
+    auto get_pipelen = [](AppPlan *plan) {
+      if (plan->plan_root->IsBreaker()) { return 0; }
+      return plan->attrs.pipeline_len;
+    };
 
     // calculate properties using helper functions and closures
     int pipeline_len   = 1 + MaxPlanProperties(plans, get_pipelen);
@@ -174,9 +170,9 @@ namespace mohair {
     int breaker_height = MaxPlanProperties(plans, get_breakerheight);
     int breaker_count  = SumPlanProperties(plans, get_breakercount);
 
-    std::vector<AppPlan> breakers = GatherPlanProperties<AppPlan>(plans, get_breakers);
-    std::vector<AppPlan> breaker_leaves = GatherPlanProperties<AppPlan>(
-      plans, get_breaker_leaves
+    std::vector<AppPlan*> breakers = GatherPlanProperties<AppPlan>(plans, get_breakers);
+    std::vector<AppPlan*> breaker_leaves = GatherPlanProperties<AppPlan>(
+      plans, get_breakerleaves
     );
 
     return DecomposableProperties(
@@ -188,14 +184,14 @@ namespace mohair {
   }
 
   // >> AppPlan static functions
-  static AppPlan AppPlan::FromPlanMessage(const shared_ptr<Buffer> &plan_msg) {
+  AppPlan FromPlanMessage(const shared_ptr<Buffer> &plan_msg) {
     unique_ptr<PlanRel> substrait_plan { SubstraitPlanFromBuffer(plan_msg) };
 
     // MohairPlanFrom receives the unique_ptr by reference and returns a mutable pointer
     unique_ptr<QueryOp> plan_root_op   { MohairPlanFrom(substrait_plan) };
 
     // TraversePlan receives the unique_ptr by reference and returns an AppPlan
-    auto application_plan      = AppPlan::TraversePlan(plan_root_op.get());
+    auto application_plan      = TraversePlan(plan_root_op.get());
     application_plan.plan_root = std::move(plan_root_op);
 
     // TODO: figure out if we should save the parsed `substrait_plan`
@@ -203,7 +199,7 @@ namespace mohair {
     return application_plan;
   }
 
-  static std::vector<AppPlan> AppPlan::WalkInputOps(QueryOp *parent_op) {
+  std::vector<AppPlan> WalkInputOps(QueryOp *parent_op) {
     // Gather child operators
     std::vector<QueryOp *> child_ops = parent_op->GetOpInputs();
 
@@ -212,43 +208,43 @@ namespace mohair {
     sorted_plans.reserve(child_ops.size());
 
     // Recurse on first child operator; populate first element of sorted_plans
-    sorted_plans.push_back(AppPlan::TraversePlan(child_ops[0]));
+    sorted_plans.push_back(TraversePlan(child_ops[0]));
 
     // For each input operator to parent_op
-    for (int child_ndx = 1; child_ndx < child_ops.size(); ++child_ndx) {
+    for (size_t child_ndx = 1; child_ndx < child_ops.size(); ++child_ndx) {
       // recurse on child operator
-      AppPlan child_plan = AppPlan::TraversePlan(child_ops[child_ndx]);
+      AppPlan child_plan = TraversePlan(child_ops[child_ndx]);
 
       // insertion sort into sorted_plans
-      InsertionSortAppPlans(sorted_plans, child_plan);
+      InsertionSortAppPlans(sorted_plans, std::move(child_plan));
     }
 
     // return AppPlan instances sorted by pipeline length (height-related property)
-    return std::move(sorted_plans);
+    return sorted_plans;
   }
 
-  static AppPlan AppPlan::TraversePlan(QueryOp *op) {
+  AppPlan TraversePlan(QueryOp *op) {
     // Recurse on input operators
-    auto child_plans = AppPlan::WalkInputOps(op);
+    auto child_plans = WalkInputOps(op);
 
     // Create a plan that wraps this operator
     AppPlan root_plan { op };
 
     // Assign initial properties to root_plan
-    root_plan.attrs = DecomposableProperties::ForPlanInputs(child_plans);
+    root_plan.attrs = PropertiesForPlanInputs(child_plans);
 
     // Then update properties in case this operator is a pipeline breaker
     if (op->IsBreaker()) {
       root_plan.attrs.breaker_count  += 1;
       root_plan.attrs.breaker_height += 1;
 
-      // We're a breaker; we append to the end as we build up
-      root_plan.attrs.breakers.push_back(root_plan);
-
       // If we don't have leaves, then we are a leaf
       if (child_plans.size() == 0) {
-        root_plan.attrs.breaker_leaves.push_back(root_plan);
+        root_plan.attrs.breaker_leaves.push_back(&root_plan);
       }
+
+      // Otherwise, we're a non-leaf breaker
+      else { root_plan.attrs.breakers.push_back(&root_plan); }
     }
 
     // Done with traversal

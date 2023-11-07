@@ -32,7 +32,7 @@ namespace mohair {
   unique_ptr<PlanAnchor> QueryOp::plan_anchor() { return nullptr;          }
   string                 QueryOp::ToString()    { return table_name;       }
   const string           QueryOp::ViewStr()     { return this->ToString(); }
-  const bool             QueryOp::IsBreaker()   { return false;            }
+  bool                   QueryOp::IsBreaker()   { return false;            }
 
   string                 PipelineOp::ToString() { return table_name;       }
   string                 BreakerOp::ToString()  { return table_name;       }
@@ -134,11 +134,14 @@ namespace mohair {
 
   // >> End of plan_anchor() implementations
 
+
   // >> Implementations for each QueryOp to return its inputs
+  using QueryOpVec = std::vector<QueryOp *>;
+
   // NOTE: QueryOpVec is a convenience alias in `operators.hpp`
   template <typename UnaryQueryOp>
-  std::vector<unique_ptr<QueryOp>> GetInputsUnary(UnaryQueryOp &op) {
-    return std::vector<unique_ptr<QueryOp>> { std::get<0>(op_inputs).get() };
+  QueryOpVec GetInputsUnary(UnaryQueryOp *op) {
+    return QueryOpVec { std::get<0>(op->op_inputs).get() };
   }
 
   QueryOpVec OpProj::GetOpInputs()  { return GetInputsUnary(this); }
@@ -149,10 +152,10 @@ namespace mohair {
 
 
   template <typename BinaryQueryOp>
-  std::vector<unique_ptr<QueryOp>> GetInputsBinary(BinaryQueryOp &op) {
-    return std::vector<unique_ptr<QueryOp>> {
-       std::get<0>(op_inputs).get()
-      ,std::get<1>(op_inputs).get()
+  QueryOpVec GetInputsBinary(BinaryQueryOp *op) {
+    return QueryOpVec {
+       std::get<0>(op->op_inputs).get()
+      ,std::get<1>(op->op_inputs).get()
     };
   }
 
