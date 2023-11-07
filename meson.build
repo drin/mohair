@@ -77,7 +77,7 @@ dep_absllog = dependency('absl_log')
 
 # >> Grouped dependencies
 dep_service   = [dep_acero, dep_flight, dep_ompi, dep_faodel, dep_proto, dep_absllog]
-dep_queryplan = [dep_arrow, dep_proto, dep_absllog]
+dep_queryplan = [dep_acero, dep_proto, dep_absllog]
 
 
 # ------------------------------
@@ -130,6 +130,7 @@ queryplan_hdrlist = [
 # >> For flight services
 services_hdrlist = [
    cpp_coredir    / 'mohair.hpp'
+  ,cpp_coredir    / 'plans.hpp'
   ,cpp_enginedir  / 'adapter_acero.hpp'
   ,cpp_servicedir / 'flight_internal.hpp'
   ,cpp_enginedir  / 'adapter_faodel.hpp'
@@ -164,6 +165,8 @@ queryplan_srclist = [
 # >> For flight services
 services_srclist = [
    cpp_coredir    / 'util.cpp'
+  ,cpp_coredir    / 'plans.cpp'
+  ,cpp_coredir    / 'operators.cpp'
   ,cpp_enginedir  / 'execution.cpp'
   ,cpp_enginedir  / 'faodel.cpp'
   ,cpp_servicedir / 'flight_internal.cpp'
@@ -179,8 +182,8 @@ lib_mohairquery_hdrlist = (substrait_hdrlist + queryplan_hdrlist)
 lib_mohairquery_srclist = (substrait_srclist + queryplan_srclist)
 
 # >> Binary for mohair flight services
-bin_mohairservice_hdrlist = services_hdrlist
-bin_mohairservice_srclist = services_srclist
+bin_mohairservice_hdrlist = (substrait_hdrlist + services_hdrlist)
+bin_mohairservice_srclist = (substrait_srclist + services_srclist)
 
 
 # ------------------------------
@@ -219,7 +222,7 @@ bin_mohairquery_srclist = (
   + lib_mohairquery_srclist
 )
 
-bin_mohairquery = executable('mohair-query'
+bin_mohairquery = executable('mohair'
   ,bin_mohairquery_srclist
   ,dependencies: dep_queryplan
   ,install     : false
