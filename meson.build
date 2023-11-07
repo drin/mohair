@@ -19,13 +19,17 @@ module_pkgcfg = import('pkgconfig')
 # >> Determine the system we're building on
 buildsys_type = 'unknown'
 
-os_name = run_command('uname', '-s').stdout().strip()
+os_name = run_command('uname', '-s', check: false).stdout().strip()
 if os_name == 'Darwin'
     buildsys_type = 'macosx'
 
 elif os_name == 'Linux'
-    os_is_arch   = run_command('grep', '--silent', 'NAME="Arch Linux"', '/etc/os-release')
-    os_is_ubuntu = run_command('grep', '--silent', 'NAME="Ubuntu"'    , '/etc/os-release')
+    os_is_arch   = run_command(
+      'grep', '--silent', 'NAME="Arch Linux"', '/etc/os-release', check: false
+    )
+    os_is_ubuntu = run_command(
+      'grep', '--silent', 'NAME="Ubuntu"'    , '/etc/os-release', check: false
+    )
 
     if os_is_arch.returncode() == 0
         buildsys_type = 'archlinux'
