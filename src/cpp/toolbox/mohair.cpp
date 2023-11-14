@@ -17,6 +17,8 @@
 
 
 // >> Aliases
+using mohair::QueryOp;
+
 using google::protobuf::TextFormat;
 
 
@@ -31,52 +33,6 @@ int ValidateArgs(int argc, char **argv) {
   return 0;
 }
 
-unique_ptr<PlanRel> ReadSubstraitFromFile(const char *plan_fpath) {
-  std::cout << "Reading plan from: '" << plan_fpath  << "'"
-            << std::endl
-  ;
-
-  string plan_msg;
-  if (not mohair::FileToString(plan_fpath, plan_msg)) {
-    std::cerr << "Failed to parse file data into string" << std::endl;
-    return nullptr;
-  }
-
-  return mohair::SubstraitPlanFromString(plan_msg);
-}
-
-int StringForSubstrait(unique_ptr<PlanRel> &substrait_plan, string *plan_text) {
-  auto success = TextFormat::PrintToString(*substrait_plan, plan_text);
-  if (not success) {
-    std::cerr << "Unable to print substrait plan as string" << std::endl;
-    return 3;
-  }
-
-  return 0;
-}
-
-/*
-int ExecWithFaodel(int argc, char **argv, unique_ptr<PlanRel> substrait_plan) {
-  mohair::adapters::Faodel faodel_adapter;
-
-  // bootstrap and display configuration
-  faodel_adapter.BootstrapWithKelpie(argc, argv);
-  faodel_adapter.PrintMPIInfo();
-
-  // register a compute function with kelpie
-  kelpie::RegisterComputeFunction("ExecuteWithAcero", mohair::adapters::ExecuteSubstrait);
-
-  // TODO:
-  // execute `sample_fn` on rank 0
-  // this also adds barriers around the lambda
-  // faodel_adapter.FencedRankFn(0, QueryEngineMain());
-
-  faodel_adapter.Finish();
-
-  return 0;
-}
-*/
-
 
 // ------------------------------
 // Main Logic
@@ -87,24 +43,33 @@ int main(int argc, char **argv) {
     return validate_status;
   }
 
-  auto substrait_plan = ReadSubstraitFromFile(argv[1]);
+  // Read the example substrait from a file
+  auto file_stream    = mohair::StreamForFile(argv[1]);
+  auto substrait_plan = mohair::SubstraitPlanFromFile(&file_stream);
   if (substrait_plan == nullptr) {
     std::cerr << "Failed to read substrait plan from file" << std::endl;
     return 2;
   }
 
-  string plan_text;
-  auto stringify_status = StringForSubstrait(substrait_plan, &plan_text);
-  if (stringify_status != 0) {
-    std::cerr << "Failed to stringify substrait plan" << std::endl;
-    return stringify_status;
-  }
-  std::cout << "Substrait Plan:" << std::endl
-            << plan_text        << std::endl
-  ;
+  // Debug print substrait
+  // PrintSubstraitPlan(substrait_plan.get());
 
-  // Delegate faodel work
-  // return ExecWithFaodel(argc, argv, std::move(substrait_plan));
+  // Convert substrait to a plan we understand
+  std::cout << "Parsing Substrait..." << std::endl;
+  unique_ptr<QueryOp> mohair_root { mohair::MohairPlanFrom(substrait_plan.get()) };
+
+  std::cout << "Traversing Mohair plan..." << std::endl;
+  auto application_plan = mohair::FromPlanOp(mohair_root.get());
+  /*
+  if (application_plan == nullptr) {
+    std::cerr << "Failed to parse substrait plan" << std::endl;
+    return 10;
+  }
+  */
+
+  std::cout << "Mohair Plan:"              << std::endl
+            << application_plan.ViewPlan() << std::endl
+  ;
 
   return 0;
 }
