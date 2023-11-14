@@ -252,11 +252,11 @@ namespace mohair {
       case Rel::RelTypeCase::kAggregate: {
         return FromUnaryOpMsg<AggregateRel, OpAggr>(rel_msg, rel_msg->mutable_aggregate());
       }
-      case Rel::RelTypeCase::kCross: {
-        return FromBinaryOpMsg<CrossRel, OpCrossJoin>(rel_msg, rel_msg->mutable_cross());
-      }
       case Rel::RelTypeCase::kJoin: {
         return FromBinaryOpMsg<JoinRel, OpJoin>(rel_msg, rel_msg->mutable_join());
+      }
+      case Rel::RelTypeCase::kCross: {
+        return FromBinaryOpMsg<CrossRel, OpCrossJoin>(rel_msg, rel_msg->mutable_cross());
       }
 
       // hash and merge joins
@@ -292,9 +292,8 @@ namespace mohair {
 
       // Catch all error
       default: {
-        // construct error here since it's simple
         return std::make_unique<OpErr>(
-          rel_msg, "ParseError: Unknown substrait operator"
+          rel_msg, "ParseError: conversion for operator not yet implemented"
         );
       }
     }
