@@ -27,41 +27,65 @@
 
 namespace mohair {
 
-  // >> Conversion functions
+  // >> Debug functions
 
-  unique_ptr<PlanRel> SubstraitPlanFromString(string plan_msg) {
-    auto substrait_plan = std::make_unique<PlanRel>();
+  template <typename MsgType>
+  void PrintProtoMessage(MsgType *msg) {
+    string proto_str;
+
+    auto success = TextFormat::PrintToString(*msg, &proto_str);
+    if (not success) {
+      std::cerr << "Unable to print message" << std::endl;
+      return;
+    }
+
+    std::cout << "Proto message:" << std::endl
+              << proto_str        << std::endl;
+  }
+
+  void  PrintSubstraitRel(Rel  *rel_msg ) { PrintProtoMessage<Rel>(rel_msg);   }
+  void PrintSubstraitPlan(Plan *plan_msg) { PrintProtoMessage<Plan>(plan_msg); }
+
+
+  // >> Conversion functions
+  unique_ptr<Plan> SubstraitPlanFromString(string &plan_msg) {
+    auto substrait_plan = std::make_unique<Plan>();
 
     substrait_plan->ParseFromString(plan_msg);
-    substrait_plan->PrintDebugString();
+    // substrait_plan->PrintDebugString();
 
     return substrait_plan;
   }
 
-  unique_ptr<PlanRel> SubstraitPlanFromBuffer(const shared_ptr<Buffer> &plan_msg) {
-    return SubstraitPlanFromString(plan_msg->ToString());
-  }
-
-  unique_ptr<PlanRel> SubstraitPlanFromFile(fstream *plan_fstream) {
-    auto substrait_plan = std::make_unique<PlanRel>();
+  unique_ptr<Plan> SubstraitPlanFromFile(fstream *plan_fstream) {
+    auto substrait_plan = std::make_unique<Plan>();
     if (substrait_plan->ParseFromIstream(plan_fstream)) { return substrait_plan; }
 
     std::cerr << "Failed to parse substrait plan" << std::endl;
     return nullptr;
   }
 
-  unique_ptr<QueryOp> MohairPlanFrom(unique_ptr<PlanRel> &substrait_plan) {
-    switch (substrait_plan->rel_type_case()) {
+  unique_ptr<QueryOp> MohairPlanFrom(Plan *substrait_plan) {
+    // walk the top level relations until we find the root (should only be one)
+    int                 root_count  { 0       };
+    unique_ptr<QueryOp> mohair_root { nullptr };
 
-      case PlanRel::RelTypeCase::kRoot: {
-        // unique_ptr<PlanRel> -> *RootRel -> *Rel
-        return MohairFrom(substrait_plan->mutable_root()->mutable_input());
+    for (int ndx = 0; ndx < substrait_plan->relations_size(); ++ndx) {
+      PlanRel plan_root { substrait_plan->relations(ndx) };
+
+      // Don't break after we find a RootRel; validate there is only 1
+      if (plan_root.rel_type_case() == PlanRel::RelTypeCase::kRoot) {
+        ++root_count;
+        mohair_root = std::move(MohairFrom(plan_root.mutable_root()->mutable_input()));
       }
-
-      default: { std::cerr << "Expected a PlanRel with a root" << std::endl; }
     }
 
-    return nullptr;
+    if (root_count != 1) {
+      std::cerr << "Found [" << std::to_string(root_count) << "] RootRels" << std::endl;
+      return nullptr;
+    }
+
+    return mohair_root;
   }
 
 
@@ -144,6 +168,20 @@ namespace mohair {
   {
   }
 
+  string DecomposableProperties::ToString() {
+    std::stringstream prop_stream;
+
+    prop_stream << "Plan properties:"   << std::endl
+                << "\tPipeline length:" << pipeline_len   << std::endl
+                << "\tPlan width     :" << plan_width     << std::endl
+                << "\tPlan height    :" << plan_height    << std::endl
+                << "\tBreaker height :" << breaker_height << std::endl
+                << "\tBreaker count  :" << breaker_count  << std::endl
+    ;
+
+    return prop_stream.str();
+  }
+
   DecomposableProperties PropertiesForPlanInputs(std::vector<AppPlan> &plans) {
     // closures for property access
     auto get_planwidth     = [](AppPlan *plan) { return plan->attrs.plan_width;     };
@@ -155,7 +193,7 @@ namespace mohair {
     auto get_breakerleaves =  [](AppPlan *plan) { return plan->attrs.breaker_leaves; };
 
     auto get_pipelen = [](AppPlan *plan) {
-      if (plan->plan_root->IsBreaker()) { return 0; }
+      if (plan->plan_op->IsBreaker()) { return 0; }
       return plan->attrs.pipeline_len;
     };
 
@@ -184,21 +222,6 @@ namespace mohair {
   }
 
   // >> AppPlan static functions
-  AppPlan FromPlanMessage(const shared_ptr<Buffer> &plan_msg) {
-    unique_ptr<PlanRel> substrait_plan { SubstraitPlanFromBuffer(plan_msg) };
-
-    // MohairPlanFrom receives the unique_ptr by reference and returns a mutable pointer
-    unique_ptr<QueryOp> plan_root_op   { MohairPlanFrom(substrait_plan) };
-
-    // TraversePlan receives the unique_ptr by reference and returns an AppPlan
-    auto application_plan      = TraversePlan(plan_root_op.get());
-    application_plan.plan_root = std::move(plan_root_op);
-
-    // TODO: figure out if we should save the parsed `substrait_plan`
-    //       (probably useful once we start pushing down subplans)
-    return application_plan;
-  }
-
   std::vector<AppPlan> WalkInputOps(QueryOp *parent_op) {
     // Gather child operators
     std::vector<QueryOp *> child_ops = parent_op->GetOpInputs();
@@ -207,13 +230,15 @@ namespace mohair {
     std::vector<AppPlan> sorted_plans;
     sorted_plans.reserve(child_ops.size());
 
+    if (child_ops.size() == 0) { return sorted_plans; }
+
     // Recurse on first child operator; populate first element of sorted_plans
-    sorted_plans.push_back(TraversePlan(child_ops[0]));
+    sorted_plans.push_back(FromPlanOp(child_ops[0]));
 
     // For each input operator to parent_op
     for (size_t child_ndx = 1; child_ndx < child_ops.size(); ++child_ndx) {
       // recurse on child operator
-      AppPlan child_plan = TraversePlan(child_ops[child_ndx]);
+      AppPlan child_plan = FromPlanOp(child_ops[child_ndx]);
 
       // insertion sort into sorted_plans
       InsertionSortAppPlans(sorted_plans, std::move(child_plan));
@@ -223,7 +248,7 @@ namespace mohair {
     return sorted_plans;
   }
 
-  AppPlan TraversePlan(QueryOp *op) {
+  AppPlan FromPlanOp(QueryOp *op) {
     // Recurse on input operators
     auto child_plans = WalkInputOps(op);
 
@@ -249,6 +274,34 @@ namespace mohair {
 
     // Done with traversal
     return root_plan;
+  }
+
+  void ViewOp(QueryOp *op, string *indent, std::stringstream *view_stream) {
+    // Add indentation for current op
+    if (op->IsBreaker()) { (*view_stream) << std::endl << *indent; }
+    else                 { (*view_stream)              <<    "  "; }
+
+    // Append representation for this op
+    (*view_stream) << op->ViewStr();
+
+    // Increase indent for child ops
+    indent->append(2, ' ');
+
+    // Recurse on child ops
+    std::vector<QueryOp *> child_ops = op->GetOpInputs();
+    for (size_t ndx = 0; ndx < child_ops.size(); ++ndx) {
+      ViewOp(child_ops[ndx], indent, view_stream);
+    }
+  }
+
+  // >> AppPlan member functions
+  string AppPlan::ViewPlan() {
+    std::stringstream plan_str;
+    string            indent { "" };
+
+    ViewOp(plan_op, &indent, &plan_str);
+
+    return plan_str.str();
   }
 
 } // namespace: mohair

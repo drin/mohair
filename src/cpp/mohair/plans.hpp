@@ -29,17 +29,23 @@
 
 #include "mohair/algebra.pb.h"
 
+//  >> External libs
+#include <google/protobuf/text_format.h>
+
 
 // ------------------------------
 // Type aliases
 
 //  >> Substrait types
+using substrait::Plan;
 using substrait::PlanRel;
 using substrait::Rel;
 
 using mohair::PlanAnchor;
 using mohair::ErrRel;
 
+//  >> Protobuf types
+using google::protobuf::TextFormat;
 
 // ------------------------------
 // Classes and Functions
@@ -121,6 +127,8 @@ namespace mohair {
     DecomposableProperties( int plen, int pwidth, int pheight, int bheight, int bcount
                            ,std::vector<AppPlan*> vec_b
                            ,std::vector<AppPlan*> vec_bl);
+
+    string ToString();
   };
 
   DecomposableProperties PropertiesForPlanInputs(std::vector<AppPlan> &child_plans);
@@ -139,15 +147,14 @@ namespace mohair {
   struct AppPlan : QueryPlan {
     // A set of attributes that a node in an AppPlan has
     DecomposableProperties attrs;
-    unique_ptr<QueryOp>    plan_root { nullptr };
-
     std::vector<string>    source_names;
 
     AppPlan(QueryOp *op) : QueryPlan(op) {};
+
+    string ViewPlan();
   };
 
-  AppPlan FromPlanMessage(const shared_ptr<Buffer> &plan_msg);
-  AppPlan TraversePlan(QueryOp *op);
+  AppPlan FromPlanOp(QueryOp *op);
 
   /**
    * A query plan that may contain a mix of:
@@ -170,7 +177,7 @@ namespace mohair {
    * can access them from the kelpie pool.
    */
   struct SysPlan : QueryPlan {
-    unique_ptr<PlanRel>    substrait_plan;
+    unique_ptr<Plan>       substrait_plan;
     std::vector<string>    source_names;
     std::vector<BreakerOp> breaker_list;
 
@@ -197,7 +204,7 @@ namespace mohair {
    * engine would produce and execute.
    */
   struct EnginePlan : QueryPlan {
-    unique_ptr<PlanRel> substrait_plan;
+    unique_ptr<Plan> substrait_plan;
   };
 
 
@@ -208,13 +215,15 @@ namespace mohair {
 namespace mohair {
 
   // >> Reader Functions
-  unique_ptr<PlanRel> SubstraitPlanFromString(string plan_msg);
-  unique_ptr<PlanRel> SubstraitPlanFromBuffer(const shared_ptr<Buffer> &plan_msg);
-  unique_ptr<PlanRel> SubstraitPlanFromFile(fstream *plan_fstream);
+  unique_ptr<Plan> SubstraitPlanFromString(string &plan_msg);
+  unique_ptr<Plan> SubstraitPlanFromFile(fstream *plan_fstream);
+
+  void PrintSubstraitPlan(Plan *plan_msg);
+  void PrintSubstraitRel(Rel   *rel_msg);
 
   // >> Translation Functions
   unique_ptr<QueryOp>    MohairFrom(Rel *rel_msg);
-  unique_ptr<QueryOp>    MohairPlanFrom(unique_ptr<PlanRel> &substrait_plan);
+  unique_ptr<QueryOp>    MohairPlanFrom(Plan *substrait_plan);
   unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<QueryOp> &mohair_op);
 
 
