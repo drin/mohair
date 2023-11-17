@@ -21,14 +21,17 @@ namespace _pb = ::google::protobuf;
 namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 namespace substrait {
-        template <typename>
+
+inline constexpr ExpressionReference::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : output_names_{},
+        expr_type_{},
+        _cached_size_{0},
+        _oneof_case_{} {}
+
+template <typename>
 PROTOBUF_CONSTEXPR ExpressionReference::ExpressionReference(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.output_names_)*/ {},
-      /*decltype(_impl_.expr_type_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_._oneof_case_)*/ {},
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct ExpressionReferenceDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ExpressionReferenceDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ExpressionReferenceDefaultTypeInternal() {}
@@ -39,19 +42,21 @@ struct ExpressionReferenceDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ExpressionReferenceDefaultTypeInternal _ExpressionReference_default_instance_;
-        template <typename>
+
+inline constexpr ExtendedExpression::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        extension_uris_{},
+        extensions_{},
+        referred_expr_{},
+        expected_type_urls_{},
+        base_schema_{nullptr},
+        advanced_extensions_{nullptr},
+        version_{nullptr} {}
+
+template <typename>
 PROTOBUF_CONSTEXPR ExtendedExpression::ExtendedExpression(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.extension_uris_)*/ {},
-      /*decltype(_impl_.extensions_)*/ {},
-      /*decltype(_impl_.referred_expr_)*/ {},
-      /*decltype(_impl_.expected_type_urls_)*/ {},
-      /*decltype(_impl_.base_schema_)*/ nullptr,
-      /*decltype(_impl_.advanced_extensions_)*/ nullptr,
-      /*decltype(_impl_.version_)*/ nullptr,
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct ExtendedExpressionDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ExtendedExpressionDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~ExtendedExpressionDefaultTypeInternal() {}
@@ -204,15 +209,12 @@ const ::substrait::AggregateFunction& ExpressionReference::_Internal::measure(co
   return *msg->_impl_.expr_type_.measure_;
 }
 void ExpressionReference::set_allocated_expression(::substrait::Expression* expression) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_expr_type();
   if (expression) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(expression));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(expression)->GetArena();
     if (message_arena != submessage_arena) {
-      expression = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, expression, submessage_arena);
+      expression = ::google::protobuf::internal::GetOwnedMessage(message_arena, expression, submessage_arena);
     }
     set_has_expression();
     _impl_.expr_type_.expression_ = expression;
@@ -220,23 +222,21 @@ void ExpressionReference::set_allocated_expression(::substrait::Expression* expr
   // @@protoc_insertion_point(field_set_allocated:substrait.ExpressionReference.expression)
 }
 void ExpressionReference::clear_expression() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (expr_type_case() == kExpression) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.expr_type_.expression_;
     }
     clear_has_expr_type();
   }
 }
 void ExpressionReference::set_allocated_measure(::substrait::AggregateFunction* measure) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_expr_type();
   if (measure) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(measure));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(measure)->GetArena();
     if (message_arena != submessage_arena) {
-      measure = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, measure, submessage_arena);
+      measure = ::google::protobuf::internal::GetOwnedMessage(message_arena, measure, submessage_arena);
     }
     set_has_measure();
     _impl_.expr_type_.measure_ = measure;
@@ -244,8 +244,9 @@ void ExpressionReference::set_allocated_measure(::substrait::AggregateFunction* 
   // @@protoc_insertion_point(field_set_allocated:substrait.ExpressionReference.measure)
 }
 void ExpressionReference::clear_measure() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (expr_type_case() == kMeasure) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.expr_type_.measure_;
     }
     clear_has_expr_type();
@@ -256,45 +257,46 @@ ExpressionReference::ExpressionReference(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ExpressionReference)
 }
-ExpressionReference::ExpressionReference(const ExpressionReference& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE ExpressionReference::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : output_names_{visibility, arena, from.output_names_},
+        expr_type_{},
+        _cached_size_{0},
+        _oneof_case_{from._oneof_case_[0]} {}
+
+ExpressionReference::ExpressionReference(
+    ::google::protobuf::Arena* arena,
+    const ExpressionReference& from)
+    : ::google::protobuf::Message(arena) {
   ExpressionReference* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.output_names_){from._impl_.output_names_},
-      decltype(_impl_.expr_type_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_._oneof_case_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  clear_has_expr_type();
-  switch (from.expr_type_case()) {
-    case kExpression: {
-      _this->_internal_mutable_expression()->::substrait::Expression::MergeFrom(
-          from._internal_expression());
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  switch (expr_type_case()) {
+    case EXPR_TYPE_NOT_SET:
       break;
-    }
-    case kMeasure: {
-      _this->_internal_mutable_measure()->::substrait::AggregateFunction::MergeFrom(
-          from._internal_measure());
-      break;
-    }
-    case EXPR_TYPE_NOT_SET: {
-      break;
-    }
+      case kExpression:
+        _impl_.expr_type_.expression_ = CreateMaybeMessage<::substrait::Expression>(arena, *from._impl_.expr_type_.expression_);
+        break;
+      case kMeasure:
+        _impl_.expr_type_.measure_ = CreateMaybeMessage<::substrait::AggregateFunction>(arena, *from._impl_.expr_type_.measure_);
+        break;
   }
 
   // @@protoc_insertion_point(copy_constructor:substrait.ExpressionReference)
 }
+inline PROTOBUF_NDEBUG_INLINE ExpressionReference::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : output_names_{visibility, arena},
+        expr_type_{},
+        _cached_size_{0},
+        _oneof_case_{} {}
+
 inline void ExpressionReference::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.output_names_){arena},
-      decltype(_impl_.expr_type_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_._oneof_case_)*/ {},
-  };
-  clear_has_expr_type();
+  new (&_impl_) Impl_(internal_visibility(), arena);
 }
 ExpressionReference::~ExpressionReference() {
   // @@protoc_insertion_point(destructor:substrait.ExpressionReference)
@@ -302,27 +304,25 @@ ExpressionReference::~ExpressionReference() {
   SharedDtor();
 }
 inline void ExpressionReference::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _internal_mutable_output_names()->~RepeatedPtrField();
+  ABSL_DCHECK(GetArena() == nullptr);
   if (has_expr_type()) {
     clear_expr_type();
   }
-}
-void ExpressionReference::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _impl_.~Impl_();
 }
 
 void ExpressionReference::clear_expr_type() {
 // @@protoc_insertion_point(one_of_clear_start:substrait.ExpressionReference)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   switch (expr_type_case()) {
     case kExpression: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.expr_type_.expression_;
       }
       break;
     }
     case kMeasure: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.expr_type_.measure_;
       }
       break;
@@ -337,11 +337,12 @@ void ExpressionReference::clear_expr_type() {
 
 PROTOBUF_NOINLINE void ExpressionReference::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ExpressionReference)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _internal_mutable_output_names()->Clear();
+  _impl_.output_names_.Clear();
   clear_expr_type();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -402,14 +403,14 @@ const ::_pbi::TcParseTable<0, 3, 2, 50, 2> ExpressionReference::_table_ = {
 
   switch (expr_type_case()) {
     case kExpression: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(1, _Internal::expression(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          1, _Internal::expression(this),
           _Internal::expression(this).GetCachedSize(), target, stream);
       break;
     }
     case kMeasure: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(2, _Internal::measure(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          2, _Internal::measure(this),
           _Internal::measure(this).GetCachedSize(), target, stream);
       break;
     }
@@ -450,16 +451,14 @@ const ::_pbi::TcParseTable<0, 3, 2, 50, 2> ExpressionReference::_table_ = {
   switch (expr_type_case()) {
     // .substrait.Expression expression = 1 [json_name = "expression"];
     case kExpression: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.expr_type_.expression_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.expr_type_.expression_);
       break;
     }
     // .substrait.AggregateFunction measure = 2 [json_name = "measure"];
     case kMeasure: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.expr_type_.measure_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.expr_type_.measure_);
       break;
     }
     case EXPR_TYPE_NOT_SET: {
@@ -470,11 +469,12 @@ const ::_pbi::TcParseTable<0, 3, 2, 50, 2> ExpressionReference::_table_ = {
 }
 
 const ::google::protobuf::Message::ClassData ExpressionReference::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    ExpressionReference::MergeImpl
+    ExpressionReference::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*ExpressionReference::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* ExpressionReference::GetClassData() const {
+  return &_class_data_;
+}
 
 void ExpressionReference::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ExpressionReference*>(&to_msg);
@@ -514,7 +514,10 @@ PROTOBUF_NOINLINE bool ExpressionReference::IsInitialized() const {
   return true;
 }
 
-void ExpressionReference::InternalSwap(ExpressionReference* other) {
+::_pbi::CachedSize* ExpressionReference::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void ExpressionReference::InternalSwap(ExpressionReference* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.output_names_.InternalSwap(&other->_impl_.output_names_);
@@ -558,20 +561,25 @@ const ::substrait::extensions::AdvancedExtension& ExtendedExpression::_Internal:
   return *msg->_impl_.advanced_extensions_;
 }
 void ExtendedExpression::clear_version() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (_impl_.version_ != nullptr) _impl_.version_->Clear();
   _impl_._has_bits_[0] &= ~0x00000004u;
 }
 void ExtendedExpression::clear_extension_uris() {
-  _internal_mutable_extension_uris()->Clear();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.extension_uris_.Clear();
 }
 void ExtendedExpression::clear_extensions() {
-  _internal_mutable_extensions()->Clear();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.extensions_.Clear();
 }
 void ExtendedExpression::clear_base_schema() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (_impl_.base_schema_ != nullptr) _impl_.base_schema_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
 void ExtendedExpression::clear_advanced_extensions() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (_impl_.advanced_extensions_ != nullptr) _impl_.advanced_extensions_->Clear();
   _impl_._has_bits_[0] &= ~0x00000002u;
 }
@@ -580,47 +588,55 @@ ExtendedExpression::ExtendedExpression(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.ExtendedExpression)
 }
-ExtendedExpression::ExtendedExpression(const ExtendedExpression& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE ExtendedExpression::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        extension_uris_{visibility, arena, from.extension_uris_},
+        extensions_{visibility, arena, from.extensions_},
+        referred_expr_{visibility, arena, from.referred_expr_},
+        expected_type_urls_{visibility, arena, from.expected_type_urls_} {}
+
+ExtendedExpression::ExtendedExpression(
+    ::google::protobuf::Arena* arena,
+    const ExtendedExpression& from)
+    : ::google::protobuf::Message(arena) {
   ExtendedExpression* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.extension_uris_){from._impl_.extension_uris_},
-      decltype(_impl_.extensions_){from._impl_.extensions_},
-      decltype(_impl_.referred_expr_){from._impl_.referred_expr_},
-      decltype(_impl_.expected_type_urls_){from._impl_.expected_type_urls_},
-      decltype(_impl_.base_schema_){nullptr},
-      decltype(_impl_.advanced_extensions_){nullptr},
-      decltype(_impl_.version_){nullptr},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.base_schema_ = new ::substrait::NamedStruct(*from._impl_.base_schema_);
-  }
-  if ((from._impl_._has_bits_[0] & 0x00000002u) != 0) {
-    _this->_impl_.advanced_extensions_ = new ::substrait::extensions::AdvancedExtension(*from._impl_.advanced_extensions_);
-  }
-  if ((from._impl_._has_bits_[0] & 0x00000004u) != 0) {
-    _this->_impl_.version_ = new ::substrait::Version(*from._impl_.version_);
-  }
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.base_schema_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::NamedStruct>(arena, *from._impl_.base_schema_)
+                : nullptr;
+  _impl_.advanced_extensions_ = (cached_has_bits & 0x00000002u)
+                ? CreateMaybeMessage<::substrait::extensions::AdvancedExtension>(arena, *from._impl_.advanced_extensions_)
+                : nullptr;
+  _impl_.version_ = (cached_has_bits & 0x00000004u)
+                ? CreateMaybeMessage<::substrait::Version>(arena, *from._impl_.version_)
+                : nullptr;
 
   // @@protoc_insertion_point(copy_constructor:substrait.ExtendedExpression)
 }
+inline PROTOBUF_NDEBUG_INLINE ExtendedExpression::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        extension_uris_{visibility, arena},
+        extensions_{visibility, arena},
+        referred_expr_{visibility, arena},
+        expected_type_urls_{visibility, arena} {}
+
 inline void ExtendedExpression::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.extension_uris_){arena},
-      decltype(_impl_.extensions_){arena},
-      decltype(_impl_.referred_expr_){arena},
-      decltype(_impl_.expected_type_urls_){arena},
-      decltype(_impl_.base_schema_){nullptr},
-      decltype(_impl_.advanced_extensions_){nullptr},
-      decltype(_impl_.version_){nullptr},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, base_schema_),
+           0,
+           offsetof(Impl_, version_) -
+               offsetof(Impl_, base_schema_) +
+               sizeof(Impl_::version_));
 }
 ExtendedExpression::~ExtendedExpression() {
   // @@protoc_insertion_point(destructor:substrait.ExtendedExpression)
@@ -628,29 +644,24 @@ ExtendedExpression::~ExtendedExpression() {
   SharedDtor();
 }
 inline void ExtendedExpression::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.extension_uris_.~RepeatedPtrField();
-  _impl_.extensions_.~RepeatedPtrField();
-  _impl_.referred_expr_.~RepeatedPtrField();
-  _internal_mutable_expected_type_urls()->~RepeatedPtrField();
-  if (this != internal_default_instance()) delete _impl_.base_schema_;
-  if (this != internal_default_instance()) delete _impl_.advanced_extensions_;
-  if (this != internal_default_instance()) delete _impl_.version_;
-}
-void ExtendedExpression::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.base_schema_;
+  delete _impl_.advanced_extensions_;
+  delete _impl_.version_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void ExtendedExpression::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.ExtendedExpression)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _internal_mutable_extension_uris()->Clear();
-  _internal_mutable_extensions()->Clear();
-  _internal_mutable_referred_expr()->Clear();
-  _internal_mutable_expected_type_urls()->Clear();
+  _impl_.extension_uris_.Clear();
+  _impl_.extensions_.Clear();
+  _impl_.referred_expr_.Clear();
+  _impl_.expected_type_urls_.Clear();
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
@@ -786,15 +797,15 @@ const ::_pbi::TcParseTable<3, 7, 6, 55, 2> ExtendedExpression::_table_ = {
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.NamedStruct base_schema = 4 [json_name = "baseSchema"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(4, _Internal::base_schema(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        4, _Internal::base_schema(this),
         _Internal::base_schema(this).GetCachedSize(), target, stream);
   }
 
   // .substrait.extensions.AdvancedExtension advanced_extensions = 5 [json_name = "advancedExtensions"];
   if (cached_has_bits & 0x00000002u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(5, _Internal::advanced_extensions(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        5, _Internal::advanced_extensions(this),
         _Internal::advanced_extensions(this).GetCachedSize(), target, stream);
   }
 
@@ -808,8 +819,8 @@ const ::_pbi::TcParseTable<3, 7, 6, 55, 2> ExtendedExpression::_table_ = {
 
   // .substrait.Version version = 7 [json_name = "version"];
   if (cached_has_bits & 0x00000004u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(7, _Internal::version(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        7, _Internal::version(this),
         _Internal::version(this).GetCachedSize(), target, stream);
   }
 
@@ -858,23 +869,20 @@ const ::_pbi::TcParseTable<3, 7, 6, 55, 2> ExtendedExpression::_table_ = {
   if (cached_has_bits & 0x00000007u) {
     // .substrait.NamedStruct base_schema = 4 [json_name = "baseSchema"];
     if (cached_has_bits & 0x00000001u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.base_schema_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.base_schema_);
     }
 
     // .substrait.extensions.AdvancedExtension advanced_extensions = 5 [json_name = "advancedExtensions"];
     if (cached_has_bits & 0x00000002u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.advanced_extensions_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.advanced_extensions_);
     }
 
     // .substrait.Version version = 7 [json_name = "version"];
     if (cached_has_bits & 0x00000004u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.version_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.version_);
     }
 
   }
@@ -882,11 +890,12 @@ const ::_pbi::TcParseTable<3, 7, 6, 55, 2> ExtendedExpression::_table_ = {
 }
 
 const ::google::protobuf::Message::ClassData ExtendedExpression::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    ExtendedExpression::MergeImpl
+    ExtendedExpression::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*ExtendedExpression::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* ExtendedExpression::GetClassData() const {
+  return &_class_data_;
+}
 
 void ExtendedExpression::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ExtendedExpression*>(&to_msg);
@@ -896,9 +905,12 @@ void ExtendedExpression::MergeImpl(::google::protobuf::Message& to_msg, const ::
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  _this->_internal_mutable_extension_uris()->MergeFrom(from._internal_extension_uris());
-  _this->_internal_mutable_extensions()->MergeFrom(from._internal_extensions());
-  _this->_internal_mutable_referred_expr()->MergeFrom(from._internal_referred_expr());
+  _this->_internal_mutable_extension_uris()->MergeFrom(
+      from._internal_extension_uris());
+  _this->_internal_mutable_extensions()->MergeFrom(
+      from._internal_extensions());
+  _this->_internal_mutable_referred_expr()->MergeFrom(
+      from._internal_referred_expr());
   _this->_internal_mutable_expected_type_urls()->MergeFrom(from._internal_expected_type_urls());
   cached_has_bits = from._impl_._has_bits_[0];
   if (cached_has_bits & 0x00000007u) {
@@ -929,7 +941,10 @@ PROTOBUF_NOINLINE bool ExtendedExpression::IsInitialized() const {
   return true;
 }
 
-void ExtendedExpression::InternalSwap(ExtendedExpression* other) {
+::_pbi::CachedSize* ExtendedExpression::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void ExtendedExpression::InternalSwap(ExtendedExpression* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);

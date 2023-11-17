@@ -21,78 +21,23 @@ namespace _pb = ::google::protobuf;
 namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 namespace substrait {
-        template <typename>
-PROTOBUF_CONSTEXPR PlanRel::PlanRel(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.rel_type_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_._oneof_case_)*/ {},
-    } {}
-struct PlanRelDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR PlanRelDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~PlanRelDefaultTypeInternal() {}
-  union {
-    PlanRel _instance;
-  };
-};
 
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PlanRelDefaultTypeInternal _PlanRel_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR Plan::Plan(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.extension_uris_)*/ {},
-      /*decltype(_impl_.extensions_)*/ {},
-      /*decltype(_impl_.relations_)*/ {},
-      /*decltype(_impl_.expected_type_urls_)*/ {},
-      /*decltype(_impl_.advanced_extensions_)*/ nullptr,
-      /*decltype(_impl_.version_)*/ nullptr,
-    } {}
-struct PlanDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR PlanDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~PlanDefaultTypeInternal() {}
-  union {
-    Plan _instance;
-  };
-};
+inline constexpr Version::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : git_hash_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        producer_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        major_number_{0u},
+        minor_number_{0u},
+        patch_number_{0u},
+        _cached_size_{0} {}
 
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PlanDefaultTypeInternal _Plan_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR PlanVersion::PlanVersion(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.version_)*/ nullptr,
-    } {}
-struct PlanVersionDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR PlanVersionDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~PlanVersionDefaultTypeInternal() {}
-  union {
-    PlanVersion _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PlanVersionDefaultTypeInternal _PlanVersion_default_instance_;
-        template <typename>
+template <typename>
 PROTOBUF_CONSTEXPR Version::Version(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.git_hash_)*/ {
-          &::_pbi::fixed_address_empty_string,
-          ::_pbi::ConstantInitialized{},
-      },
-      /*decltype(_impl_.producer_)*/ {
-          &::_pbi::fixed_address_empty_string,
-          ::_pbi::ConstantInitialized{},
-      },
-      /*decltype(_impl_.major_number_)*/ 0u,
-      /*decltype(_impl_.minor_number_)*/ 0u,
-      /*decltype(_impl_.patch_number_)*/ 0u,
-      /*decltype(_impl_._cached_size_)*/ {},
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct VersionDefaultTypeInternal {
   PROTOBUF_CONSTEXPR VersionDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~VersionDefaultTypeInternal() {}
@@ -103,6 +48,69 @@ struct VersionDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 VersionDefaultTypeInternal _Version_default_instance_;
+
+inline constexpr PlanVersion::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        version_{nullptr} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR PlanVersion::PlanVersion(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct PlanVersionDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR PlanVersionDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~PlanVersionDefaultTypeInternal() {}
+  union {
+    PlanVersion _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PlanVersionDefaultTypeInternal _PlanVersion_default_instance_;
+
+inline constexpr PlanRel::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : rel_type_{},
+        _cached_size_{0},
+        _oneof_case_{} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR PlanRel::PlanRel(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct PlanRelDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR PlanRelDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~PlanRelDefaultTypeInternal() {}
+  union {
+    PlanRel _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PlanRelDefaultTypeInternal _PlanRel_default_instance_;
+
+inline constexpr Plan::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        extension_uris_{},
+        extensions_{},
+        relations_{},
+        expected_type_urls_{},
+        advanced_extensions_{nullptr},
+        version_{nullptr} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR Plan::Plan(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct PlanDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR PlanDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~PlanDefaultTypeInternal() {}
+  union {
+    Plan _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PlanDefaultTypeInternal _Plan_default_instance_;
 }  // namespace substrait
 static ::_pb::Metadata file_level_metadata_substrait_2fplan_2eproto[4];
 static constexpr const ::_pb::EnumDescriptor**
@@ -267,15 +275,12 @@ const ::substrait::RelRoot& PlanRel::_Internal::root(const PlanRel* msg) {
   return *msg->_impl_.rel_type_.root_;
 }
 void PlanRel::set_allocated_rel(::substrait::Rel* rel) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_rel_type();
   if (rel) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(rel));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(rel)->GetArena();
     if (message_arena != submessage_arena) {
-      rel = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, rel, submessage_arena);
+      rel = ::google::protobuf::internal::GetOwnedMessage(message_arena, rel, submessage_arena);
     }
     set_has_rel();
     _impl_.rel_type_.rel_ = rel;
@@ -283,23 +288,21 @@ void PlanRel::set_allocated_rel(::substrait::Rel* rel) {
   // @@protoc_insertion_point(field_set_allocated:substrait.PlanRel.rel)
 }
 void PlanRel::clear_rel() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (rel_type_case() == kRel) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.rel_type_.rel_;
     }
     clear_has_rel_type();
   }
 }
 void PlanRel::set_allocated_root(::substrait::RelRoot* root) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_rel_type();
   if (root) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(root));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(root)->GetArena();
     if (message_arena != submessage_arena) {
-      root = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, root, submessage_arena);
+      root = ::google::protobuf::internal::GetOwnedMessage(message_arena, root, submessage_arena);
     }
     set_has_root();
     _impl_.rel_type_.root_ = root;
@@ -307,8 +310,9 @@ void PlanRel::set_allocated_root(::substrait::RelRoot* root) {
   // @@protoc_insertion_point(field_set_allocated:substrait.PlanRel.root)
 }
 void PlanRel::clear_root() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (rel_type_case() == kRoot) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.rel_type_.root_;
     }
     clear_has_rel_type();
@@ -319,43 +323,44 @@ PlanRel::PlanRel(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.PlanRel)
 }
-PlanRel::PlanRel(const PlanRel& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE PlanRel::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : rel_type_{},
+        _cached_size_{0},
+        _oneof_case_{from._oneof_case_[0]} {}
+
+PlanRel::PlanRel(
+    ::google::protobuf::Arena* arena,
+    const PlanRel& from)
+    : ::google::protobuf::Message(arena) {
   PlanRel* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.rel_type_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_._oneof_case_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  clear_has_rel_type();
-  switch (from.rel_type_case()) {
-    case kRel: {
-      _this->_internal_mutable_rel()->::substrait::Rel::MergeFrom(
-          from._internal_rel());
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  switch (rel_type_case()) {
+    case REL_TYPE_NOT_SET:
       break;
-    }
-    case kRoot: {
-      _this->_internal_mutable_root()->::substrait::RelRoot::MergeFrom(
-          from._internal_root());
-      break;
-    }
-    case REL_TYPE_NOT_SET: {
-      break;
-    }
+      case kRel:
+        _impl_.rel_type_.rel_ = CreateMaybeMessage<::substrait::Rel>(arena, *from._impl_.rel_type_.rel_);
+        break;
+      case kRoot:
+        _impl_.rel_type_.root_ = CreateMaybeMessage<::substrait::RelRoot>(arena, *from._impl_.rel_type_.root_);
+        break;
   }
 
   // @@protoc_insertion_point(copy_constructor:substrait.PlanRel)
 }
+inline PROTOBUF_NDEBUG_INLINE PlanRel::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : rel_type_{},
+        _cached_size_{0},
+        _oneof_case_{} {}
+
 inline void PlanRel::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.rel_type_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_._oneof_case_)*/ {},
-  };
-  clear_has_rel_type();
+  new (&_impl_) Impl_(internal_visibility(), arena);
 }
 PlanRel::~PlanRel() {
   // @@protoc_insertion_point(destructor:substrait.PlanRel)
@@ -363,26 +368,25 @@ PlanRel::~PlanRel() {
   SharedDtor();
 }
 inline void PlanRel::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  ABSL_DCHECK(GetArena() == nullptr);
   if (has_rel_type()) {
     clear_rel_type();
   }
-}
-void PlanRel::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _impl_.~Impl_();
 }
 
 void PlanRel::clear_rel_type() {
 // @@protoc_insertion_point(one_of_clear_start:substrait.PlanRel)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   switch (rel_type_case()) {
     case kRel: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.rel_type_.rel_;
       }
       break;
     }
     case kRoot: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.rel_type_.root_;
       }
       break;
@@ -397,6 +401,7 @@ void PlanRel::clear_rel_type() {
 
 PROTOBUF_NOINLINE void PlanRel::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.PlanRel)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -453,14 +458,14 @@ const ::_pbi::TcParseTable<0, 2, 2, 0, 2> PlanRel::_table_ = {
 
   switch (rel_type_case()) {
     case kRel: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(1, _Internal::rel(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          1, _Internal::rel(this),
           _Internal::rel(this).GetCachedSize(), target, stream);
       break;
     }
     case kRoot: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(2, _Internal::root(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          2, _Internal::root(this),
           _Internal::root(this).GetCachedSize(), target, stream);
       break;
     }
@@ -487,16 +492,14 @@ const ::_pbi::TcParseTable<0, 2, 2, 0, 2> PlanRel::_table_ = {
   switch (rel_type_case()) {
     // .substrait.Rel rel = 1 [json_name = "rel"];
     case kRel: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.rel_type_.rel_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.rel_type_.rel_);
       break;
     }
     // .substrait.RelRoot root = 2 [json_name = "root"];
     case kRoot: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.rel_type_.root_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.rel_type_.root_);
       break;
     }
     case REL_TYPE_NOT_SET: {
@@ -507,11 +510,12 @@ const ::_pbi::TcParseTable<0, 2, 2, 0, 2> PlanRel::_table_ = {
 }
 
 const ::google::protobuf::Message::ClassData PlanRel::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    PlanRel::MergeImpl
+    PlanRel::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*PlanRel::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* PlanRel::GetClassData() const {
+  return &_class_data_;
+}
 
 void PlanRel::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<PlanRel*>(&to_msg);
@@ -550,7 +554,10 @@ PROTOBUF_NOINLINE bool PlanRel::IsInitialized() const {
   return true;
 }
 
-void PlanRel::InternalSwap(PlanRel* other) {
+::_pbi::CachedSize* PlanRel::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void PlanRel::InternalSwap(PlanRel* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_.rel_type_, other->_impl_.rel_type_);
@@ -586,12 +593,15 @@ const ::substrait::extensions::AdvancedExtension& Plan::_Internal::advanced_exte
   return *msg->_impl_.advanced_extensions_;
 }
 void Plan::clear_extension_uris() {
-  _internal_mutable_extension_uris()->Clear();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.extension_uris_.Clear();
 }
 void Plan::clear_extensions() {
-  _internal_mutable_extensions()->Clear();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.extensions_.Clear();
 }
 void Plan::clear_advanced_extensions() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (_impl_.advanced_extensions_ != nullptr) _impl_.advanced_extensions_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
@@ -600,42 +610,52 @@ Plan::Plan(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.Plan)
 }
-Plan::Plan(const Plan& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE Plan::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        extension_uris_{visibility, arena, from.extension_uris_},
+        extensions_{visibility, arena, from.extensions_},
+        relations_{visibility, arena, from.relations_},
+        expected_type_urls_{visibility, arena, from.expected_type_urls_} {}
+
+Plan::Plan(
+    ::google::protobuf::Arena* arena,
+    const Plan& from)
+    : ::google::protobuf::Message(arena) {
   Plan* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.extension_uris_){from._impl_.extension_uris_},
-      decltype(_impl_.extensions_){from._impl_.extensions_},
-      decltype(_impl_.relations_){from._impl_.relations_},
-      decltype(_impl_.expected_type_urls_){from._impl_.expected_type_urls_},
-      decltype(_impl_.advanced_extensions_){nullptr},
-      decltype(_impl_.version_){nullptr},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.advanced_extensions_ = new ::substrait::extensions::AdvancedExtension(*from._impl_.advanced_extensions_);
-  }
-  if ((from._impl_._has_bits_[0] & 0x00000002u) != 0) {
-    _this->_impl_.version_ = new ::substrait::Version(*from._impl_.version_);
-  }
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.advanced_extensions_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::extensions::AdvancedExtension>(arena, *from._impl_.advanced_extensions_)
+                : nullptr;
+  _impl_.version_ = (cached_has_bits & 0x00000002u)
+                ? CreateMaybeMessage<::substrait::Version>(arena, *from._impl_.version_)
+                : nullptr;
 
   // @@protoc_insertion_point(copy_constructor:substrait.Plan)
 }
+inline PROTOBUF_NDEBUG_INLINE Plan::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        extension_uris_{visibility, arena},
+        extensions_{visibility, arena},
+        relations_{visibility, arena},
+        expected_type_urls_{visibility, arena} {}
+
 inline void Plan::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.extension_uris_){arena},
-      decltype(_impl_.extensions_){arena},
-      decltype(_impl_.relations_){arena},
-      decltype(_impl_.expected_type_urls_){arena},
-      decltype(_impl_.advanced_extensions_){nullptr},
-      decltype(_impl_.version_){nullptr},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, advanced_extensions_),
+           0,
+           offsetof(Impl_, version_) -
+               offsetof(Impl_, advanced_extensions_) +
+               sizeof(Impl_::version_));
 }
 Plan::~Plan() {
   // @@protoc_insertion_point(destructor:substrait.Plan)
@@ -643,28 +663,23 @@ Plan::~Plan() {
   SharedDtor();
 }
 inline void Plan::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.extension_uris_.~RepeatedPtrField();
-  _impl_.extensions_.~RepeatedPtrField();
-  _impl_.relations_.~RepeatedPtrField();
-  _internal_mutable_expected_type_urls()->~RepeatedPtrField();
-  if (this != internal_default_instance()) delete _impl_.advanced_extensions_;
-  if (this != internal_default_instance()) delete _impl_.version_;
-}
-void Plan::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.advanced_extensions_;
+  delete _impl_.version_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void Plan::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.Plan)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _internal_mutable_extension_uris()->Clear();
-  _internal_mutable_extensions()->Clear();
-  _internal_mutable_relations()->Clear();
-  _internal_mutable_expected_type_urls()->Clear();
+  _impl_.extension_uris_.Clear();
+  _impl_.extensions_.Clear();
+  _impl_.relations_.Clear();
+  _impl_.expected_type_urls_.Clear();
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
@@ -790,8 +805,8 @@ const ::_pbi::TcParseTable<3, 6, 5, 41, 2> Plan::_table_ = {
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.extensions.AdvancedExtension advanced_extensions = 4 [json_name = "advancedExtensions"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(4, _Internal::advanced_extensions(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        4, _Internal::advanced_extensions(this),
         _Internal::advanced_extensions(this).GetCachedSize(), target, stream);
   }
 
@@ -805,8 +820,8 @@ const ::_pbi::TcParseTable<3, 6, 5, 41, 2> Plan::_table_ = {
 
   // .substrait.Version version = 6 [json_name = "version"];
   if (cached_has_bits & 0x00000002u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(6, _Internal::version(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        6, _Internal::version(this),
         _Internal::version(this).GetCachedSize(), target, stream);
   }
 
@@ -855,16 +870,14 @@ const ::_pbi::TcParseTable<3, 6, 5, 41, 2> Plan::_table_ = {
   if (cached_has_bits & 0x00000003u) {
     // .substrait.extensions.AdvancedExtension advanced_extensions = 4 [json_name = "advancedExtensions"];
     if (cached_has_bits & 0x00000001u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.advanced_extensions_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.advanced_extensions_);
     }
 
     // .substrait.Version version = 6 [json_name = "version"];
     if (cached_has_bits & 0x00000002u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.version_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.version_);
     }
 
   }
@@ -872,11 +885,12 @@ const ::_pbi::TcParseTable<3, 6, 5, 41, 2> Plan::_table_ = {
 }
 
 const ::google::protobuf::Message::ClassData Plan::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    Plan::MergeImpl
+    Plan::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*Plan::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* Plan::GetClassData() const {
+  return &_class_data_;
+}
 
 void Plan::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<Plan*>(&to_msg);
@@ -886,9 +900,12 @@ void Plan::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protob
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  _this->_internal_mutable_extension_uris()->MergeFrom(from._internal_extension_uris());
-  _this->_internal_mutable_extensions()->MergeFrom(from._internal_extensions());
-  _this->_internal_mutable_relations()->MergeFrom(from._internal_relations());
+  _this->_internal_mutable_extension_uris()->MergeFrom(
+      from._internal_extension_uris());
+  _this->_internal_mutable_extensions()->MergeFrom(
+      from._internal_extensions());
+  _this->_internal_mutable_relations()->MergeFrom(
+      from._internal_relations());
   _this->_internal_mutable_expected_type_urls()->MergeFrom(from._internal_expected_type_urls());
   cached_has_bits = from._impl_._has_bits_[0];
   if (cached_has_bits & 0x00000003u) {
@@ -915,7 +932,10 @@ PROTOBUF_NOINLINE bool Plan::IsInitialized() const {
   return true;
 }
 
-void Plan::InternalSwap(Plan* other) {
+::_pbi::CachedSize* Plan::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void Plan::InternalSwap(Plan* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
@@ -957,29 +977,36 @@ PlanVersion::PlanVersion(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.PlanVersion)
 }
-PlanVersion::PlanVersion(const PlanVersion& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE PlanVersion::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+PlanVersion::PlanVersion(
+    ::google::protobuf::Arena* arena,
+    const PlanVersion& from)
+    : ::google::protobuf::Message(arena) {
   PlanVersion* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.version_){nullptr},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.version_ = new ::substrait::Version(*from._impl_.version_);
-  }
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.version_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::Version>(arena, *from._impl_.version_)
+                : nullptr;
 
   // @@protoc_insertion_point(copy_constructor:substrait.PlanVersion)
 }
+inline PROTOBUF_NDEBUG_INLINE PlanVersion::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
 inline void PlanVersion::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.version_){nullptr},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.version_ = {};
 }
 PlanVersion::~PlanVersion() {
   // @@protoc_insertion_point(destructor:substrait.PlanVersion)
@@ -987,15 +1014,14 @@ PlanVersion::~PlanVersion() {
   SharedDtor();
 }
 inline void PlanVersion::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete _impl_.version_;
-}
-void PlanVersion::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.version_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void PlanVersion::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.PlanVersion)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1056,8 +1082,8 @@ const ::_pbi::TcParseTable<0, 1, 1, 0, 2> PlanVersion::_table_ = {
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.Version version = 6 [json_name = "version"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(6, _Internal::version(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        6, _Internal::version(this),
         _Internal::version(this).GetCachedSize(), target, stream);
   }
 
@@ -1081,20 +1107,20 @@ const ::_pbi::TcParseTable<0, 1, 1, 0, 2> PlanVersion::_table_ = {
   // .substrait.Version version = 6 [json_name = "version"];
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *_impl_.version_);
+    total_size +=
+        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.version_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::google::protobuf::Message::ClassData PlanVersion::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    PlanVersion::MergeImpl
+    PlanVersion::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*PlanVersion::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* PlanVersion::GetClassData() const {
+  return &_class_data_;
+}
 
 void PlanVersion::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<PlanVersion*>(&to_msg);
@@ -1122,7 +1148,10 @@ PROTOBUF_NOINLINE bool PlanVersion::IsInitialized() const {
   return true;
 }
 
-void PlanVersion::InternalSwap(PlanVersion* other) {
+::_pbi::CachedSize* PlanVersion::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void PlanVersion::InternalSwap(PlanVersion* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
@@ -1145,57 +1174,47 @@ Version::Version(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.Version)
 }
-Version::Version(const Version& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE Version::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : git_hash_(arena, from.git_hash_),
+        producer_(arena, from.producer_),
+        _cached_size_{0} {}
+
+Version::Version(
+    ::google::protobuf::Arena* arena,
+    const Version& from)
+    : ::google::protobuf::Message(arena) {
   Version* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.git_hash_){},
-      decltype(_impl_.producer_){},
-      decltype(_impl_.major_number_){},
-      decltype(_impl_.minor_number_){},
-      decltype(_impl_.patch_number_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  _impl_.git_hash_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.git_hash_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_git_hash().empty()) {
-    _this->_impl_.git_hash_.Set(from._internal_git_hash(), _this->GetArenaForAllocation());
-  }
-  _impl_.producer_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.producer_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_producer().empty()) {
-    _this->_impl_.producer_.Set(from._internal_producer(), _this->GetArenaForAllocation());
-  }
-  ::memcpy(&_impl_.major_number_, &from._impl_.major_number_,
-    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.patch_number_) -
-    reinterpret_cast<char*>(&_impl_.major_number_)) + sizeof(_impl_.patch_number_));
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, major_number_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, major_number_),
+           offsetof(Impl_, patch_number_) -
+               offsetof(Impl_, major_number_) +
+               sizeof(Impl_::patch_number_));
 
   // @@protoc_insertion_point(copy_constructor:substrait.Version)
 }
+inline PROTOBUF_NDEBUG_INLINE Version::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : git_hash_(arena),
+        producer_(arena),
+        _cached_size_{0} {}
+
 inline void Version::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.git_hash_){},
-      decltype(_impl_.producer_){},
-      decltype(_impl_.major_number_){0u},
-      decltype(_impl_.minor_number_){0u},
-      decltype(_impl_.patch_number_){0u},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
-  _impl_.git_hash_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.git_hash_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.producer_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.producer_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, major_number_),
+           0,
+           offsetof(Impl_, patch_number_) -
+               offsetof(Impl_, major_number_) +
+               sizeof(Impl_::patch_number_));
 }
 Version::~Version() {
   // @@protoc_insertion_point(destructor:substrait.Version)
@@ -1203,16 +1222,15 @@ Version::~Version() {
   SharedDtor();
 }
 inline void Version::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  ABSL_DCHECK(GetArena() == nullptr);
   _impl_.git_hash_.Destroy();
   _impl_.producer_.Destroy();
-}
-void Version::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void Version::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.Version)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1388,11 +1406,12 @@ const ::_pbi::TcParseTable<3, 5, 0, 42, 2> Version::_table_ = {
 }
 
 const ::google::protobuf::Message::ClassData Version::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    Version::MergeImpl
+    Version::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*Version::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* Version::GetClassData() const {
+  return &_class_data_;
+}
 
 void Version::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<Version*>(&to_msg);
@@ -1431,15 +1450,16 @@ PROTOBUF_NOINLINE bool Version::IsInitialized() const {
   return true;
 }
 
-void Version::InternalSwap(Version* other) {
+::_pbi::CachedSize* Version::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void Version::InternalSwap(Version* PROTOBUF_RESTRICT other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.git_hash_, lhs_arena,
-                                       &other->_impl_.git_hash_, rhs_arena);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.producer_, lhs_arena,
-                                       &other->_impl_.producer_, rhs_arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.git_hash_, &other->_impl_.git_hash_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.producer_, &other->_impl_.producer_, arena);
   ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(Version, _impl_.patch_number_)
       + sizeof(Version::_impl_.patch_number_)

@@ -21,18 +21,20 @@ namespace _pb = ::google::protobuf;
 namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 namespace substrait {
-        template <typename>
+
+inline constexpr Capabilities_SimpleExtension::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : function_keys_{},
+        type_keys_{},
+        type_variation_keys_{},
+        uri_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        _cached_size_{0} {}
+
+template <typename>
 PROTOBUF_CONSTEXPR Capabilities_SimpleExtension::Capabilities_SimpleExtension(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.function_keys_)*/ {},
-      /*decltype(_impl_.type_keys_)*/ {},
-      /*decltype(_impl_.type_variation_keys_)*/ {},
-      /*decltype(_impl_.uri_)*/ {
-          &::_pbi::fixed_address_empty_string,
-          ::_pbi::ConstantInitialized{},
-      },
-      /*decltype(_impl_._cached_size_)*/ {},
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct Capabilities_SimpleExtensionDefaultTypeInternal {
   PROTOBUF_CONSTEXPR Capabilities_SimpleExtensionDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~Capabilities_SimpleExtensionDefaultTypeInternal() {}
@@ -43,14 +45,17 @@ struct Capabilities_SimpleExtensionDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 Capabilities_SimpleExtensionDefaultTypeInternal _Capabilities_SimpleExtension_default_instance_;
-        template <typename>
+
+inline constexpr Capabilities::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : substrait_versions_{},
+        advanced_extension_type_urls_{},
+        simple_extensions_{},
+        _cached_size_{0} {}
+
+template <typename>
 PROTOBUF_CONSTEXPR Capabilities::Capabilities(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.substrait_versions_)*/ {},
-      /*decltype(_impl_.advanced_extension_type_urls_)*/ {},
-      /*decltype(_impl_.simple_extensions_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct CapabilitiesDefaultTypeInternal {
   PROTOBUF_CONSTEXPR CapabilitiesDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~CapabilitiesDefaultTypeInternal() {}
@@ -169,41 +174,38 @@ Capabilities_SimpleExtension::Capabilities_SimpleExtension(::google::protobuf::A
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.Capabilities.SimpleExtension)
 }
-Capabilities_SimpleExtension::Capabilities_SimpleExtension(const Capabilities_SimpleExtension& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE Capabilities_SimpleExtension::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : function_keys_{visibility, arena, from.function_keys_},
+        type_keys_{visibility, arena, from.type_keys_},
+        type_variation_keys_{visibility, arena, from.type_variation_keys_},
+        uri_(arena, from.uri_),
+        _cached_size_{0} {}
+
+Capabilities_SimpleExtension::Capabilities_SimpleExtension(
+    ::google::protobuf::Arena* arena,
+    const Capabilities_SimpleExtension& from)
+    : ::google::protobuf::Message(arena) {
   Capabilities_SimpleExtension* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.function_keys_){from._impl_.function_keys_},
-      decltype(_impl_.type_keys_){from._impl_.type_keys_},
-      decltype(_impl_.type_variation_keys_){from._impl_.type_variation_keys_},
-      decltype(_impl_.uri_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  _impl_.uri_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.uri_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_uri().empty()) {
-    _this->_impl_.uri_.Set(from._internal_uri(), _this->GetArenaForAllocation());
-  }
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
 
   // @@protoc_insertion_point(copy_constructor:substrait.Capabilities.SimpleExtension)
 }
+inline PROTOBUF_NDEBUG_INLINE Capabilities_SimpleExtension::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : function_keys_{visibility, arena},
+        type_keys_{visibility, arena},
+        type_variation_keys_{visibility, arena},
+        uri_(arena),
+        _cached_size_{0} {}
+
 inline void Capabilities_SimpleExtension::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.function_keys_){arena},
-      decltype(_impl_.type_keys_){arena},
-      decltype(_impl_.type_variation_keys_){arena},
-      decltype(_impl_.uri_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
-  _impl_.uri_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.uri_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  new (&_impl_) Impl_(internal_visibility(), arena);
 }
 Capabilities_SimpleExtension::~Capabilities_SimpleExtension() {
   // @@protoc_insertion_point(destructor:substrait.Capabilities.SimpleExtension)
@@ -211,25 +213,21 @@ Capabilities_SimpleExtension::~Capabilities_SimpleExtension() {
   SharedDtor();
 }
 inline void Capabilities_SimpleExtension::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _internal_mutable_function_keys()->~RepeatedPtrField();
-  _internal_mutable_type_keys()->~RepeatedPtrField();
-  _internal_mutable_type_variation_keys()->~RepeatedPtrField();
+  ABSL_DCHECK(GetArena() == nullptr);
   _impl_.uri_.Destroy();
-}
-void Capabilities_SimpleExtension::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void Capabilities_SimpleExtension::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.Capabilities.SimpleExtension)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _internal_mutable_function_keys()->Clear();
-  _internal_mutable_type_keys()->Clear();
-  _internal_mutable_type_variation_keys()->Clear();
+  _impl_.function_keys_.Clear();
+  _impl_.type_keys_.Clear();
+  _impl_.type_variation_keys_.Clear();
   _impl_.uri_.ClearToEmpty();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -379,11 +377,12 @@ const ::_pbi::TcParseTable<2, 4, 0, 91, 2> Capabilities_SimpleExtension::_table_
 }
 
 const ::google::protobuf::Message::ClassData Capabilities_SimpleExtension::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    Capabilities_SimpleExtension::MergeImpl
+    Capabilities_SimpleExtension::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*Capabilities_SimpleExtension::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* Capabilities_SimpleExtension::GetClassData() const {
+  return &_class_data_;
+}
 
 void Capabilities_SimpleExtension::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<Capabilities_SimpleExtension*>(&to_msg);
@@ -413,16 +412,18 @@ PROTOBUF_NOINLINE bool Capabilities_SimpleExtension::IsInitialized() const {
   return true;
 }
 
-void Capabilities_SimpleExtension::InternalSwap(Capabilities_SimpleExtension* other) {
+::_pbi::CachedSize* Capabilities_SimpleExtension::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void Capabilities_SimpleExtension::InternalSwap(Capabilities_SimpleExtension* PROTOBUF_RESTRICT other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.function_keys_.InternalSwap(&other->_impl_.function_keys_);
   _impl_.type_keys_.InternalSwap(&other->_impl_.type_keys_);
   _impl_.type_variation_keys_.InternalSwap(&other->_impl_.type_variation_keys_);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.uri_, lhs_arena,
-                                       &other->_impl_.uri_, rhs_arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.uri_, &other->_impl_.uri_, arena);
 }
 
 ::google::protobuf::Metadata Capabilities_SimpleExtension::GetMetadata() const {
@@ -441,28 +442,36 @@ Capabilities::Capabilities(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.Capabilities)
 }
-Capabilities::Capabilities(const Capabilities& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE Capabilities::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : substrait_versions_{visibility, arena, from.substrait_versions_},
+        advanced_extension_type_urls_{visibility, arena, from.advanced_extension_type_urls_},
+        simple_extensions_{visibility, arena, from.simple_extensions_},
+        _cached_size_{0} {}
+
+Capabilities::Capabilities(
+    ::google::protobuf::Arena* arena,
+    const Capabilities& from)
+    : ::google::protobuf::Message(arena) {
   Capabilities* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.substrait_versions_){from._impl_.substrait_versions_},
-      decltype(_impl_.advanced_extension_type_urls_){from._impl_.advanced_extension_type_urls_},
-      decltype(_impl_.simple_extensions_){from._impl_.simple_extensions_},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
 
   // @@protoc_insertion_point(copy_constructor:substrait.Capabilities)
 }
+inline PROTOBUF_NDEBUG_INLINE Capabilities::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : substrait_versions_{visibility, arena},
+        advanced_extension_type_urls_{visibility, arena},
+        simple_extensions_{visibility, arena},
+        _cached_size_{0} {}
+
 inline void Capabilities::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.substrait_versions_){arena},
-      decltype(_impl_.advanced_extension_type_urls_){arena},
-      decltype(_impl_.simple_extensions_){arena},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
 }
 Capabilities::~Capabilities() {
   // @@protoc_insertion_point(destructor:substrait.Capabilities)
@@ -470,24 +479,20 @@ Capabilities::~Capabilities() {
   SharedDtor();
 }
 inline void Capabilities::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _internal_mutable_substrait_versions()->~RepeatedPtrField();
-  _internal_mutable_advanced_extension_type_urls()->~RepeatedPtrField();
-  _impl_.simple_extensions_.~RepeatedPtrField();
-}
-void Capabilities::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void Capabilities::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.Capabilities)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _internal_mutable_substrait_versions()->Clear();
-  _internal_mutable_advanced_extension_type_urls()->Clear();
-  _internal_mutable_simple_extensions()->Clear();
+  _impl_.substrait_versions_.Clear();
+  _impl_.advanced_extension_type_urls_.Clear();
+  _impl_.simple_extensions_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
@@ -615,11 +620,12 @@ const ::_pbi::TcParseTable<2, 3, 1, 77, 2> Capabilities::_table_ = {
 }
 
 const ::google::protobuf::Message::ClassData Capabilities::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    Capabilities::MergeImpl
+    Capabilities::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*Capabilities::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* Capabilities::GetClassData() const {
+  return &_class_data_;
+}
 
 void Capabilities::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<Capabilities*>(&to_msg);
@@ -631,7 +637,8 @@ void Capabilities::MergeImpl(::google::protobuf::Message& to_msg, const ::google
 
   _this->_internal_mutable_substrait_versions()->MergeFrom(from._internal_substrait_versions());
   _this->_internal_mutable_advanced_extension_type_urls()->MergeFrom(from._internal_advanced_extension_type_urls());
-  _this->_internal_mutable_simple_extensions()->MergeFrom(from._internal_simple_extensions());
+  _this->_internal_mutable_simple_extensions()->MergeFrom(
+      from._internal_simple_extensions());
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -646,7 +653,10 @@ PROTOBUF_NOINLINE bool Capabilities::IsInitialized() const {
   return true;
 }
 
-void Capabilities::InternalSwap(Capabilities* other) {
+::_pbi::CachedSize* Capabilities::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void Capabilities::InternalSwap(Capabilities* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.substrait_versions_.InternalSwap(&other->_impl_.substrait_versions_);
