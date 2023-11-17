@@ -21,166 +21,17 @@ namespace _pb = ::google::protobuf;
 namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 namespace substrait {
-        template <typename>
-PROTOBUF_CONSTEXPR DerivationExpression_ExpressionFixedChar::DerivationExpression_ExpressionFixedChar(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.length_)*/ nullptr,
-      /*decltype(_impl_.variation_pointer_)*/ 0u,
-      /*decltype(_impl_.nullability_)*/ 0,
-    } {}
-struct DerivationExpression_ExpressionFixedCharDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionFixedCharDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~DerivationExpression_ExpressionFixedCharDefaultTypeInternal() {}
-  union {
-    DerivationExpression_ExpressionFixedChar _instance;
-  };
-};
 
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionFixedCharDefaultTypeInternal _DerivationExpression_ExpressionFixedChar_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR DerivationExpression_ExpressionVarChar::DerivationExpression_ExpressionVarChar(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.length_)*/ nullptr,
-      /*decltype(_impl_.variation_pointer_)*/ 0u,
-      /*decltype(_impl_.nullability_)*/ 0,
-    } {}
-struct DerivationExpression_ExpressionVarCharDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionVarCharDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~DerivationExpression_ExpressionVarCharDefaultTypeInternal() {}
-  union {
-    DerivationExpression_ExpressionVarChar _instance;
-  };
-};
+inline constexpr DerivationExpression_ExpressionUserDefined::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : type_pointer_{0u},
+        variation_pointer_{0u},
+        nullability_{static_cast< ::substrait::Type_Nullability >(0)},
+        _cached_size_{0} {}
 
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionVarCharDefaultTypeInternal _DerivationExpression_ExpressionVarChar_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR DerivationExpression_ExpressionFixedBinary::DerivationExpression_ExpressionFixedBinary(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.length_)*/ nullptr,
-      /*decltype(_impl_.variation_pointer_)*/ 0u,
-      /*decltype(_impl_.nullability_)*/ 0,
-    } {}
-struct DerivationExpression_ExpressionFixedBinaryDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionFixedBinaryDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~DerivationExpression_ExpressionFixedBinaryDefaultTypeInternal() {}
-  union {
-    DerivationExpression_ExpressionFixedBinary _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionFixedBinaryDefaultTypeInternal _DerivationExpression_ExpressionFixedBinary_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR DerivationExpression_ExpressionDecimal::DerivationExpression_ExpressionDecimal(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.scale_)*/ nullptr,
-      /*decltype(_impl_.precision_)*/ nullptr,
-      /*decltype(_impl_.variation_pointer_)*/ 0u,
-      /*decltype(_impl_.nullability_)*/ 0,
-    } {}
-struct DerivationExpression_ExpressionDecimalDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionDecimalDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~DerivationExpression_ExpressionDecimalDefaultTypeInternal() {}
-  union {
-    DerivationExpression_ExpressionDecimal _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionDecimalDefaultTypeInternal _DerivationExpression_ExpressionDecimal_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR DerivationExpression_ExpressionStruct::DerivationExpression_ExpressionStruct(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.types_)*/ {},
-      /*decltype(_impl_.variation_pointer_)*/ 0u,
-      /*decltype(_impl_.nullability_)*/ 0,
-      /*decltype(_impl_._cached_size_)*/ {},
-    } {}
-struct DerivationExpression_ExpressionStructDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionStructDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~DerivationExpression_ExpressionStructDefaultTypeInternal() {}
-  union {
-    DerivationExpression_ExpressionStruct _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionStructDefaultTypeInternal _DerivationExpression_ExpressionStruct_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR DerivationExpression_ExpressionNamedStruct::DerivationExpression_ExpressionNamedStruct(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.names_)*/ {},
-      /*decltype(_impl_.struct__)*/ nullptr,
-    } {}
-struct DerivationExpression_ExpressionNamedStructDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionNamedStructDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~DerivationExpression_ExpressionNamedStructDefaultTypeInternal() {}
-  union {
-    DerivationExpression_ExpressionNamedStruct _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionNamedStructDefaultTypeInternal _DerivationExpression_ExpressionNamedStruct_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR DerivationExpression_ExpressionList::DerivationExpression_ExpressionList(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.type_)*/ nullptr,
-      /*decltype(_impl_.variation_pointer_)*/ 0u,
-      /*decltype(_impl_.nullability_)*/ 0,
-    } {}
-struct DerivationExpression_ExpressionListDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionListDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~DerivationExpression_ExpressionListDefaultTypeInternal() {}
-  union {
-    DerivationExpression_ExpressionList _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionListDefaultTypeInternal _DerivationExpression_ExpressionList_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR DerivationExpression_ExpressionMap::DerivationExpression_ExpressionMap(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.key_)*/ nullptr,
-      /*decltype(_impl_.value_)*/ nullptr,
-      /*decltype(_impl_.variation_pointer_)*/ 0u,
-      /*decltype(_impl_.nullability_)*/ 0,
-    } {}
-struct DerivationExpression_ExpressionMapDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionMapDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~DerivationExpression_ExpressionMapDefaultTypeInternal() {}
-  union {
-    DerivationExpression_ExpressionMap _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionMapDefaultTypeInternal _DerivationExpression_ExpressionMap_default_instance_;
-        template <typename>
+template <typename>
 PROTOBUF_CONSTEXPR DerivationExpression_ExpressionUserDefined::DerivationExpression_ExpressionUserDefined(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.type_pointer_)*/ 0u,
-      /*decltype(_impl_.variation_pointer_)*/ 0u,
-      /*decltype(_impl_.nullability_)*/ 0,
-      /*decltype(_impl_._cached_size_)*/ {},
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct DerivationExpression_ExpressionUserDefinedDefaultTypeInternal {
   PROTOBUF_CONSTEXPR DerivationExpression_ExpressionUserDefinedDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~DerivationExpression_ExpressionUserDefinedDefaultTypeInternal() {}
@@ -191,108 +42,16 @@ struct DerivationExpression_ExpressionUserDefinedDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionUserDefinedDefaultTypeInternal _DerivationExpression_ExpressionUserDefined_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR DerivationExpression_IfElse::DerivationExpression_IfElse(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.if_condition_)*/ nullptr,
-      /*decltype(_impl_.if_return_)*/ nullptr,
-      /*decltype(_impl_.else_return_)*/ nullptr,
-    } {}
-struct DerivationExpression_IfElseDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DerivationExpression_IfElseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~DerivationExpression_IfElseDefaultTypeInternal() {}
-  union {
-    DerivationExpression_IfElse _instance;
-  };
-};
 
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_IfElseDefaultTypeInternal _DerivationExpression_IfElse_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR DerivationExpression_UnaryOp::DerivationExpression_UnaryOp(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.arg_)*/ nullptr,
-      /*decltype(_impl_.op_type_)*/ 0,
-    } {}
-struct DerivationExpression_UnaryOpDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DerivationExpression_UnaryOpDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~DerivationExpression_UnaryOpDefaultTypeInternal() {}
-  union {
-    DerivationExpression_UnaryOp _instance;
-  };
-};
+inline constexpr DerivationExpression::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : kind_{},
+        _cached_size_{0},
+        _oneof_case_{} {}
 
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_UnaryOpDefaultTypeInternal _DerivationExpression_UnaryOp_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR DerivationExpression_BinaryOp::DerivationExpression_BinaryOp(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.arg1_)*/ nullptr,
-      /*decltype(_impl_.arg2_)*/ nullptr,
-      /*decltype(_impl_.op_type_)*/ 0,
-    } {}
-struct DerivationExpression_BinaryOpDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DerivationExpression_BinaryOpDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~DerivationExpression_BinaryOpDefaultTypeInternal() {}
-  union {
-    DerivationExpression_BinaryOp _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_BinaryOpDefaultTypeInternal _DerivationExpression_BinaryOp_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR DerivationExpression_ReturnProgram_Assignment::DerivationExpression_ReturnProgram_Assignment(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.name_)*/ {
-          &::_pbi::fixed_address_empty_string,
-          ::_pbi::ConstantInitialized{},
-      },
-      /*decltype(_impl_.expression_)*/ nullptr,
-    } {}
-struct DerivationExpression_ReturnProgram_AssignmentDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DerivationExpression_ReturnProgram_AssignmentDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~DerivationExpression_ReturnProgram_AssignmentDefaultTypeInternal() {}
-  union {
-    DerivationExpression_ReturnProgram_Assignment _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ReturnProgram_AssignmentDefaultTypeInternal _DerivationExpression_ReturnProgram_Assignment_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR DerivationExpression_ReturnProgram::DerivationExpression_ReturnProgram(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.assignments_)*/ {},
-      /*decltype(_impl_.final_expression_)*/ nullptr,
-    } {}
-struct DerivationExpression_ReturnProgramDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR DerivationExpression_ReturnProgramDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~DerivationExpression_ReturnProgramDefaultTypeInternal() {}
-  union {
-    DerivationExpression_ReturnProgram _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ReturnProgramDefaultTypeInternal _DerivationExpression_ReturnProgram_default_instance_;
-        template <typename>
+template <typename>
 PROTOBUF_CONSTEXPR DerivationExpression::DerivationExpression(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.kind_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_._oneof_case_)*/ {},
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct DerivationExpressionDefaultTypeInternal {
   PROTOBUF_CONSTEXPR DerivationExpressionDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~DerivationExpressionDefaultTypeInternal() {}
@@ -303,6 +62,279 @@ struct DerivationExpressionDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpressionDefaultTypeInternal _DerivationExpression_default_instance_;
+
+inline constexpr DerivationExpression_BinaryOp::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        arg1_{nullptr},
+        arg2_{nullptr},
+        op_type_{static_cast< ::substrait::DerivationExpression_BinaryOp_BinaryOpType >(0)} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DerivationExpression_BinaryOp::DerivationExpression_BinaryOp(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DerivationExpression_BinaryOpDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DerivationExpression_BinaryOpDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DerivationExpression_BinaryOpDefaultTypeInternal() {}
+  union {
+    DerivationExpression_BinaryOp _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_BinaryOpDefaultTypeInternal _DerivationExpression_BinaryOp_default_instance_;
+
+inline constexpr DerivationExpression_ExpressionDecimal::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        scale_{nullptr},
+        precision_{nullptr},
+        variation_pointer_{0u},
+        nullability_{static_cast< ::substrait::Type_Nullability >(0)} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DerivationExpression_ExpressionDecimal::DerivationExpression_ExpressionDecimal(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DerivationExpression_ExpressionDecimalDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionDecimalDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DerivationExpression_ExpressionDecimalDefaultTypeInternal() {}
+  union {
+    DerivationExpression_ExpressionDecimal _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionDecimalDefaultTypeInternal _DerivationExpression_ExpressionDecimal_default_instance_;
+
+inline constexpr DerivationExpression_ExpressionFixedBinary::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        length_{nullptr},
+        variation_pointer_{0u},
+        nullability_{static_cast< ::substrait::Type_Nullability >(0)} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DerivationExpression_ExpressionFixedBinary::DerivationExpression_ExpressionFixedBinary(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DerivationExpression_ExpressionFixedBinaryDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionFixedBinaryDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DerivationExpression_ExpressionFixedBinaryDefaultTypeInternal() {}
+  union {
+    DerivationExpression_ExpressionFixedBinary _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionFixedBinaryDefaultTypeInternal _DerivationExpression_ExpressionFixedBinary_default_instance_;
+
+inline constexpr DerivationExpression_ExpressionFixedChar::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        length_{nullptr},
+        variation_pointer_{0u},
+        nullability_{static_cast< ::substrait::Type_Nullability >(0)} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DerivationExpression_ExpressionFixedChar::DerivationExpression_ExpressionFixedChar(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DerivationExpression_ExpressionFixedCharDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionFixedCharDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DerivationExpression_ExpressionFixedCharDefaultTypeInternal() {}
+  union {
+    DerivationExpression_ExpressionFixedChar _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionFixedCharDefaultTypeInternal _DerivationExpression_ExpressionFixedChar_default_instance_;
+
+inline constexpr DerivationExpression_ExpressionList::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        type_{nullptr},
+        variation_pointer_{0u},
+        nullability_{static_cast< ::substrait::Type_Nullability >(0)} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DerivationExpression_ExpressionList::DerivationExpression_ExpressionList(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DerivationExpression_ExpressionListDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionListDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DerivationExpression_ExpressionListDefaultTypeInternal() {}
+  union {
+    DerivationExpression_ExpressionList _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionListDefaultTypeInternal _DerivationExpression_ExpressionList_default_instance_;
+
+inline constexpr DerivationExpression_ExpressionMap::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        key_{nullptr},
+        value_{nullptr},
+        variation_pointer_{0u},
+        nullability_{static_cast< ::substrait::Type_Nullability >(0)} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DerivationExpression_ExpressionMap::DerivationExpression_ExpressionMap(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DerivationExpression_ExpressionMapDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionMapDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DerivationExpression_ExpressionMapDefaultTypeInternal() {}
+  union {
+    DerivationExpression_ExpressionMap _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionMapDefaultTypeInternal _DerivationExpression_ExpressionMap_default_instance_;
+
+inline constexpr DerivationExpression_ExpressionStruct::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : types_{},
+        variation_pointer_{0u},
+        nullability_{static_cast< ::substrait::Type_Nullability >(0)},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DerivationExpression_ExpressionStruct::DerivationExpression_ExpressionStruct(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DerivationExpression_ExpressionStructDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionStructDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DerivationExpression_ExpressionStructDefaultTypeInternal() {}
+  union {
+    DerivationExpression_ExpressionStruct _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionStructDefaultTypeInternal _DerivationExpression_ExpressionStruct_default_instance_;
+
+inline constexpr DerivationExpression_ExpressionVarChar::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        length_{nullptr},
+        variation_pointer_{0u},
+        nullability_{static_cast< ::substrait::Type_Nullability >(0)} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DerivationExpression_ExpressionVarChar::DerivationExpression_ExpressionVarChar(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DerivationExpression_ExpressionVarCharDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionVarCharDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DerivationExpression_ExpressionVarCharDefaultTypeInternal() {}
+  union {
+    DerivationExpression_ExpressionVarChar _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionVarCharDefaultTypeInternal _DerivationExpression_ExpressionVarChar_default_instance_;
+
+inline constexpr DerivationExpression_IfElse::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        if_condition_{nullptr},
+        if_return_{nullptr},
+        else_return_{nullptr} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DerivationExpression_IfElse::DerivationExpression_IfElse(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DerivationExpression_IfElseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DerivationExpression_IfElseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DerivationExpression_IfElseDefaultTypeInternal() {}
+  union {
+    DerivationExpression_IfElse _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_IfElseDefaultTypeInternal _DerivationExpression_IfElse_default_instance_;
+
+inline constexpr DerivationExpression_ReturnProgram::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        assignments_{},
+        final_expression_{nullptr} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DerivationExpression_ReturnProgram::DerivationExpression_ReturnProgram(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DerivationExpression_ReturnProgramDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DerivationExpression_ReturnProgramDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DerivationExpression_ReturnProgramDefaultTypeInternal() {}
+  union {
+    DerivationExpression_ReturnProgram _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ReturnProgramDefaultTypeInternal _DerivationExpression_ReturnProgram_default_instance_;
+
+inline constexpr DerivationExpression_ReturnProgram_Assignment::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        name_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        expression_{nullptr} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DerivationExpression_ReturnProgram_Assignment::DerivationExpression_ReturnProgram_Assignment(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DerivationExpression_ReturnProgram_AssignmentDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DerivationExpression_ReturnProgram_AssignmentDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DerivationExpression_ReturnProgram_AssignmentDefaultTypeInternal() {}
+  union {
+    DerivationExpression_ReturnProgram_Assignment _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ReturnProgram_AssignmentDefaultTypeInternal _DerivationExpression_ReturnProgram_Assignment_default_instance_;
+
+inline constexpr DerivationExpression_UnaryOp::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        arg_{nullptr},
+        op_type_{static_cast< ::substrait::DerivationExpression_UnaryOp_UnaryOpType >(0)} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DerivationExpression_UnaryOp::DerivationExpression_UnaryOp(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DerivationExpression_UnaryOpDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DerivationExpression_UnaryOpDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DerivationExpression_UnaryOpDefaultTypeInternal() {}
+  union {
+    DerivationExpression_UnaryOp _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_UnaryOpDefaultTypeInternal _DerivationExpression_UnaryOp_default_instance_;
+
+inline constexpr DerivationExpression_ExpressionNamedStruct::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        names_{},
+        struct__{nullptr} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DerivationExpression_ExpressionNamedStruct::DerivationExpression_ExpressionNamedStruct(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DerivationExpression_ExpressionNamedStructDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DerivationExpression_ExpressionNamedStructDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DerivationExpression_ExpressionNamedStructDefaultTypeInternal() {}
+  union {
+    DerivationExpression_ExpressionNamedStruct _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DerivationExpression_ExpressionNamedStructDefaultTypeInternal _DerivationExpression_ExpressionNamedStruct_default_instance_;
 }  // namespace substrait
 static ::_pb::Metadata file_level_metadata_substrait_2ftype_5fexpressions_2eproto[15];
 static const ::_pb::EnumDescriptor* file_level_enum_descriptors_substrait_2ftype_5fexpressions_2eproto[2];
@@ -752,14 +784,10 @@ const ::google::protobuf::EnumDescriptor* DerivationExpression_UnaryOp_UnaryOpTy
   ::google::protobuf::internal::AssignDescriptors(&descriptor_table_substrait_2ftype_5fexpressions_2eproto);
   return file_level_enum_descriptors_substrait_2ftype_5fexpressions_2eproto[0];
 }
+PROTOBUF_CONSTINIT const uint32_t DerivationExpression_UnaryOp_UnaryOpType_internal_data_[] = {
+    131072u, 0u, };
 bool DerivationExpression_UnaryOp_UnaryOpType_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-      return true;
-    default:
-      return false;
-  }
+  return 0 <= value && value <= 1;
 }
 #if (__cplusplus < 201703) && \
   (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
@@ -776,25 +804,10 @@ const ::google::protobuf::EnumDescriptor* DerivationExpression_BinaryOp_BinaryOp
   ::google::protobuf::internal::AssignDescriptors(&descriptor_table_substrait_2ftype_5fexpressions_2eproto);
   return file_level_enum_descriptors_substrait_2ftype_5fexpressions_2eproto[1];
 }
+PROTOBUF_CONSTINIT const uint32_t DerivationExpression_BinaryOp_BinaryOpType_internal_data_[] = {
+    851968u, 0u, };
 bool DerivationExpression_BinaryOp_BinaryOpType_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-    case 11:
-    case 12:
-      return true;
-    default:
-      return false;
-  }
+  return 0 <= value && value <= 12;
 }
 #if (__cplusplus < 201703) && \
   (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
@@ -839,36 +852,48 @@ DerivationExpression_ExpressionFixedChar::DerivationExpression_ExpressionFixedCh
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.DerivationExpression.ExpressionFixedChar)
 }
-DerivationExpression_ExpressionFixedChar::DerivationExpression_ExpressionFixedChar(const DerivationExpression_ExpressionFixedChar& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionFixedChar::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+DerivationExpression_ExpressionFixedChar::DerivationExpression_ExpressionFixedChar(
+    ::google::protobuf::Arena* arena,
+    const DerivationExpression_ExpressionFixedChar& from)
+    : ::google::protobuf::Message(arena) {
   DerivationExpression_ExpressionFixedChar* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.length_){nullptr},
-      decltype(_impl_.variation_pointer_){},
-      decltype(_impl_.nullability_){},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.length_ = new ::substrait::DerivationExpression(*from._impl_.length_);
-  }
-  ::memcpy(&_impl_.variation_pointer_, &from._impl_.variation_pointer_,
-    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.nullability_) -
-    reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.length_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.length_)
+                : nullptr;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, variation_pointer_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, variation_pointer_),
+           offsetof(Impl_, nullability_) -
+               offsetof(Impl_, variation_pointer_) +
+               sizeof(Impl_::nullability_));
 
   // @@protoc_insertion_point(copy_constructor:substrait.DerivationExpression.ExpressionFixedChar)
 }
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionFixedChar::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
 inline void DerivationExpression_ExpressionFixedChar::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.length_){nullptr},
-      decltype(_impl_.variation_pointer_){0u},
-      decltype(_impl_.nullability_){0},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, length_),
+           0,
+           offsetof(Impl_, nullability_) -
+               offsetof(Impl_, length_) +
+               sizeof(Impl_::nullability_));
 }
 DerivationExpression_ExpressionFixedChar::~DerivationExpression_ExpressionFixedChar() {
   // @@protoc_insertion_point(destructor:substrait.DerivationExpression.ExpressionFixedChar)
@@ -876,15 +901,14 @@ DerivationExpression_ExpressionFixedChar::~DerivationExpression_ExpressionFixedC
   SharedDtor();
 }
 inline void DerivationExpression_ExpressionFixedChar::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete _impl_.length_;
-}
-void DerivationExpression_ExpressionFixedChar::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.length_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void DerivationExpression_ExpressionFixedChar::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.DerivationExpression.ExpressionFixedChar)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -961,8 +985,8 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> DerivationExpression_ExpressionFixedCh
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.DerivationExpression length = 1 [json_name = "length"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(1, _Internal::length(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        1, _Internal::length(this),
         _Internal::length(this).GetCachedSize(), target, stream);
   }
 
@@ -1000,9 +1024,8 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> DerivationExpression_ExpressionFixedCh
   // .substrait.DerivationExpression length = 1 [json_name = "length"];
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *_impl_.length_);
+    total_size +=
+        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.length_);
   }
 
   // uint32 variation_pointer = 2 [json_name = "variationPointer"];
@@ -1021,11 +1044,12 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> DerivationExpression_ExpressionFixedCh
 }
 
 const ::google::protobuf::Message::ClassData DerivationExpression_ExpressionFixedChar::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    DerivationExpression_ExpressionFixedChar::MergeImpl
+    DerivationExpression_ExpressionFixedChar::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*DerivationExpression_ExpressionFixedChar::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* DerivationExpression_ExpressionFixedChar::GetClassData() const {
+  return &_class_data_;
+}
 
 void DerivationExpression_ExpressionFixedChar::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<DerivationExpression_ExpressionFixedChar*>(&to_msg);
@@ -1059,7 +1083,10 @@ PROTOBUF_NOINLINE bool DerivationExpression_ExpressionFixedChar::IsInitialized()
   return true;
 }
 
-void DerivationExpression_ExpressionFixedChar::InternalSwap(DerivationExpression_ExpressionFixedChar* other) {
+::_pbi::CachedSize* DerivationExpression_ExpressionFixedChar::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DerivationExpression_ExpressionFixedChar::InternalSwap(DerivationExpression_ExpressionFixedChar* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
@@ -1097,36 +1124,48 @@ DerivationExpression_ExpressionVarChar::DerivationExpression_ExpressionVarChar(:
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.DerivationExpression.ExpressionVarChar)
 }
-DerivationExpression_ExpressionVarChar::DerivationExpression_ExpressionVarChar(const DerivationExpression_ExpressionVarChar& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionVarChar::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+DerivationExpression_ExpressionVarChar::DerivationExpression_ExpressionVarChar(
+    ::google::protobuf::Arena* arena,
+    const DerivationExpression_ExpressionVarChar& from)
+    : ::google::protobuf::Message(arena) {
   DerivationExpression_ExpressionVarChar* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.length_){nullptr},
-      decltype(_impl_.variation_pointer_){},
-      decltype(_impl_.nullability_){},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.length_ = new ::substrait::DerivationExpression(*from._impl_.length_);
-  }
-  ::memcpy(&_impl_.variation_pointer_, &from._impl_.variation_pointer_,
-    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.nullability_) -
-    reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.length_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.length_)
+                : nullptr;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, variation_pointer_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, variation_pointer_),
+           offsetof(Impl_, nullability_) -
+               offsetof(Impl_, variation_pointer_) +
+               sizeof(Impl_::nullability_));
 
   // @@protoc_insertion_point(copy_constructor:substrait.DerivationExpression.ExpressionVarChar)
 }
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionVarChar::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
 inline void DerivationExpression_ExpressionVarChar::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.length_){nullptr},
-      decltype(_impl_.variation_pointer_){0u},
-      decltype(_impl_.nullability_){0},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, length_),
+           0,
+           offsetof(Impl_, nullability_) -
+               offsetof(Impl_, length_) +
+               sizeof(Impl_::nullability_));
 }
 DerivationExpression_ExpressionVarChar::~DerivationExpression_ExpressionVarChar() {
   // @@protoc_insertion_point(destructor:substrait.DerivationExpression.ExpressionVarChar)
@@ -1134,15 +1173,14 @@ DerivationExpression_ExpressionVarChar::~DerivationExpression_ExpressionVarChar(
   SharedDtor();
 }
 inline void DerivationExpression_ExpressionVarChar::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete _impl_.length_;
-}
-void DerivationExpression_ExpressionVarChar::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.length_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void DerivationExpression_ExpressionVarChar::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.DerivationExpression.ExpressionVarChar)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1219,8 +1257,8 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> DerivationExpression_ExpressionVarChar
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.DerivationExpression length = 1 [json_name = "length"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(1, _Internal::length(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        1, _Internal::length(this),
         _Internal::length(this).GetCachedSize(), target, stream);
   }
 
@@ -1258,9 +1296,8 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> DerivationExpression_ExpressionVarChar
   // .substrait.DerivationExpression length = 1 [json_name = "length"];
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *_impl_.length_);
+    total_size +=
+        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.length_);
   }
 
   // uint32 variation_pointer = 2 [json_name = "variationPointer"];
@@ -1279,11 +1316,12 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> DerivationExpression_ExpressionVarChar
 }
 
 const ::google::protobuf::Message::ClassData DerivationExpression_ExpressionVarChar::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    DerivationExpression_ExpressionVarChar::MergeImpl
+    DerivationExpression_ExpressionVarChar::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*DerivationExpression_ExpressionVarChar::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* DerivationExpression_ExpressionVarChar::GetClassData() const {
+  return &_class_data_;
+}
 
 void DerivationExpression_ExpressionVarChar::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<DerivationExpression_ExpressionVarChar*>(&to_msg);
@@ -1317,7 +1355,10 @@ PROTOBUF_NOINLINE bool DerivationExpression_ExpressionVarChar::IsInitialized() c
   return true;
 }
 
-void DerivationExpression_ExpressionVarChar::InternalSwap(DerivationExpression_ExpressionVarChar* other) {
+::_pbi::CachedSize* DerivationExpression_ExpressionVarChar::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DerivationExpression_ExpressionVarChar::InternalSwap(DerivationExpression_ExpressionVarChar* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
@@ -1355,36 +1396,48 @@ DerivationExpression_ExpressionFixedBinary::DerivationExpression_ExpressionFixed
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.DerivationExpression.ExpressionFixedBinary)
 }
-DerivationExpression_ExpressionFixedBinary::DerivationExpression_ExpressionFixedBinary(const DerivationExpression_ExpressionFixedBinary& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionFixedBinary::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+DerivationExpression_ExpressionFixedBinary::DerivationExpression_ExpressionFixedBinary(
+    ::google::protobuf::Arena* arena,
+    const DerivationExpression_ExpressionFixedBinary& from)
+    : ::google::protobuf::Message(arena) {
   DerivationExpression_ExpressionFixedBinary* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.length_){nullptr},
-      decltype(_impl_.variation_pointer_){},
-      decltype(_impl_.nullability_){},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.length_ = new ::substrait::DerivationExpression(*from._impl_.length_);
-  }
-  ::memcpy(&_impl_.variation_pointer_, &from._impl_.variation_pointer_,
-    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.nullability_) -
-    reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.length_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.length_)
+                : nullptr;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, variation_pointer_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, variation_pointer_),
+           offsetof(Impl_, nullability_) -
+               offsetof(Impl_, variation_pointer_) +
+               sizeof(Impl_::nullability_));
 
   // @@protoc_insertion_point(copy_constructor:substrait.DerivationExpression.ExpressionFixedBinary)
 }
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionFixedBinary::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
 inline void DerivationExpression_ExpressionFixedBinary::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.length_){nullptr},
-      decltype(_impl_.variation_pointer_){0u},
-      decltype(_impl_.nullability_){0},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, length_),
+           0,
+           offsetof(Impl_, nullability_) -
+               offsetof(Impl_, length_) +
+               sizeof(Impl_::nullability_));
 }
 DerivationExpression_ExpressionFixedBinary::~DerivationExpression_ExpressionFixedBinary() {
   // @@protoc_insertion_point(destructor:substrait.DerivationExpression.ExpressionFixedBinary)
@@ -1392,15 +1445,14 @@ DerivationExpression_ExpressionFixedBinary::~DerivationExpression_ExpressionFixe
   SharedDtor();
 }
 inline void DerivationExpression_ExpressionFixedBinary::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete _impl_.length_;
-}
-void DerivationExpression_ExpressionFixedBinary::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.length_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void DerivationExpression_ExpressionFixedBinary::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.DerivationExpression.ExpressionFixedBinary)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1477,8 +1529,8 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> DerivationExpression_ExpressionFixedBi
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.DerivationExpression length = 1 [json_name = "length"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(1, _Internal::length(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        1, _Internal::length(this),
         _Internal::length(this).GetCachedSize(), target, stream);
   }
 
@@ -1516,9 +1568,8 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> DerivationExpression_ExpressionFixedBi
   // .substrait.DerivationExpression length = 1 [json_name = "length"];
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *_impl_.length_);
+    total_size +=
+        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.length_);
   }
 
   // uint32 variation_pointer = 2 [json_name = "variationPointer"];
@@ -1537,11 +1588,12 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> DerivationExpression_ExpressionFixedBi
 }
 
 const ::google::protobuf::Message::ClassData DerivationExpression_ExpressionFixedBinary::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    DerivationExpression_ExpressionFixedBinary::MergeImpl
+    DerivationExpression_ExpressionFixedBinary::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*DerivationExpression_ExpressionFixedBinary::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* DerivationExpression_ExpressionFixedBinary::GetClassData() const {
+  return &_class_data_;
+}
 
 void DerivationExpression_ExpressionFixedBinary::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<DerivationExpression_ExpressionFixedBinary*>(&to_msg);
@@ -1575,7 +1627,10 @@ PROTOBUF_NOINLINE bool DerivationExpression_ExpressionFixedBinary::IsInitialized
   return true;
 }
 
-void DerivationExpression_ExpressionFixedBinary::InternalSwap(DerivationExpression_ExpressionFixedBinary* other) {
+::_pbi::CachedSize* DerivationExpression_ExpressionFixedBinary::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DerivationExpression_ExpressionFixedBinary::InternalSwap(DerivationExpression_ExpressionFixedBinary* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
@@ -1620,41 +1675,51 @@ DerivationExpression_ExpressionDecimal::DerivationExpression_ExpressionDecimal(:
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.DerivationExpression.ExpressionDecimal)
 }
-DerivationExpression_ExpressionDecimal::DerivationExpression_ExpressionDecimal(const DerivationExpression_ExpressionDecimal& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionDecimal::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+DerivationExpression_ExpressionDecimal::DerivationExpression_ExpressionDecimal(
+    ::google::protobuf::Arena* arena,
+    const DerivationExpression_ExpressionDecimal& from)
+    : ::google::protobuf::Message(arena) {
   DerivationExpression_ExpressionDecimal* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.scale_){nullptr},
-      decltype(_impl_.precision_){nullptr},
-      decltype(_impl_.variation_pointer_){},
-      decltype(_impl_.nullability_){},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.scale_ = new ::substrait::DerivationExpression(*from._impl_.scale_);
-  }
-  if ((from._impl_._has_bits_[0] & 0x00000002u) != 0) {
-    _this->_impl_.precision_ = new ::substrait::DerivationExpression(*from._impl_.precision_);
-  }
-  ::memcpy(&_impl_.variation_pointer_, &from._impl_.variation_pointer_,
-    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.nullability_) -
-    reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.scale_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.scale_)
+                : nullptr;
+  _impl_.precision_ = (cached_has_bits & 0x00000002u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.precision_)
+                : nullptr;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, variation_pointer_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, variation_pointer_),
+           offsetof(Impl_, nullability_) -
+               offsetof(Impl_, variation_pointer_) +
+               sizeof(Impl_::nullability_));
 
   // @@protoc_insertion_point(copy_constructor:substrait.DerivationExpression.ExpressionDecimal)
 }
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionDecimal::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
 inline void DerivationExpression_ExpressionDecimal::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.scale_){nullptr},
-      decltype(_impl_.precision_){nullptr},
-      decltype(_impl_.variation_pointer_){0u},
-      decltype(_impl_.nullability_){0},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, scale_),
+           0,
+           offsetof(Impl_, nullability_) -
+               offsetof(Impl_, scale_) +
+               sizeof(Impl_::nullability_));
 }
 DerivationExpression_ExpressionDecimal::~DerivationExpression_ExpressionDecimal() {
   // @@protoc_insertion_point(destructor:substrait.DerivationExpression.ExpressionDecimal)
@@ -1662,16 +1727,15 @@ DerivationExpression_ExpressionDecimal::~DerivationExpression_ExpressionDecimal(
   SharedDtor();
 }
 inline void DerivationExpression_ExpressionDecimal::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete _impl_.scale_;
-  if (this != internal_default_instance()) delete _impl_.precision_;
-}
-void DerivationExpression_ExpressionDecimal::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.scale_;
+  delete _impl_.precision_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void DerivationExpression_ExpressionDecimal::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.DerivationExpression.ExpressionDecimal)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1760,15 +1824,15 @@ const ::_pbi::TcParseTable<2, 4, 2, 0, 2> DerivationExpression_ExpressionDecimal
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.DerivationExpression scale = 1 [json_name = "scale"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(1, _Internal::scale(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        1, _Internal::scale(this),
         _Internal::scale(this).GetCachedSize(), target, stream);
   }
 
   // .substrait.DerivationExpression precision = 2 [json_name = "precision"];
   if (cached_has_bits & 0x00000002u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(2, _Internal::precision(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        2, _Internal::precision(this),
         _Internal::precision(this).GetCachedSize(), target, stream);
   }
 
@@ -1807,16 +1871,14 @@ const ::_pbi::TcParseTable<2, 4, 2, 0, 2> DerivationExpression_ExpressionDecimal
   if (cached_has_bits & 0x00000003u) {
     // .substrait.DerivationExpression scale = 1 [json_name = "scale"];
     if (cached_has_bits & 0x00000001u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.scale_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.scale_);
     }
 
     // .substrait.DerivationExpression precision = 2 [json_name = "precision"];
     if (cached_has_bits & 0x00000002u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.precision_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.precision_);
     }
 
   }
@@ -1836,11 +1898,12 @@ const ::_pbi::TcParseTable<2, 4, 2, 0, 2> DerivationExpression_ExpressionDecimal
 }
 
 const ::google::protobuf::Message::ClassData DerivationExpression_ExpressionDecimal::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    DerivationExpression_ExpressionDecimal::MergeImpl
+    DerivationExpression_ExpressionDecimal::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*DerivationExpression_ExpressionDecimal::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* DerivationExpression_ExpressionDecimal::GetClassData() const {
+  return &_class_data_;
+}
 
 void DerivationExpression_ExpressionDecimal::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<DerivationExpression_ExpressionDecimal*>(&to_msg);
@@ -1881,7 +1944,10 @@ PROTOBUF_NOINLINE bool DerivationExpression_ExpressionDecimal::IsInitialized() c
   return true;
 }
 
-void DerivationExpression_ExpressionDecimal::InternalSwap(DerivationExpression_ExpressionDecimal* other) {
+::_pbi::CachedSize* DerivationExpression_ExpressionDecimal::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DerivationExpression_ExpressionDecimal::InternalSwap(DerivationExpression_ExpressionDecimal* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
@@ -1909,31 +1975,45 @@ DerivationExpression_ExpressionStruct::DerivationExpression_ExpressionStruct(::g
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.DerivationExpression.ExpressionStruct)
 }
-DerivationExpression_ExpressionStruct::DerivationExpression_ExpressionStruct(const DerivationExpression_ExpressionStruct& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionStruct::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : types_{visibility, arena, from.types_},
+        _cached_size_{0} {}
+
+DerivationExpression_ExpressionStruct::DerivationExpression_ExpressionStruct(
+    ::google::protobuf::Arena* arena,
+    const DerivationExpression_ExpressionStruct& from)
+    : ::google::protobuf::Message(arena) {
   DerivationExpression_ExpressionStruct* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.types_){from._impl_.types_},
-      decltype(_impl_.variation_pointer_){},
-      decltype(_impl_.nullability_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  ::memcpy(&_impl_.variation_pointer_, &from._impl_.variation_pointer_,
-    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.nullability_) -
-    reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, variation_pointer_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, variation_pointer_),
+           offsetof(Impl_, nullability_) -
+               offsetof(Impl_, variation_pointer_) +
+               sizeof(Impl_::nullability_));
 
   // @@protoc_insertion_point(copy_constructor:substrait.DerivationExpression.ExpressionStruct)
 }
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionStruct::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : types_{visibility, arena},
+        _cached_size_{0} {}
+
 inline void DerivationExpression_ExpressionStruct::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.types_){arena},
-      decltype(_impl_.variation_pointer_){0u},
-      decltype(_impl_.nullability_){0},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, variation_pointer_),
+           0,
+           offsetof(Impl_, nullability_) -
+               offsetof(Impl_, variation_pointer_) +
+               sizeof(Impl_::nullability_));
 }
 DerivationExpression_ExpressionStruct::~DerivationExpression_ExpressionStruct() {
   // @@protoc_insertion_point(destructor:substrait.DerivationExpression.ExpressionStruct)
@@ -1941,20 +2021,18 @@ DerivationExpression_ExpressionStruct::~DerivationExpression_ExpressionStruct() 
   SharedDtor();
 }
 inline void DerivationExpression_ExpressionStruct::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.types_.~RepeatedPtrField();
-}
-void DerivationExpression_ExpressionStruct::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void DerivationExpression_ExpressionStruct::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.DerivationExpression.ExpressionStruct)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _internal_mutable_types()->Clear();
+  _impl_.types_.Clear();
   ::memset(&_impl_.variation_pointer_, 0, static_cast<::size_t>(
       reinterpret_cast<char*>(&_impl_.nullability_) -
       reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
@@ -2079,11 +2157,12 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> DerivationExpression_ExpressionStruct:
 }
 
 const ::google::protobuf::Message::ClassData DerivationExpression_ExpressionStruct::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    DerivationExpression_ExpressionStruct::MergeImpl
+    DerivationExpression_ExpressionStruct::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*DerivationExpression_ExpressionStruct::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* DerivationExpression_ExpressionStruct::GetClassData() const {
+  return &_class_data_;
+}
 
 void DerivationExpression_ExpressionStruct::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<DerivationExpression_ExpressionStruct*>(&to_msg);
@@ -2093,7 +2172,8 @@ void DerivationExpression_ExpressionStruct::MergeImpl(::google::protobuf::Messag
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  _this->_internal_mutable_types()->MergeFrom(from._internal_types());
+  _this->_internal_mutable_types()->MergeFrom(
+      from._internal_types());
   if (from._internal_variation_pointer() != 0) {
     _this->_internal_set_variation_pointer(from._internal_variation_pointer());
   }
@@ -2114,7 +2194,10 @@ PROTOBUF_NOINLINE bool DerivationExpression_ExpressionStruct::IsInitialized() co
   return true;
 }
 
-void DerivationExpression_ExpressionStruct::InternalSwap(DerivationExpression_ExpressionStruct* other) {
+::_pbi::CachedSize* DerivationExpression_ExpressionStruct::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DerivationExpression_ExpressionStruct::InternalSwap(DerivationExpression_ExpressionStruct* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.types_.InternalSwap(&other->_impl_.types_);
@@ -2152,31 +2235,38 @@ DerivationExpression_ExpressionNamedStruct::DerivationExpression_ExpressionNamed
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.DerivationExpression.ExpressionNamedStruct)
 }
-DerivationExpression_ExpressionNamedStruct::DerivationExpression_ExpressionNamedStruct(const DerivationExpression_ExpressionNamedStruct& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionNamedStruct::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        names_{visibility, arena, from.names_} {}
+
+DerivationExpression_ExpressionNamedStruct::DerivationExpression_ExpressionNamedStruct(
+    ::google::protobuf::Arena* arena,
+    const DerivationExpression_ExpressionNamedStruct& from)
+    : ::google::protobuf::Message(arena) {
   DerivationExpression_ExpressionNamedStruct* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.names_){from._impl_.names_},
-      decltype(_impl_.struct__){nullptr},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.struct__ = new ::substrait::DerivationExpression_ExpressionStruct(*from._impl_.struct__);
-  }
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.struct__ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression_ExpressionStruct>(arena, *from._impl_.struct__)
+                : nullptr;
 
   // @@protoc_insertion_point(copy_constructor:substrait.DerivationExpression.ExpressionNamedStruct)
 }
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionNamedStruct::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        names_{visibility, arena} {}
+
 inline void DerivationExpression_ExpressionNamedStruct::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.names_){arena},
-      decltype(_impl_.struct__){nullptr},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.struct__ = {};
 }
 DerivationExpression_ExpressionNamedStruct::~DerivationExpression_ExpressionNamedStruct() {
   // @@protoc_insertion_point(destructor:substrait.DerivationExpression.ExpressionNamedStruct)
@@ -2184,21 +2274,19 @@ DerivationExpression_ExpressionNamedStruct::~DerivationExpression_ExpressionName
   SharedDtor();
 }
 inline void DerivationExpression_ExpressionNamedStruct::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _internal_mutable_names()->~RepeatedPtrField();
-  if (this != internal_default_instance()) delete _impl_.struct__;
-}
-void DerivationExpression_ExpressionNamedStruct::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.struct__;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void DerivationExpression_ExpressionNamedStruct::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.DerivationExpression.ExpressionNamedStruct)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _internal_mutable_names()->Clear();
+  _impl_.names_.Clear();
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
     ABSL_DCHECK(_impl_.struct__ != nullptr);
@@ -2272,8 +2360,8 @@ const ::_pbi::TcParseTable<1, 2, 1, 66, 2> DerivationExpression_ExpressionNamedS
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.DerivationExpression.ExpressionStruct struct = 2 [json_name = "struct"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(2, _Internal::struct_(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        2, _Internal::struct_(this),
         _Internal::struct_(this).GetCachedSize(), target, stream);
   }
 
@@ -2303,20 +2391,20 @@ const ::_pbi::TcParseTable<1, 2, 1, 66, 2> DerivationExpression_ExpressionNamedS
   // .substrait.DerivationExpression.ExpressionStruct struct = 2 [json_name = "struct"];
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *_impl_.struct__);
+    total_size +=
+        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.struct__);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::google::protobuf::Message::ClassData DerivationExpression_ExpressionNamedStruct::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    DerivationExpression_ExpressionNamedStruct::MergeImpl
+    DerivationExpression_ExpressionNamedStruct::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*DerivationExpression_ExpressionNamedStruct::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* DerivationExpression_ExpressionNamedStruct::GetClassData() const {
+  return &_class_data_;
+}
 
 void DerivationExpression_ExpressionNamedStruct::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<DerivationExpression_ExpressionNamedStruct*>(&to_msg);
@@ -2345,7 +2433,10 @@ PROTOBUF_NOINLINE bool DerivationExpression_ExpressionNamedStruct::IsInitialized
   return true;
 }
 
-void DerivationExpression_ExpressionNamedStruct::InternalSwap(DerivationExpression_ExpressionNamedStruct* other) {
+::_pbi::CachedSize* DerivationExpression_ExpressionNamedStruct::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DerivationExpression_ExpressionNamedStruct::InternalSwap(DerivationExpression_ExpressionNamedStruct* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
@@ -2379,36 +2470,48 @@ DerivationExpression_ExpressionList::DerivationExpression_ExpressionList(::googl
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.DerivationExpression.ExpressionList)
 }
-DerivationExpression_ExpressionList::DerivationExpression_ExpressionList(const DerivationExpression_ExpressionList& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionList::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+DerivationExpression_ExpressionList::DerivationExpression_ExpressionList(
+    ::google::protobuf::Arena* arena,
+    const DerivationExpression_ExpressionList& from)
+    : ::google::protobuf::Message(arena) {
   DerivationExpression_ExpressionList* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.type_){nullptr},
-      decltype(_impl_.variation_pointer_){},
-      decltype(_impl_.nullability_){},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.type_ = new ::substrait::DerivationExpression(*from._impl_.type_);
-  }
-  ::memcpy(&_impl_.variation_pointer_, &from._impl_.variation_pointer_,
-    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.nullability_) -
-    reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.type_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.type_)
+                : nullptr;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, variation_pointer_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, variation_pointer_),
+           offsetof(Impl_, nullability_) -
+               offsetof(Impl_, variation_pointer_) +
+               sizeof(Impl_::nullability_));
 
   // @@protoc_insertion_point(copy_constructor:substrait.DerivationExpression.ExpressionList)
 }
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionList::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
 inline void DerivationExpression_ExpressionList::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.type_){nullptr},
-      decltype(_impl_.variation_pointer_){0u},
-      decltype(_impl_.nullability_){0},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, type_),
+           0,
+           offsetof(Impl_, nullability_) -
+               offsetof(Impl_, type_) +
+               sizeof(Impl_::nullability_));
 }
 DerivationExpression_ExpressionList::~DerivationExpression_ExpressionList() {
   // @@protoc_insertion_point(destructor:substrait.DerivationExpression.ExpressionList)
@@ -2416,15 +2519,14 @@ DerivationExpression_ExpressionList::~DerivationExpression_ExpressionList() {
   SharedDtor();
 }
 inline void DerivationExpression_ExpressionList::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete _impl_.type_;
-}
-void DerivationExpression_ExpressionList::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.type_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void DerivationExpression_ExpressionList::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.DerivationExpression.ExpressionList)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -2501,8 +2603,8 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> DerivationExpression_ExpressionList::_
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.DerivationExpression type = 1 [json_name = "type"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(1, _Internal::type(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        1, _Internal::type(this),
         _Internal::type(this).GetCachedSize(), target, stream);
   }
 
@@ -2540,9 +2642,8 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> DerivationExpression_ExpressionList::_
   // .substrait.DerivationExpression type = 1 [json_name = "type"];
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *_impl_.type_);
+    total_size +=
+        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.type_);
   }
 
   // uint32 variation_pointer = 2 [json_name = "variationPointer"];
@@ -2561,11 +2662,12 @@ const ::_pbi::TcParseTable<2, 3, 1, 0, 2> DerivationExpression_ExpressionList::_
 }
 
 const ::google::protobuf::Message::ClassData DerivationExpression_ExpressionList::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    DerivationExpression_ExpressionList::MergeImpl
+    DerivationExpression_ExpressionList::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*DerivationExpression_ExpressionList::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* DerivationExpression_ExpressionList::GetClassData() const {
+  return &_class_data_;
+}
 
 void DerivationExpression_ExpressionList::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<DerivationExpression_ExpressionList*>(&to_msg);
@@ -2599,7 +2701,10 @@ PROTOBUF_NOINLINE bool DerivationExpression_ExpressionList::IsInitialized() cons
   return true;
 }
 
-void DerivationExpression_ExpressionList::InternalSwap(DerivationExpression_ExpressionList* other) {
+::_pbi::CachedSize* DerivationExpression_ExpressionList::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DerivationExpression_ExpressionList::InternalSwap(DerivationExpression_ExpressionList* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
@@ -2644,41 +2749,51 @@ DerivationExpression_ExpressionMap::DerivationExpression_ExpressionMap(::google:
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.DerivationExpression.ExpressionMap)
 }
-DerivationExpression_ExpressionMap::DerivationExpression_ExpressionMap(const DerivationExpression_ExpressionMap& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionMap::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+DerivationExpression_ExpressionMap::DerivationExpression_ExpressionMap(
+    ::google::protobuf::Arena* arena,
+    const DerivationExpression_ExpressionMap& from)
+    : ::google::protobuf::Message(arena) {
   DerivationExpression_ExpressionMap* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.key_){nullptr},
-      decltype(_impl_.value_){nullptr},
-      decltype(_impl_.variation_pointer_){},
-      decltype(_impl_.nullability_){},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.key_ = new ::substrait::DerivationExpression(*from._impl_.key_);
-  }
-  if ((from._impl_._has_bits_[0] & 0x00000002u) != 0) {
-    _this->_impl_.value_ = new ::substrait::DerivationExpression(*from._impl_.value_);
-  }
-  ::memcpy(&_impl_.variation_pointer_, &from._impl_.variation_pointer_,
-    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.nullability_) -
-    reinterpret_cast<char*>(&_impl_.variation_pointer_)) + sizeof(_impl_.nullability_));
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.key_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.key_)
+                : nullptr;
+  _impl_.value_ = (cached_has_bits & 0x00000002u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.value_)
+                : nullptr;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, variation_pointer_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, variation_pointer_),
+           offsetof(Impl_, nullability_) -
+               offsetof(Impl_, variation_pointer_) +
+               sizeof(Impl_::nullability_));
 
   // @@protoc_insertion_point(copy_constructor:substrait.DerivationExpression.ExpressionMap)
 }
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionMap::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
 inline void DerivationExpression_ExpressionMap::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.key_){nullptr},
-      decltype(_impl_.value_){nullptr},
-      decltype(_impl_.variation_pointer_){0u},
-      decltype(_impl_.nullability_){0},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, key_),
+           0,
+           offsetof(Impl_, nullability_) -
+               offsetof(Impl_, key_) +
+               sizeof(Impl_::nullability_));
 }
 DerivationExpression_ExpressionMap::~DerivationExpression_ExpressionMap() {
   // @@protoc_insertion_point(destructor:substrait.DerivationExpression.ExpressionMap)
@@ -2686,16 +2801,15 @@ DerivationExpression_ExpressionMap::~DerivationExpression_ExpressionMap() {
   SharedDtor();
 }
 inline void DerivationExpression_ExpressionMap::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete _impl_.key_;
-  if (this != internal_default_instance()) delete _impl_.value_;
-}
-void DerivationExpression_ExpressionMap::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.key_;
+  delete _impl_.value_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void DerivationExpression_ExpressionMap::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.DerivationExpression.ExpressionMap)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -2784,15 +2898,15 @@ const ::_pbi::TcParseTable<2, 4, 2, 0, 2> DerivationExpression_ExpressionMap::_t
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.DerivationExpression key = 1 [json_name = "key"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(1, _Internal::key(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        1, _Internal::key(this),
         _Internal::key(this).GetCachedSize(), target, stream);
   }
 
   // .substrait.DerivationExpression value = 2 [json_name = "value"];
   if (cached_has_bits & 0x00000002u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(2, _Internal::value(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        2, _Internal::value(this),
         _Internal::value(this).GetCachedSize(), target, stream);
   }
 
@@ -2831,16 +2945,14 @@ const ::_pbi::TcParseTable<2, 4, 2, 0, 2> DerivationExpression_ExpressionMap::_t
   if (cached_has_bits & 0x00000003u) {
     // .substrait.DerivationExpression key = 1 [json_name = "key"];
     if (cached_has_bits & 0x00000001u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.key_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.key_);
     }
 
     // .substrait.DerivationExpression value = 2 [json_name = "value"];
     if (cached_has_bits & 0x00000002u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.value_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.value_);
     }
 
   }
@@ -2860,11 +2972,12 @@ const ::_pbi::TcParseTable<2, 4, 2, 0, 2> DerivationExpression_ExpressionMap::_t
 }
 
 const ::google::protobuf::Message::ClassData DerivationExpression_ExpressionMap::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    DerivationExpression_ExpressionMap::MergeImpl
+    DerivationExpression_ExpressionMap::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*DerivationExpression_ExpressionMap::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* DerivationExpression_ExpressionMap::GetClassData() const {
+  return &_class_data_;
+}
 
 void DerivationExpression_ExpressionMap::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<DerivationExpression_ExpressionMap*>(&to_msg);
@@ -2905,7 +3018,10 @@ PROTOBUF_NOINLINE bool DerivationExpression_ExpressionMap::IsInitialized() const
   return true;
 }
 
-void DerivationExpression_ExpressionMap::InternalSwap(DerivationExpression_ExpressionMap* other) {
+::_pbi::CachedSize* DerivationExpression_ExpressionMap::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DerivationExpression_ExpressionMap::InternalSwap(DerivationExpression_ExpressionMap* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
@@ -2933,20 +3049,24 @@ DerivationExpression_ExpressionUserDefined::DerivationExpression_ExpressionUserD
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.DerivationExpression.ExpressionUserDefined)
 }
-DerivationExpression_ExpressionUserDefined::DerivationExpression_ExpressionUserDefined(const DerivationExpression_ExpressionUserDefined& from)
-    : ::google::protobuf::Message(), _impl_(from._impl_) {
-  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
-      from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:substrait.DerivationExpression.ExpressionUserDefined)
+DerivationExpression_ExpressionUserDefined::DerivationExpression_ExpressionUserDefined(
+    ::google::protobuf::Arena* arena, const DerivationExpression_ExpressionUserDefined& from)
+    : DerivationExpression_ExpressionUserDefined(arena) {
+  MergeFrom(from);
 }
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ExpressionUserDefined::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
 inline void DerivationExpression_ExpressionUserDefined::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.type_pointer_){0u},
-      decltype(_impl_.variation_pointer_){0u},
-      decltype(_impl_.nullability_){0},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, type_pointer_),
+           0,
+           offsetof(Impl_, nullability_) -
+               offsetof(Impl_, type_pointer_) +
+               sizeof(Impl_::nullability_));
 }
 DerivationExpression_ExpressionUserDefined::~DerivationExpression_ExpressionUserDefined() {
   // @@protoc_insertion_point(destructor:substrait.DerivationExpression.ExpressionUserDefined)
@@ -2954,14 +3074,13 @@ DerivationExpression_ExpressionUserDefined::~DerivationExpression_ExpressionUser
   SharedDtor();
 }
 inline void DerivationExpression_ExpressionUserDefined::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-}
-void DerivationExpression_ExpressionUserDefined::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void DerivationExpression_ExpressionUserDefined::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.DerivationExpression.ExpressionUserDefined)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -3089,11 +3208,12 @@ const ::_pbi::TcParseTable<2, 3, 0, 0, 2> DerivationExpression_ExpressionUserDef
 }
 
 const ::google::protobuf::Message::ClassData DerivationExpression_ExpressionUserDefined::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    DerivationExpression_ExpressionUserDefined::MergeImpl
+    DerivationExpression_ExpressionUserDefined::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*DerivationExpression_ExpressionUserDefined::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* DerivationExpression_ExpressionUserDefined::GetClassData() const {
+  return &_class_data_;
+}
 
 void DerivationExpression_ExpressionUserDefined::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<DerivationExpression_ExpressionUserDefined*>(&to_msg);
@@ -3126,7 +3246,10 @@ PROTOBUF_NOINLINE bool DerivationExpression_ExpressionUserDefined::IsInitialized
   return true;
 }
 
-void DerivationExpression_ExpressionUserDefined::InternalSwap(DerivationExpression_ExpressionUserDefined* other) {
+::_pbi::CachedSize* DerivationExpression_ExpressionUserDefined::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DerivationExpression_ExpressionUserDefined::InternalSwap(DerivationExpression_ExpressionUserDefined* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::google::protobuf::internal::memswap<
@@ -3177,39 +3300,47 @@ DerivationExpression_IfElse::DerivationExpression_IfElse(::google::protobuf::Are
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.DerivationExpression.IfElse)
 }
-DerivationExpression_IfElse::DerivationExpression_IfElse(const DerivationExpression_IfElse& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_IfElse::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+DerivationExpression_IfElse::DerivationExpression_IfElse(
+    ::google::protobuf::Arena* arena,
+    const DerivationExpression_IfElse& from)
+    : ::google::protobuf::Message(arena) {
   DerivationExpression_IfElse* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.if_condition_){nullptr},
-      decltype(_impl_.if_return_){nullptr},
-      decltype(_impl_.else_return_){nullptr},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.if_condition_ = new ::substrait::DerivationExpression(*from._impl_.if_condition_);
-  }
-  if ((from._impl_._has_bits_[0] & 0x00000002u) != 0) {
-    _this->_impl_.if_return_ = new ::substrait::DerivationExpression(*from._impl_.if_return_);
-  }
-  if ((from._impl_._has_bits_[0] & 0x00000004u) != 0) {
-    _this->_impl_.else_return_ = new ::substrait::DerivationExpression(*from._impl_.else_return_);
-  }
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.if_condition_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.if_condition_)
+                : nullptr;
+  _impl_.if_return_ = (cached_has_bits & 0x00000002u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.if_return_)
+                : nullptr;
+  _impl_.else_return_ = (cached_has_bits & 0x00000004u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.else_return_)
+                : nullptr;
 
   // @@protoc_insertion_point(copy_constructor:substrait.DerivationExpression.IfElse)
 }
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_IfElse::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
 inline void DerivationExpression_IfElse::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.if_condition_){nullptr},
-      decltype(_impl_.if_return_){nullptr},
-      decltype(_impl_.else_return_){nullptr},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, if_condition_),
+           0,
+           offsetof(Impl_, else_return_) -
+               offsetof(Impl_, if_condition_) +
+               sizeof(Impl_::else_return_));
 }
 DerivationExpression_IfElse::~DerivationExpression_IfElse() {
   // @@protoc_insertion_point(destructor:substrait.DerivationExpression.IfElse)
@@ -3217,17 +3348,16 @@ DerivationExpression_IfElse::~DerivationExpression_IfElse() {
   SharedDtor();
 }
 inline void DerivationExpression_IfElse::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete _impl_.if_condition_;
-  if (this != internal_default_instance()) delete _impl_.if_return_;
-  if (this != internal_default_instance()) delete _impl_.else_return_;
-}
-void DerivationExpression_IfElse::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.if_condition_;
+  delete _impl_.if_return_;
+  delete _impl_.else_return_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void DerivationExpression_IfElse::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.DerivationExpression.IfElse)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -3313,22 +3443,22 @@ const ::_pbi::TcParseTable<2, 3, 3, 0, 2> DerivationExpression_IfElse::_table_ =
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.DerivationExpression if_condition = 1 [json_name = "ifCondition"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(1, _Internal::if_condition(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        1, _Internal::if_condition(this),
         _Internal::if_condition(this).GetCachedSize(), target, stream);
   }
 
   // .substrait.DerivationExpression if_return = 2 [json_name = "ifReturn"];
   if (cached_has_bits & 0x00000002u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(2, _Internal::if_return(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        2, _Internal::if_return(this),
         _Internal::if_return(this).GetCachedSize(), target, stream);
   }
 
   // .substrait.DerivationExpression else_return = 3 [json_name = "elseReturn"];
   if (cached_has_bits & 0x00000004u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(3, _Internal::else_return(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        3, _Internal::else_return(this),
         _Internal::else_return(this).GetCachedSize(), target, stream);
   }
 
@@ -3353,23 +3483,20 @@ const ::_pbi::TcParseTable<2, 3, 3, 0, 2> DerivationExpression_IfElse::_table_ =
   if (cached_has_bits & 0x00000007u) {
     // .substrait.DerivationExpression if_condition = 1 [json_name = "ifCondition"];
     if (cached_has_bits & 0x00000001u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.if_condition_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.if_condition_);
     }
 
     // .substrait.DerivationExpression if_return = 2 [json_name = "ifReturn"];
     if (cached_has_bits & 0x00000002u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.if_return_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.if_return_);
     }
 
     // .substrait.DerivationExpression else_return = 3 [json_name = "elseReturn"];
     if (cached_has_bits & 0x00000004u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.else_return_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.else_return_);
     }
 
   }
@@ -3377,11 +3504,12 @@ const ::_pbi::TcParseTable<2, 3, 3, 0, 2> DerivationExpression_IfElse::_table_ =
 }
 
 const ::google::protobuf::Message::ClassData DerivationExpression_IfElse::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    DerivationExpression_IfElse::MergeImpl
+    DerivationExpression_IfElse::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*DerivationExpression_IfElse::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* DerivationExpression_IfElse::GetClassData() const {
+  return &_class_data_;
+}
 
 void DerivationExpression_IfElse::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<DerivationExpression_IfElse*>(&to_msg);
@@ -3420,7 +3548,10 @@ PROTOBUF_NOINLINE bool DerivationExpression_IfElse::IsInitialized() const {
   return true;
 }
 
-void DerivationExpression_IfElse::InternalSwap(DerivationExpression_IfElse* other) {
+::_pbi::CachedSize* DerivationExpression_IfElse::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DerivationExpression_IfElse::InternalSwap(DerivationExpression_IfElse* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
@@ -3458,32 +3589,42 @@ DerivationExpression_UnaryOp::DerivationExpression_UnaryOp(::google::protobuf::A
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.DerivationExpression.UnaryOp)
 }
-DerivationExpression_UnaryOp::DerivationExpression_UnaryOp(const DerivationExpression_UnaryOp& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_UnaryOp::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+DerivationExpression_UnaryOp::DerivationExpression_UnaryOp(
+    ::google::protobuf::Arena* arena,
+    const DerivationExpression_UnaryOp& from)
+    : ::google::protobuf::Message(arena) {
   DerivationExpression_UnaryOp* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.arg_){nullptr},
-      decltype(_impl_.op_type_){},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.arg_ = new ::substrait::DerivationExpression(*from._impl_.arg_);
-  }
-  _this->_impl_.op_type_ = from._impl_.op_type_;
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.arg_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.arg_)
+                : nullptr;
+  _impl_.op_type_ = from._impl_.op_type_;
 
   // @@protoc_insertion_point(copy_constructor:substrait.DerivationExpression.UnaryOp)
 }
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_UnaryOp::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
 inline void DerivationExpression_UnaryOp::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.arg_){nullptr},
-      decltype(_impl_.op_type_){0},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, arg_),
+           0,
+           offsetof(Impl_, op_type_) -
+               offsetof(Impl_, arg_) +
+               sizeof(Impl_::op_type_));
 }
 DerivationExpression_UnaryOp::~DerivationExpression_UnaryOp() {
   // @@protoc_insertion_point(destructor:substrait.DerivationExpression.UnaryOp)
@@ -3491,15 +3632,14 @@ DerivationExpression_UnaryOp::~DerivationExpression_UnaryOp() {
   SharedDtor();
 }
 inline void DerivationExpression_UnaryOp::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete _impl_.arg_;
-}
-void DerivationExpression_UnaryOp::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.arg_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void DerivationExpression_UnaryOp::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.DerivationExpression.UnaryOp)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -3574,8 +3714,8 @@ const ::_pbi::TcParseTable<1, 2, 1, 0, 2> DerivationExpression_UnaryOp::_table_ 
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.DerivationExpression arg = 2 [json_name = "arg"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(2, _Internal::arg(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        2, _Internal::arg(this),
         _Internal::arg(this).GetCachedSize(), target, stream);
   }
 
@@ -3599,9 +3739,8 @@ const ::_pbi::TcParseTable<1, 2, 1, 0, 2> DerivationExpression_UnaryOp::_table_ 
   // .substrait.DerivationExpression arg = 2 [json_name = "arg"];
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *_impl_.arg_);
+    total_size +=
+        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.arg_);
   }
 
   // .substrait.DerivationExpression.UnaryOp.UnaryOpType op_type = 1 [json_name = "opType"];
@@ -3614,11 +3753,12 @@ const ::_pbi::TcParseTable<1, 2, 1, 0, 2> DerivationExpression_UnaryOp::_table_ 
 }
 
 const ::google::protobuf::Message::ClassData DerivationExpression_UnaryOp::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    DerivationExpression_UnaryOp::MergeImpl
+    DerivationExpression_UnaryOp::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*DerivationExpression_UnaryOp::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* DerivationExpression_UnaryOp::GetClassData() const {
+  return &_class_data_;
+}
 
 void DerivationExpression_UnaryOp::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<DerivationExpression_UnaryOp*>(&to_msg);
@@ -3649,7 +3789,10 @@ PROTOBUF_NOINLINE bool DerivationExpression_UnaryOp::IsInitialized() const {
   return true;
 }
 
-void DerivationExpression_UnaryOp::InternalSwap(DerivationExpression_UnaryOp* other) {
+::_pbi::CachedSize* DerivationExpression_UnaryOp::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DerivationExpression_UnaryOp::InternalSwap(DerivationExpression_UnaryOp* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
@@ -3694,37 +3837,45 @@ DerivationExpression_BinaryOp::DerivationExpression_BinaryOp(::google::protobuf:
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.DerivationExpression.BinaryOp)
 }
-DerivationExpression_BinaryOp::DerivationExpression_BinaryOp(const DerivationExpression_BinaryOp& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_BinaryOp::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+DerivationExpression_BinaryOp::DerivationExpression_BinaryOp(
+    ::google::protobuf::Arena* arena,
+    const DerivationExpression_BinaryOp& from)
+    : ::google::protobuf::Message(arena) {
   DerivationExpression_BinaryOp* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.arg1_){nullptr},
-      decltype(_impl_.arg2_){nullptr},
-      decltype(_impl_.op_type_){},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.arg1_ = new ::substrait::DerivationExpression(*from._impl_.arg1_);
-  }
-  if ((from._impl_._has_bits_[0] & 0x00000002u) != 0) {
-    _this->_impl_.arg2_ = new ::substrait::DerivationExpression(*from._impl_.arg2_);
-  }
-  _this->_impl_.op_type_ = from._impl_.op_type_;
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.arg1_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.arg1_)
+                : nullptr;
+  _impl_.arg2_ = (cached_has_bits & 0x00000002u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.arg2_)
+                : nullptr;
+  _impl_.op_type_ = from._impl_.op_type_;
 
   // @@protoc_insertion_point(copy_constructor:substrait.DerivationExpression.BinaryOp)
 }
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_BinaryOp::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
 inline void DerivationExpression_BinaryOp::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.arg1_){nullptr},
-      decltype(_impl_.arg2_){nullptr},
-      decltype(_impl_.op_type_){0},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, arg1_),
+           0,
+           offsetof(Impl_, op_type_) -
+               offsetof(Impl_, arg1_) +
+               sizeof(Impl_::op_type_));
 }
 DerivationExpression_BinaryOp::~DerivationExpression_BinaryOp() {
   // @@protoc_insertion_point(destructor:substrait.DerivationExpression.BinaryOp)
@@ -3732,16 +3883,15 @@ DerivationExpression_BinaryOp::~DerivationExpression_BinaryOp() {
   SharedDtor();
 }
 inline void DerivationExpression_BinaryOp::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete _impl_.arg1_;
-  if (this != internal_default_instance()) delete _impl_.arg2_;
-}
-void DerivationExpression_BinaryOp::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.arg1_;
+  delete _impl_.arg2_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void DerivationExpression_BinaryOp::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.DerivationExpression.BinaryOp)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -3830,15 +3980,15 @@ const ::_pbi::TcParseTable<2, 3, 2, 0, 2> DerivationExpression_BinaryOp::_table_
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.DerivationExpression arg1 = 2 [json_name = "arg1"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(2, _Internal::arg1(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        2, _Internal::arg1(this),
         _Internal::arg1(this).GetCachedSize(), target, stream);
   }
 
   // .substrait.DerivationExpression arg2 = 3 [json_name = "arg2"];
   if (cached_has_bits & 0x00000002u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(3, _Internal::arg2(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        3, _Internal::arg2(this),
         _Internal::arg2(this).GetCachedSize(), target, stream);
   }
 
@@ -3863,16 +4013,14 @@ const ::_pbi::TcParseTable<2, 3, 2, 0, 2> DerivationExpression_BinaryOp::_table_
   if (cached_has_bits & 0x00000003u) {
     // .substrait.DerivationExpression arg1 = 2 [json_name = "arg1"];
     if (cached_has_bits & 0x00000001u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.arg1_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.arg1_);
     }
 
     // .substrait.DerivationExpression arg2 = 3 [json_name = "arg2"];
     if (cached_has_bits & 0x00000002u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.arg2_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.arg2_);
     }
 
   }
@@ -3886,11 +4034,12 @@ const ::_pbi::TcParseTable<2, 3, 2, 0, 2> DerivationExpression_BinaryOp::_table_
 }
 
 const ::google::protobuf::Message::ClassData DerivationExpression_BinaryOp::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    DerivationExpression_BinaryOp::MergeImpl
+    DerivationExpression_BinaryOp::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*DerivationExpression_BinaryOp::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* DerivationExpression_BinaryOp::GetClassData() const {
+  return &_class_data_;
+}
 
 void DerivationExpression_BinaryOp::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<DerivationExpression_BinaryOp*>(&to_msg);
@@ -3928,7 +4077,10 @@ PROTOBUF_NOINLINE bool DerivationExpression_BinaryOp::IsInitialized() const {
   return true;
 }
 
-void DerivationExpression_BinaryOp::InternalSwap(DerivationExpression_BinaryOp* other) {
+::_pbi::CachedSize* DerivationExpression_BinaryOp::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DerivationExpression_BinaryOp::InternalSwap(DerivationExpression_BinaryOp* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
@@ -3966,42 +4118,38 @@ DerivationExpression_ReturnProgram_Assignment::DerivationExpression_ReturnProgra
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.DerivationExpression.ReturnProgram.Assignment)
 }
-DerivationExpression_ReturnProgram_Assignment::DerivationExpression_ReturnProgram_Assignment(const DerivationExpression_ReturnProgram_Assignment& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ReturnProgram_Assignment::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        name_(arena, from.name_) {}
+
+DerivationExpression_ReturnProgram_Assignment::DerivationExpression_ReturnProgram_Assignment(
+    ::google::protobuf::Arena* arena,
+    const DerivationExpression_ReturnProgram_Assignment& from)
+    : ::google::protobuf::Message(arena) {
   DerivationExpression_ReturnProgram_Assignment* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.name_){},
-      decltype(_impl_.expression_){nullptr},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  _impl_.name_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.name_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_name().empty()) {
-    _this->_impl_.name_.Set(from._internal_name(), _this->GetArenaForAllocation());
-  }
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.expression_ = new ::substrait::DerivationExpression(*from._impl_.expression_);
-  }
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.expression_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.expression_)
+                : nullptr;
 
   // @@protoc_insertion_point(copy_constructor:substrait.DerivationExpression.ReturnProgram.Assignment)
 }
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ReturnProgram_Assignment::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        name_(arena) {}
+
 inline void DerivationExpression_ReturnProgram_Assignment::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.name_){},
-      decltype(_impl_.expression_){nullptr},
-  };
-  _impl_.name_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.name_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.expression_ = {};
 }
 DerivationExpression_ReturnProgram_Assignment::~DerivationExpression_ReturnProgram_Assignment() {
   // @@protoc_insertion_point(destructor:substrait.DerivationExpression.ReturnProgram.Assignment)
@@ -4009,16 +4157,15 @@ DerivationExpression_ReturnProgram_Assignment::~DerivationExpression_ReturnProgr
   SharedDtor();
 }
 inline void DerivationExpression_ReturnProgram_Assignment::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  ABSL_DCHECK(GetArena() == nullptr);
   _impl_.name_.Destroy();
-  if (this != internal_default_instance()) delete _impl_.expression_;
-}
-void DerivationExpression_ReturnProgram_Assignment::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  delete _impl_.expression_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void DerivationExpression_ReturnProgram_Assignment::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.DerivationExpression.ReturnProgram.Assignment)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -4097,8 +4244,8 @@ const ::_pbi::TcParseTable<1, 2, 1, 68, 2> DerivationExpression_ReturnProgram_As
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.DerivationExpression expression = 2 [json_name = "expression"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(2, _Internal::expression(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        2, _Internal::expression(this),
         _Internal::expression(this).GetCachedSize(), target, stream);
   }
 
@@ -4128,20 +4275,20 @@ const ::_pbi::TcParseTable<1, 2, 1, 68, 2> DerivationExpression_ReturnProgram_As
   // .substrait.DerivationExpression expression = 2 [json_name = "expression"];
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *_impl_.expression_);
+    total_size +=
+        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.expression_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::google::protobuf::Message::ClassData DerivationExpression_ReturnProgram_Assignment::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    DerivationExpression_ReturnProgram_Assignment::MergeImpl
+    DerivationExpression_ReturnProgram_Assignment::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*DerivationExpression_ReturnProgram_Assignment::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* DerivationExpression_ReturnProgram_Assignment::GetClassData() const {
+  return &_class_data_;
+}
 
 void DerivationExpression_ReturnProgram_Assignment::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<DerivationExpression_ReturnProgram_Assignment*>(&to_msg);
@@ -4172,14 +4319,16 @@ PROTOBUF_NOINLINE bool DerivationExpression_ReturnProgram_Assignment::IsInitiali
   return true;
 }
 
-void DerivationExpression_ReturnProgram_Assignment::InternalSwap(DerivationExpression_ReturnProgram_Assignment* other) {
+::_pbi::CachedSize* DerivationExpression_ReturnProgram_Assignment::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DerivationExpression_ReturnProgram_Assignment::InternalSwap(DerivationExpression_ReturnProgram_Assignment* PROTOBUF_RESTRICT other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, lhs_arena,
-                                       &other->_impl_.name_, rhs_arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, &other->_impl_.name_, arena);
   swap(_impl_.expression_, other->_impl_.expression_);
 }
 
@@ -4209,31 +4358,38 @@ DerivationExpression_ReturnProgram::DerivationExpression_ReturnProgram(::google:
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.DerivationExpression.ReturnProgram)
 }
-DerivationExpression_ReturnProgram::DerivationExpression_ReturnProgram(const DerivationExpression_ReturnProgram& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ReturnProgram::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        assignments_{visibility, arena, from.assignments_} {}
+
+DerivationExpression_ReturnProgram::DerivationExpression_ReturnProgram(
+    ::google::protobuf::Arena* arena,
+    const DerivationExpression_ReturnProgram& from)
+    : ::google::protobuf::Message(arena) {
   DerivationExpression_ReturnProgram* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.assignments_){from._impl_.assignments_},
-      decltype(_impl_.final_expression_){nullptr},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.final_expression_ = new ::substrait::DerivationExpression(*from._impl_.final_expression_);
-  }
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.final_expression_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::DerivationExpression>(arena, *from._impl_.final_expression_)
+                : nullptr;
 
   // @@protoc_insertion_point(copy_constructor:substrait.DerivationExpression.ReturnProgram)
 }
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression_ReturnProgram::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        assignments_{visibility, arena} {}
+
 inline void DerivationExpression_ReturnProgram::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.assignments_){arena},
-      decltype(_impl_.final_expression_){nullptr},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.final_expression_ = {};
 }
 DerivationExpression_ReturnProgram::~DerivationExpression_ReturnProgram() {
   // @@protoc_insertion_point(destructor:substrait.DerivationExpression.ReturnProgram)
@@ -4241,21 +4397,19 @@ DerivationExpression_ReturnProgram::~DerivationExpression_ReturnProgram() {
   SharedDtor();
 }
 inline void DerivationExpression_ReturnProgram::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.assignments_.~RepeatedPtrField();
-  if (this != internal_default_instance()) delete _impl_.final_expression_;
-}
-void DerivationExpression_ReturnProgram::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.final_expression_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void DerivationExpression_ReturnProgram::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.DerivationExpression.ReturnProgram)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _internal_mutable_assignments()->Clear();
+  _impl_.assignments_.Clear();
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
     ABSL_DCHECK(_impl_.final_expression_ != nullptr);
@@ -4327,8 +4481,8 @@ const ::_pbi::TcParseTable<1, 2, 2, 0, 2> DerivationExpression_ReturnProgram::_t
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.DerivationExpression final_expression = 2 [json_name = "finalExpression"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(2, _Internal::final_expression(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        2, _Internal::final_expression(this),
         _Internal::final_expression(this).GetCachedSize(), target, stream);
   }
 
@@ -4358,20 +4512,20 @@ const ::_pbi::TcParseTable<1, 2, 2, 0, 2> DerivationExpression_ReturnProgram::_t
   // .substrait.DerivationExpression final_expression = 2 [json_name = "finalExpression"];
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *_impl_.final_expression_);
+    total_size +=
+        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.final_expression_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::google::protobuf::Message::ClassData DerivationExpression_ReturnProgram::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    DerivationExpression_ReturnProgram::MergeImpl
+    DerivationExpression_ReturnProgram::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*DerivationExpression_ReturnProgram::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* DerivationExpression_ReturnProgram::GetClassData() const {
+  return &_class_data_;
+}
 
 void DerivationExpression_ReturnProgram::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<DerivationExpression_ReturnProgram*>(&to_msg);
@@ -4381,7 +4535,8 @@ void DerivationExpression_ReturnProgram::MergeImpl(::google::protobuf::Message& 
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  _this->_internal_mutable_assignments()->MergeFrom(from._internal_assignments());
+  _this->_internal_mutable_assignments()->MergeFrom(
+      from._internal_assignments());
   if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
     _this->_internal_mutable_final_expression()->::substrait::DerivationExpression::MergeFrom(
         from._internal_final_expression());
@@ -4400,7 +4555,10 @@ PROTOBUF_NOINLINE bool DerivationExpression_ReturnProgram::IsInitialized() const
   return true;
 }
 
-void DerivationExpression_ReturnProgram::InternalSwap(DerivationExpression_ReturnProgram* other) {
+::_pbi::CachedSize* DerivationExpression_ReturnProgram::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DerivationExpression_ReturnProgram::InternalSwap(DerivationExpression_ReturnProgram* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
@@ -4534,15 +4692,12 @@ const ::substrait::DerivationExpression_ReturnProgram& DerivationExpression::_In
   return *msg->_impl_.kind_.return_program_;
 }
 void DerivationExpression::set_allocated_bool_(::substrait::Type_Boolean* bool_) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (bool_) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(bool_));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(bool_)->GetArena();
     if (message_arena != submessage_arena) {
-      bool_ = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, bool_, submessage_arena);
+      bool_ = ::google::protobuf::internal::GetOwnedMessage(message_arena, bool_, submessage_arena);
     }
     set_has_bool_();
     _impl_.kind_.bool__ = bool_;
@@ -4550,23 +4705,21 @@ void DerivationExpression::set_allocated_bool_(::substrait::Type_Boolean* bool_)
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.bool)
 }
 void DerivationExpression::clear_bool_() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kBool) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.bool__;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_i8(::substrait::Type_I8* i8) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (i8) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(i8));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(i8)->GetArena();
     if (message_arena != submessage_arena) {
-      i8 = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, i8, submessage_arena);
+      i8 = ::google::protobuf::internal::GetOwnedMessage(message_arena, i8, submessage_arena);
     }
     set_has_i8();
     _impl_.kind_.i8_ = i8;
@@ -4574,23 +4727,21 @@ void DerivationExpression::set_allocated_i8(::substrait::Type_I8* i8) {
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.i8)
 }
 void DerivationExpression::clear_i8() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kI8) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.i8_;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_i16(::substrait::Type_I16* i16) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (i16) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(i16));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(i16)->GetArena();
     if (message_arena != submessage_arena) {
-      i16 = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, i16, submessage_arena);
+      i16 = ::google::protobuf::internal::GetOwnedMessage(message_arena, i16, submessage_arena);
     }
     set_has_i16();
     _impl_.kind_.i16_ = i16;
@@ -4598,23 +4749,21 @@ void DerivationExpression::set_allocated_i16(::substrait::Type_I16* i16) {
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.i16)
 }
 void DerivationExpression::clear_i16() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kI16) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.i16_;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_i32(::substrait::Type_I32* i32) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (i32) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(i32));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(i32)->GetArena();
     if (message_arena != submessage_arena) {
-      i32 = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, i32, submessage_arena);
+      i32 = ::google::protobuf::internal::GetOwnedMessage(message_arena, i32, submessage_arena);
     }
     set_has_i32();
     _impl_.kind_.i32_ = i32;
@@ -4622,23 +4771,21 @@ void DerivationExpression::set_allocated_i32(::substrait::Type_I32* i32) {
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.i32)
 }
 void DerivationExpression::clear_i32() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kI32) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.i32_;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_i64(::substrait::Type_I64* i64) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (i64) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(i64));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(i64)->GetArena();
     if (message_arena != submessage_arena) {
-      i64 = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, i64, submessage_arena);
+      i64 = ::google::protobuf::internal::GetOwnedMessage(message_arena, i64, submessage_arena);
     }
     set_has_i64();
     _impl_.kind_.i64_ = i64;
@@ -4646,23 +4793,21 @@ void DerivationExpression::set_allocated_i64(::substrait::Type_I64* i64) {
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.i64)
 }
 void DerivationExpression::clear_i64() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kI64) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.i64_;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_fp32(::substrait::Type_FP32* fp32) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (fp32) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(fp32));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(fp32)->GetArena();
     if (message_arena != submessage_arena) {
-      fp32 = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, fp32, submessage_arena);
+      fp32 = ::google::protobuf::internal::GetOwnedMessage(message_arena, fp32, submessage_arena);
     }
     set_has_fp32();
     _impl_.kind_.fp32_ = fp32;
@@ -4670,23 +4815,21 @@ void DerivationExpression::set_allocated_fp32(::substrait::Type_FP32* fp32) {
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.fp32)
 }
 void DerivationExpression::clear_fp32() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kFp32) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.fp32_;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_fp64(::substrait::Type_FP64* fp64) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (fp64) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(fp64));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(fp64)->GetArena();
     if (message_arena != submessage_arena) {
-      fp64 = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, fp64, submessage_arena);
+      fp64 = ::google::protobuf::internal::GetOwnedMessage(message_arena, fp64, submessage_arena);
     }
     set_has_fp64();
     _impl_.kind_.fp64_ = fp64;
@@ -4694,23 +4837,21 @@ void DerivationExpression::set_allocated_fp64(::substrait::Type_FP64* fp64) {
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.fp64)
 }
 void DerivationExpression::clear_fp64() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kFp64) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.fp64_;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_string(::substrait::Type_String* string) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (string) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(string));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(string)->GetArena();
     if (message_arena != submessage_arena) {
-      string = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, string, submessage_arena);
+      string = ::google::protobuf::internal::GetOwnedMessage(message_arena, string, submessage_arena);
     }
     set_has_string();
     _impl_.kind_.string_ = string;
@@ -4718,23 +4859,21 @@ void DerivationExpression::set_allocated_string(::substrait::Type_String* string
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.string)
 }
 void DerivationExpression::clear_string() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kString) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.string_;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_binary(::substrait::Type_Binary* binary) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (binary) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(binary));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(binary)->GetArena();
     if (message_arena != submessage_arena) {
-      binary = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, binary, submessage_arena);
+      binary = ::google::protobuf::internal::GetOwnedMessage(message_arena, binary, submessage_arena);
     }
     set_has_binary();
     _impl_.kind_.binary_ = binary;
@@ -4742,23 +4881,21 @@ void DerivationExpression::set_allocated_binary(::substrait::Type_Binary* binary
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.binary)
 }
 void DerivationExpression::clear_binary() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kBinary) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.binary_;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_timestamp(::substrait::Type_Timestamp* timestamp) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (timestamp) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(timestamp));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(timestamp)->GetArena();
     if (message_arena != submessage_arena) {
-      timestamp = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, timestamp, submessage_arena);
+      timestamp = ::google::protobuf::internal::GetOwnedMessage(message_arena, timestamp, submessage_arena);
     }
     set_has_timestamp();
     _impl_.kind_.timestamp_ = timestamp;
@@ -4766,23 +4903,21 @@ void DerivationExpression::set_allocated_timestamp(::substrait::Type_Timestamp* 
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.timestamp)
 }
 void DerivationExpression::clear_timestamp() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kTimestamp) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.timestamp_;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_date(::substrait::Type_Date* date) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (date) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(date));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(date)->GetArena();
     if (message_arena != submessage_arena) {
-      date = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, date, submessage_arena);
+      date = ::google::protobuf::internal::GetOwnedMessage(message_arena, date, submessage_arena);
     }
     set_has_date();
     _impl_.kind_.date_ = date;
@@ -4790,23 +4925,21 @@ void DerivationExpression::set_allocated_date(::substrait::Type_Date* date) {
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.date)
 }
 void DerivationExpression::clear_date() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kDate) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.date_;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_time(::substrait::Type_Time* time) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (time) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(time));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(time)->GetArena();
     if (message_arena != submessage_arena) {
-      time = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, time, submessage_arena);
+      time = ::google::protobuf::internal::GetOwnedMessage(message_arena, time, submessage_arena);
     }
     set_has_time();
     _impl_.kind_.time_ = time;
@@ -4814,23 +4947,21 @@ void DerivationExpression::set_allocated_time(::substrait::Type_Time* time) {
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.time)
 }
 void DerivationExpression::clear_time() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kTime) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.time_;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_interval_year(::substrait::Type_IntervalYear* interval_year) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (interval_year) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(interval_year));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(interval_year)->GetArena();
     if (message_arena != submessage_arena) {
-      interval_year = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, interval_year, submessage_arena);
+      interval_year = ::google::protobuf::internal::GetOwnedMessage(message_arena, interval_year, submessage_arena);
     }
     set_has_interval_year();
     _impl_.kind_.interval_year_ = interval_year;
@@ -4838,23 +4969,21 @@ void DerivationExpression::set_allocated_interval_year(::substrait::Type_Interva
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.interval_year)
 }
 void DerivationExpression::clear_interval_year() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kIntervalYear) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.interval_year_;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_interval_day(::substrait::Type_IntervalDay* interval_day) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (interval_day) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(interval_day));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(interval_day)->GetArena();
     if (message_arena != submessage_arena) {
-      interval_day = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, interval_day, submessage_arena);
+      interval_day = ::google::protobuf::internal::GetOwnedMessage(message_arena, interval_day, submessage_arena);
     }
     set_has_interval_day();
     _impl_.kind_.interval_day_ = interval_day;
@@ -4862,23 +4991,21 @@ void DerivationExpression::set_allocated_interval_day(::substrait::Type_Interval
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.interval_day)
 }
 void DerivationExpression::clear_interval_day() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kIntervalDay) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.interval_day_;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_timestamp_tz(::substrait::Type_TimestampTZ* timestamp_tz) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (timestamp_tz) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(timestamp_tz));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(timestamp_tz)->GetArena();
     if (message_arena != submessage_arena) {
-      timestamp_tz = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, timestamp_tz, submessage_arena);
+      timestamp_tz = ::google::protobuf::internal::GetOwnedMessage(message_arena, timestamp_tz, submessage_arena);
     }
     set_has_timestamp_tz();
     _impl_.kind_.timestamp_tz_ = timestamp_tz;
@@ -4886,23 +5013,21 @@ void DerivationExpression::set_allocated_timestamp_tz(::substrait::Type_Timestam
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.timestamp_tz)
 }
 void DerivationExpression::clear_timestamp_tz() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kTimestampTz) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.timestamp_tz_;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_uuid(::substrait::Type_UUID* uuid) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (uuid) {
-    ::google::protobuf::Arena* submessage_arena =
-        ::google::protobuf::Arena::InternalGetOwningArena(
-                reinterpret_cast<::google::protobuf::MessageLite*>(uuid));
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::MessageLite*>(uuid)->GetArena();
     if (message_arena != submessage_arena) {
-      uuid = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, uuid, submessage_arena);
+      uuid = ::google::protobuf::internal::GetOwnedMessage(message_arena, uuid, submessage_arena);
     }
     set_has_uuid();
     _impl_.kind_.uuid_ = uuid;
@@ -4910,22 +5035,21 @@ void DerivationExpression::set_allocated_uuid(::substrait::Type_UUID* uuid) {
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.uuid)
 }
 void DerivationExpression::clear_uuid() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (kind_case() == kUuid) {
-    if (GetArenaForAllocation() == nullptr) {
+    if (GetArena() == nullptr) {
       delete _impl_.kind_.uuid_;
     }
     clear_has_kind();
   }
 }
 void DerivationExpression::set_allocated_fixed_char(::substrait::DerivationExpression_ExpressionFixedChar* fixed_char) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (fixed_char) {
-    ::google::protobuf::Arena* submessage_arena =
-      ::google::protobuf::Arena::InternalGetOwningArena(fixed_char);
+    ::google::protobuf::Arena* submessage_arena = fixed_char->GetArena();
     if (message_arena != submessage_arena) {
-      fixed_char = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, fixed_char, submessage_arena);
+      fixed_char = ::google::protobuf::internal::GetOwnedMessage(message_arena, fixed_char, submessage_arena);
     }
     set_has_fixed_char();
     _impl_.kind_.fixed_char_ = fixed_char;
@@ -4933,14 +5057,12 @@ void DerivationExpression::set_allocated_fixed_char(::substrait::DerivationExpre
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.fixed_char)
 }
 void DerivationExpression::set_allocated_varchar(::substrait::DerivationExpression_ExpressionVarChar* varchar) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (varchar) {
-    ::google::protobuf::Arena* submessage_arena =
-      ::google::protobuf::Arena::InternalGetOwningArena(varchar);
+    ::google::protobuf::Arena* submessage_arena = varchar->GetArena();
     if (message_arena != submessage_arena) {
-      varchar = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, varchar, submessage_arena);
+      varchar = ::google::protobuf::internal::GetOwnedMessage(message_arena, varchar, submessage_arena);
     }
     set_has_varchar();
     _impl_.kind_.varchar_ = varchar;
@@ -4948,14 +5070,12 @@ void DerivationExpression::set_allocated_varchar(::substrait::DerivationExpressi
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.varchar)
 }
 void DerivationExpression::set_allocated_fixed_binary(::substrait::DerivationExpression_ExpressionFixedBinary* fixed_binary) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (fixed_binary) {
-    ::google::protobuf::Arena* submessage_arena =
-      ::google::protobuf::Arena::InternalGetOwningArena(fixed_binary);
+    ::google::protobuf::Arena* submessage_arena = fixed_binary->GetArena();
     if (message_arena != submessage_arena) {
-      fixed_binary = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, fixed_binary, submessage_arena);
+      fixed_binary = ::google::protobuf::internal::GetOwnedMessage(message_arena, fixed_binary, submessage_arena);
     }
     set_has_fixed_binary();
     _impl_.kind_.fixed_binary_ = fixed_binary;
@@ -4963,14 +5083,12 @@ void DerivationExpression::set_allocated_fixed_binary(::substrait::DerivationExp
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.fixed_binary)
 }
 void DerivationExpression::set_allocated_decimal(::substrait::DerivationExpression_ExpressionDecimal* decimal) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (decimal) {
-    ::google::protobuf::Arena* submessage_arena =
-      ::google::protobuf::Arena::InternalGetOwningArena(decimal);
+    ::google::protobuf::Arena* submessage_arena = decimal->GetArena();
     if (message_arena != submessage_arena) {
-      decimal = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, decimal, submessage_arena);
+      decimal = ::google::protobuf::internal::GetOwnedMessage(message_arena, decimal, submessage_arena);
     }
     set_has_decimal();
     _impl_.kind_.decimal_ = decimal;
@@ -4978,14 +5096,12 @@ void DerivationExpression::set_allocated_decimal(::substrait::DerivationExpressi
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.decimal)
 }
 void DerivationExpression::set_allocated_struct_(::substrait::DerivationExpression_ExpressionStruct* struct_) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (struct_) {
-    ::google::protobuf::Arena* submessage_arena =
-      ::google::protobuf::Arena::InternalGetOwningArena(struct_);
+    ::google::protobuf::Arena* submessage_arena = struct_->GetArena();
     if (message_arena != submessage_arena) {
-      struct_ = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, struct_, submessage_arena);
+      struct_ = ::google::protobuf::internal::GetOwnedMessage(message_arena, struct_, submessage_arena);
     }
     set_has_struct_();
     _impl_.kind_.struct__ = struct_;
@@ -4993,14 +5109,12 @@ void DerivationExpression::set_allocated_struct_(::substrait::DerivationExpressi
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.struct)
 }
 void DerivationExpression::set_allocated_list(::substrait::DerivationExpression_ExpressionList* list) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (list) {
-    ::google::protobuf::Arena* submessage_arena =
-      ::google::protobuf::Arena::InternalGetOwningArena(list);
+    ::google::protobuf::Arena* submessage_arena = list->GetArena();
     if (message_arena != submessage_arena) {
-      list = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, list, submessage_arena);
+      list = ::google::protobuf::internal::GetOwnedMessage(message_arena, list, submessage_arena);
     }
     set_has_list();
     _impl_.kind_.list_ = list;
@@ -5008,14 +5122,12 @@ void DerivationExpression::set_allocated_list(::substrait::DerivationExpression_
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.list)
 }
 void DerivationExpression::set_allocated_map(::substrait::DerivationExpression_ExpressionMap* map) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (map) {
-    ::google::protobuf::Arena* submessage_arena =
-      ::google::protobuf::Arena::InternalGetOwningArena(map);
+    ::google::protobuf::Arena* submessage_arena = map->GetArena();
     if (message_arena != submessage_arena) {
-      map = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, map, submessage_arena);
+      map = ::google::protobuf::internal::GetOwnedMessage(message_arena, map, submessage_arena);
     }
     set_has_map();
     _impl_.kind_.map_ = map;
@@ -5023,14 +5135,12 @@ void DerivationExpression::set_allocated_map(::substrait::DerivationExpression_E
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.map)
 }
 void DerivationExpression::set_allocated_user_defined(::substrait::DerivationExpression_ExpressionUserDefined* user_defined) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (user_defined) {
-    ::google::protobuf::Arena* submessage_arena =
-      ::google::protobuf::Arena::InternalGetOwningArena(user_defined);
+    ::google::protobuf::Arena* submessage_arena = user_defined->GetArena();
     if (message_arena != submessage_arena) {
-      user_defined = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, user_defined, submessage_arena);
+      user_defined = ::google::protobuf::internal::GetOwnedMessage(message_arena, user_defined, submessage_arena);
     }
     set_has_user_defined();
     _impl_.kind_.user_defined_ = user_defined;
@@ -5038,14 +5148,12 @@ void DerivationExpression::set_allocated_user_defined(::substrait::DerivationExp
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.user_defined)
 }
 void DerivationExpression::set_allocated_unary_op(::substrait::DerivationExpression_UnaryOp* unary_op) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (unary_op) {
-    ::google::protobuf::Arena* submessage_arena =
-      ::google::protobuf::Arena::InternalGetOwningArena(unary_op);
+    ::google::protobuf::Arena* submessage_arena = unary_op->GetArena();
     if (message_arena != submessage_arena) {
-      unary_op = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, unary_op, submessage_arena);
+      unary_op = ::google::protobuf::internal::GetOwnedMessage(message_arena, unary_op, submessage_arena);
     }
     set_has_unary_op();
     _impl_.kind_.unary_op_ = unary_op;
@@ -5053,14 +5161,12 @@ void DerivationExpression::set_allocated_unary_op(::substrait::DerivationExpress
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.unary_op)
 }
 void DerivationExpression::set_allocated_binary_op(::substrait::DerivationExpression_BinaryOp* binary_op) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (binary_op) {
-    ::google::protobuf::Arena* submessage_arena =
-      ::google::protobuf::Arena::InternalGetOwningArena(binary_op);
+    ::google::protobuf::Arena* submessage_arena = binary_op->GetArena();
     if (message_arena != submessage_arena) {
-      binary_op = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, binary_op, submessage_arena);
+      binary_op = ::google::protobuf::internal::GetOwnedMessage(message_arena, binary_op, submessage_arena);
     }
     set_has_binary_op();
     _impl_.kind_.binary_op_ = binary_op;
@@ -5068,14 +5174,12 @@ void DerivationExpression::set_allocated_binary_op(::substrait::DerivationExpres
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.binary_op)
 }
 void DerivationExpression::set_allocated_if_else(::substrait::DerivationExpression_IfElse* if_else) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (if_else) {
-    ::google::protobuf::Arena* submessage_arena =
-      ::google::protobuf::Arena::InternalGetOwningArena(if_else);
+    ::google::protobuf::Arena* submessage_arena = if_else->GetArena();
     if (message_arena != submessage_arena) {
-      if_else = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, if_else, submessage_arena);
+      if_else = ::google::protobuf::internal::GetOwnedMessage(message_arena, if_else, submessage_arena);
     }
     set_has_if_else();
     _impl_.kind_.if_else_ = if_else;
@@ -5083,14 +5187,12 @@ void DerivationExpression::set_allocated_if_else(::substrait::DerivationExpressi
   // @@protoc_insertion_point(field_set_allocated:substrait.DerivationExpression.if_else)
 }
 void DerivationExpression::set_allocated_return_program(::substrait::DerivationExpression_ReturnProgram* return_program) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_kind();
   if (return_program) {
-    ::google::protobuf::Arena* submessage_arena =
-      ::google::protobuf::Arena::InternalGetOwningArena(return_program);
+    ::google::protobuf::Arena* submessage_arena = return_program->GetArena();
     if (message_arena != submessage_arena) {
-      return_program = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, return_program, submessage_arena);
+      return_program = ::google::protobuf::internal::GetOwnedMessage(message_arena, return_program, submessage_arena);
     }
     set_has_return_program();
     _impl_.kind_.return_program_ = return_program;
@@ -5102,189 +5204,134 @@ DerivationExpression::DerivationExpression(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.DerivationExpression)
 }
-DerivationExpression::DerivationExpression(const DerivationExpression& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : kind_{},
+        _cached_size_{0},
+        _oneof_case_{from._oneof_case_[0]} {}
+
+DerivationExpression::DerivationExpression(
+    ::google::protobuf::Arena* arena,
+    const DerivationExpression& from)
+    : ::google::protobuf::Message(arena) {
   DerivationExpression* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.kind_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_._oneof_case_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  clear_has_kind();
-  switch (from.kind_case()) {
-    case kBool: {
-      _this->_internal_mutable_bool_()->::substrait::Type_Boolean::MergeFrom(
-          from._internal_bool_());
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  switch (kind_case()) {
+    case KIND_NOT_SET:
       break;
-    }
-    case kI8: {
-      _this->_internal_mutable_i8()->::substrait::Type_I8::MergeFrom(
-          from._internal_i8());
-      break;
-    }
-    case kI16: {
-      _this->_internal_mutable_i16()->::substrait::Type_I16::MergeFrom(
-          from._internal_i16());
-      break;
-    }
-    case kI32: {
-      _this->_internal_mutable_i32()->::substrait::Type_I32::MergeFrom(
-          from._internal_i32());
-      break;
-    }
-    case kI64: {
-      _this->_internal_mutable_i64()->::substrait::Type_I64::MergeFrom(
-          from._internal_i64());
-      break;
-    }
-    case kFp32: {
-      _this->_internal_mutable_fp32()->::substrait::Type_FP32::MergeFrom(
-          from._internal_fp32());
-      break;
-    }
-    case kFp64: {
-      _this->_internal_mutable_fp64()->::substrait::Type_FP64::MergeFrom(
-          from._internal_fp64());
-      break;
-    }
-    case kString: {
-      _this->_internal_mutable_string()->::substrait::Type_String::MergeFrom(
-          from._internal_string());
-      break;
-    }
-    case kBinary: {
-      _this->_internal_mutable_binary()->::substrait::Type_Binary::MergeFrom(
-          from._internal_binary());
-      break;
-    }
-    case kTimestamp: {
-      _this->_internal_mutable_timestamp()->::substrait::Type_Timestamp::MergeFrom(
-          from._internal_timestamp());
-      break;
-    }
-    case kDate: {
-      _this->_internal_mutable_date()->::substrait::Type_Date::MergeFrom(
-          from._internal_date());
-      break;
-    }
-    case kTime: {
-      _this->_internal_mutable_time()->::substrait::Type_Time::MergeFrom(
-          from._internal_time());
-      break;
-    }
-    case kIntervalYear: {
-      _this->_internal_mutable_interval_year()->::substrait::Type_IntervalYear::MergeFrom(
-          from._internal_interval_year());
-      break;
-    }
-    case kIntervalDay: {
-      _this->_internal_mutable_interval_day()->::substrait::Type_IntervalDay::MergeFrom(
-          from._internal_interval_day());
-      break;
-    }
-    case kTimestampTz: {
-      _this->_internal_mutable_timestamp_tz()->::substrait::Type_TimestampTZ::MergeFrom(
-          from._internal_timestamp_tz());
-      break;
-    }
-    case kUuid: {
-      _this->_internal_mutable_uuid()->::substrait::Type_UUID::MergeFrom(
-          from._internal_uuid());
-      break;
-    }
-    case kFixedChar: {
-      _this->_internal_mutable_fixed_char()->::substrait::DerivationExpression_ExpressionFixedChar::MergeFrom(
-          from._internal_fixed_char());
-      break;
-    }
-    case kVarchar: {
-      _this->_internal_mutable_varchar()->::substrait::DerivationExpression_ExpressionVarChar::MergeFrom(
-          from._internal_varchar());
-      break;
-    }
-    case kFixedBinary: {
-      _this->_internal_mutable_fixed_binary()->::substrait::DerivationExpression_ExpressionFixedBinary::MergeFrom(
-          from._internal_fixed_binary());
-      break;
-    }
-    case kDecimal: {
-      _this->_internal_mutable_decimal()->::substrait::DerivationExpression_ExpressionDecimal::MergeFrom(
-          from._internal_decimal());
-      break;
-    }
-    case kStruct: {
-      _this->_internal_mutable_struct_()->::substrait::DerivationExpression_ExpressionStruct::MergeFrom(
-          from._internal_struct_());
-      break;
-    }
-    case kList: {
-      _this->_internal_mutable_list()->::substrait::DerivationExpression_ExpressionList::MergeFrom(
-          from._internal_list());
-      break;
-    }
-    case kMap: {
-      _this->_internal_mutable_map()->::substrait::DerivationExpression_ExpressionMap::MergeFrom(
-          from._internal_map());
-      break;
-    }
-    case kUserDefined: {
-      _this->_internal_mutable_user_defined()->::substrait::DerivationExpression_ExpressionUserDefined::MergeFrom(
-          from._internal_user_defined());
-      break;
-    }
-    case kUserDefinedPointer: {
-      _this->_internal_set_user_defined_pointer(from._internal_user_defined_pointer());
-      break;
-    }
-    case kTypeParameterName: {
-      _this->_internal_set_type_parameter_name(from._internal_type_parameter_name());
-      break;
-    }
-    case kIntegerParameterName: {
-      _this->_internal_set_integer_parameter_name(from._internal_integer_parameter_name());
-      break;
-    }
-    case kIntegerLiteral: {
-      _this->_internal_set_integer_literal(from._internal_integer_literal());
-      break;
-    }
-    case kUnaryOp: {
-      _this->_internal_mutable_unary_op()->::substrait::DerivationExpression_UnaryOp::MergeFrom(
-          from._internal_unary_op());
-      break;
-    }
-    case kBinaryOp: {
-      _this->_internal_mutable_binary_op()->::substrait::DerivationExpression_BinaryOp::MergeFrom(
-          from._internal_binary_op());
-      break;
-    }
-    case kIfElse: {
-      _this->_internal_mutable_if_else()->::substrait::DerivationExpression_IfElse::MergeFrom(
-          from._internal_if_else());
-      break;
-    }
-    case kReturnProgram: {
-      _this->_internal_mutable_return_program()->::substrait::DerivationExpression_ReturnProgram::MergeFrom(
-          from._internal_return_program());
-      break;
-    }
-    case KIND_NOT_SET: {
-      break;
-    }
+      case kBool:
+        _impl_.kind_.bool__ = CreateMaybeMessage<::substrait::Type_Boolean>(arena, *from._impl_.kind_.bool__);
+        break;
+      case kI8:
+        _impl_.kind_.i8_ = CreateMaybeMessage<::substrait::Type_I8>(arena, *from._impl_.kind_.i8_);
+        break;
+      case kI16:
+        _impl_.kind_.i16_ = CreateMaybeMessage<::substrait::Type_I16>(arena, *from._impl_.kind_.i16_);
+        break;
+      case kI32:
+        _impl_.kind_.i32_ = CreateMaybeMessage<::substrait::Type_I32>(arena, *from._impl_.kind_.i32_);
+        break;
+      case kI64:
+        _impl_.kind_.i64_ = CreateMaybeMessage<::substrait::Type_I64>(arena, *from._impl_.kind_.i64_);
+        break;
+      case kFp32:
+        _impl_.kind_.fp32_ = CreateMaybeMessage<::substrait::Type_FP32>(arena, *from._impl_.kind_.fp32_);
+        break;
+      case kFp64:
+        _impl_.kind_.fp64_ = CreateMaybeMessage<::substrait::Type_FP64>(arena, *from._impl_.kind_.fp64_);
+        break;
+      case kString:
+        _impl_.kind_.string_ = CreateMaybeMessage<::substrait::Type_String>(arena, *from._impl_.kind_.string_);
+        break;
+      case kBinary:
+        _impl_.kind_.binary_ = CreateMaybeMessage<::substrait::Type_Binary>(arena, *from._impl_.kind_.binary_);
+        break;
+      case kTimestamp:
+        _impl_.kind_.timestamp_ = CreateMaybeMessage<::substrait::Type_Timestamp>(arena, *from._impl_.kind_.timestamp_);
+        break;
+      case kDate:
+        _impl_.kind_.date_ = CreateMaybeMessage<::substrait::Type_Date>(arena, *from._impl_.kind_.date_);
+        break;
+      case kTime:
+        _impl_.kind_.time_ = CreateMaybeMessage<::substrait::Type_Time>(arena, *from._impl_.kind_.time_);
+        break;
+      case kIntervalYear:
+        _impl_.kind_.interval_year_ = CreateMaybeMessage<::substrait::Type_IntervalYear>(arena, *from._impl_.kind_.interval_year_);
+        break;
+      case kIntervalDay:
+        _impl_.kind_.interval_day_ = CreateMaybeMessage<::substrait::Type_IntervalDay>(arena, *from._impl_.kind_.interval_day_);
+        break;
+      case kTimestampTz:
+        _impl_.kind_.timestamp_tz_ = CreateMaybeMessage<::substrait::Type_TimestampTZ>(arena, *from._impl_.kind_.timestamp_tz_);
+        break;
+      case kUuid:
+        _impl_.kind_.uuid_ = CreateMaybeMessage<::substrait::Type_UUID>(arena, *from._impl_.kind_.uuid_);
+        break;
+      case kFixedChar:
+        _impl_.kind_.fixed_char_ = CreateMaybeMessage<::substrait::DerivationExpression_ExpressionFixedChar>(arena, *from._impl_.kind_.fixed_char_);
+        break;
+      case kVarchar:
+        _impl_.kind_.varchar_ = CreateMaybeMessage<::substrait::DerivationExpression_ExpressionVarChar>(arena, *from._impl_.kind_.varchar_);
+        break;
+      case kFixedBinary:
+        _impl_.kind_.fixed_binary_ = CreateMaybeMessage<::substrait::DerivationExpression_ExpressionFixedBinary>(arena, *from._impl_.kind_.fixed_binary_);
+        break;
+      case kDecimal:
+        _impl_.kind_.decimal_ = CreateMaybeMessage<::substrait::DerivationExpression_ExpressionDecimal>(arena, *from._impl_.kind_.decimal_);
+        break;
+      case kStruct:
+        _impl_.kind_.struct__ = CreateMaybeMessage<::substrait::DerivationExpression_ExpressionStruct>(arena, *from._impl_.kind_.struct__);
+        break;
+      case kList:
+        _impl_.kind_.list_ = CreateMaybeMessage<::substrait::DerivationExpression_ExpressionList>(arena, *from._impl_.kind_.list_);
+        break;
+      case kMap:
+        _impl_.kind_.map_ = CreateMaybeMessage<::substrait::DerivationExpression_ExpressionMap>(arena, *from._impl_.kind_.map_);
+        break;
+      case kUserDefined:
+        _impl_.kind_.user_defined_ = CreateMaybeMessage<::substrait::DerivationExpression_ExpressionUserDefined>(arena, *from._impl_.kind_.user_defined_);
+        break;
+      case kUserDefinedPointer:
+        _impl_.kind_.user_defined_pointer_ = from._impl_.kind_.user_defined_pointer_;
+        break;
+      case kTypeParameterName:
+        new (&_impl_.kind_.type_parameter_name_) decltype(_impl_.kind_.type_parameter_name_){arena, from._impl_.kind_.type_parameter_name_};
+        break;
+      case kIntegerParameterName:
+        new (&_impl_.kind_.integer_parameter_name_) decltype(_impl_.kind_.integer_parameter_name_){arena, from._impl_.kind_.integer_parameter_name_};
+        break;
+      case kIntegerLiteral:
+        _impl_.kind_.integer_literal_ = from._impl_.kind_.integer_literal_;
+        break;
+      case kUnaryOp:
+        _impl_.kind_.unary_op_ = CreateMaybeMessage<::substrait::DerivationExpression_UnaryOp>(arena, *from._impl_.kind_.unary_op_);
+        break;
+      case kBinaryOp:
+        _impl_.kind_.binary_op_ = CreateMaybeMessage<::substrait::DerivationExpression_BinaryOp>(arena, *from._impl_.kind_.binary_op_);
+        break;
+      case kIfElse:
+        _impl_.kind_.if_else_ = CreateMaybeMessage<::substrait::DerivationExpression_IfElse>(arena, *from._impl_.kind_.if_else_);
+        break;
+      case kReturnProgram:
+        _impl_.kind_.return_program_ = CreateMaybeMessage<::substrait::DerivationExpression_ReturnProgram>(arena, *from._impl_.kind_.return_program_);
+        break;
   }
 
   // @@protoc_insertion_point(copy_constructor:substrait.DerivationExpression)
 }
+inline PROTOBUF_NDEBUG_INLINE DerivationExpression::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : kind_{},
+        _cached_size_{0},
+        _oneof_case_{} {}
+
 inline void DerivationExpression::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.kind_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_._oneof_case_)*/ {},
-  };
-  clear_has_kind();
+  new (&_impl_) Impl_(internal_visibility(), arena);
 }
 DerivationExpression::~DerivationExpression() {
   // @@protoc_insertion_point(destructor:substrait.DerivationExpression)
@@ -5292,158 +5339,157 @@ DerivationExpression::~DerivationExpression() {
   SharedDtor();
 }
 inline void DerivationExpression::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  ABSL_DCHECK(GetArena() == nullptr);
   if (has_kind()) {
     clear_kind();
   }
-}
-void DerivationExpression::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _impl_.~Impl_();
 }
 
 void DerivationExpression::clear_kind() {
 // @@protoc_insertion_point(one_of_clear_start:substrait.DerivationExpression)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   switch (kind_case()) {
     case kBool: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.bool__;
       }
       break;
     }
     case kI8: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.i8_;
       }
       break;
     }
     case kI16: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.i16_;
       }
       break;
     }
     case kI32: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.i32_;
       }
       break;
     }
     case kI64: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.i64_;
       }
       break;
     }
     case kFp32: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.fp32_;
       }
       break;
     }
     case kFp64: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.fp64_;
       }
       break;
     }
     case kString: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.string_;
       }
       break;
     }
     case kBinary: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.binary_;
       }
       break;
     }
     case kTimestamp: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.timestamp_;
       }
       break;
     }
     case kDate: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.date_;
       }
       break;
     }
     case kTime: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.time_;
       }
       break;
     }
     case kIntervalYear: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.interval_year_;
       }
       break;
     }
     case kIntervalDay: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.interval_day_;
       }
       break;
     }
     case kTimestampTz: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.timestamp_tz_;
       }
       break;
     }
     case kUuid: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.uuid_;
       }
       break;
     }
     case kFixedChar: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.fixed_char_;
       }
       break;
     }
     case kVarchar: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.varchar_;
       }
       break;
     }
     case kFixedBinary: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.fixed_binary_;
       }
       break;
     }
     case kDecimal: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.decimal_;
       }
       break;
     }
     case kStruct: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.struct__;
       }
       break;
     }
     case kList: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.list_;
       }
       break;
     }
     case kMap: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.map_;
       }
       break;
     }
     case kUserDefined: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.user_defined_;
       }
       break;
@@ -5465,25 +5511,25 @@ void DerivationExpression::clear_kind() {
       break;
     }
     case kUnaryOp: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.unary_op_;
       }
       break;
     }
     case kBinaryOp: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.binary_op_;
       }
       break;
     }
     case kIfElse: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.if_else_;
       }
       break;
     }
     case kReturnProgram: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.kind_.return_program_;
       }
       break;
@@ -5498,6 +5544,7 @@ void DerivationExpression::clear_kind() {
 
 PROTOBUF_NOINLINE void DerivationExpression::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.DerivationExpression)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -5676,140 +5723,140 @@ const ::_pbi::TcParseTable<0, 32, 28, 112, 7> DerivationExpression::_table_ = {
 
   switch (kind_case()) {
     case kBool: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(1, _Internal::bool_(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          1, _Internal::bool_(this),
           _Internal::bool_(this).GetCachedSize(), target, stream);
       break;
     }
     case kI8: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(2, _Internal::i8(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          2, _Internal::i8(this),
           _Internal::i8(this).GetCachedSize(), target, stream);
       break;
     }
     case kI16: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(3, _Internal::i16(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          3, _Internal::i16(this),
           _Internal::i16(this).GetCachedSize(), target, stream);
       break;
     }
     case kI32: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(5, _Internal::i32(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          5, _Internal::i32(this),
           _Internal::i32(this).GetCachedSize(), target, stream);
       break;
     }
     case kI64: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(7, _Internal::i64(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          7, _Internal::i64(this),
           _Internal::i64(this).GetCachedSize(), target, stream);
       break;
     }
     case kFp32: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(10, _Internal::fp32(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          10, _Internal::fp32(this),
           _Internal::fp32(this).GetCachedSize(), target, stream);
       break;
     }
     case kFp64: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(11, _Internal::fp64(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          11, _Internal::fp64(this),
           _Internal::fp64(this).GetCachedSize(), target, stream);
       break;
     }
     case kString: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(12, _Internal::string(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          12, _Internal::string(this),
           _Internal::string(this).GetCachedSize(), target, stream);
       break;
     }
     case kBinary: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(13, _Internal::binary(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          13, _Internal::binary(this),
           _Internal::binary(this).GetCachedSize(), target, stream);
       break;
     }
     case kTimestamp: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(14, _Internal::timestamp(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          14, _Internal::timestamp(this),
           _Internal::timestamp(this).GetCachedSize(), target, stream);
       break;
     }
     case kDate: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(16, _Internal::date(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          16, _Internal::date(this),
           _Internal::date(this).GetCachedSize(), target, stream);
       break;
     }
     case kTime: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(17, _Internal::time(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          17, _Internal::time(this),
           _Internal::time(this).GetCachedSize(), target, stream);
       break;
     }
     case kIntervalYear: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(19, _Internal::interval_year(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          19, _Internal::interval_year(this),
           _Internal::interval_year(this).GetCachedSize(), target, stream);
       break;
     }
     case kIntervalDay: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(20, _Internal::interval_day(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          20, _Internal::interval_day(this),
           _Internal::interval_day(this).GetCachedSize(), target, stream);
       break;
     }
     case kFixedChar: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(21, _Internal::fixed_char(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          21, _Internal::fixed_char(this),
           _Internal::fixed_char(this).GetCachedSize(), target, stream);
       break;
     }
     case kVarchar: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(22, _Internal::varchar(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          22, _Internal::varchar(this),
           _Internal::varchar(this).GetCachedSize(), target, stream);
       break;
     }
     case kFixedBinary: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(23, _Internal::fixed_binary(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          23, _Internal::fixed_binary(this),
           _Internal::fixed_binary(this).GetCachedSize(), target, stream);
       break;
     }
     case kDecimal: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(24, _Internal::decimal(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          24, _Internal::decimal(this),
           _Internal::decimal(this).GetCachedSize(), target, stream);
       break;
     }
     case kStruct: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(25, _Internal::struct_(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          25, _Internal::struct_(this),
           _Internal::struct_(this).GetCachedSize(), target, stream);
       break;
     }
     case kList: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(27, _Internal::list(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          27, _Internal::list(this),
           _Internal::list(this).GetCachedSize(), target, stream);
       break;
     }
     case kMap: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(28, _Internal::map(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          28, _Internal::map(this),
           _Internal::map(this).GetCachedSize(), target, stream);
       break;
     }
     case kTimestampTz: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(29, _Internal::timestamp_tz(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          29, _Internal::timestamp_tz(this),
           _Internal::timestamp_tz(this).GetCachedSize(), target, stream);
       break;
     }
     case kUserDefined: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(30, _Internal::user_defined(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          30, _Internal::user_defined(this),
           _Internal::user_defined(this).GetCachedSize(), target, stream);
       break;
     }
@@ -5820,8 +5867,8 @@ const ::_pbi::TcParseTable<0, 32, 28, 112, 7> DerivationExpression::_table_ = {
       break;
     }
     case kUuid: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(32, _Internal::uuid(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          32, _Internal::uuid(this),
           _Internal::uuid(this).GetCachedSize(), target, stream);
       break;
     }
@@ -5846,26 +5893,26 @@ const ::_pbi::TcParseTable<0, 32, 28, 112, 7> DerivationExpression::_table_ = {
       break;
     }
     case kUnaryOp: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(36, _Internal::unary_op(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          36, _Internal::unary_op(this),
           _Internal::unary_op(this).GetCachedSize(), target, stream);
       break;
     }
     case kBinaryOp: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(37, _Internal::binary_op(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          37, _Internal::binary_op(this),
           _Internal::binary_op(this).GetCachedSize(), target, stream);
       break;
     }
     case kIfElse: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(38, _Internal::if_else(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          38, _Internal::if_else(this),
           _Internal::if_else(this).GetCachedSize(), target, stream);
       break;
     }
     case kReturnProgram: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(39, _Internal::return_program(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          39, _Internal::return_program(this),
           _Internal::return_program(this).GetCachedSize(), target, stream);
       break;
     }
@@ -5892,170 +5939,146 @@ const ::_pbi::TcParseTable<0, 32, 28, 112, 7> DerivationExpression::_table_ = {
   switch (kind_case()) {
     // .substrait.Type.Boolean bool = 1 [json_name = "bool"];
     case kBool: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.bool__);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.bool__);
       break;
     }
     // .substrait.Type.I8 i8 = 2 [json_name = "i8"];
     case kI8: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.i8_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.i8_);
       break;
     }
     // .substrait.Type.I16 i16 = 3 [json_name = "i16"];
     case kI16: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.i16_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.i16_);
       break;
     }
     // .substrait.Type.I32 i32 = 5 [json_name = "i32"];
     case kI32: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.i32_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.i32_);
       break;
     }
     // .substrait.Type.I64 i64 = 7 [json_name = "i64"];
     case kI64: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.i64_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.i64_);
       break;
     }
     // .substrait.Type.FP32 fp32 = 10 [json_name = "fp32"];
     case kFp32: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.fp32_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.fp32_);
       break;
     }
     // .substrait.Type.FP64 fp64 = 11 [json_name = "fp64"];
     case kFp64: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.fp64_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.fp64_);
       break;
     }
     // .substrait.Type.String string = 12 [json_name = "string"];
     case kString: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.string_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.string_);
       break;
     }
     // .substrait.Type.Binary binary = 13 [json_name = "binary"];
     case kBinary: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.binary_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.binary_);
       break;
     }
     // .substrait.Type.Timestamp timestamp = 14 [json_name = "timestamp"];
     case kTimestamp: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.timestamp_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.timestamp_);
       break;
     }
     // .substrait.Type.Date date = 16 [json_name = "date"];
     case kDate: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.date_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.date_);
       break;
     }
     // .substrait.Type.Time time = 17 [json_name = "time"];
     case kTime: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.time_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.time_);
       break;
     }
     // .substrait.Type.IntervalYear interval_year = 19 [json_name = "intervalYear"];
     case kIntervalYear: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.interval_year_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.interval_year_);
       break;
     }
     // .substrait.Type.IntervalDay interval_day = 20 [json_name = "intervalDay"];
     case kIntervalDay: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.interval_day_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.interval_day_);
       break;
     }
     // .substrait.Type.TimestampTZ timestamp_tz = 29 [json_name = "timestampTz"];
     case kTimestampTz: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.timestamp_tz_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.timestamp_tz_);
       break;
     }
     // .substrait.Type.UUID uuid = 32 [json_name = "uuid"];
     case kUuid: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.uuid_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.uuid_);
       break;
     }
     // .substrait.DerivationExpression.ExpressionFixedChar fixed_char = 21 [json_name = "fixedChar"];
     case kFixedChar: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.fixed_char_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.fixed_char_);
       break;
     }
     // .substrait.DerivationExpression.ExpressionVarChar varchar = 22 [json_name = "varchar"];
     case kVarchar: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.varchar_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.varchar_);
       break;
     }
     // .substrait.DerivationExpression.ExpressionFixedBinary fixed_binary = 23 [json_name = "fixedBinary"];
     case kFixedBinary: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.fixed_binary_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.fixed_binary_);
       break;
     }
     // .substrait.DerivationExpression.ExpressionDecimal decimal = 24 [json_name = "decimal"];
     case kDecimal: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.decimal_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.decimal_);
       break;
     }
     // .substrait.DerivationExpression.ExpressionStruct struct = 25 [json_name = "struct"];
     case kStruct: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.struct__);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.struct__);
       break;
     }
     // .substrait.DerivationExpression.ExpressionList list = 27 [json_name = "list"];
     case kList: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.list_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.list_);
       break;
     }
     // .substrait.DerivationExpression.ExpressionMap map = 28 [json_name = "map"];
     case kMap: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.map_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.map_);
       break;
     }
     // .substrait.DerivationExpression.ExpressionUserDefined user_defined = 30 [json_name = "userDefined"];
     case kUserDefined: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.user_defined_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.user_defined_);
       break;
     }
     // uint32 user_defined_pointer = 31 [json_name = "userDefinedPointer", deprecated = true];
@@ -6084,30 +6107,26 @@ const ::_pbi::TcParseTable<0, 32, 28, 112, 7> DerivationExpression::_table_ = {
     }
     // .substrait.DerivationExpression.UnaryOp unary_op = 36 [json_name = "unaryOp"];
     case kUnaryOp: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.unary_op_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.unary_op_);
       break;
     }
     // .substrait.DerivationExpression.BinaryOp binary_op = 37 [json_name = "binaryOp"];
     case kBinaryOp: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.binary_op_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.binary_op_);
       break;
     }
     // .substrait.DerivationExpression.IfElse if_else = 38 [json_name = "ifElse"];
     case kIfElse: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.if_else_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.if_else_);
       break;
     }
     // .substrait.DerivationExpression.ReturnProgram return_program = 39 [json_name = "returnProgram"];
     case kReturnProgram: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.kind_.return_program_);
+      total_size +=
+          2 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.kind_.return_program_);
       break;
     }
     case KIND_NOT_SET: {
@@ -6118,11 +6137,12 @@ const ::_pbi::TcParseTable<0, 32, 28, 112, 7> DerivationExpression::_table_ = {
 }
 
 const ::google::protobuf::Message::ClassData DerivationExpression::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    DerivationExpression::MergeImpl
+    DerivationExpression::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*DerivationExpression::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* DerivationExpression::GetClassData() const {
+  return &_class_data_;
+}
 
 void DerivationExpression::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<DerivationExpression*>(&to_msg);
@@ -6307,7 +6327,10 @@ PROTOBUF_NOINLINE bool DerivationExpression::IsInitialized() const {
   return true;
 }
 
-void DerivationExpression::InternalSwap(DerivationExpression* other) {
+::_pbi::CachedSize* DerivationExpression::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DerivationExpression::InternalSwap(DerivationExpression* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_.kind_, other->_impl_.kind_);

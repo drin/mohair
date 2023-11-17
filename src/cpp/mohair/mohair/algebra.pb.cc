@@ -21,79 +21,17 @@ namespace _pb = ::google::protobuf;
 namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 namespace mohair {
-        template <typename>
-PROTOBUF_CONSTEXPR ExecutionStats::ExecutionStats(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.runtime_)*/ 0,
-      /*decltype(_impl_.executed_)*/ false,
-      /*decltype(_impl_._cached_size_)*/ {},
-    } {}
-struct ExecutionStatsDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR ExecutionStatsDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~ExecutionStatsDefaultTypeInternal() {}
-  union {
-    ExecutionStats _instance;
-  };
-};
 
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ExecutionStatsDefaultTypeInternal _ExecutionStats_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR SkyRel::SkyRel(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.slices_)*/ {},
-      /* _impl_._slices_cached_byte_size_ = */ {0},
-      /*decltype(_impl_.domain_)*/ {
-          &::_pbi::fixed_address_empty_string,
-          ::_pbi::ConstantInitialized{},
-      },
-      /*decltype(_impl_.partition_)*/ {
-          &::_pbi::fixed_address_empty_string,
-          ::_pbi::ConstantInitialized{},
-      },
-      /*decltype(_impl_.execstats_)*/ nullptr,
-    } {}
-struct SkyRelDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR SkyRelDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~SkyRelDefaultTypeInternal() {}
-  union {
-    SkyRel _instance;
-  };
-};
+inline constexpr QueryRel::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : query_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        _cached_size_{0} {}
 
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SkyRelDefaultTypeInternal _SkyRel_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR ErrRel::ErrRel(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.err_msg_)*/ {
-          &::_pbi::fixed_address_empty_string,
-          ::_pbi::ConstantInitialized{},
-      },
-      /*decltype(_impl_.err_code_)*/ 0,
-      /*decltype(_impl_._cached_size_)*/ {},
-    } {}
-struct ErrRelDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR ErrRelDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~ErrRelDefaultTypeInternal() {}
-  union {
-    ErrRel _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ErrRelDefaultTypeInternal _ErrRel_default_instance_;
-        template <typename>
+template <typename>
 PROTOBUF_CONSTEXPR QueryRel::QueryRel(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.query_)*/ {
-          &::_pbi::fixed_address_empty_string,
-          ::_pbi::ConstantInitialized{},
-      },
-      /*decltype(_impl_._cached_size_)*/ {},
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct QueryRelDefaultTypeInternal {
   PROTOBUF_CONSTEXPR QueryRelDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~QueryRelDefaultTypeInternal() {}
@@ -104,13 +42,84 @@ struct QueryRelDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 QueryRelDefaultTypeInternal _QueryRel_default_instance_;
-        template <typename>
+
+inline constexpr ExecutionStats::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : runtime_{0},
+        executed_{false},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR ExecutionStats::ExecutionStats(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct ExecutionStatsDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ExecutionStatsDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ExecutionStatsDefaultTypeInternal() {}
+  union {
+    ExecutionStats _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ExecutionStatsDefaultTypeInternal _ExecutionStats_default_instance_;
+
+inline constexpr ErrRel::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : err_msg_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        err_code_{static_cast< ::mohair::ErrRel_ErrType >(0)},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR ErrRel::ErrRel(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct ErrRelDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ErrRelDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ErrRelDefaultTypeInternal() {}
+  union {
+    ErrRel _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ErrRelDefaultTypeInternal _ErrRel_default_instance_;
+
+inline constexpr SkyRel::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        slices_{},
+        _slices_cached_byte_size_{0},
+        domain_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        partition_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        execstats_{nullptr} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR SkyRel::SkyRel(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct SkyRelDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR SkyRelDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~SkyRelDefaultTypeInternal() {}
+  union {
+    SkyRel _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SkyRelDefaultTypeInternal _SkyRel_default_instance_;
+
+inline constexpr PlanAnchor::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        anchor_rel_{nullptr} {}
+
+template <typename>
 PROTOBUF_CONSTEXPR PlanAnchor::PlanAnchor(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.anchor_rel_)*/ nullptr,
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct PlanAnchorDefaultTypeInternal {
   PROTOBUF_CONSTEXPR PlanAnchorDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~PlanAnchorDefaultTypeInternal() {}
@@ -265,13 +274,10 @@ const ::google::protobuf::EnumDescriptor* ErrRel_ErrType_descriptor() {
   ::google::protobuf::internal::AssignDescriptors(&descriptor_table_mohair_2falgebra_2eproto);
   return file_level_enum_descriptors_mohair_2falgebra_2eproto[0];
 }
+PROTOBUF_CONSTINIT const uint32_t ErrRel_ErrType_internal_data_[] = {
+    65536u, 0u, };
 bool ErrRel_ErrType_IsValid(int value) {
-  switch (value) {
-    case 0:
-      return true;
-    default:
-      return false;
-  }
+  return 0 <= value && value <= 0;
 }
 #if (__cplusplus < 201703) && \
   (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
@@ -294,19 +300,24 @@ ExecutionStats::ExecutionStats(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:mohair.ExecutionStats)
 }
-ExecutionStats::ExecutionStats(const ExecutionStats& from)
-    : ::google::protobuf::Message(), _impl_(from._impl_) {
-  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
-      from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:mohair.ExecutionStats)
+ExecutionStats::ExecutionStats(
+    ::google::protobuf::Arena* arena, const ExecutionStats& from)
+    : ExecutionStats(arena) {
+  MergeFrom(from);
 }
+inline PROTOBUF_NDEBUG_INLINE ExecutionStats::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
 inline void ExecutionStats::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.runtime_){0},
-      decltype(_impl_.executed_){false},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, runtime_),
+           0,
+           offsetof(Impl_, executed_) -
+               offsetof(Impl_, runtime_) +
+               sizeof(Impl_::executed_));
 }
 ExecutionStats::~ExecutionStats() {
   // @@protoc_insertion_point(destructor:mohair.ExecutionStats)
@@ -314,14 +325,13 @@ ExecutionStats::~ExecutionStats() {
   SharedDtor();
 }
 inline void ExecutionStats::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-}
-void ExecutionStats::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void ExecutionStats::Clear() {
 // @@protoc_insertion_point(message_clear_start:mohair.ExecutionStats)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -437,11 +447,12 @@ const ::_pbi::TcParseTable<1, 2, 0, 0, 2> ExecutionStats::_table_ = {
 }
 
 const ::google::protobuf::Message::ClassData ExecutionStats::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    ExecutionStats::MergeImpl
+    ExecutionStats::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*ExecutionStats::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* ExecutionStats::GetClassData() const {
+  return &_class_data_;
+}
 
 void ExecutionStats::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ExecutionStats*>(&to_msg);
@@ -476,7 +487,10 @@ PROTOBUF_NOINLINE bool ExecutionStats::IsInitialized() const {
   return true;
 }
 
-void ExecutionStats::InternalSwap(ExecutionStats* other) {
+::_pbi::CachedSize* ExecutionStats::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void ExecutionStats::InternalSwap(ExecutionStats* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::google::protobuf::internal::memswap<
@@ -513,59 +527,44 @@ SkyRel::SkyRel(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:mohair.SkyRel)
 }
-SkyRel::SkyRel(const SkyRel& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE SkyRel::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        slices_{visibility, arena, from.slices_},
+        _slices_cached_byte_size_{0},
+        domain_(arena, from.domain_),
+        partition_(arena, from.partition_) {}
+
+SkyRel::SkyRel(
+    ::google::protobuf::Arena* arena,
+    const SkyRel& from)
+    : ::google::protobuf::Message(arena) {
   SkyRel* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.slices_){from._impl_.slices_},
-      /* _impl_._slices_cached_byte_size_ = */ {0},
-      decltype(_impl_.domain_){},
-      decltype(_impl_.partition_){},
-      decltype(_impl_.execstats_){nullptr},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  _impl_.domain_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.domain_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_domain().empty()) {
-    _this->_impl_.domain_.Set(from._internal_domain(), _this->GetArenaForAllocation());
-  }
-  _impl_.partition_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.partition_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_partition().empty()) {
-    _this->_impl_.partition_.Set(from._internal_partition(), _this->GetArenaForAllocation());
-  }
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.execstats_ = new ::mohair::ExecutionStats(*from._impl_.execstats_);
-  }
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.execstats_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::mohair::ExecutionStats>(arena, *from._impl_.execstats_)
+                : nullptr;
 
   // @@protoc_insertion_point(copy_constructor:mohair.SkyRel)
 }
+inline PROTOBUF_NDEBUG_INLINE SkyRel::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0},
+        slices_{visibility, arena},
+        _slices_cached_byte_size_{0},
+        domain_(arena),
+        partition_(arena) {}
+
 inline void SkyRel::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.slices_){arena},
-      /* _impl_._slices_cached_byte_size_ = */ {0},
-      decltype(_impl_.domain_){},
-      decltype(_impl_.partition_){},
-      decltype(_impl_.execstats_){nullptr},
-  };
-  _impl_.domain_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.domain_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.partition_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.partition_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.execstats_ = {};
 }
 SkyRel::~SkyRel() {
   // @@protoc_insertion_point(destructor:mohair.SkyRel)
@@ -573,23 +572,21 @@ SkyRel::~SkyRel() {
   SharedDtor();
 }
 inline void SkyRel::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.slices_.~RepeatedField();
+  ABSL_DCHECK(GetArena() == nullptr);
   _impl_.domain_.Destroy();
   _impl_.partition_.Destroy();
-  if (this != internal_default_instance()) delete _impl_.execstats_;
-}
-void SkyRel::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  delete _impl_.execstats_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void SkyRel::Clear() {
 // @@protoc_insertion_point(message_clear_start:mohair.SkyRel)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _internal_mutable_slices()->Clear();
+  _impl_.slices_.Clear();
   _impl_.domain_.ClearToEmpty();
   _impl_.partition_.ClearToEmpty();
   cached_has_bits = _impl_._has_bits_[0];
@@ -687,16 +684,16 @@ const ::_pbi::TcParseTable<2, 4, 1, 37, 2> SkyRel::_table_ = {
   {
     int byte_size = _impl_._slices_cached_byte_size_.Get();
     if (byte_size > 0) {
-      target = stream->WriteUInt32Packed(3, _internal_slices(),
-                                                 byte_size, target);
+      target = stream->WriteUInt32Packed(
+          3, _internal_slices(), byte_size, target);
     }
   }
 
   cached_has_bits = _impl_._has_bits_[0];
   // .mohair.ExecutionStats execstats = 4 [json_name = "execstats"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(4, _Internal::execstats(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        4, _Internal::execstats(this),
         _Internal::execstats(this).GetCachedSize(), target, stream);
   }
 
@@ -745,20 +742,20 @@ const ::_pbi::TcParseTable<2, 4, 1, 37, 2> SkyRel::_table_ = {
   // .mohair.ExecutionStats execstats = 4 [json_name = "execstats"];
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *_impl_.execstats_);
+    total_size +=
+        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.execstats_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::google::protobuf::Message::ClassData SkyRel::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    SkyRel::MergeImpl
+    SkyRel::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*SkyRel::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* SkyRel::GetClassData() const {
+  return &_class_data_;
+}
 
 void SkyRel::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<SkyRel*>(&to_msg);
@@ -793,17 +790,18 @@ PROTOBUF_NOINLINE bool SkyRel::IsInitialized() const {
   return true;
 }
 
-void SkyRel::InternalSwap(SkyRel* other) {
+::_pbi::CachedSize* SkyRel::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void SkyRel::InternalSwap(SkyRel* PROTOBUF_RESTRICT other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   _impl_.slices_.InternalSwap(&other->_impl_.slices_);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.domain_, lhs_arena,
-                                       &other->_impl_.domain_, rhs_arena);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.partition_, lhs_arena,
-                                       &other->_impl_.partition_, rhs_arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.domain_, &other->_impl_.domain_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.partition_, &other->_impl_.partition_, arena);
   swap(_impl_.execstats_, other->_impl_.execstats_);
 }
 
@@ -823,38 +821,34 @@ ErrRel::ErrRel(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:mohair.ErrRel)
 }
-ErrRel::ErrRel(const ErrRel& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE ErrRel::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : err_msg_(arena, from.err_msg_),
+        _cached_size_{0} {}
+
+ErrRel::ErrRel(
+    ::google::protobuf::Arena* arena,
+    const ErrRel& from)
+    : ::google::protobuf::Message(arena) {
   ErrRel* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.err_msg_){},
-      decltype(_impl_.err_code_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  _impl_.err_msg_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.err_msg_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_err_msg().empty()) {
-    _this->_impl_.err_msg_.Set(from._internal_err_msg(), _this->GetArenaForAllocation());
-  }
-  _this->_impl_.err_code_ = from._impl_.err_code_;
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  _impl_.err_code_ = from._impl_.err_code_;
 
   // @@protoc_insertion_point(copy_constructor:mohair.ErrRel)
 }
+inline PROTOBUF_NDEBUG_INLINE ErrRel::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : err_msg_(arena),
+        _cached_size_{0} {}
+
 inline void ErrRel::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.err_msg_){},
-      decltype(_impl_.err_code_){0},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
-  _impl_.err_msg_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.err_msg_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.err_code_ = {};
 }
 ErrRel::~ErrRel() {
   // @@protoc_insertion_point(destructor:mohair.ErrRel)
@@ -862,15 +856,14 @@ ErrRel::~ErrRel() {
   SharedDtor();
 }
 inline void ErrRel::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  ABSL_DCHECK(GetArena() == nullptr);
   _impl_.err_msg_.Destroy();
-}
-void ErrRel::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void ErrRel::Clear() {
 // @@protoc_insertion_point(message_clear_start:mohair.ErrRel)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -981,11 +974,12 @@ const ::_pbi::TcParseTable<1, 2, 0, 29, 2> ErrRel::_table_ = {
 }
 
 const ::google::protobuf::Message::ClassData ErrRel::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    ErrRel::MergeImpl
+    ErrRel::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*ErrRel::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* ErrRel::GetClassData() const {
+  return &_class_data_;
+}
 
 void ErrRel::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<ErrRel*>(&to_msg);
@@ -1015,13 +1009,15 @@ PROTOBUF_NOINLINE bool ErrRel::IsInitialized() const {
   return true;
 }
 
-void ErrRel::InternalSwap(ErrRel* other) {
+::_pbi::CachedSize* ErrRel::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void ErrRel::InternalSwap(ErrRel* PROTOBUF_RESTRICT other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.err_msg_, lhs_arena,
-                                       &other->_impl_.err_msg_, rhs_arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.err_msg_, &other->_impl_.err_msg_, arena);
   swap(_impl_.err_code_, other->_impl_.err_code_);
 }
 
@@ -1041,35 +1037,32 @@ QueryRel::QueryRel(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:mohair.QueryRel)
 }
-QueryRel::QueryRel(const QueryRel& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE QueryRel::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : query_(arena, from.query_),
+        _cached_size_{0} {}
+
+QueryRel::QueryRel(
+    ::google::protobuf::Arena* arena,
+    const QueryRel& from)
+    : ::google::protobuf::Message(arena) {
   QueryRel* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.query_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  _impl_.query_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.query_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_query().empty()) {
-    _this->_impl_.query_.Set(from._internal_query(), _this->GetArenaForAllocation());
-  }
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
 
   // @@protoc_insertion_point(copy_constructor:mohair.QueryRel)
 }
+inline PROTOBUF_NDEBUG_INLINE QueryRel::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : query_(arena),
+        _cached_size_{0} {}
+
 inline void QueryRel::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.query_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
-  _impl_.query_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.query_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  new (&_impl_) Impl_(internal_visibility(), arena);
 }
 QueryRel::~QueryRel() {
   // @@protoc_insertion_point(destructor:mohair.QueryRel)
@@ -1077,15 +1070,14 @@ QueryRel::~QueryRel() {
   SharedDtor();
 }
 inline void QueryRel::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  ABSL_DCHECK(GetArena() == nullptr);
   _impl_.query_.Destroy();
-}
-void QueryRel::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void QueryRel::Clear() {
 // @@protoc_insertion_point(message_clear_start:mohair.QueryRel)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1171,11 +1163,12 @@ const ::_pbi::TcParseTable<0, 1, 0, 0, 2> QueryRel::_table_ = {
 }
 
 const ::google::protobuf::Message::ClassData QueryRel::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    QueryRel::MergeImpl
+    QueryRel::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*QueryRel::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* QueryRel::GetClassData() const {
+  return &_class_data_;
+}
 
 void QueryRel::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<QueryRel*>(&to_msg);
@@ -1202,13 +1195,15 @@ PROTOBUF_NOINLINE bool QueryRel::IsInitialized() const {
   return true;
 }
 
-void QueryRel::InternalSwap(QueryRel* other) {
+::_pbi::CachedSize* QueryRel::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void QueryRel::InternalSwap(QueryRel* PROTOBUF_RESTRICT other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.query_, lhs_arena,
-                                       &other->_impl_.query_, rhs_arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.query_, &other->_impl_.query_, arena);
 }
 
 ::google::protobuf::Metadata QueryRel::GetMetadata() const {
@@ -1233,6 +1228,7 @@ const ::substrait::Rel& PlanAnchor::_Internal::anchor_rel(const PlanAnchor* msg)
   return *msg->_impl_.anchor_rel_;
 }
 void PlanAnchor::clear_anchor_rel() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (_impl_.anchor_rel_ != nullptr) _impl_.anchor_rel_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
@@ -1241,29 +1237,36 @@ PlanAnchor::PlanAnchor(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:mohair.PlanAnchor)
 }
-PlanAnchor::PlanAnchor(const PlanAnchor& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE PlanAnchor::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+PlanAnchor::PlanAnchor(
+    ::google::protobuf::Arena* arena,
+    const PlanAnchor& from)
+    : ::google::protobuf::Message(arena) {
   PlanAnchor* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.anchor_rel_){nullptr},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.anchor_rel_ = new ::substrait::Rel(*from._impl_.anchor_rel_);
-  }
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.anchor_rel_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::substrait::Rel>(arena, *from._impl_.anchor_rel_)
+                : nullptr;
 
   // @@protoc_insertion_point(copy_constructor:mohair.PlanAnchor)
 }
+inline PROTOBUF_NDEBUG_INLINE PlanAnchor::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
 inline void PlanAnchor::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.anchor_rel_){nullptr},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.anchor_rel_ = {};
 }
 PlanAnchor::~PlanAnchor() {
   // @@protoc_insertion_point(destructor:mohair.PlanAnchor)
@@ -1271,15 +1274,14 @@ PlanAnchor::~PlanAnchor() {
   SharedDtor();
 }
 inline void PlanAnchor::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete _impl_.anchor_rel_;
-}
-void PlanAnchor::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.anchor_rel_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void PlanAnchor::Clear() {
 // @@protoc_insertion_point(message_clear_start:mohair.PlanAnchor)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1340,8 +1342,8 @@ const ::_pbi::TcParseTable<0, 1, 1, 0, 2> PlanAnchor::_table_ = {
   cached_has_bits = _impl_._has_bits_[0];
   // .substrait.Rel anchor_rel = 1 [json_name = "anchorRel"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(1, _Internal::anchor_rel(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        1, _Internal::anchor_rel(this),
         _Internal::anchor_rel(this).GetCachedSize(), target, stream);
   }
 
@@ -1365,20 +1367,20 @@ const ::_pbi::TcParseTable<0, 1, 1, 0, 2> PlanAnchor::_table_ = {
   // .substrait.Rel anchor_rel = 1 [json_name = "anchorRel"];
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSize(
-        *_impl_.anchor_rel_);
+    total_size +=
+        1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.anchor_rel_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
 const ::google::protobuf::Message::ClassData PlanAnchor::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    PlanAnchor::MergeImpl
+    PlanAnchor::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*PlanAnchor::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* PlanAnchor::GetClassData() const {
+  return &_class_data_;
+}
 
 void PlanAnchor::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<PlanAnchor*>(&to_msg);
@@ -1406,7 +1408,10 @@ PROTOBUF_NOINLINE bool PlanAnchor::IsInitialized() const {
   return true;
 }
 
-void PlanAnchor::InternalSwap(PlanAnchor* other) {
+::_pbi::CachedSize* PlanAnchor::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void PlanAnchor::InternalSwap(PlanAnchor* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);

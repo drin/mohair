@@ -22,16 +22,18 @@ namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 namespace substrait {
 namespace extensions {
-        template <typename>
+
+inline constexpr SimpleExtensionURI::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : uri_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        extension_uri_anchor_{0u},
+        _cached_size_{0} {}
+
+template <typename>
 PROTOBUF_CONSTEXPR SimpleExtensionURI::SimpleExtensionURI(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.uri_)*/ {
-          &::_pbi::fixed_address_empty_string,
-          ::_pbi::ConstantInitialized{},
-      },
-      /*decltype(_impl_.extension_uri_anchor_)*/ 0u,
-      /*decltype(_impl_._cached_size_)*/ {},
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct SimpleExtensionURIDefaultTypeInternal {
   PROTOBUF_CONSTEXPR SimpleExtensionURIDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~SimpleExtensionURIDefaultTypeInternal() {}
@@ -42,38 +44,19 @@ struct SimpleExtensionURIDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SimpleExtensionURIDefaultTypeInternal _SimpleExtensionURI_default_instance_;
-        template <typename>
-PROTOBUF_CONSTEXPR SimpleExtensionDeclaration_ExtensionType::SimpleExtensionDeclaration_ExtensionType(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.name_)*/ {
-          &::_pbi::fixed_address_empty_string,
-          ::_pbi::ConstantInitialized{},
-      },
-      /*decltype(_impl_.extension_uri_reference_)*/ 0u,
-      /*decltype(_impl_.type_anchor_)*/ 0u,
-      /*decltype(_impl_._cached_size_)*/ {},
-    } {}
-struct SimpleExtensionDeclaration_ExtensionTypeDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR SimpleExtensionDeclaration_ExtensionTypeDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~SimpleExtensionDeclaration_ExtensionTypeDefaultTypeInternal() {}
-  union {
-    SimpleExtensionDeclaration_ExtensionType _instance;
-  };
-};
 
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SimpleExtensionDeclaration_ExtensionTypeDefaultTypeInternal _SimpleExtensionDeclaration_ExtensionType_default_instance_;
-        template <typename>
+inline constexpr SimpleExtensionDeclaration_ExtensionTypeVariation::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : name_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        extension_uri_reference_{0u},
+        type_variation_anchor_{0u},
+        _cached_size_{0} {}
+
+template <typename>
 PROTOBUF_CONSTEXPR SimpleExtensionDeclaration_ExtensionTypeVariation::SimpleExtensionDeclaration_ExtensionTypeVariation(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.name_)*/ {
-          &::_pbi::fixed_address_empty_string,
-          ::_pbi::ConstantInitialized{},
-      },
-      /*decltype(_impl_.extension_uri_reference_)*/ 0u,
-      /*decltype(_impl_.type_variation_anchor_)*/ 0u,
-      /*decltype(_impl_._cached_size_)*/ {},
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct SimpleExtensionDeclaration_ExtensionTypeVariationDefaultTypeInternal {
   PROTOBUF_CONSTEXPR SimpleExtensionDeclaration_ExtensionTypeVariationDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~SimpleExtensionDeclaration_ExtensionTypeVariationDefaultTypeInternal() {}
@@ -84,17 +67,42 @@ struct SimpleExtensionDeclaration_ExtensionTypeVariationDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SimpleExtensionDeclaration_ExtensionTypeVariationDefaultTypeInternal _SimpleExtensionDeclaration_ExtensionTypeVariation_default_instance_;
-        template <typename>
+
+inline constexpr SimpleExtensionDeclaration_ExtensionType::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : name_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        extension_uri_reference_{0u},
+        type_anchor_{0u},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR SimpleExtensionDeclaration_ExtensionType::SimpleExtensionDeclaration_ExtensionType(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct SimpleExtensionDeclaration_ExtensionTypeDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR SimpleExtensionDeclaration_ExtensionTypeDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~SimpleExtensionDeclaration_ExtensionTypeDefaultTypeInternal() {}
+  union {
+    SimpleExtensionDeclaration_ExtensionType _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SimpleExtensionDeclaration_ExtensionTypeDefaultTypeInternal _SimpleExtensionDeclaration_ExtensionType_default_instance_;
+
+inline constexpr SimpleExtensionDeclaration_ExtensionFunction::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : name_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        extension_uri_reference_{0u},
+        function_anchor_{0u},
+        _cached_size_{0} {}
+
+template <typename>
 PROTOBUF_CONSTEXPR SimpleExtensionDeclaration_ExtensionFunction::SimpleExtensionDeclaration_ExtensionFunction(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.name_)*/ {
-          &::_pbi::fixed_address_empty_string,
-          ::_pbi::ConstantInitialized{},
-      },
-      /*decltype(_impl_.extension_uri_reference_)*/ 0u,
-      /*decltype(_impl_.function_anchor_)*/ 0u,
-      /*decltype(_impl_._cached_size_)*/ {},
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct SimpleExtensionDeclaration_ExtensionFunctionDefaultTypeInternal {
   PROTOBUF_CONSTEXPR SimpleExtensionDeclaration_ExtensionFunctionDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~SimpleExtensionDeclaration_ExtensionFunctionDefaultTypeInternal() {}
@@ -105,13 +113,16 @@ struct SimpleExtensionDeclaration_ExtensionFunctionDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SimpleExtensionDeclaration_ExtensionFunctionDefaultTypeInternal _SimpleExtensionDeclaration_ExtensionFunction_default_instance_;
-        template <typename>
+
+inline constexpr SimpleExtensionDeclaration::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : mapping_type_{},
+        _cached_size_{0},
+        _oneof_case_{} {}
+
+template <typename>
 PROTOBUF_CONSTEXPR SimpleExtensionDeclaration::SimpleExtensionDeclaration(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_.mapping_type_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_._oneof_case_)*/ {},
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct SimpleExtensionDeclarationDefaultTypeInternal {
   PROTOBUF_CONSTEXPR SimpleExtensionDeclarationDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~SimpleExtensionDeclarationDefaultTypeInternal() {}
@@ -122,14 +133,16 @@ struct SimpleExtensionDeclarationDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SimpleExtensionDeclarationDefaultTypeInternal _SimpleExtensionDeclaration_default_instance_;
-        template <typename>
+
+inline constexpr AdvancedExtension::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        optimization_{nullptr},
+        enhancement_{nullptr} {}
+
+template <typename>
 PROTOBUF_CONSTEXPR AdvancedExtension::AdvancedExtension(::_pbi::ConstantInitialized)
-    : _impl_{
-      /*decltype(_impl_._has_bits_)*/ {},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_.optimization_)*/ nullptr,
-      /*decltype(_impl_.enhancement_)*/ nullptr,
-    } {}
+    : _impl_(::_pbi::ConstantInitialized()) {}
 struct AdvancedExtensionDefaultTypeInternal {
   PROTOBUF_CONSTEXPR AdvancedExtensionDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
   ~AdvancedExtensionDefaultTypeInternal() {}
@@ -325,38 +338,34 @@ SimpleExtensionURI::SimpleExtensionURI(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.extensions.SimpleExtensionURI)
 }
-SimpleExtensionURI::SimpleExtensionURI(const SimpleExtensionURI& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE SimpleExtensionURI::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : uri_(arena, from.uri_),
+        _cached_size_{0} {}
+
+SimpleExtensionURI::SimpleExtensionURI(
+    ::google::protobuf::Arena* arena,
+    const SimpleExtensionURI& from)
+    : ::google::protobuf::Message(arena) {
   SimpleExtensionURI* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.uri_){},
-      decltype(_impl_.extension_uri_anchor_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  _impl_.uri_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.uri_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_uri().empty()) {
-    _this->_impl_.uri_.Set(from._internal_uri(), _this->GetArenaForAllocation());
-  }
-  _this->_impl_.extension_uri_anchor_ = from._impl_.extension_uri_anchor_;
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  _impl_.extension_uri_anchor_ = from._impl_.extension_uri_anchor_;
 
   // @@protoc_insertion_point(copy_constructor:substrait.extensions.SimpleExtensionURI)
 }
+inline PROTOBUF_NDEBUG_INLINE SimpleExtensionURI::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : uri_(arena),
+        _cached_size_{0} {}
+
 inline void SimpleExtensionURI::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.uri_){},
-      decltype(_impl_.extension_uri_anchor_){0u},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
-  _impl_.uri_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.uri_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.extension_uri_anchor_ = {};
 }
 SimpleExtensionURI::~SimpleExtensionURI() {
   // @@protoc_insertion_point(destructor:substrait.extensions.SimpleExtensionURI)
@@ -364,15 +373,14 @@ SimpleExtensionURI::~SimpleExtensionURI() {
   SharedDtor();
 }
 inline void SimpleExtensionURI::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  ABSL_DCHECK(GetArena() == nullptr);
   _impl_.uri_.Destroy();
-}
-void SimpleExtensionURI::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void SimpleExtensionURI::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.extensions.SimpleExtensionURI)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -483,11 +491,12 @@ const ::_pbi::TcParseTable<1, 2, 0, 51, 2> SimpleExtensionURI::_table_ = {
 }
 
 const ::google::protobuf::Message::ClassData SimpleExtensionURI::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    SimpleExtensionURI::MergeImpl
+    SimpleExtensionURI::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*SimpleExtensionURI::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* SimpleExtensionURI::GetClassData() const {
+  return &_class_data_;
+}
 
 void SimpleExtensionURI::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<SimpleExtensionURI*>(&to_msg);
@@ -517,13 +526,15 @@ PROTOBUF_NOINLINE bool SimpleExtensionURI::IsInitialized() const {
   return true;
 }
 
-void SimpleExtensionURI::InternalSwap(SimpleExtensionURI* other) {
+::_pbi::CachedSize* SimpleExtensionURI::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void SimpleExtensionURI::InternalSwap(SimpleExtensionURI* PROTOBUF_RESTRICT other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.uri_, lhs_arena,
-                                       &other->_impl_.uri_, rhs_arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.uri_, &other->_impl_.uri_, arena);
         swap(_impl_.extension_uri_anchor_, other->_impl_.extension_uri_anchor_);
 }
 
@@ -543,42 +554,45 @@ SimpleExtensionDeclaration_ExtensionType::SimpleExtensionDeclaration_ExtensionTy
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.extensions.SimpleExtensionDeclaration.ExtensionType)
 }
-SimpleExtensionDeclaration_ExtensionType::SimpleExtensionDeclaration_ExtensionType(const SimpleExtensionDeclaration_ExtensionType& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE SimpleExtensionDeclaration_ExtensionType::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : name_(arena, from.name_),
+        _cached_size_{0} {}
+
+SimpleExtensionDeclaration_ExtensionType::SimpleExtensionDeclaration_ExtensionType(
+    ::google::protobuf::Arena* arena,
+    const SimpleExtensionDeclaration_ExtensionType& from)
+    : ::google::protobuf::Message(arena) {
   SimpleExtensionDeclaration_ExtensionType* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.name_){},
-      decltype(_impl_.extension_uri_reference_){},
-      decltype(_impl_.type_anchor_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  _impl_.name_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.name_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_name().empty()) {
-    _this->_impl_.name_.Set(from._internal_name(), _this->GetArenaForAllocation());
-  }
-  ::memcpy(&_impl_.extension_uri_reference_, &from._impl_.extension_uri_reference_,
-    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.type_anchor_) -
-    reinterpret_cast<char*>(&_impl_.extension_uri_reference_)) + sizeof(_impl_.type_anchor_));
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, extension_uri_reference_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, extension_uri_reference_),
+           offsetof(Impl_, type_anchor_) -
+               offsetof(Impl_, extension_uri_reference_) +
+               sizeof(Impl_::type_anchor_));
 
   // @@protoc_insertion_point(copy_constructor:substrait.extensions.SimpleExtensionDeclaration.ExtensionType)
 }
+inline PROTOBUF_NDEBUG_INLINE SimpleExtensionDeclaration_ExtensionType::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : name_(arena),
+        _cached_size_{0} {}
+
 inline void SimpleExtensionDeclaration_ExtensionType::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.name_){},
-      decltype(_impl_.extension_uri_reference_){0u},
-      decltype(_impl_.type_anchor_){0u},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
-  _impl_.name_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.name_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, extension_uri_reference_),
+           0,
+           offsetof(Impl_, type_anchor_) -
+               offsetof(Impl_, extension_uri_reference_) +
+               sizeof(Impl_::type_anchor_));
 }
 SimpleExtensionDeclaration_ExtensionType::~SimpleExtensionDeclaration_ExtensionType() {
   // @@protoc_insertion_point(destructor:substrait.extensions.SimpleExtensionDeclaration.ExtensionType)
@@ -586,15 +600,14 @@ SimpleExtensionDeclaration_ExtensionType::~SimpleExtensionDeclaration_ExtensionT
   SharedDtor();
 }
 inline void SimpleExtensionDeclaration_ExtensionType::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  ABSL_DCHECK(GetArena() == nullptr);
   _impl_.name_.Destroy();
-}
-void SimpleExtensionDeclaration_ExtensionType::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void SimpleExtensionDeclaration_ExtensionType::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.extensions.SimpleExtensionDeclaration.ExtensionType)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -727,11 +740,12 @@ const ::_pbi::TcParseTable<2, 3, 0, 74, 2> SimpleExtensionDeclaration_ExtensionT
 }
 
 const ::google::protobuf::Message::ClassData SimpleExtensionDeclaration_ExtensionType::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    SimpleExtensionDeclaration_ExtensionType::MergeImpl
+    SimpleExtensionDeclaration_ExtensionType::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*SimpleExtensionDeclaration_ExtensionType::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* SimpleExtensionDeclaration_ExtensionType::GetClassData() const {
+  return &_class_data_;
+}
 
 void SimpleExtensionDeclaration_ExtensionType::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<SimpleExtensionDeclaration_ExtensionType*>(&to_msg);
@@ -764,13 +778,15 @@ PROTOBUF_NOINLINE bool SimpleExtensionDeclaration_ExtensionType::IsInitialized()
   return true;
 }
 
-void SimpleExtensionDeclaration_ExtensionType::InternalSwap(SimpleExtensionDeclaration_ExtensionType* other) {
+::_pbi::CachedSize* SimpleExtensionDeclaration_ExtensionType::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void SimpleExtensionDeclaration_ExtensionType::InternalSwap(SimpleExtensionDeclaration_ExtensionType* PROTOBUF_RESTRICT other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, lhs_arena,
-                                       &other->_impl_.name_, rhs_arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, &other->_impl_.name_, arena);
   ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(SimpleExtensionDeclaration_ExtensionType, _impl_.type_anchor_)
       + sizeof(SimpleExtensionDeclaration_ExtensionType::_impl_.type_anchor_)
@@ -795,42 +811,45 @@ SimpleExtensionDeclaration_ExtensionTypeVariation::SimpleExtensionDeclaration_Ex
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.extensions.SimpleExtensionDeclaration.ExtensionTypeVariation)
 }
-SimpleExtensionDeclaration_ExtensionTypeVariation::SimpleExtensionDeclaration_ExtensionTypeVariation(const SimpleExtensionDeclaration_ExtensionTypeVariation& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE SimpleExtensionDeclaration_ExtensionTypeVariation::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : name_(arena, from.name_),
+        _cached_size_{0} {}
+
+SimpleExtensionDeclaration_ExtensionTypeVariation::SimpleExtensionDeclaration_ExtensionTypeVariation(
+    ::google::protobuf::Arena* arena,
+    const SimpleExtensionDeclaration_ExtensionTypeVariation& from)
+    : ::google::protobuf::Message(arena) {
   SimpleExtensionDeclaration_ExtensionTypeVariation* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.name_){},
-      decltype(_impl_.extension_uri_reference_){},
-      decltype(_impl_.type_variation_anchor_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  _impl_.name_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.name_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_name().empty()) {
-    _this->_impl_.name_.Set(from._internal_name(), _this->GetArenaForAllocation());
-  }
-  ::memcpy(&_impl_.extension_uri_reference_, &from._impl_.extension_uri_reference_,
-    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.type_variation_anchor_) -
-    reinterpret_cast<char*>(&_impl_.extension_uri_reference_)) + sizeof(_impl_.type_variation_anchor_));
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, extension_uri_reference_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, extension_uri_reference_),
+           offsetof(Impl_, type_variation_anchor_) -
+               offsetof(Impl_, extension_uri_reference_) +
+               sizeof(Impl_::type_variation_anchor_));
 
   // @@protoc_insertion_point(copy_constructor:substrait.extensions.SimpleExtensionDeclaration.ExtensionTypeVariation)
 }
+inline PROTOBUF_NDEBUG_INLINE SimpleExtensionDeclaration_ExtensionTypeVariation::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : name_(arena),
+        _cached_size_{0} {}
+
 inline void SimpleExtensionDeclaration_ExtensionTypeVariation::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.name_){},
-      decltype(_impl_.extension_uri_reference_){0u},
-      decltype(_impl_.type_variation_anchor_){0u},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
-  _impl_.name_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.name_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, extension_uri_reference_),
+           0,
+           offsetof(Impl_, type_variation_anchor_) -
+               offsetof(Impl_, extension_uri_reference_) +
+               sizeof(Impl_::type_variation_anchor_));
 }
 SimpleExtensionDeclaration_ExtensionTypeVariation::~SimpleExtensionDeclaration_ExtensionTypeVariation() {
   // @@protoc_insertion_point(destructor:substrait.extensions.SimpleExtensionDeclaration.ExtensionTypeVariation)
@@ -838,15 +857,14 @@ SimpleExtensionDeclaration_ExtensionTypeVariation::~SimpleExtensionDeclaration_E
   SharedDtor();
 }
 inline void SimpleExtensionDeclaration_ExtensionTypeVariation::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  ABSL_DCHECK(GetArena() == nullptr);
   _impl_.name_.Destroy();
-}
-void SimpleExtensionDeclaration_ExtensionTypeVariation::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void SimpleExtensionDeclaration_ExtensionTypeVariation::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.extensions.SimpleExtensionDeclaration.ExtensionTypeVariation)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -979,11 +997,12 @@ const ::_pbi::TcParseTable<2, 3, 0, 83, 2> SimpleExtensionDeclaration_ExtensionT
 }
 
 const ::google::protobuf::Message::ClassData SimpleExtensionDeclaration_ExtensionTypeVariation::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    SimpleExtensionDeclaration_ExtensionTypeVariation::MergeImpl
+    SimpleExtensionDeclaration_ExtensionTypeVariation::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*SimpleExtensionDeclaration_ExtensionTypeVariation::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* SimpleExtensionDeclaration_ExtensionTypeVariation::GetClassData() const {
+  return &_class_data_;
+}
 
 void SimpleExtensionDeclaration_ExtensionTypeVariation::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<SimpleExtensionDeclaration_ExtensionTypeVariation*>(&to_msg);
@@ -1016,13 +1035,15 @@ PROTOBUF_NOINLINE bool SimpleExtensionDeclaration_ExtensionTypeVariation::IsInit
   return true;
 }
 
-void SimpleExtensionDeclaration_ExtensionTypeVariation::InternalSwap(SimpleExtensionDeclaration_ExtensionTypeVariation* other) {
+::_pbi::CachedSize* SimpleExtensionDeclaration_ExtensionTypeVariation::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void SimpleExtensionDeclaration_ExtensionTypeVariation::InternalSwap(SimpleExtensionDeclaration_ExtensionTypeVariation* PROTOBUF_RESTRICT other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, lhs_arena,
-                                       &other->_impl_.name_, rhs_arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, &other->_impl_.name_, arena);
   ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(SimpleExtensionDeclaration_ExtensionTypeVariation, _impl_.type_variation_anchor_)
       + sizeof(SimpleExtensionDeclaration_ExtensionTypeVariation::_impl_.type_variation_anchor_)
@@ -1047,42 +1068,45 @@ SimpleExtensionDeclaration_ExtensionFunction::SimpleExtensionDeclaration_Extensi
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.extensions.SimpleExtensionDeclaration.ExtensionFunction)
 }
-SimpleExtensionDeclaration_ExtensionFunction::SimpleExtensionDeclaration_ExtensionFunction(const SimpleExtensionDeclaration_ExtensionFunction& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE SimpleExtensionDeclaration_ExtensionFunction::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : name_(arena, from.name_),
+        _cached_size_{0} {}
+
+SimpleExtensionDeclaration_ExtensionFunction::SimpleExtensionDeclaration_ExtensionFunction(
+    ::google::protobuf::Arena* arena,
+    const SimpleExtensionDeclaration_ExtensionFunction& from)
+    : ::google::protobuf::Message(arena) {
   SimpleExtensionDeclaration_ExtensionFunction* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.name_){},
-      decltype(_impl_.extension_uri_reference_){},
-      decltype(_impl_.function_anchor_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  _impl_.name_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.name_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_name().empty()) {
-    _this->_impl_.name_.Set(from._internal_name(), _this->GetArenaForAllocation());
-  }
-  ::memcpy(&_impl_.extension_uri_reference_, &from._impl_.extension_uri_reference_,
-    static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.function_anchor_) -
-    reinterpret_cast<char*>(&_impl_.extension_uri_reference_)) + sizeof(_impl_.function_anchor_));
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, extension_uri_reference_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, extension_uri_reference_),
+           offsetof(Impl_, function_anchor_) -
+               offsetof(Impl_, extension_uri_reference_) +
+               sizeof(Impl_::function_anchor_));
 
   // @@protoc_insertion_point(copy_constructor:substrait.extensions.SimpleExtensionDeclaration.ExtensionFunction)
 }
+inline PROTOBUF_NDEBUG_INLINE SimpleExtensionDeclaration_ExtensionFunction::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : name_(arena),
+        _cached_size_{0} {}
+
 inline void SimpleExtensionDeclaration_ExtensionFunction::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.name_){},
-      decltype(_impl_.extension_uri_reference_){0u},
-      decltype(_impl_.function_anchor_){0u},
-      /*decltype(_impl_._cached_size_)*/ {},
-  };
-  _impl_.name_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        _impl_.name_.Set("", GetArenaForAllocation());
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, extension_uri_reference_),
+           0,
+           offsetof(Impl_, function_anchor_) -
+               offsetof(Impl_, extension_uri_reference_) +
+               sizeof(Impl_::function_anchor_));
 }
 SimpleExtensionDeclaration_ExtensionFunction::~SimpleExtensionDeclaration_ExtensionFunction() {
   // @@protoc_insertion_point(destructor:substrait.extensions.SimpleExtensionDeclaration.ExtensionFunction)
@@ -1090,15 +1114,14 @@ SimpleExtensionDeclaration_ExtensionFunction::~SimpleExtensionDeclaration_Extens
   SharedDtor();
 }
 inline void SimpleExtensionDeclaration_ExtensionFunction::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  ABSL_DCHECK(GetArena() == nullptr);
   _impl_.name_.Destroy();
-}
-void SimpleExtensionDeclaration_ExtensionFunction::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void SimpleExtensionDeclaration_ExtensionFunction::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.extensions.SimpleExtensionDeclaration.ExtensionFunction)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1231,11 +1254,12 @@ const ::_pbi::TcParseTable<2, 3, 0, 78, 2> SimpleExtensionDeclaration_ExtensionF
 }
 
 const ::google::protobuf::Message::ClassData SimpleExtensionDeclaration_ExtensionFunction::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    SimpleExtensionDeclaration_ExtensionFunction::MergeImpl
+    SimpleExtensionDeclaration_ExtensionFunction::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*SimpleExtensionDeclaration_ExtensionFunction::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* SimpleExtensionDeclaration_ExtensionFunction::GetClassData() const {
+  return &_class_data_;
+}
 
 void SimpleExtensionDeclaration_ExtensionFunction::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<SimpleExtensionDeclaration_ExtensionFunction*>(&to_msg);
@@ -1268,13 +1292,15 @@ PROTOBUF_NOINLINE bool SimpleExtensionDeclaration_ExtensionFunction::IsInitializ
   return true;
 }
 
-void SimpleExtensionDeclaration_ExtensionFunction::InternalSwap(SimpleExtensionDeclaration_ExtensionFunction* other) {
+::_pbi::CachedSize* SimpleExtensionDeclaration_ExtensionFunction::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void SimpleExtensionDeclaration_ExtensionFunction::InternalSwap(SimpleExtensionDeclaration_ExtensionFunction* PROTOBUF_RESTRICT other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, lhs_arena,
-                                       &other->_impl_.name_, rhs_arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, &other->_impl_.name_, arena);
   ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(SimpleExtensionDeclaration_ExtensionFunction, _impl_.function_anchor_)
       + sizeof(SimpleExtensionDeclaration_ExtensionFunction::_impl_.function_anchor_)
@@ -1309,14 +1335,12 @@ const ::substrait::extensions::SimpleExtensionDeclaration_ExtensionFunction& Sim
   return *msg->_impl_.mapping_type_.extension_function_;
 }
 void SimpleExtensionDeclaration::set_allocated_extension_type(::substrait::extensions::SimpleExtensionDeclaration_ExtensionType* extension_type) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_mapping_type();
   if (extension_type) {
-    ::google::protobuf::Arena* submessage_arena =
-      ::google::protobuf::Arena::InternalGetOwningArena(extension_type);
+    ::google::protobuf::Arena* submessage_arena = extension_type->GetArena();
     if (message_arena != submessage_arena) {
-      extension_type = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, extension_type, submessage_arena);
+      extension_type = ::google::protobuf::internal::GetOwnedMessage(message_arena, extension_type, submessage_arena);
     }
     set_has_extension_type();
     _impl_.mapping_type_.extension_type_ = extension_type;
@@ -1324,14 +1348,12 @@ void SimpleExtensionDeclaration::set_allocated_extension_type(::substrait::exten
   // @@protoc_insertion_point(field_set_allocated:substrait.extensions.SimpleExtensionDeclaration.extension_type)
 }
 void SimpleExtensionDeclaration::set_allocated_extension_type_variation(::substrait::extensions::SimpleExtensionDeclaration_ExtensionTypeVariation* extension_type_variation) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_mapping_type();
   if (extension_type_variation) {
-    ::google::protobuf::Arena* submessage_arena =
-      ::google::protobuf::Arena::InternalGetOwningArena(extension_type_variation);
+    ::google::protobuf::Arena* submessage_arena = extension_type_variation->GetArena();
     if (message_arena != submessage_arena) {
-      extension_type_variation = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, extension_type_variation, submessage_arena);
+      extension_type_variation = ::google::protobuf::internal::GetOwnedMessage(message_arena, extension_type_variation, submessage_arena);
     }
     set_has_extension_type_variation();
     _impl_.mapping_type_.extension_type_variation_ = extension_type_variation;
@@ -1339,14 +1361,12 @@ void SimpleExtensionDeclaration::set_allocated_extension_type_variation(::substr
   // @@protoc_insertion_point(field_set_allocated:substrait.extensions.SimpleExtensionDeclaration.extension_type_variation)
 }
 void SimpleExtensionDeclaration::set_allocated_extension_function(::substrait::extensions::SimpleExtensionDeclaration_ExtensionFunction* extension_function) {
-  ::google::protobuf::Arena* message_arena = GetArenaForAllocation();
+  ::google::protobuf::Arena* message_arena = GetArena();
   clear_mapping_type();
   if (extension_function) {
-    ::google::protobuf::Arena* submessage_arena =
-      ::google::protobuf::Arena::InternalGetOwningArena(extension_function);
+    ::google::protobuf::Arena* submessage_arena = extension_function->GetArena();
     if (message_arena != submessage_arena) {
-      extension_function = ::google::protobuf::internal::GetOwnedMessage(
-          message_arena, extension_function, submessage_arena);
+      extension_function = ::google::protobuf::internal::GetOwnedMessage(message_arena, extension_function, submessage_arena);
     }
     set_has_extension_function();
     _impl_.mapping_type_.extension_function_ = extension_function;
@@ -1358,48 +1378,47 @@ SimpleExtensionDeclaration::SimpleExtensionDeclaration(::google::protobuf::Arena
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.extensions.SimpleExtensionDeclaration)
 }
-SimpleExtensionDeclaration::SimpleExtensionDeclaration(const SimpleExtensionDeclaration& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE SimpleExtensionDeclaration::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : mapping_type_{},
+        _cached_size_{0},
+        _oneof_case_{from._oneof_case_[0]} {}
+
+SimpleExtensionDeclaration::SimpleExtensionDeclaration(
+    ::google::protobuf::Arena* arena,
+    const SimpleExtensionDeclaration& from)
+    : ::google::protobuf::Message(arena) {
   SimpleExtensionDeclaration* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.mapping_type_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_._oneof_case_)*/ {},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  clear_has_mapping_type();
-  switch (from.mapping_type_case()) {
-    case kExtensionType: {
-      _this->_internal_mutable_extension_type()->::substrait::extensions::SimpleExtensionDeclaration_ExtensionType::MergeFrom(
-          from._internal_extension_type());
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  switch (mapping_type_case()) {
+    case MAPPING_TYPE_NOT_SET:
       break;
-    }
-    case kExtensionTypeVariation: {
-      _this->_internal_mutable_extension_type_variation()->::substrait::extensions::SimpleExtensionDeclaration_ExtensionTypeVariation::MergeFrom(
-          from._internal_extension_type_variation());
-      break;
-    }
-    case kExtensionFunction: {
-      _this->_internal_mutable_extension_function()->::substrait::extensions::SimpleExtensionDeclaration_ExtensionFunction::MergeFrom(
-          from._internal_extension_function());
-      break;
-    }
-    case MAPPING_TYPE_NOT_SET: {
-      break;
-    }
+      case kExtensionType:
+        _impl_.mapping_type_.extension_type_ = CreateMaybeMessage<::substrait::extensions::SimpleExtensionDeclaration_ExtensionType>(arena, *from._impl_.mapping_type_.extension_type_);
+        break;
+      case kExtensionTypeVariation:
+        _impl_.mapping_type_.extension_type_variation_ = CreateMaybeMessage<::substrait::extensions::SimpleExtensionDeclaration_ExtensionTypeVariation>(arena, *from._impl_.mapping_type_.extension_type_variation_);
+        break;
+      case kExtensionFunction:
+        _impl_.mapping_type_.extension_function_ = CreateMaybeMessage<::substrait::extensions::SimpleExtensionDeclaration_ExtensionFunction>(arena, *from._impl_.mapping_type_.extension_function_);
+        break;
   }
 
   // @@protoc_insertion_point(copy_constructor:substrait.extensions.SimpleExtensionDeclaration)
 }
+inline PROTOBUF_NDEBUG_INLINE SimpleExtensionDeclaration::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : mapping_type_{},
+        _cached_size_{0},
+        _oneof_case_{} {}
+
 inline void SimpleExtensionDeclaration::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_.mapping_type_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      /*decltype(_impl_._oneof_case_)*/ {},
-  };
-  clear_has_mapping_type();
+  new (&_impl_) Impl_(internal_visibility(), arena);
 }
 SimpleExtensionDeclaration::~SimpleExtensionDeclaration() {
   // @@protoc_insertion_point(destructor:substrait.extensions.SimpleExtensionDeclaration)
@@ -1407,32 +1426,31 @@ SimpleExtensionDeclaration::~SimpleExtensionDeclaration() {
   SharedDtor();
 }
 inline void SimpleExtensionDeclaration::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
+  ABSL_DCHECK(GetArena() == nullptr);
   if (has_mapping_type()) {
     clear_mapping_type();
   }
-}
-void SimpleExtensionDeclaration::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _impl_.~Impl_();
 }
 
 void SimpleExtensionDeclaration::clear_mapping_type() {
 // @@protoc_insertion_point(one_of_clear_start:substrait.extensions.SimpleExtensionDeclaration)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   switch (mapping_type_case()) {
     case kExtensionType: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.mapping_type_.extension_type_;
       }
       break;
     }
     case kExtensionTypeVariation: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.mapping_type_.extension_type_variation_;
       }
       break;
     }
     case kExtensionFunction: {
-      if (GetArenaForAllocation() == nullptr) {
+      if (GetArena() == nullptr) {
         delete _impl_.mapping_type_.extension_function_;
       }
       break;
@@ -1447,6 +1465,7 @@ void SimpleExtensionDeclaration::clear_mapping_type() {
 
 PROTOBUF_NOINLINE void SimpleExtensionDeclaration::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.extensions.SimpleExtensionDeclaration)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1507,20 +1526,20 @@ const ::_pbi::TcParseTable<0, 3, 3, 0, 2> SimpleExtensionDeclaration::_table_ = 
 
   switch (mapping_type_case()) {
     case kExtensionType: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(1, _Internal::extension_type(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          1, _Internal::extension_type(this),
           _Internal::extension_type(this).GetCachedSize(), target, stream);
       break;
     }
     case kExtensionTypeVariation: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(2, _Internal::extension_type_variation(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          2, _Internal::extension_type_variation(this),
           _Internal::extension_type_variation(this).GetCachedSize(), target, stream);
       break;
     }
     case kExtensionFunction: {
-      target = ::google::protobuf::internal::WireFormatLite::
-        InternalWriteMessage(3, _Internal::extension_function(this),
+      target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+          3, _Internal::extension_function(this),
           _Internal::extension_function(this).GetCachedSize(), target, stream);
       break;
     }
@@ -1547,23 +1566,20 @@ const ::_pbi::TcParseTable<0, 3, 3, 0, 2> SimpleExtensionDeclaration::_table_ = 
   switch (mapping_type_case()) {
     // .substrait.extensions.SimpleExtensionDeclaration.ExtensionType extension_type = 1 [json_name = "extensionType"];
     case kExtensionType: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.mapping_type_.extension_type_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.mapping_type_.extension_type_);
       break;
     }
     // .substrait.extensions.SimpleExtensionDeclaration.ExtensionTypeVariation extension_type_variation = 2 [json_name = "extensionTypeVariation"];
     case kExtensionTypeVariation: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.mapping_type_.extension_type_variation_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.mapping_type_.extension_type_variation_);
       break;
     }
     // .substrait.extensions.SimpleExtensionDeclaration.ExtensionFunction extension_function = 3 [json_name = "extensionFunction"];
     case kExtensionFunction: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.mapping_type_.extension_function_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.mapping_type_.extension_function_);
       break;
     }
     case MAPPING_TYPE_NOT_SET: {
@@ -1574,11 +1590,12 @@ const ::_pbi::TcParseTable<0, 3, 3, 0, 2> SimpleExtensionDeclaration::_table_ = 
 }
 
 const ::google::protobuf::Message::ClassData SimpleExtensionDeclaration::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    SimpleExtensionDeclaration::MergeImpl
+    SimpleExtensionDeclaration::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*SimpleExtensionDeclaration::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* SimpleExtensionDeclaration::GetClassData() const {
+  return &_class_data_;
+}
 
 void SimpleExtensionDeclaration::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<SimpleExtensionDeclaration*>(&to_msg);
@@ -1622,7 +1639,10 @@ PROTOBUF_NOINLINE bool SimpleExtensionDeclaration::IsInitialized() const {
   return true;
 }
 
-void SimpleExtensionDeclaration::InternalSwap(SimpleExtensionDeclaration* other) {
+::_pbi::CachedSize* SimpleExtensionDeclaration::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void SimpleExtensionDeclaration::InternalSwap(SimpleExtensionDeclaration* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_.mapping_type_, other->_impl_.mapping_type_);
@@ -1658,10 +1678,12 @@ const ::google::protobuf::Any& AdvancedExtension::_Internal::enhancement(const A
   return *msg->_impl_.enhancement_;
 }
 void AdvancedExtension::clear_optimization() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (_impl_.optimization_ != nullptr) _impl_.optimization_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
 void AdvancedExtension::clear_enhancement() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   if (_impl_.enhancement_ != nullptr) _impl_.enhancement_->Clear();
   _impl_._has_bits_[0] &= ~0x00000002u;
 }
@@ -1670,34 +1692,44 @@ AdvancedExtension::AdvancedExtension(::google::protobuf::Arena* arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:substrait.extensions.AdvancedExtension)
 }
-AdvancedExtension::AdvancedExtension(const AdvancedExtension& from) : ::google::protobuf::Message() {
+inline PROTOBUF_NDEBUG_INLINE AdvancedExtension::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+AdvancedExtension::AdvancedExtension(
+    ::google::protobuf::Arena* arena,
+    const AdvancedExtension& from)
+    : ::google::protobuf::Message(arena) {
   AdvancedExtension* const _this = this;
   (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){from._impl_._has_bits_},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.optimization_){nullptr},
-      decltype(_impl_.enhancement_){nullptr},
-  };
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
-  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
-    _this->_impl_.optimization_ = new ::google::protobuf::Any(*from._impl_.optimization_);
-  }
-  if ((from._impl_._has_bits_[0] & 0x00000002u) != 0) {
-    _this->_impl_.enhancement_ = new ::google::protobuf::Any(*from._impl_.enhancement_);
-  }
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.optimization_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::google::protobuf::Any>(arena, *from._impl_.optimization_)
+                : nullptr;
+  _impl_.enhancement_ = (cached_has_bits & 0x00000002u)
+                ? CreateMaybeMessage<::google::protobuf::Any>(arena, *from._impl_.enhancement_)
+                : nullptr;
 
   // @@protoc_insertion_point(copy_constructor:substrait.extensions.AdvancedExtension)
 }
+inline PROTOBUF_NDEBUG_INLINE AdvancedExtension::Impl_::Impl_(
+    ::google::protobuf::internal::InternalVisibility visibility,
+    ::google::protobuf::Arena* arena)
+      : _cached_size_{0} {}
+
 inline void AdvancedExtension::SharedCtor(::_pb::Arena* arena) {
-  (void)arena;
-  new (&_impl_) Impl_{
-      decltype(_impl_._has_bits_){},
-      /*decltype(_impl_._cached_size_)*/ {},
-      decltype(_impl_.optimization_){nullptr},
-      decltype(_impl_.enhancement_){nullptr},
-  };
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, optimization_),
+           0,
+           offsetof(Impl_, enhancement_) -
+               offsetof(Impl_, optimization_) +
+               sizeof(Impl_::enhancement_));
 }
 AdvancedExtension::~AdvancedExtension() {
   // @@protoc_insertion_point(destructor:substrait.extensions.AdvancedExtension)
@@ -1705,16 +1737,15 @@ AdvancedExtension::~AdvancedExtension() {
   SharedDtor();
 }
 inline void AdvancedExtension::SharedDtor() {
-  ABSL_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete _impl_.optimization_;
-  if (this != internal_default_instance()) delete _impl_.enhancement_;
-}
-void AdvancedExtension::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.optimization_;
+  delete _impl_.enhancement_;
+  _impl_.~Impl_();
 }
 
 PROTOBUF_NOINLINE void AdvancedExtension::Clear() {
 // @@protoc_insertion_point(message_clear_start:substrait.extensions.AdvancedExtension)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ::uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1788,15 +1819,15 @@ const ::_pbi::TcParseTable<1, 2, 2, 0, 2> AdvancedExtension::_table_ = {
   cached_has_bits = _impl_._has_bits_[0];
   // .google.protobuf.Any optimization = 1 [json_name = "optimization"];
   if (cached_has_bits & 0x00000001u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(1, _Internal::optimization(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        1, _Internal::optimization(this),
         _Internal::optimization(this).GetCachedSize(), target, stream);
   }
 
   // .google.protobuf.Any enhancement = 2 [json_name = "enhancement"];
   if (cached_has_bits & 0x00000002u) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessage(2, _Internal::enhancement(this),
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        2, _Internal::enhancement(this),
         _Internal::enhancement(this).GetCachedSize(), target, stream);
   }
 
@@ -1821,16 +1852,14 @@ const ::_pbi::TcParseTable<1, 2, 2, 0, 2> AdvancedExtension::_table_ = {
   if (cached_has_bits & 0x00000003u) {
     // .google.protobuf.Any optimization = 1 [json_name = "optimization"];
     if (cached_has_bits & 0x00000001u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.optimization_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.optimization_);
     }
 
     // .google.protobuf.Any enhancement = 2 [json_name = "enhancement"];
     if (cached_has_bits & 0x00000002u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          *_impl_.enhancement_);
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.enhancement_);
     }
 
   }
@@ -1838,11 +1867,12 @@ const ::_pbi::TcParseTable<1, 2, 2, 0, 2> AdvancedExtension::_table_ = {
 }
 
 const ::google::protobuf::Message::ClassData AdvancedExtension::_class_data_ = {
-    ::google::protobuf::Message::CopyWithSourceCheck,
-    AdvancedExtension::MergeImpl
+    AdvancedExtension::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
 };
-const ::google::protobuf::Message::ClassData*AdvancedExtension::GetClassData() const { return &_class_data_; }
-
+const ::google::protobuf::Message::ClassData* AdvancedExtension::GetClassData() const {
+  return &_class_data_;
+}
 
 void AdvancedExtension::MergeImpl(::google::protobuf::Message& to_msg, const ::google::protobuf::Message& from_msg) {
   auto* const _this = static_cast<AdvancedExtension*>(&to_msg);
@@ -1877,7 +1907,10 @@ PROTOBUF_NOINLINE bool AdvancedExtension::IsInitialized() const {
   return true;
 }
 
-void AdvancedExtension::InternalSwap(AdvancedExtension* other) {
+::_pbi::CachedSize* AdvancedExtension::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void AdvancedExtension::InternalSwap(AdvancedExtension* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
