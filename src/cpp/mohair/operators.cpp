@@ -30,13 +30,26 @@ namespace mohair {
 
   // >> Implementations to complete QueryOp, PipelineOp, and BreakerOp types
   unique_ptr<PlanAnchor> QueryOp::plan_anchor() { return nullptr;          }
-  string                 QueryOp::ToString()    { return table_name;       }
+  const string           QueryOp::ToString()    { return table_name;       }
   const string           QueryOp::ViewStr()     { return this->ToString(); }
   bool                   QueryOp::IsBreaker()   { return false;            }
-  std::vector<QueryOp *> QueryOp::GetOpInputs() { return {};               };
+  std::vector<QueryOp *> QueryOp::GetOpInputs() { return {};               }
 
-  string                 PipelineOp::ToString() { return table_name;       }
-  string                 BreakerOp::ToString()  { return table_name;       }
+  const string           PipelineOp::ToString() { return table_name;       }
+  const string           BreakerOp::ToString()  { return table_name;       }
+
+  // >> Implementations for each op type to return its string representation
+  const string OpRead::ToString()      { return u8"Read(" + table_name + u8")"; }
+  const string OpProj::ToString()      { return u8"Π("    + table_name + u8")"; }
+  const string OpSel::ToString()       { return u8"σ("    + table_name + u8")"; }
+  const string OpLimit::ToString()     { return u8"Lim("  + table_name + u8")"; }
+  const string OpSort::ToString()      { return u8"Sort(" + table_name + u8")"; }
+  const string OpAggr::ToString()      { return u8"Aggr(" + table_name + u8")"; }
+
+  const string OpCrossJoin::ToString() { return u8"×("    + table_name + u8")"; }
+  const string OpJoin::ToString()      { return u8"⋈("    + table_name + u8")"; }
+  const string OpHashJoin::ToString()  { return u8"⋈→("   + table_name + u8")"; }
+  const string OpMergeJoin::ToString() { return u8"⋈⊕("   + table_name + u8")"; }
 
   // >> Implementations for each op type to return its PlanAnchor
   unique_ptr<PlanAnchor> PlanAnchorForRel(Rel *anchor_relmsg) {
@@ -142,6 +155,12 @@ namespace mohair {
   // NOTE: QueryOpVec is a convenience alias in `operators.hpp`
   template <typename UnaryQueryOp>
   QueryOpVec GetInputsUnary(UnaryQueryOp *op) {
+    /*
+    auto &op_input_ptr = std::get<0>(op->op_inputs);
+    auto op_input      = op_input_ptr.get();
+    QueryOpVec in_op_list { op_input };
+    return in_op_list;
+    */
     return QueryOpVec { std::get<0>(op->op_inputs).get() };
   }
 

@@ -68,6 +68,7 @@ namespace mohair {
 
     unique_ptr<PlanAnchor> plan_anchor() override { return QueryOp::plan_anchor(); }
     std::vector<QueryOp *> GetOpInputs() override { return QueryOp::GetOpInputs(); }
+    const string           ToString()    override { return u8"Err()"; }
   };
 
   struct OpRead : PipelineOp {
@@ -78,6 +79,7 @@ namespace mohair {
 
     unique_ptr<PlanAnchor> plan_anchor() override { return QueryOp::plan_anchor(); }
     std::vector<QueryOp *> GetOpInputs() override { return QueryOp::GetOpInputs(); }
+    const string           ToString()    override;
   };
 
   // TODO: figure out how this should bridge to skytether
@@ -98,6 +100,7 @@ namespace mohair {
 
     unique_ptr<PlanAnchor> plan_anchor() override;
     std::vector<QueryOp *> GetOpInputs() override;
+    const string           ToString()    override;
   };
 
   struct OpSel : PipelineOp {
@@ -111,6 +114,7 @@ namespace mohair {
 
     unique_ptr<PlanAnchor> plan_anchor() override;
     std::vector<QueryOp *> GetOpInputs() override;
+    const string           ToString()    override;
   };
 
   struct OpLimit : PipelineOp {
@@ -124,6 +128,7 @@ namespace mohair {
 
     unique_ptr<PlanAnchor> plan_anchor() override;
     std::vector<QueryOp *> GetOpInputs() override;
+    const string           ToString()    override;
   };
 
 
@@ -139,6 +144,7 @@ namespace mohair {
 
     unique_ptr<PlanAnchor> plan_anchor() override;
     std::vector<QueryOp *> GetOpInputs() override;
+    const string           ToString()    override;
   };
 
   struct OpAggr : BreakerOp {
@@ -152,6 +158,7 @@ namespace mohair {
 
     unique_ptr<PlanAnchor> plan_anchor() override;
     std::vector<QueryOp *> GetOpInputs() override;
+    const string           ToString()    override;
   };
 
   struct OpCrossJoin : BreakerOp {
@@ -165,6 +172,7 @@ namespace mohair {
 
     unique_ptr<PlanAnchor> plan_anchor() override;
     std::vector<QueryOp *> GetOpInputs() override;
+    const string           ToString()    override;
   };
 
   struct OpJoin : BreakerOp {
@@ -178,6 +186,7 @@ namespace mohair {
 
     unique_ptr<PlanAnchor> plan_anchor() override;
     std::vector<QueryOp *> GetOpInputs() override;
+    const string           ToString()    override;
   };
 
   struct OpHashJoin : BreakerOp {
@@ -191,6 +200,7 @@ namespace mohair {
 
     unique_ptr<PlanAnchor> plan_anchor() override;
     std::vector<QueryOp *> GetOpInputs() override;
+    const string           ToString()    override;
   };
 
   struct OpMergeJoin : BreakerOp {
@@ -204,6 +214,7 @@ namespace mohair {
 
     unique_ptr<PlanAnchor> plan_anchor() override;
     std::vector<QueryOp *> GetOpInputs() override;
+    const string           ToString()    override;
   };
 
   /* TODO: needs variadic op_inputs

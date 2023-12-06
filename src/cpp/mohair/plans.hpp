@@ -64,7 +64,7 @@ namespace mohair {
     QueryOp(Rel *rel, string tname): op_wrap(rel), table_name(tname) {}
 
     virtual unique_ptr<PlanAnchor> plan_anchor();
-    virtual string                 ToString();
+    virtual const string           ToString();
     virtual const string           ViewStr();
     virtual bool                   IsBreaker();
 
@@ -75,17 +75,17 @@ namespace mohair {
   struct PipelineOp : QueryOp {
     PipelineOp(Rel *rel, string tname): QueryOp(rel, tname) {}
 
-    virtual string ToString()  override;
-    const   string ViewStr()   override { return u8"← " + this->ToString(); }
-    bool           IsBreaker() override { return false; }
+    virtual const string ToString()  override;
+    const string         ViewStr()   override { return u8"← " + this->ToString(); }
+    bool                 IsBreaker() override { return false; }
   };
 
   struct BreakerOp : QueryOp {
     BreakerOp(Rel *rel, string tname): QueryOp(rel, tname) {}
 
-    virtual string ToString()  override;
-    const   string ViewStr()   override { return u8"↤ " + this->ToString(); }
-    bool           IsBreaker() override { return true; }
+    virtual const string ToString()  override;
+    const string         ViewStr()   override { return u8"↤ " + this->ToString(); }
+    bool                 IsBreaker() override { return true; }
   };
 
 
@@ -102,7 +102,8 @@ namespace mohair {
   struct QueryPlan {
     QueryOp *plan_op;
 
-    QueryPlan(QueryOp *op) : plan_op(op) {};
+    virtual ~QueryPlan() {}
+    QueryPlan(QueryOp *op) : plan_op(op) {}
   };
 
 
