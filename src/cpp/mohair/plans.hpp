@@ -115,24 +115,21 @@ namespace mohair {
 
   // Declare a struct of various tree properties that an AppPlan will have
   struct DecomposableProperties {
-    int pipeline_len   = 0;
-    int plan_width     = 0;
-    int plan_height    = 0;
-    int breaker_height = 0;
-    int breaker_count  = 0;
+    int pipeline_len;
+    int plan_width;
+    int plan_height;
+    int breaker_height;
 
     std::vector<AppPlan*> breakers;
     std::vector<AppPlan*> breaker_leaves;
 
-    DecomposableProperties();
-    DecomposableProperties( int plen, int pwidth, int pheight, int bheight, int bcount
-                           ,std::vector<AppPlan*> vec_b
-                           ,std::vector<AppPlan*> vec_bl);
+    DecomposableProperties() {}
 
     string ToString();
   };
 
-  DecomposableProperties PropertiesForPlanInputs(std::vector<AppPlan> &child_plans);
+  using PlanVec = std::vector<unique_ptr<AppPlan>>;
+  unique_ptr<DecomposableProperties> PropertiesForPlanInputs(PlanVec &child_plans);
 
   /**
    * A query plan that contains logical data manipulation operators only.
@@ -147,15 +144,15 @@ namespace mohair {
    */
   struct AppPlan : QueryPlan {
     // A set of attributes that a node in an AppPlan has
-    DecomposableProperties attrs;
-    std::vector<string>    source_names;
+    unique_ptr<DecomposableProperties> attrs;
+    std::vector<string>                source_names;
 
     AppPlan(QueryOp *op) : QueryPlan(op) {};
 
     string ViewPlan();
   };
 
-  AppPlan FromPlanOp(QueryOp *op);
+  unique_ptr<AppPlan> FromPlanOp(QueryOp *op);
 
   /**
    * A query plan that may contain a mix of:
