@@ -101,73 +101,20 @@ namespace mohair {
 
   // >> Helper functions
 
-  void InsertionSortAppPlans(std::vector<AppPlan> &plans, AppPlan new_plan) {
+  void InsertionSortAppPlans( std::vector<unique_ptr<AppPlan>> &plans
+                             ,unique_ptr<AppPlan>               new_plan) {
     auto plans_it = plans.begin();
 
     // find the spot to insert
     for (; plans_it != plans.end(); plans_it = std::next(plans_it)) {
-      if (new_plan.attrs.pipeline_len > plans_it->attrs.pipeline_len) { break; }
+      if (new_plan->attrs->pipeline_len > (*plans_it)->attrs->pipeline_len) { break; }
     }
 
     // we always insert, even if its at the end of the list
     plans.insert(plans_it, std::move(new_plan));
   }
 
-  int SumPlanProperties( std::vector<AppPlan> &plans
-                        ,std::function<int(AppPlan*)> fn_get) {
-    int prop_val = 0;
-    for (size_t ndx = 0; ndx < plans.size(); ++ndx) {
-      auto *plan  = &(plans[ndx]);
-      prop_val   += fn_get(plan);
-    }
-
-    return prop_val;
-  }
-
-  int MaxPlanProperties( std::vector<AppPlan> &plans
-                        ,std::function<int(AppPlan*)> fn_get) {
-    int prop_val = 0;
-    for (size_t ndx = 0; ndx < plans.size(); ++ndx) {
-      auto *plan     = &(plans[ndx]);
-      int   plan_val = fn_get(plan);
-      if (plan_val > prop_val) { prop_val = plan_val; }
-    }
-
-    return prop_val;
-  }
-
-  template <typename StoredType>
-  std::vector<StoredType*>
-  GatherPlanProperties( std::vector<AppPlan> &plans
-                       ,std::function<std::vector<StoredType*>(AppPlan*)> fn_get) {
-    std::vector<StoredType*> gathered;
-
-    for (size_t ndx = 0; ndx < plans.size(); ++ndx) {
-      auto *plan  = &(plans[ndx]);
-      auto  props = fn_get(plan);
-
-      gathered.insert(gathered.cbegin(), props.cbegin(), props.cend());
-    }
-
-    return std::move(gathered);
-  }
-
   // >> DecomposableProperties functions
-  DecomposableProperties::DecomposableProperties() {}
-  DecomposableProperties::DecomposableProperties( int plen, int pwidth, int pheight
-                                                 ,int bheight, int bcount
-                                                 ,std::vector<AppPlan*> vec_b
-                                                 ,std::vector<AppPlan*> vec_bl)
-    :  pipeline_len(plen)
-      ,plan_width(pwidth)
-      ,plan_height(pheight)
-      ,breaker_height(bheight)
-      ,breaker_count(bcount)
-      ,breakers(vec_b)
-      ,breaker_leaves(vec_bl)
-  {
-  }
-
   string DecomposableProperties::ToString() {
     std::stringstream prop_stream;
 
@@ -176,69 +123,103 @@ namespace mohair {
                 << "\tPlan width     :" << plan_width     << std::endl
                 << "\tPlan height    :" << plan_height    << std::endl
                 << "\tBreaker height :" << breaker_height << std::endl
-                << "\tBreaker count  :" << breaker_count  << std::endl
     ;
 
     return prop_stream.str();
   }
 
-  DecomposableProperties PropertiesForPlanInputs(std::vector<AppPlan> &plans) {
-    // closures for property access
-    auto get_planwidth     = [](AppPlan *plan) { return plan->attrs.plan_width;     };
-    auto get_planheight    = [](AppPlan *plan) { return plan->attrs.plan_height;    };
-    auto get_breakerheight = [](AppPlan *plan) { return plan->attrs.breaker_height; };
-    auto get_breakercount  = [](AppPlan *plan) { return plan->attrs.breaker_count;  };
+  // PlanVec is a vector of unique_ptr<AppPlan>
+  unique_ptr<DecomposableProperties> PropertiesForPlanInputs(PlanVec &plans) {
+    auto properties = std::make_unique<DecomposableProperties>();
 
-    auto get_breakers      =  [](AppPlan *plan) { return plan->attrs.breakers;       };
-    auto get_breakerleaves =  [](AppPlan *plan) { return plan->attrs.breaker_leaves; };
+    // pipeline length, plan width and height, and breaker height
+    int p_len = 0, pl_width = 0, pl_height = 0, bheight = 0;
 
-    auto get_pipelen = [](AppPlan *plan) {
-      if (plan->plan_op->IsBreaker()) { return 0; }
-      return plan->attrs.pipeline_len;
-    };
+    // local references to vectors
+    std::vector<AppPlan*> *break_ops = &(properties->breakers);
+    std::vector<AppPlan*> *bleaf_ops = &(properties->breaker_leaves);
 
-    // calculate properties using helper functions and closures
-    int pipeline_len   = 1 + MaxPlanProperties(plans, get_pipelen);
-    int plan_height    = 1 + MaxPlanProperties(plans, get_planheight);
+    for (size_t ndx = 0; ndx < plans.size(); ++ndx) {
+      // >> grab a convenient reference to each plan; these are non-owning
+      AppPlan *plan = plans[ndx].get();
 
-    int plan_width     = SumPlanProperties(plans, get_planwidth);
-    if (plan_width == 0) { plan_width = 1; }
+      // >> pull in properties from the current plan input
+      std::vector<AppPlan*> *plan_breakops = &(plan->attrs->breakers);
+      std::vector<AppPlan*> *plan_bleafops = &(plan->attrs->breaker_leaves);
 
-    // these get special updates elsewhere, based on the root of the super-plan
-    int breaker_height = MaxPlanProperties(plans, get_breakerheight);
-    int breaker_count  = SumPlanProperties(plans, get_breakercount);
+      int plan_plwidth  = plan->attrs->plan_width;
+      int plan_plheight = plan->attrs->plan_height;
+      int plan_bheight  = plan->attrs->breaker_height;
 
-    std::vector<AppPlan*> breakers = GatherPlanProperties<AppPlan>(plans, get_breakers);
-    std::vector<AppPlan*> breaker_leaves = GatherPlanProperties<AppPlan>(
-      plans, get_breakerleaves
-    );
+      int plan_plen = 0;
+      if (not plan->plan_op->IsBreaker()) { plan_plen = plan->attrs->pipeline_len; }
 
-    return DecomposableProperties(
-       pipeline_len, plan_width, plan_height
-      ,breaker_height, breaker_count
-      ,breakers
-      ,breaker_leaves
-    );
+
+      // >> update local variables
+
+      //   |> pointers for fast access
+      //      (put this first because it relates to the above check)
+      else if (plan->plan_op->IsBreaker()) {
+        // A breaker with no leaves must be a leaf itself
+        // TODO: double check the same pointer value is being pushed
+        // TODO: double check the pointer value doesn't change in between calls
+        if (plan->attrs->breaker_leaves.size() == 0) {
+          bleaf_ops->push_back(plan);
+        }
+
+        // Otherwise, it is an internal breaker and we preserve its pointers
+        else {
+          // TODO: double check that insert is a copy of the pointers
+          bleaf_ops->insert(bleaf_ops->cend(), plan_bleafops->cbegin(), plan_bleafops->cend());
+          break_ops->insert(break_ops->cend(), plan_breakops->cbegin(), plan_breakops->cend());
+          break_ops->push_back(plan);
+        }
+      }
+
+      //   |> max-type properties
+      if (plan_plen     > p_len    ) { p_len     = plan_plen;     }
+      if (plan_plheight > pl_height) { pl_height = plan_plheight; }
+      if (plan_bheight  > bheight)   { bheight   = plan_bheight;  }
+
+      //   |> sum-type properties
+      pl_width += plan_plwidth;
+    }
+
+    // >> non-conditional adjustments to properties
+    ++p_len;
+    ++pl_height;
+
+    // >> conditional adjustments to properties
+    if (pl_width == 0) { pl_width = 1; }
+
+    // >> update properties container and return it
+    properties->pipeline_len   = p_len;
+    properties->plan_height    = pl_height;
+    properties->plan_width     = pl_width;
+    properties->breaker_height = bheight;
+
+    return properties;
   }
 
   // >> AppPlan static functions
-  std::vector<AppPlan> WalkInputOps(QueryOp *parent_op) {
+  std::vector<unique_ptr<AppPlan>> WalkInputOps(QueryOp *parent_op) {
     // Gather child operators
     std::vector<QueryOp *> child_ops = parent_op->GetOpInputs();
 
     // Initialize a vector of AppPlan instances (wraps QueryOp with tree properties)
-    std::vector<AppPlan> sorted_plans;
+    std::vector<unique_ptr<AppPlan>> sorted_plans;
     sorted_plans.reserve(child_ops.size());
 
     if (child_ops.size() == 0) { return sorted_plans; }
 
     // Recurse on first child operator; populate first element of sorted_plans
-    sorted_plans.push_back(FromPlanOp(child_ops[0]));
+    auto first_childplan = FromPlanOp(child_ops[0]);
+    sorted_plans.push_back(std::move(first_childplan));
 
     // For each input operator to parent_op
     for (size_t child_ndx = 1; child_ndx < child_ops.size(); ++child_ndx) {
       // recurse on child operator
-      AppPlan child_plan = FromPlanOp(child_ops[child_ndx]);
+      auto child_plan = FromPlanOp(child_ops[child_ndx]);
 
       // insertion sort into sorted_plans
       InsertionSortAppPlans(sorted_plans, std::move(child_plan));
@@ -248,31 +229,27 @@ namespace mohair {
     return sorted_plans;
   }
 
-  AppPlan FromPlanOp(QueryOp *op) {
+  unique_ptr<AppPlan> FromPlanOp(QueryOp *op) {
     // Recurse on input operators
     auto child_plans = WalkInputOps(op);
 
+    /*
+    if (   child_plans.size() == 2 && child_plans[0]->plan_op->IsBreaker() && child_plans[0]->plan_op->IsBreaker()) {
+      std::cout << "First case of error" << std::endl;
+    }
+    */
+
     // Create a plan that wraps this operator
-    AppPlan root_plan { op };
+    auto root_plan = std::make_unique<AppPlan>(op);
 
     // Assign initial properties to root_plan
-    root_plan.attrs = PropertiesForPlanInputs(child_plans);
+    root_plan->attrs = PropertiesForPlanInputs(child_plans);
 
-    // Then update properties in case this operator is a pipeline breaker
-    if (op->IsBreaker()) {
-      root_plan.attrs.breaker_count  += 1;
-      root_plan.attrs.breaker_height += 1;
-
-      // If we don't have leaves, then we are a leaf
-      if (child_plans.size() == 0) {
-        root_plan.attrs.breaker_leaves.push_back(&root_plan);
-      }
-
-      // Otherwise, we're a non-leaf breaker
-      else { root_plan.attrs.breakers.push_back(&root_plan); }
-    }
+    // Update properties if this operator is a pipeline breaker
+    if (op->IsBreaker()) { root_plan->attrs->breaker_height += 1; }
 
     // Done with traversal
+    // NOTE: it seems like this gets called multiple times?
     return root_plan;
   }
 
