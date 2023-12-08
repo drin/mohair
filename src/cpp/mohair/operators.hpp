@@ -63,23 +63,18 @@ namespace mohair {
   struct OpErr : QueryOp {
     string err_msg;
 
-    OpErr(Rel *rel, const char *msg)
-      : QueryOp(rel, string {""}), err_msg(msg) {}
+    OpErr(Rel *rel, const char *msg): QueryOp(rel), err_msg(msg) {}
 
-    unique_ptr<PlanAnchor> plan_anchor() override { return QueryOp::plan_anchor(); }
-    std::vector<QueryOp *> GetOpInputs() override { return QueryOp::GetOpInputs(); }
-    const string           ToString()    override { return u8"Err()"; }
+    const string ToString() override;
   };
 
   struct OpRead : PipelineOp {
     ReadRel *plan_op;
 
-    OpRead(ReadRel *op, Rel *rel, string tname)
+    OpRead(ReadRel *op, Rel *rel, string &tname)
       : PipelineOp(rel, tname), plan_op(op) {}
 
-    unique_ptr<PlanAnchor> plan_anchor() override { return QueryOp::plan_anchor(); }
-    std::vector<QueryOp *> GetOpInputs() override { return QueryOp::GetOpInputs(); }
-    const string           ToString()    override;
+    const string ToString() override;
   };
 
   // TODO: figure out how this should bridge to skytether
@@ -95,12 +90,12 @@ namespace mohair {
     ProjectRel *plan_op;
     InputsType  op_inputs;
 
-    OpProj(ProjectRel *op, Rel *rel, string tname)
+    OpProj(ProjectRel *op, Rel *rel, string &tname)
       : PipelineOp(rel, tname), plan_op(op) {}
 
-    unique_ptr<PlanAnchor> plan_anchor() override;
-    std::vector<QueryOp *> GetOpInputs() override;
     const string           ToString()    override;
+    std::vector<QueryOp *> GetOpInputs() override;
+    unique_ptr<PlanAnchor> plan_anchor() override;
   };
 
   struct OpSel : PipelineOp {
@@ -109,12 +104,12 @@ namespace mohair {
     FilterRel  *plan_op;
     InputsType  op_inputs;
 
-    OpSel(FilterRel *op, Rel *rel, string tname)
+    OpSel(FilterRel *op, Rel *rel, string &tname)
       : PipelineOp(rel, tname), plan_op(op) {}
 
-    unique_ptr<PlanAnchor> plan_anchor() override;
-    std::vector<QueryOp *> GetOpInputs() override;
     const string           ToString()    override;
+    std::vector<QueryOp *> GetOpInputs() override;
+    unique_ptr<PlanAnchor> plan_anchor() override;
   };
 
   struct OpLimit : PipelineOp {
@@ -123,12 +118,12 @@ namespace mohair {
     FetchRel   *plan_op;
     InputsType  op_inputs;
 
-    OpLimit(FetchRel *op, Rel *rel, string tname)
+    OpLimit(FetchRel *op, Rel *rel, string &tname)
       : PipelineOp(rel, tname), plan_op(op) {}
 
-    unique_ptr<PlanAnchor> plan_anchor() override;
-    std::vector<QueryOp *> GetOpInputs() override;
     const string           ToString()    override;
+    std::vector<QueryOp *> GetOpInputs() override;
+    unique_ptr<PlanAnchor> plan_anchor() override;
   };
 
 
@@ -139,12 +134,12 @@ namespace mohair {
     SortRel    *plan_op;
     InputsType  op_inputs;
 
-    OpSort(SortRel *op, Rel *rel, string tname)
+    OpSort(SortRel *op, Rel *rel, string &tname)
       : BreakerOp(rel, tname), plan_op(op) {}
 
-    unique_ptr<PlanAnchor> plan_anchor() override;
-    std::vector<QueryOp *> GetOpInputs() override;
     const string           ToString()    override;
+    std::vector<QueryOp *> GetOpInputs() override;
+    unique_ptr<PlanAnchor> plan_anchor() override;
   };
 
   struct OpAggr : BreakerOp {
@@ -153,12 +148,12 @@ namespace mohair {
     AggregateRel *plan_op;
     InputsType    op_inputs;
 
-    OpAggr(AggregateRel *op, Rel *rel, string tname)
+    OpAggr(AggregateRel *op, Rel *rel, string &tname)
       : BreakerOp(rel, tname), plan_op(op) {}
 
-    unique_ptr<PlanAnchor> plan_anchor() override;
-    std::vector<QueryOp *> GetOpInputs() override;
     const string           ToString()    override;
+    std::vector<QueryOp *> GetOpInputs() override;
+    unique_ptr<PlanAnchor> plan_anchor() override;
   };
 
   struct OpCrossJoin : BreakerOp {
@@ -167,12 +162,12 @@ namespace mohair {
     CrossRel   *plan_op;
     InputsType  op_inputs;
 
-    OpCrossJoin(CrossRel *op, Rel *rel, string tname)
+    OpCrossJoin(CrossRel *op, Rel *rel, string &tname)
       : BreakerOp(rel, tname), plan_op(op) {}
 
-    unique_ptr<PlanAnchor> plan_anchor() override;
-    std::vector<QueryOp *> GetOpInputs() override;
     const string           ToString()    override;
+    std::vector<QueryOp *> GetOpInputs() override;
+    unique_ptr<PlanAnchor> plan_anchor() override;
   };
 
   struct OpJoin : BreakerOp {
@@ -181,12 +176,12 @@ namespace mohair {
     JoinRel    *plan_op;
     InputsType  op_inputs;
 
-    OpJoin(JoinRel *op, Rel *rel, string tname)
+    OpJoin(JoinRel *op, Rel *rel, string &tname)
       : BreakerOp(rel, tname), plan_op(op) {}
 
-    unique_ptr<PlanAnchor> plan_anchor() override;
-    std::vector<QueryOp *> GetOpInputs() override;
     const string           ToString()    override;
+    std::vector<QueryOp *> GetOpInputs() override;
+    unique_ptr<PlanAnchor> plan_anchor() override;
   };
 
   struct OpHashJoin : BreakerOp {
@@ -195,12 +190,12 @@ namespace mohair {
     HashJoinRel *plan_op;
     InputsType   op_inputs;
 
-    OpHashJoin(HashJoinRel *op, Rel *rel, string tname)
+    OpHashJoin(HashJoinRel *op, Rel *rel, string &tname)
       : BreakerOp(rel, tname), plan_op(op) {}
 
-    unique_ptr<PlanAnchor> plan_anchor() override;
-    std::vector<QueryOp *> GetOpInputs() override;
     const string           ToString()    override;
+    std::vector<QueryOp *> GetOpInputs() override;
+    unique_ptr<PlanAnchor> plan_anchor() override;
   };
 
   struct OpMergeJoin : BreakerOp {
@@ -209,12 +204,12 @@ namespace mohair {
     MergeJoinRel *plan_op;
     InputsType    op_inputs;
 
-    OpMergeJoin(MergeJoinRel *op, Rel *rel, string tname)
+    OpMergeJoin(MergeJoinRel *op, Rel *rel, string &tname)
       : BreakerOp(rel, tname), plan_op(op) {}
 
-    unique_ptr<PlanAnchor> plan_anchor() override;
-    std::vector<QueryOp *> GetOpInputs() override;
     const string           ToString()    override;
+    std::vector<QueryOp *> GetOpInputs() override;
+    unique_ptr<PlanAnchor> plan_anchor() override;
   };
 
   /* TODO: needs variadic op_inputs
