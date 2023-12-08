@@ -28,17 +28,8 @@
 
 namespace mohair {
 
-  // >> Implementations to complete QueryOp, PipelineOp, and BreakerOp types
-  unique_ptr<PlanAnchor> QueryOp::plan_anchor() { return nullptr;          }
-  const string           QueryOp::ToString()    { return table_name;       }
-  const string           QueryOp::ViewStr()     { return this->ToString(); }
-  bool                   QueryOp::IsBreaker()   { return false;            }
-  std::vector<QueryOp *> QueryOp::GetOpInputs() { return {};               }
-
-  const string           PipelineOp::ToString() { return table_name;       }
-  const string           BreakerOp::ToString()  { return table_name;       }
-
   // >> Implementations for each op type to return its string representation
+  const string OpErr::ToString()       { return u8"Err()";                      }
   const string OpRead::ToString()      { return u8"Read(" + table_name + u8")"; }
   const string OpProj::ToString()      { return u8"Π("    + table_name + u8")"; }
   const string OpSel::ToString()       { return u8"σ("    + table_name + u8")"; }
@@ -193,9 +184,8 @@ namespace mohair {
     unique_ptr<QueryOp> op_input = MohairFrom(substrait_op->mutable_input());
 
     // Initialize op and set its inputs
-    auto op_tname = string { op_input->table_name };
     auto unary_op = std::make_unique<MohairRel>(
-      substrait_op, rel_msg, std::move(op_tname)
+      substrait_op, rel_msg, op_input->table_name
     );
     get<0>(unary_op->op_inputs) = std::move(op_input);
 
@@ -209,9 +199,9 @@ namespace mohair {
     unique_ptr<QueryOp> right_input = MohairFrom(substrait_op->mutable_right());
 
     // prep params for the operator
-    auto op_tname = string { left_input->table_name + "." + right_input->table_name };
+    string op_tname { left_input->table_name + "." + right_input->table_name  };
     auto binary_op = std::make_unique<MohairRel>(
-      substrait_op, rel_msg, std::move(op_tname)
+       substrait_op, rel_msg, op_tname
     );
 
     get<0>(binary_op->op_inputs) = std::move(left_input);
@@ -221,12 +211,10 @@ namespace mohair {
   }
 
   unique_ptr<QueryOp> FromReadMsg(Rel *rel_msg, ReadRel *substrait_op) {
-    // prep params for the operator
-    string  op_tname  = SourceNameForRead(substrait_op);
-
     // construct the operator
+    string op_tname { SourceNameForRead(substrait_op) };
     unique_ptr<QueryOp> read_op = std::make_unique<OpRead>(
-      substrait_op, rel_msg, std::move(op_tname)
+      substrait_op, rel_msg, op_tname
     );
 
     return read_op;

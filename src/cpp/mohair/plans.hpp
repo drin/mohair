@@ -61,31 +61,31 @@ namespace mohair {
     Rel    *op_wrap;
     string  table_name;
 
-    QueryOp(Rel *rel, string tname): op_wrap(rel), table_name(tname) {}
+    virtual ~QueryOp() {}
 
-    virtual unique_ptr<PlanAnchor> plan_anchor();
-    virtual const string           ToString();
-    virtual const string           ViewStr();
-    virtual bool                   IsBreaker();
+    QueryOp(Rel *rel)               : op_wrap(rel), table_name("")    {}
+    QueryOp(Rel *rel, string &tname): op_wrap(rel), table_name(tname) {}
 
-    virtual std::vector<QueryOp *> GetOpInputs();
+    virtual const string           ToString()    { return table_name;       }
+    virtual const string           ViewStr()     { return this->ToString(); }
+    virtual bool                   IsBreaker()   { return false;            }
+    virtual std::vector<QueryOp *> GetOpInputs() { return {};               }
+    virtual unique_ptr<PlanAnchor> plan_anchor() { return nullptr;          }
   };
 
   // Classes for distinguishing pipeline-able operators from pipeline breakers
   struct PipelineOp : QueryOp {
-    PipelineOp(Rel *rel, string tname): QueryOp(rel, tname) {}
+    PipelineOp(Rel *rel, string &tname): QueryOp(rel, tname) {}
 
-    virtual const string ToString()  override;
-    const string         ViewStr()   override { return u8"← " + this->ToString(); }
-    bool                 IsBreaker() override { return false; }
+    const string ViewStr()   override { return u8"← " + this->ToString(); }
+    bool         IsBreaker() override { return false; }
   };
 
   struct BreakerOp : QueryOp {
-    BreakerOp(Rel *rel, string tname): QueryOp(rel, tname) {}
+    BreakerOp(Rel *rel, string &tname): QueryOp(rel, tname) {}
 
-    virtual const string ToString()  override;
-    const string         ViewStr()   override { return u8"↤ " + this->ToString(); }
-    bool                 IsBreaker() override { return true; }
+    const string ViewStr()   override { return u8"↤ " + this->ToString(); }
+    bool         IsBreaker() override { return true; }
   };
 
 

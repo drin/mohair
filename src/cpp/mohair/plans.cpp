@@ -67,8 +67,8 @@ namespace mohair {
 
   unique_ptr<QueryOp> MohairPlanFrom(Plan *substrait_plan) {
     // walk the top level relations until we find the root (should only be one)
-    int                 root_count  { 0       };
-    unique_ptr<QueryOp> mohair_root { nullptr };
+    int root_count = 0;
+    unique_ptr<QueryOp> mohair_root;
 
     for (int ndx = 0; ndx < substrait_plan->relations_size(); ++ndx) {
       PlanRel plan_root { substrait_plan->relations(ndx) };
@@ -76,7 +76,7 @@ namespace mohair {
       // Don't break after we find a RootRel; validate there is only 1
       if (plan_root.rel_type_case() == PlanRel::RelTypeCase::kRoot) {
         ++root_count;
-        mohair_root = std::move(MohairFrom(plan_root.mutable_root()->mutable_input()));
+        mohair_root = MohairFrom(plan_root.mutable_root()->mutable_input());
       }
     }
 
@@ -154,25 +154,22 @@ namespace mohair {
       int plan_plen = 0;
       if (not plan->plan_op->IsBreaker()) { plan_plen = plan->attrs->pipeline_len; }
 
-
       // >> update local variables
-
       //   |> pointers for fast access
       //      (put this first because it relates to the above check)
       else if (plan->plan_op->IsBreaker()) {
         // A breaker with no leaves must be a leaf itself
-        // TODO: double check the same pointer value is being pushed
-        // TODO: double check the pointer value doesn't change in between calls
         if (plan->attrs->breaker_leaves.size() == 0) {
           bleaf_ops->push_back(plan);
+          // bleaf_ops->push_back(std::move(plans[ndx]));
         }
 
         // Otherwise, it is an internal breaker and we preserve its pointers
         else {
-          // TODO: double check that insert is a copy of the pointers
           bleaf_ops->insert(bleaf_ops->cend(), plan_bleafops->cbegin(), plan_bleafops->cend());
           break_ops->insert(break_ops->cend(), plan_breakops->cbegin(), plan_breakops->cend());
           break_ops->push_back(plan);
+          // break_ops->push_back(std::move(plans[ndx]));
         }
       }
 
