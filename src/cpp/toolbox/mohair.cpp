@@ -73,11 +73,11 @@ int main(int argc, char **argv) {
   ;
 
   std::cout << "Breaker Leaves:" << std::endl;
-  std::vector<AppPlan*> plan_bleaves = application_plan->attrs->breaker_leaves;
+  std::vector<unique_ptr<AppPlan>>& plan_bleaves = application_plan->bleaf_ops;
   for (size_t bleaf_ndx = 0; bleaf_ndx < plan_bleaves.size(); ++bleaf_ndx) {
     std::cout << "\t[" << std::to_string(bleaf_ndx) << "]" << std::endl;
 
-    AppPlan *bleaf = plan_bleaves[bleaf_ndx];
+    unique_ptr<AppPlan>& bleaf = plan_bleaves[bleaf_ndx];
     std::cout << bleaf->ViewPlan() << std::endl;
   }
 
