@@ -114,22 +114,32 @@ namespace mohair {
   struct AppPlan;
 
   // Declare a struct of various tree properties that an AppPlan will have
-  struct DecomposableProperties {
-    int pipeline_len;
+  struct PlanAttrs {
+    int pipe_len;
     int plan_width;
     int plan_height;
-    int breaker_height;
+    int break_height;
 
-    std::vector<AppPlan*> breakers;
-    std::vector<AppPlan*> breaker_leaves;
+    PlanAttrs(int plen, int pwidth, int pheight, int bheight)
+      : pipe_len(plen), plan_width(pwidth), plan_height(pheight), break_height(bheight)
+      {}
 
-    DecomposableProperties() {}
+    PlanAttrs() : PlanAttrs(1, 1, 1, 0) {}
+    PlanAttrs(PlanAttrs &other)
+      : PlanAttrs(other.pipe_len, other.plan_width, other.plan_height, other.break_height)
+      {}
+
+    /*
+    PlanAttrs(PlanAttrs &other)
+      :  pipe_len    (other.pipe_len)
+        ,plan_width  (other.plan_width)
+        ,plan_height (other.plan_height)
+        ,break_height(other.break_height)
+      {}
+    */
 
     string ToString();
   };
-
-  using PlanVec = std::vector<unique_ptr<AppPlan>>;
-  unique_ptr<DecomposableProperties> PropertiesForPlanInputs(PlanVec &child_plans);
 
   /**
    * A query plan that contains logical data manipulation operators only.
@@ -144,15 +154,22 @@ namespace mohair {
    */
   struct AppPlan : QueryPlan {
     // A set of attributes that a node in an AppPlan has
-    unique_ptr<DecomposableProperties> attrs;
-    std::vector<string>                source_names;
+    PlanAttrs           attrs;
+    std::vector<string> source_names;
 
-    AppPlan(QueryOp *op) : QueryPlan(op) {};
+    // Indices into interesting operators in the AppPlan
+    std::vector<unique_ptr<AppPlan>> break_ops;
+    std::vector<unique_ptr<AppPlan>> bleaf_ops;
+
+    AppPlan(QueryOp *op)                       : QueryPlan(op)                   {};
+    AppPlan(QueryOp *op, PlanAttrs &new_attrs) : QueryPlan(op), attrs(new_attrs) {};
 
     string ViewPlan();
   };
 
   unique_ptr<AppPlan> FromPlanOp(QueryOp *op);
+
+  using PlanVec = std::vector<unique_ptr<AppPlan>>;
 
   /**
    * A query plan that may contain a mix of:
@@ -175,14 +192,8 @@ namespace mohair {
    * can access them from the kelpie pool.
    */
   struct SysPlan : QueryPlan {
-    unique_ptr<Plan>       substrait_plan;
-    std::vector<string>    source_names;
-    std::vector<BreakerOp> breaker_list;
-
-    int plan_width     { 0 };
-    int plan_height    { 0 };
-    int breaker_height { 0 };
-    int breaker_count  { 0 };
+    unique_ptr<Plan>    substrait_plan;
+    std::vector<string> source_names;
   };
 
   /**
