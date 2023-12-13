@@ -48,12 +48,14 @@ namespace mohair::services {
 
     // register a compute function with kelpie
     faodel_if.RegisterEngineAcero();
-    faodel_pool = std::move(faodel_if.ConnectToPool());
+    faodel_pool = faodel_if.ConnectToPool();
+
+    return Status::OK();
   }
 
-  Status FaodelService::ListFlights( const ServerCallContext   &context
-                                    ,const Criteria            *criteria
-                                    ,unique_ptr<FlightListing> *listings) {
+  Status FaodelService::ListFlights( [[maybe_unused]] const ServerCallContext   &context
+                                    ,[[maybe_unused]] const Criteria            *criteria
+                                    ,[[maybe_unused]] unique_ptr<FlightListing> *listings) {
 
     // TODO: figure out how to query catalog metadata
     /*
@@ -64,9 +66,9 @@ namespace mohair::services {
     return Status::NotImplemented("TODO");
   }
 
-  Status FaodelService::GetFlightInfo( const ServerCallContext &context
-                                      ,const FlightDescriptor  &request
-                                      ,unique_ptr<FlightInfo>  *info) {
+  Status FaodelService::GetFlightInfo( [[maybe_unused]] const ServerCallContext &context
+                                      ,[[maybe_unused]] const FlightDescriptor  &request
+                                      ,[[maybe_unused]] unique_ptr<FlightInfo>  *info) {
     return Status::NotImplemented("TODO");
   }
 
@@ -79,33 +81,33 @@ namespace mohair::services {
   }
   */
 
-  Status FaodelService::GetSchema( const ServerCallContext  &context
-                                  ,const FlightDescriptor   &request
-                                  ,unique_ptr<SchemaResult> *schema) {
+  Status FaodelService::GetSchema( [[maybe_unused]] const ServerCallContext  &context
+                                  ,[[maybe_unused]] const FlightDescriptor   &request
+                                  ,[[maybe_unused]] unique_ptr<SchemaResult> *schema) {
     return Status::NotImplemented("TODO");
   }
 
-  Status FaodelService::DoGet( const ServerCallContext      &context
-                              ,const Ticket                 &request
-                              ,unique_ptr<FlightDataStream> *writer) {
+  Status FaodelService::DoGet( [[maybe_unused]] const ServerCallContext      &context
+                              ,[[maybe_unused]] const Ticket                 &request
+                              ,[[maybe_unused]] unique_ptr<FlightDataStream> *writer) {
     return Status::NotImplemented("TODO");
   }
 
-  Status FaodelService::DoPut( const ServerCallContext          &context
-                              ,unique_ptr<FlightMessageReader>   reader
-                              ,unique_ptr<FlightMetadataWriter>  writer) {
+  Status FaodelService::DoPut( [[maybe_unused]] const ServerCallContext          &context
+                              ,[[maybe_unused]] unique_ptr<FlightMessageReader>   reader
+                              ,[[maybe_unused]] unique_ptr<FlightMetadataWriter>  writer) {
     return Status::NotImplemented("TODO");
   }
 
-  Status FaodelService::DoExchange( const ServerCallContext         &context
-                                   ,unique_ptr<FlightMessageReader>  reader
-                                   ,unique_ptr<FlightMessageWriter>  writer) {
+  Status FaodelService::DoExchange( [[maybe_unused]] const ServerCallContext         &context
+                                   ,[[maybe_unused]] unique_ptr<FlightMessageReader>  reader
+                                   ,[[maybe_unused]] unique_ptr<FlightMessageWriter>  writer) {
     return Status::NotImplemented("TODO");
   }
 
-  Status FaodelService::DoAction( const ServerCallContext  &context
-                                 ,const Action             &action
-                                 ,unique_ptr<ResultStream> *result) {
+  Status FaodelService::DoAction( [[maybe_unused]] const ServerCallContext  &context
+                                 ,                 const Action             &action
+                                 ,                 unique_ptr<ResultStream> *result) {
     if (action.type == "query") {
       return ActionQuery(context, action.body, result);
     }
@@ -114,15 +116,15 @@ namespace mohair::services {
     return ActionUnknown(context, action.type);
   }
 
-  Status FaodelService::ListActions( const ServerCallContext  &context
-                                    ,vector<ActionType>       *actions) {
+  Status FaodelService::ListActions( [[maybe_unused]] const ServerCallContext  &context
+                                    ,[[maybe_unused]] vector<ActionType>       *actions) {
     return Status::NotImplemented("TODO");
   }
 
 
-  Status FaodelService::ActionQuery( const ServerCallContext  &context
-                                    ,const shared_ptr<Buffer>  plan_msg
-                                    ,unique_ptr<ResultStream> *result) {
+  Status FaodelService::ActionQuery( [[maybe_unused]] const ServerCallContext  &context
+                                    ,                 const shared_ptr<Buffer>  plan_msg
+                                    ,[[maybe_unused]] unique_ptr<ResultStream> *result) {
     // TODO receive the plan then execute it with Faodel.
     // faodel_if.ExecuteEngineAcero(faodel_pool, <key>, plan_msg);
     string plan_data = plan_msg->ToString();
@@ -130,8 +132,8 @@ namespace mohair::services {
     return Status::NotImplemented("TODO: query service");
   }
 
-  Status FaodelService::ActionUnknown( const ServerCallContext &context
-                                      ,const string             action_type) {
+  Status FaodelService::ActionUnknown( [[maybe_unused]] const ServerCallContext &context
+                                      ,                 const string             action_type) {
     return Status::NotImplemented("Unknown action: [", action_type, "]");
   }
 
