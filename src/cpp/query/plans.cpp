@@ -90,6 +90,46 @@ namespace mohair {
 
 
   // >> Query plan traversal functions
+  unique_ptr<AppPlan>& FindLongPipelineLeaf(PlanVec &plans) {
+    int    longest_pipelen = 0;
+    size_t match_ndx       = 0;
+
+    for (size_t plan_ndx = 0; plan_ndx < plans.size(); ++plan_ndx) {
+      unique_ptr<AppPlan>& plan = plans[plan_ndx];
+      if (plan == nullptr) { continue; }
+
+      // track the index that matches our criteria
+      if (plan->attrs.pipe_len > longest_pipelen) {
+        match_ndx       = plan_ndx;
+        longest_pipelen = plan->attrs.pipe_len;
+      }
+    }
+
+    return plans[match_ndx];
+  }
+
+  unique_ptr<DecomposedPlan> SplitPlan(unique_ptr<AppPlan> &plan, DecomposeAlg method) {
+    switch (method) {
+      // LongPipelineLeaf is currently default algorithm
+      case LongPipelineLeaf:
+      default: {
+        // get a reference to the anchor operator
+        unique_ptr<AppPlan>& plan_splitop = FindLongPipelineLeaf(plan->bleaf_ops);
+
+        // return the DecomposedPlan
+        return std::make_unique<DecomposedPlan>(
+           std::move(plan), std::move(plan_splitop), plan_splitop->GetOpInputs()
+        );
+      }
+    }
+  }
+
+  // >> DecomposedPlan member functions
+  // TODO: do a bit of refactoring so that we can create a subplan message
+  unique_ptr<Plan> DecomposedPlan::MessageForSubPlan() {
+    auto sub_plan = std::make_unique<Plan>(query_plan->plan_op);
+  }
+
 
 } // namespace: mohair
 
