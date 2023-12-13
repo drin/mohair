@@ -113,6 +113,35 @@ namespace mohair {
   // Forward declare AppPlan (query plan with application-level intent)
   struct AppPlan;
 
+  /**
+   * A class that points to a super-plan, its sub-plans, and the anchor that represents
+   * the operator that is a parent of each sub-plan and a leaf in the super-plan.
+   */
+  struct DecomposedPlan {
+    // maybe these shouldn't be pointers, but we'll try it out for now
+    unique_ptr<AppPlan>   query_plan;
+    unique_ptr<AppPlan>   anchor_root;
+    std::vector<QueryOp*> anchor_subplans;
+
+    DecomposedPlan( unique_ptr<AppPlan>&& qplan
+                   ,unique_ptr<AppPlan>&& anchor
+                   ,std::vector<QueryOp*> subplan_roots)
+      :  query_plan(qplan)
+        ,anchor_root(anchor)
+        ,anchor_subplans(subplan_roots)
+      {}
+
+    unique_ptr<Plan> MessageForSubPlan();
+  };
+
+  enum DecomposeAlg {
+     LongPipelineLeaf // Leaf pipeline breaker with longest pipeline
+    ,LongPipelineHead // Internal pipeline breaker with longest pipeline
+    ,TallJoinLeaf     // Leaf join operation with tallest plan height
+    ,WideJoinHead     // Internal join operation with largest plan width
+  };
+
+
   // Declare a struct of various tree properties that an AppPlan will have
   struct PlanAttrs {
     int pipe_len;
@@ -128,15 +157,6 @@ namespace mohair {
     PlanAttrs(PlanAttrs &other)
       : PlanAttrs(other.pipe_len, other.plan_width, other.plan_height, other.break_height)
       {}
-
-    /*
-    PlanAttrs(PlanAttrs &other)
-      :  pipe_len    (other.pipe_len)
-        ,plan_width  (other.plan_width)
-        ,plan_height (other.plan_height)
-        ,break_height(other.break_height)
-      {}
-    */
 
     string ToString();
   };
@@ -230,13 +250,18 @@ namespace mohair {
   void PrintSubstraitPlan(Plan *plan_msg);
   void PrintSubstraitRel(Rel   *rel_msg);
 
+
   // >> Translation Functions
   unique_ptr<QueryOp>    MohairFrom(Rel *rel_msg);
   unique_ptr<QueryOp>    MohairPlanFrom(Plan *substrait_plan);
   unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<QueryOp> &mohair_op);
 
 
-  // >> Functions for query plan traversal
+  // >> Functions for query plan processing
+  unique_ptr<DecomposedPlan> SplitPlan(
+     unique_ptr<AppPlan> &plan
+    ,DecomposeAlg method = LongPipelineLeaf
+  );
 
 
 } // namespace: mohair
