@@ -34,13 +34,62 @@
 
 
 // ------------------------------
-// Type aliases
+// Type Aliases
 
 //  >> Substrait types
 using substrait::Plan;
 using substrait::PlanRel;
+using substrait::Rel;
+
+// >> Mohair types (substrait extension)
+using mohair::PlanAnchor;
+using mohair::ErrRel;
+
+//  >> Protobuf types
+using google::protobuf::TextFormat;
 
 
 // ------------------------------
-// Functions
+// Classes and structs
 
+namespace mohair {
+
+  struct PlanMessage {
+    virtual ~PlanMessage();
+
+    virtual PlanMessage(string&  msg);
+    virtual PlanMessage(fstream& msg);
+
+    virtual string Serialize();
+
+    // TODO
+    virtual unique_ptr<PlanMessage> MessageForSubPlan(DecomposedPlan* plansplit, int plan_ndx);
+  };
+
+
+  // >> Adapters for substrait
+  /**
+   * An adapter for sending plans as messages via substrait.
+   */
+  // TODO
+  struct SubstraitPlanMessage : PlanMessage {
+    unique_ptr<Plan> substrait_plan;
+    PlanRel*         root_relation;
+    int              root_relndx;
+
+    unique_ptr<PlanMessage> MessageForSubPlan();
+  };
+
+} // namespace: mohair
+
+
+namespace mohair {
+
+  // >> Reader Functions
+  unique_ptr<Plan> SubstraitPlanFromString(string &plan_msg);
+  unique_ptr<Plan> SubstraitPlanFromFile(fstream *plan_fstream);
+
+  void PrintSubstraitPlan(Plan *plan_msg);
+  void PrintSubstraitRel(Rel   *rel_msg);
+
+} // namespace: mohair
