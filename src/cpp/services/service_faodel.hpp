@@ -1,101 +1,115 @@
 // ------------------------------
 // License
-
-// Copyright 2023 National Technology & Engineering Solutions of Sandia, LLC
-// (NTESS). Under the terms of Contract DE-NA0003525 with NTESS, the U.S.
-// Government retains certain rights in this software.
+//
+// Copyright 2023 Aldrin Montana
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 
 // ------------------------------
 // Dependencies
 #pragma once
 
-// >> Internal libs
+// >> Configuration-based macros
+#include "../mohair-config.hpp"
 
-//    |> flight deps
-#include "flight_internal.hpp"
+// >> flight deps
+#include "service_mohair.hpp"
 
-//    |> integration with faodel and faodel-arrow
-#include "../engines/adapter_faodel.hpp"
+// >> integration with faodel and faodel-arrow
+#if USE_FAODEL
+  #include "../engines/adapter_faodel.hpp"
+#endif
 
-//    |> integration with mohair query processing
+// >> integration with mohair query processing
 #include "../mohair/plans.hpp"
-
-
-// ------------------------------
-// Functions
-
-namespace mohair::services {
-
-  // >> Convenience functions
-  Result<Location> default_location();
-  Status StartDefaultFaodelService();
-
-} // namespace: mohair::services
 
 
 // ------------------------------
 // Classes
 
-namespace mohair::services {
+#if USE_FAODEL
+  namespace mohair::services {
 
-  // >> Classes
-  struct FaodelService : public FlightServerBase {
-    mohair::adapters::Faodel faodel_if;
-    kelpie::Pool             faodel_pool;
+    struct FaodelService : public virtual MohairService {
+      mohair::adapters::Faodel faodel_if;
+      kelpie::Pool             faodel_pool;
 
-    //  >> FlightServerBase functions to override
+      Status Init(const FlightServerOptions &options) override;
 
-    Status           Init(const FlightServerOptions &options       );
+      Status ListFlights(
+         const ServerCallContext&   context
+        ,const Criteria*            criteria
+        ,unique_ptr<FlightListing>* listings
+      ) override;
 
-    Status    ListFlights( const ServerCallContext   &context
-                          ,const Criteria            *criteria
-                          ,unique_ptr<FlightListing> *listings     ) override;
+      Status GetFlightInfo(
+         const ServerCallContext& context
+        ,const FlightDescriptor&  request
+        ,unique_ptr<FlightInfo>*  info
+      ) override;
+   
+      Status GetSchema(
+         const ServerCallContext&  context
+        ,const FlightDescriptor&   request
+        ,unique_ptr<SchemaResult>* schema
+      ) override;
 
-    Status  GetFlightInfo( const ServerCallContext &context
-                          ,const FlightDescriptor  &request
-                          ,unique_ptr<FlightInfo>  *info           ) override;
+      Status DoGet(
+         const ServerCallContext&      context
+        ,const Ticket&                 request
+        ,unique_ptr<FlightDataStream>* stream
+      ) override;
 
-    // >= 13.0.0
-    /*
-    Status PollFlightInfo( const ServerCallContext &context
-                          ,const FlightDescriptor   &request
-                          ,unique_ptr<PollInfo>     *info          ) override;
-    */
- 
-    Status      GetSchema( const ServerCallContext  &context
-                          ,const FlightDescriptor   &request
-                          ,unique_ptr<SchemaResult> *schema        ) override;
+      Status DoPut(
+         const ServerCallContext&         context
+        ,unique_ptr<FlightMessageReader>  reader
+        ,unique_ptr<FlightMetadataWriter> writer
+      ) override;
 
-    Status          DoGet( const ServerCallContext         &context
-                          ,const Ticket                    &request
-                          ,unique_ptr<FlightDataStream>    *stream ) override;
+      Status DoExchange(
+         const ServerCallContext&        context
+        ,unique_ptr<FlightMessageReader> reader
+        ,unique_ptr<FlightMessageWriter> writer
+      ) override;
 
-    Status          DoPut( const ServerCallContext          &context
-                          ,unique_ptr<FlightMessageReader>   reader
-                          ,unique_ptr<FlightMetadataWriter>  writer) override;
+      Status DoAction(
+         const ServerCallContext&  context
+        ,const Action&             action
+        ,unique_ptr<ResultStream>* result
+      ) override;
 
-    Status     DoExchange( const ServerCallContext         &context
-                          ,unique_ptr<FlightMessageReader>  reader
-                          ,unique_ptr<FlightMessageWriter>  writer ) override;
+      Status ListActions(
+         const ServerCallContext& context
+        ,vector<ActionType>*      actions
+      ) override;
 
-    Status       DoAction( const ServerCallContext  &context
-                          ,const Action             &action
-                          ,unique_ptr<ResultStream> *result        ) override;
+      Status ActionQuery(
+         const ServerCallContext&  context
+        ,const shared_ptr<Buffer>  plan_msg
+        ,unique_ptr<ResultStream>* result
+      ) override;
 
-    Status    ListActions( const ServerCallContext  &context
-                          ,vector<ActionType>       *actions       ) override;
+      Status ActionUnknown(
+         const ServerCallContext& context
+        ,const string             action_type
+      ) override;
 
-    Status    ActionQuery( const ServerCallContext  &context
-                          ,const shared_ptr<Buffer>  plan_msg
-                          ,unique_ptr<ResultStream> *result        );
+      //  >> Convenience functions
+      FlightInfo MakeFlightInfo();
 
-    Status  ActionUnknown( const ServerCallContext &context
-                          ,const string action_type                );
+    };
 
-    //  >> Convenience functions
-    FlightInfo MakeFlightInfo();
+  } // namespace: mohair::services
 
-  };
-
-} // namespace: mohair::services
+#endif // essentially an include guard that uses USE_FAODEL

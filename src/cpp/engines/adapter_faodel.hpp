@@ -12,13 +12,12 @@
 
 //  >> Internal libs
 #include "../mohair/mohair.hpp"
+
 #include "adapter_acero.hpp"
+#include "adapter_mpi.hpp"
 
 //  >> Standard libs
 #include <map>
-
-//  >> Third-party libs
-#include <mpi.h>
 
 //    |> Core faodel and MPI interface
 #include "faodel/faodel-services/MPISyncStart.hh"

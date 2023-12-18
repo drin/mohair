@@ -18,20 +18,12 @@
 
 // ------------------------------
 // Dependencies
+#pragma once
 
-#include "flight_internal.hpp"
+// >> Configuration-based macros
+#include "../mohair-config.hpp"
 
-
-// ------------------------------
-// Functions
-
-namespace mohair::services {
-
-  // ------------------------------
-  // Convenience Methods for Arrow Flight
-  Result<Location> default_location() {
-    ARROW_ASSIGN_OR_RAISE(Location default_loc, Location::ForGrpcTcp("0.0.0.0", 0));
-    return default_loc;
-  }
-
-} // namespace: mohair::services
+//  >> Third-party libs
+#if USE_MPI
+  #include <mpi.h>
+#endif
