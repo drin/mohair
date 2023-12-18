@@ -1,0 +1,23 @@
+option('faodel'
+  ,type       : 'feature'
+  ,value      : 'disabled'
+  ,description: 'If enabled, adapters for faodel are built'
+)
+
+option('mpi'
+  ,type       : 'feature'
+  ,value      : 'disabled'
+  ,description: 'If enabled, adapters for MPI are built'
+)
+
+option('tiledb'
+  ,type       : 'feature'
+  ,value      : 'disabled'
+  ,description: 'If enabled, adapters for TileDB are built'
+)
+
+option('duckdb'
+  ,type       : 'feature'
+  ,value      : 'disabled'
+  ,description: 'If enabled, adapters for DuckDB are built'
+)

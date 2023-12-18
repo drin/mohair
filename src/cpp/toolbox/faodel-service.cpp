@@ -9,13 +9,12 @@
 // ------------------------------
 // Dependencies
 
-#include "../services/service_faodel.hpp"
+// >> Configuration-based macros
+#include "../mohair-config.hpp"
 
-#include <google/protobuf/text_format.h>
-
-
-// >> Aliases
-using google::protobuf::TextFormat;
+#if USE_FAODEL
+  #include "../services/service_faodel.hpp"
+#endif
 
 
 // ------------------------------
@@ -33,18 +32,24 @@ int ValidateArgs(int argc, char **argv) {
 // ------------------------------
 // Main Logic
 int main(int argc, char **argv) {
-  int validate_status = ValidateArgs(argc, argv);
-  if (validate_status != 0) {
-    std::cerr << "Failed to validate input command-line args" << std::endl;
-    return validate_status;
-  }
+  #if USE_FAODEL
+    int validate_status = ValidateArgs(argc, argv);
+    if (validate_status != 0) {
+      std::cerr << "Failed to validate input command-line args" << std::endl;
+      return validate_status;
+    }
 
-  // Start the flight service
-  auto status_service = mohair::services::StartDefaultFaodelService();
-  if (not status_service.ok()) {
-    mohair::PrintError("Error running faodel service", status_service);
-    return 2;
-  }
+    // Start the flight service
+    auto status_service = mohair::services::StartDefaultFaodelService();
+    if (not status_service.ok()) {
+      mohair::PrintError("Error running faodel service", status_service);
+      return 2;
+    }
+
+  #else
+    std::cerr << "Faodel feature is disabled." << std::endl;
+
+  #endif
 
   return 0;
 }

@@ -1,0 +1,6 @@
+#pragma once
+
+#define USE_MPI    @MPI@
+#define USE_FAODEL @FAODEL@
+#define USE_TILEDB @TILEDB@
+#define USE_DUCKDB @DUCKDB@

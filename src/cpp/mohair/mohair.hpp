@@ -20,6 +20,9 @@
 // Dependencies
 #pragma once
 
+// >> Configuration-based macros
+#include "../mohair-config.hpp"
+
 // >> Standard libs
 #include <functional>
 #include <memory>

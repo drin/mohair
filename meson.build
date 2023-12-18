@@ -56,28 +56,52 @@ if   buildsys_type == 'macosx'
   dep_flight = cpp_compiler.find_library('arrow-flight'   , dirs: prefix_local, static: false)
 
 elif buildsys_type == 'archlinux'
-
   #   |> Arrow
   dep_arrow  = dependency('arrow')
   dep_acero  = dependency('arrow-substrait') # this is Acero + substrait
   dep_flight = dependency('arrow-flight')
+
 endif
 
 
-# >> Individual dependencies
-
-#   |> Faodel
-dep_ompi   = dependency('ompi-cxx')
-dep_faodel = dependency('faodel')
-# dep_fado   = dependency('faodel-arrow')
-
+# >> Required dependencies
 #   |> Protobuf (for substrait)
 dep_proto   = dependency('protobuf')
 dep_absllog = dependency('absl_log')
 
+
+# >> Optional dependencies
+#   |> Faodel
+dep_ompi   = dependency('ompi-cxx', required: get_option('mpi'))
+dep_faodel = dependency('faodel'  , required: get_option('faodel'))
+
+
+# >> Make configuration data available to source files
+mohair_cfgdata = configuration_data({
+   'MPI'   : dep_ompi.found()
+  ,'FAODEL': dep_faodel.found()
+  ,'TILEDB': dep_tiledb.found()
+  ,'DUCKDB': dep_duckdb.found()
+})
+
+mohair_cfgfile = configuration_file(
+   input : 'mohair-config.hpp.in'
+  ,output: 'mohair-config.hpp'
+)
+
+
 # >> Grouped dependencies
-dep_service   = [dep_acero, dep_flight, dep_ompi, dep_faodel, dep_proto, dep_absllog]
-dep_queryplan = [dep_acero, dep_proto, dep_absllog]
+dep_service = [dep_acero, dep_flight, dep_ompi, dep_faodel, dep_proto, dep_absllog]
+dep_query   = [dep_acero, dep_proto, dep_absllog]
+
+#   |> add optional dependencies
+if dep_faodel.found()
+  dep_service += [dep_ompi, dep_faodel]
+
+elif dep_ompi.found()
+  dep_service += [dep_ompi]
+
+endif
 
 
 # ------------------------------
@@ -121,19 +145,21 @@ substrait_hdrlist = [
 ]
 
 # >> For decomposable queries
-queryplan_hdrlist = [
+query_hdrlist = [
    cpp_coredir / 'mohair.hpp'
   ,cpp_coredir / 'plans.hpp'
   ,cpp_coredir / 'operators.hpp'
+  ,cpp_coredir / 'messages.hpp'
 ]
 
 # >> For flight services
 services_hdrlist = [
    cpp_coredir    / 'mohair.hpp'
   ,cpp_coredir    / 'plans.hpp'
+  ,cpp_coredir    / 'messages.hpp'
   ,cpp_enginedir  / 'adapter_acero.hpp'
-  ,cpp_servicedir / 'flight_internal.hpp'
   ,cpp_enginedir  / 'adapter_faodel.hpp'
+  ,cpp_servicedir / 'service_mohair.hpp'
   ,cpp_servicedir / 'service_faodel.hpp'
 ]
 
@@ -156,10 +182,11 @@ substrait_srclist = [
 ]
 
 # >> For decomposable queries
-queryplan_srclist = [
+query_srclist = [
    cpp_coredir / 'util.cpp'
   ,cpp_coredir / 'plans.cpp'
   ,cpp_coredir / 'operators.cpp'
+  ,cpp_coredir / 'messages.cpp'
 ]
 
 # >> For flight services
@@ -168,9 +195,7 @@ services_srclist = [
   ,cpp_coredir    / 'plans.cpp'
   ,cpp_coredir    / 'operators.cpp'
   ,cpp_enginedir  / 'execution.cpp'
-  ,cpp_enginedir  / 'faodel.cpp'
-  ,cpp_servicedir / 'flight_internal.cpp'
-  ,cpp_servicedir / 'service_faodel.cpp'
+  ,cpp_servicedir / 'service_mohair.cpp'
 ]
 
 
@@ -178,76 +203,84 @@ services_srclist = [
 # Composed header and source lists (organized by library/binary)
 
 # >> Library for mohair query processing
-lib_mohairquery_hdrlist = (substrait_hdrlist + queryplan_hdrlist)
-lib_mohairquery_srclist = (substrait_srclist + queryplan_srclist)
+lib_mohair_srclist = (substrait_srclist + query_srclist)
 
 # >> Binary for mohair flight services
-bin_mohairservice_hdrlist = (substrait_hdrlist + services_hdrlist)
-bin_mohairservice_srclist = (substrait_srclist + services_srclist)
+mohair_srv_srclist = (substrait_srclist + services_srclist)
 
 
 # ------------------------------
 # Library definitions
 
-lib_mohairquery = library('mohair_query'
-  ,lib_mohairquery_srclist
-  ,dependencies: dep_queryplan
+lib_mohair = library('mohair'
+  ,lib_mohair_srclist
+  ,dependencies: dep_query
   ,install     : true
 )
 
-module_pkgcfg.generate(lib_mohairquery)
+module_pkgcfg.generate(lib_mohair)
 
 # ------------------------------
 # Installation
 
-install_headers(queryplan_hdrlist, subdir: 'mohair')
+install_headers(query_hdrlist, subdir: 'mohair')
 
 
 # ------------------------------
 # Binaries
 
-# >> Executable for simple read-arrow binary (prints a table from an Arrow file)
+# >> Executables we always create
+
+#   |> simple reader for Arrow files
+bin_readarrow_srclist = [
+   cpp_tooldir / 'read-arrow.cpp'
+  ,cpp_coredir / 'util.cpp'
+]
+
 bin_readarrow = executable('read-arrow'
-  ,[
-      cpp_tooldir / 'read-arrow.cpp'
-     ,cpp_coredir / 'util.cpp'
-   ]
+  ,bin_readarrow_srclist
   ,dependencies: dep_arrow
   ,install     : false
 )
 
-# >> Executable for mohair-query binary (does query processing)
+#   |> minimal query processor
 bin_mohairquery_srclist = (
     [ cpp_tooldir / 'mohair.cpp' ]
-  + lib_mohairquery_srclist
+  + lib_mohair_srclist
 )
 
 bin_mohairquery = executable('mohair'
   ,bin_mohairquery_srclist
-  ,dependencies: dep_queryplan
+  ,dependencies: dep_query
   ,install     : false
 )
 
-# >> Executable for faodel flight service
-bin_faodelservice_srclist = (
-    [ cpp_tooldir / 'faodel-service.cpp' ]
-  + bin_mohairservice_srclist
-)
-
-bin_faodelservice = executable('faodel-service'
-  ,bin_faodelservice_srclist
+#   |> minimal client for mohair services
+mohair_srv_srcmain = [ cpp_tooldir / 'mohair-client.cpp' ]
+bin_faodelclient   = executable('mohair-client'
+  ,(mohair_srv_srcmain + mohair_srv_srclist)
   ,dependencies: dep_service
   ,install     : false
 )
 
-# >> Executable for faodel flight client
-bin_faodelclient_srclist = (
-    [ cpp_tooldir / 'faodel-client.cpp' ]
-  + bin_mohairservice_srclist
-)
 
-bin_faodelclient = executable('faodel-client'
-  ,bin_faodelclient_srclist
-  ,dependencies: dep_service
-  ,install     : false
-)
+# ------------------------------
+# Feature-based executables
+
+# >> Faodel mohair service
+if dep_faodel.found()
+
+  # main source file and faodel-specific source files
+  faodel_srv_srclist = [
+     cpp_tooldir    / 'faodel-service.cpp'
+    ,cpp_enginedir  / 'faodel.cpp'
+    ,cpp_servicedir / 'service_faodel.cpp'
+  ]
+
+  bin_srv_faodel = executable('faodel-service'
+    ,(faodel_srv_srclist + mohair_srv_srclist)
+    ,dependencies: dep_service
+    ,install     : false
+  )
+
+endif

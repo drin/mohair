@@ -9,11 +9,10 @@
 // ------------------------------
 // Dependencies
 
+// >> Configuration-based macros
+#include "../mohair-config.hpp"
+
 #include "service_faodel.hpp"
-
-
-// ------------------------------
-// Type Aliases
 
 
 // ------------------------------
@@ -21,29 +20,9 @@
 
 namespace mohair::services {
 
-
   Status StartDefaultFaodelService() {
-    // grab a default location
-    ARROW_ASSIGN_OR_RAISE(auto service_loc, default_location());
-
-    FlightServerOptions options { service_loc };
     unique_ptr<FlightServerBase> faodel_service = std::make_unique<FaodelService>();
-
-    // initialize the service
-    std::cout << "Initializing service " << std::endl;
-    ARROW_RETURN_NOT_OK(faodel_service->Init(options));
-
-    // tell it to shutdown when SIGTERM is received
-    ARROW_RETURN_NOT_OK(faodel_service->SetShutdownOnSignals({SIGTERM}));
-
-    std::cout << "Starting service [localhost:"
-              << faodel_service->port() << "]"
-              << std::endl
-    ;
-
-    ARROW_RETURN_NOT_OK(faodel_service->Serve());
-
-    return Status::OK();
+    return StartService(faodel_service);
   }
 
 } // namespace: mohair::services
