@@ -33,8 +33,21 @@
 #include <google/protobuf/text_format.h>
 
 
-// >> Aliases
-using std::string;
+// ------------------------------
+// Type Aliases
+
+//  >> Substrait types
+using substrait::Plan;
+using substrait::PlanRel;
+using substrait::Rel;
+
+// >> Mohair types (substrait extension)
+using mohair::PlanAnchor;
+using mohair::ErrRel;
+
+//  >> Protobuf types
+using google::protobuf::TextFormat;
+
 
 // ------------------------------
 // Classes and structs
@@ -63,6 +76,20 @@ namespace mohair {
     unique_ptr<Plan> substrait_plan;
     PlanRel*         root_relation;
     int              root_relndx;
+
+    unique_ptr<PlanMessage> MessageForSubPlan();
   };
 
-} // Namespace: mohair
+} // namespace: mohair
+
+
+namespace mohair {
+
+  // >> Reader Functions
+  unique_ptr<Plan> SubstraitPlanFromString(string &plan_msg);
+  unique_ptr<Plan> SubstraitPlanFromFile(fstream *plan_fstream);
+
+  void PrintSubstraitPlan(Plan *plan_msg);
+  void PrintSubstraitRel(Rel   *rel_msg);
+
+} // namespace: mohair

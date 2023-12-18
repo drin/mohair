@@ -22,6 +22,7 @@
 
 //  >> Internal libs
 #include "mohair.hpp"
+#include "messaging.hpp"
 
 //    |> generated protobuf code
 #include "substrait/algebra.pb.h"
@@ -36,25 +37,14 @@
 // ------------------------------
 // Type aliases
 
-//  >> Substrait types
+// >> Substrait types
 using substrait::Plan;
-using substrait::PlanRel;
 using substrait::Rel;
 
-using mohair::PlanAnchor;
-using mohair::ErrRel;
-
-//  >> Protobuf types
-using google::protobuf::TextFormat;
-
 // ------------------------------
-// Classes and Functions
+// Base classes for query operators
 
-//  >> Classes and Methods
 namespace mohair {
-
-  // ------------------------------
-  // Base classes for operators
 
   // Top-most base class
   struct QueryOp {
@@ -69,7 +59,7 @@ namespace mohair {
     virtual const string           ToString()    { return table_name;       }
     virtual const string           ViewStr()     { return this->ToString(); }
     virtual bool                   IsBreaker()   { return false;            }
-    virtual std::vector<QueryOp *> GetOpInputs() { return {};               }
+    virtual vector<QueryOp *>      GetOpInputs() { return {};               }
     virtual unique_ptr<PlanAnchor> plan_anchor() { return nullptr;          }
   };
 
@@ -88,16 +78,16 @@ namespace mohair {
     bool         IsBreaker() override { return true; }
   };
 
+} // namespace: mohair
 
-  // ------------------------------
-  // Base classes for query plans
+
+// ------------------------------
+// Base classes for query planning and processing
+
+namespace mohair {
 
   /**
-   * QueryPlan is a simple wrapper around a QueryOp that is the root operator of a plan.
-   *
-   * `plan_root` is a non-owning pointer (for now) and QueryPlan represents a read-only
-   * view onto operators of a substrait plan with various tree properties that we're
-   * interested in.
+   * A simple class, representing a query plan, that wraps a QueryOp (root operator).
    */
   struct QueryPlan {
     QueryOp *plan_op;
@@ -107,39 +97,10 @@ namespace mohair {
   };
 
 
-  // ------------------------------
   // Derived classes for query plans representing different levels of abstraction
 
-  // Forward declare AppPlan (query plan with application-level intent)
+  // Forward declarations
   struct AppPlan;
-
-  /**
-   * A class that points to a super-plan, its sub-plans, and the anchor that represents
-   * the operator that is a parent of each sub-plan and a leaf in the super-plan.
-   */
-  struct DecomposedPlan {
-    // maybe these shouldn't be pointers, but we'll try it out for now
-    unique_ptr<AppPlan>   query_plan;
-    unique_ptr<AppPlan>   anchor_root;
-    std::vector<QueryOp*> anchor_subplans;
-
-    DecomposedPlan( unique_ptr<AppPlan>&& qplan
-                   ,unique_ptr<AppPlan>&& anchor
-                   ,std::vector<QueryOp*> subplan_roots)
-      :  query_plan(qplan)
-        ,anchor_root(anchor)
-        ,anchor_subplans(subplan_roots)
-      {}
-
-    unique_ptr<Plan> MessageForSubPlan();
-  };
-
-  enum DecomposeAlg {
-     LongPipelineLeaf // Leaf pipeline breaker with longest pipeline
-    ,LongPipelineHead // Internal pipeline breaker with longest pipeline
-    ,TallJoinLeaf     // Leaf join operation with tallest plan height
-    ,WideJoinHead     // Internal join operation with largest plan width
-  };
 
 
   // Declare a struct of various tree properties that an AppPlan will have
@@ -174,12 +135,12 @@ namespace mohair {
    */
   struct AppPlan : QueryPlan {
     // A set of attributes that a node in an AppPlan has
-    PlanAttrs           attrs;
-    std::vector<string> source_names;
+    PlanAttrs      attrs;
+    vector<string> source_names;
 
     // Indices into interesting operators in the AppPlan
-    std::vector<unique_ptr<AppPlan>> break_ops;
-    std::vector<unique_ptr<AppPlan>> bleaf_ops;
+    vector<unique_ptr<AppPlan>> break_ops;
+    vector<unique_ptr<AppPlan>> bleaf_ops;
 
     AppPlan(QueryOp *op)                       : QueryPlan(op)                   {};
     AppPlan(QueryOp *op, PlanAttrs &new_attrs) : QueryPlan(op), attrs(new_attrs) {};
@@ -187,9 +148,10 @@ namespace mohair {
     string ViewPlan();
   };
 
+  using PlanVec = vector<unique_ptr<AppPlan>>;
+
   unique_ptr<AppPlan> FromPlanOp(QueryOp *op);
 
-  using PlanVec = std::vector<unique_ptr<AppPlan>>;
 
   /**
    * A query plan that may contain a mix of:
@@ -212,8 +174,8 @@ namespace mohair {
    * can access them from the kelpie pool.
    */
   struct SysPlan : QueryPlan {
-    unique_ptr<Plan>    substrait_plan;
-    std::vector<string> source_names;
+    unique_ptr<PlanMessage> substrait_plan;
+    vector<string>          source_names;
   };
 
   /**
@@ -232,30 +194,55 @@ namespace mohair {
    * limit, an EnginePlan is the exact physical execution plan that a particular query
    * engine would produce and execute.
    */
-  struct EnginePlan : QueryPlan {
-    unique_ptr<Plan> substrait_plan;
-  };
+  struct EnginePlan : QueryPlan {};
 
 
 } // namespace: mohair
 
 
-//  >> Functions
+// ------------------------------
+// Classes for query processing
+
 namespace mohair {
 
-  // >> Reader Functions
-  unique_ptr<Plan> SubstraitPlanFromString(string &plan_msg);
-  unique_ptr<Plan> SubstraitPlanFromFile(fstream *plan_fstream);
+  /**
+   * A class that points to a super-plan, its sub-plans, and the anchor that represents
+   * the operator that is a parent of each sub-plan and a leaf in the super-plan.
+   */
+  struct DecomposedPlan {
+    // maybe these shouldn't be pointers, but we'll try it out for now
+    unique_ptr<AppPlan>   query_plan;
+    unique_ptr<AppPlan>   anchor_root;
+    std::vector<QueryOp*> anchor_subplans;
 
-  void PrintSubstraitPlan(Plan *plan_msg);
-  void PrintSubstraitRel(Rel   *rel_msg);
+    DecomposedPlan( unique_ptr<AppPlan>&& qplan
+                   ,unique_ptr<AppPlan>&& anchor
+                   ,std::vector<QueryOp*> subplan_roots)
+      :  query_plan(qplan)
+        ,anchor_root(anchor)
+        ,anchor_subplans(subplan_roots)
+      {}
+  };
 
+  enum DecomposeAlg {
+     LongPipelineLeaf // Leaf pipeline breaker with longest pipeline
+    ,LongPipelineHead // Internal pipeline breaker with longest pipeline
+    ,TallJoinLeaf     // Leaf join operation with tallest plan height
+    ,WideJoinHead     // Internal join operation with largest plan width
+  };
+
+} // namespace: mohair
+
+
+// ------------------------------
+// Static functions that provide convenient interfaces
+
+namespace mohair {
 
   // >> Translation Functions
   unique_ptr<QueryOp>    MohairFrom(Rel *rel_msg);
   unique_ptr<QueryOp>    MohairPlanFrom(Plan *substrait_plan);
   unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<QueryOp> &mohair_op);
-
 
   // >> Functions for query plan processing
   unique_ptr<DecomposedPlan> SplitPlan(
