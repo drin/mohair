@@ -57,8 +57,8 @@ logger = CreateMohairLogger(__name__)
 # ------------------------------
 # Functions
 
-def ViewQueryPlan(mohair_plan: MohairPlan) -> str:
-    return PlanViewer.View(mohair_plan)
+def ViewQueryPlan(mohair_plan: MohairPlan, indent='') -> str:
+    return PlanViewer.View(mohair_plan, indent)
 
 
 def ViewPlanOp(mohair_op: MohairOp, indent='') -> str:

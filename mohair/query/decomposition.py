@@ -106,3 +106,23 @@ class PlanSplitter:
         )
 
         return longest_chain
+
+
+class PlanMerger:
+    """
+    Methods for merging a super plan and a sub plan; coalesced as a visitor class. Note
+    that a sub plan is the same as a pushback plan in structure and representation; they
+    differ only in their place in the workflow of a computaitonal storage system.
+    """
+
+    @classmethod
+    def MergePlans(cls, super_plan: DecomposedPlan, sub_plan: MohairOp) -> MohairPlan:
+        """
+        A function to compose the parts of a `DecomposedPlan` into a single `MohairPlan`.
+        There is only one way to merge the SuperPlan and SubPlan, and that's to make the
+        root of the SubPlan an input to the SuperPlan. There should be a single,
+        overlapping operator that marks where the merge should take place.
+        """
+
+        if super_plan.anchor_root == sub_plan:
+            pass
