@@ -88,7 +88,7 @@ namespace mohair {
     using InputsType = tuple<unique_ptr<QueryOp>>;
 
     ProjectRel *plan_op;
-    InputsType  op_inputs;
+    unique_ptr<QueryOp>[1] op_inputs;
 
     OpProj(ProjectRel *op, Rel *rel, string &tname)
       : PipelineOp(rel, tname), plan_op(op) {}
