@@ -20,9 +20,6 @@
 // Dependencies
 #pragma once
 
-// >> Configuration-based macros
-#include "../mohair-config.hpp"
-
 // >> flight deps
 #include "service_mohair.hpp"
 
@@ -30,9 +27,6 @@
 #if USE_FAODEL
   #include "../engines/adapter_faodel.hpp"
 #endif
-
-// >> integration with mohair query processing
-#include "../mohair/plans.hpp"
 
 
 // ------------------------------

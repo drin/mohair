@@ -10,9 +10,6 @@
 // Dependencies
 #pragma once
 
-//  >> Internal libs
-#include "../mohair/mohair.hpp"
-
 #include "adapter_acero.hpp"
 #include "adapter_mpi.hpp"
 

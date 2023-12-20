@@ -10,6 +10,29 @@ project('mohair-faodel'
 
 
 # ------------------------------
+# Build variables (convenience)
+
+# base directory
+cpp_srcdir    = 'src' / 'cpp'
+
+# dir for core mohair sources
+cpp_querydir  = cpp_srcdir / 'query'
+
+# dir for generated protobuf code
+cpp_proto_substrait = cpp_srcdir / 'query' / 'substrait'
+cpp_proto_mohair    = cpp_srcdir / 'query' / 'mohair'
+
+# dir for adapters (execution engines)
+cpp_enginedir = cpp_srcdir / 'engines'
+
+# dir for flight services
+cpp_servicedir = cpp_srcdir / 'services'
+
+# dir for binary sources (1-1 with binaries)
+cpp_tooldir   = cpp_srcdir / 'toolbox'
+
+
+# ------------------------------
 # Meson dependencies (modules)
 
 # use pkg-config to generate library build info
@@ -46,14 +69,21 @@ endif
 # Library dependencies
 
 # >> System-dependent dependencies
+
+# Include directory for arrow headers
+arrow_incdir = '' 
+
 if   buildsys_type == 'macosx'
   cpp_compiler = meson.get_compiler('cpp')
-  prefix_local = '/usr' / 'local' / 'arrow-dev' / 'lib'
+
+  arrow_prefix = '/usr' / 'local' / 'apache-arrow-14.0.2'
+  arrow_libdir = arrow_prefix / 'lib'
+  arrow_incdir = arrow_prefix / 'include'
 
   #   |> Arrow
-  dep_arrow  = cpp_compiler.find_library('arrow'          , dirs: prefix_local, static: false)
-  dep_acero  = cpp_compiler.find_library('arrow-substrait', dirs: prefix_local, static: false)
-  dep_flight = cpp_compiler.find_library('arrow-flight'   , dirs: prefix_local, static: false)
+  dep_arrow  = cpp_compiler.find_library('arrow'          , dirs: arrow_libdir, static: false)
+  dep_acero  = cpp_compiler.find_library('arrow_substrait', dirs: arrow_libdir, static: false)
+  dep_flight = cpp_compiler.find_library('arrow_flight'   , dirs: arrow_libdir, static: false)
 
 elif buildsys_type == 'archlinux'
   #   |> Arrow
@@ -74,6 +104,8 @@ dep_absllog = dependency('absl_log')
 #   |> Faodel
 dep_ompi   = dependency('ompi-cxx', required: get_option('mpi'))
 dep_faodel = dependency('faodel'  , required: get_option('faodel'))
+dep_tiledb = dependency('tiledb'  , required: get_option('tiledb'))
+dep_duckdb = dependency('duckdb'  , required: get_option('duckdb'))
 
 
 # >> Make configuration data available to source files
@@ -84,9 +116,10 @@ mohair_cfgdata = configuration_data({
   ,'DUCKDB': dep_duckdb.found()
 })
 
-mohair_cfgfile = configuration_file(
-   input : 'mohair-config.hpp.in'
-  ,output: 'mohair-config.hpp'
+mohair_cfgfile = configure_file(
+   input        : cpp_srcdir / 'mohair-config.hpp.in'
+  ,output       : 'mohair-config.hpp'
+  ,configuration: mohair_cfgdata
 )
 
 
@@ -103,28 +136,13 @@ elif dep_ompi.found()
 
 endif
 
+if dep_tiledb.found()
+  dep_service += [dep_tiledb]
+endif
 
-# ------------------------------
-# Build variables (convenience)
-
-# base directory
-cpp_srcdir    = 'src' / 'cpp'
-
-# dir for core mohair sources
-cpp_coredir   = cpp_srcdir / 'mohair'
-
-# dir for generated protobuf code
-cpp_proto_substrait = cpp_srcdir / 'mohair' / 'substrait'
-cpp_proto_mohair    = cpp_srcdir / 'mohair' / 'mohair'
-
-# dir for adapters (execution engines)
-cpp_enginedir = cpp_srcdir / 'engines'
-
-# dir for flight services
-cpp_servicedir = cpp_srcdir / 'services'
-
-# dir for binary sources (1-1 with binaries)
-cpp_tooldir   = cpp_srcdir / 'toolbox'
+if dep_duckdb.found()
+  dep_service += [dep_duckdb]
+endif
 
 
 # ------------------------------
@@ -146,17 +164,17 @@ substrait_hdrlist = [
 
 # >> For decomposable queries
 query_hdrlist = [
-   cpp_coredir / 'mohair.hpp'
-  ,cpp_coredir / 'plans.hpp'
-  ,cpp_coredir / 'operators.hpp'
-  ,cpp_coredir / 'messages.hpp'
+   cpp_srcdir   / 'mohair.hpp'
+  ,cpp_querydir / 'plans.hpp'
+  ,cpp_querydir / 'operators.hpp'
+  ,cpp_querydir / 'messages.hpp'
 ]
 
 # >> For flight services
 services_hdrlist = [
-   cpp_coredir    / 'mohair.hpp'
-  ,cpp_coredir    / 'plans.hpp'
-  ,cpp_coredir    / 'messages.hpp'
+   cpp_srcdir     / 'mohair.hpp'
+  ,cpp_querydir   / 'plans.hpp'
+  ,cpp_querydir   / 'messages.hpp'
   ,cpp_enginedir  / 'adapter_acero.hpp'
   ,cpp_enginedir  / 'adapter_faodel.hpp'
   ,cpp_servicedir / 'service_mohair.hpp'
@@ -183,17 +201,17 @@ substrait_srclist = [
 
 # >> For decomposable queries
 query_srclist = [
-   cpp_coredir / 'util.cpp'
-  ,cpp_coredir / 'plans.cpp'
-  ,cpp_coredir / 'operators.cpp'
-  ,cpp_coredir / 'messages.cpp'
+   cpp_srcdir   / 'util.cpp'
+  ,cpp_querydir / 'plans.cpp'
+  ,cpp_querydir / 'operators.cpp'
+  # ,cpp_querydir / 'messages.cpp'
 ]
 
 # >> For flight services
 services_srclist = [
-   cpp_coredir    / 'util.cpp'
-  ,cpp_coredir    / 'plans.cpp'
-  ,cpp_coredir    / 'operators.cpp'
+   cpp_srcdir     / 'util.cpp'
+  ,cpp_querydir   / 'plans.cpp'
+  ,cpp_querydir   / 'operators.cpp'
   ,cpp_enginedir  / 'execution.cpp'
   ,cpp_servicedir / 'service_mohair.cpp'
 ]
@@ -214,8 +232,9 @@ mohair_srv_srclist = (substrait_srclist + services_srclist)
 
 lib_mohair = library('mohair'
   ,lib_mohair_srclist
-  ,dependencies: dep_query
-  ,install     : true
+  ,dependencies       : dep_query
+  ,include_directories: arrow_incdir
+  ,install            : true
 )
 
 module_pkgcfg.generate(lib_mohair)
@@ -233,14 +252,15 @@ install_headers(query_hdrlist, subdir: 'mohair')
 
 #   |> simple reader for Arrow files
 bin_readarrow_srclist = [
-   cpp_tooldir / 'read-arrow.cpp'
-  ,cpp_coredir / 'util.cpp'
+   cpp_tooldir  / 'read-arrow.cpp'
+  ,cpp_srcdir   / 'util.cpp'
 ]
 
 bin_readarrow = executable('read-arrow'
   ,bin_readarrow_srclist
-  ,dependencies: dep_arrow
-  ,install     : false
+  ,dependencies       : dep_arrow
+  ,include_directories: arrow_incdir
+  ,install            : false
 )
 
 #   |> minimal query processor
@@ -251,16 +271,18 @@ bin_mohairquery_srclist = (
 
 bin_mohairquery = executable('mohair'
   ,bin_mohairquery_srclist
-  ,dependencies: dep_query
-  ,install     : false
+  ,dependencies       : dep_query
+  ,include_directories: arrow_incdir
+  ,install            : false
 )
 
 #   |> minimal client for mohair services
 mohair_srv_srcmain = [ cpp_tooldir / 'mohair-client.cpp' ]
-bin_faodelclient   = executable('mohair-client'
+bin_mohairclient   = executable('mohair-client'
   ,(mohair_srv_srcmain + mohair_srv_srclist)
-  ,dependencies: dep_service
-  ,install     : false
+  ,dependencies       : dep_service
+  ,include_directories: arrow_incdir
+  ,install            : false
 )
 
 
@@ -279,8 +301,9 @@ if dep_faodel.found()
 
   bin_srv_faodel = executable('faodel-service'
     ,(faodel_srv_srclist + mohair_srv_srclist)
-    ,dependencies: dep_service
-    ,install     : false
+    ,dependencies       : dep_service
+    ,include_directories: arrow_incdir
+    ,install            : false
   )
 
 endif

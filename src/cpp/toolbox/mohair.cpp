@@ -9,8 +9,8 @@
 // ------------------------------
 // Dependencies
 
-#include "../mohair/mohair.hpp"
-#include "../mohair/plans.hpp"
+#include "../mohair.hpp"
+#include "../query/plans.hpp"
 // #include "../engines/adapter_faodel.hpp"
 
 #include <google/protobuf/text_format.h>

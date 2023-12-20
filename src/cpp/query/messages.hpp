@@ -21,7 +21,7 @@
 #pragma once
 
 //  >> Internal libs
-#include "mohair.hpp"
+#include "../mohair.hpp"
 
 //    |> generated protobuf code
 #include "substrait/algebra.pb.h"
@@ -57,12 +57,12 @@ namespace mohair {
   struct PlanMessage {
     virtual ~PlanMessage();
 
-    virtual PlanMessage(string&  msg);
-    virtual PlanMessage(fstream& msg);
+    PlanMessage(string&  msg);
+    PlanMessage(fstream& msg);
 
     virtual string Serialize();
 
-    // TODO
+    // TODO: can't reference DecomposedPlan from here if this is a leaf compilation unit
     virtual unique_ptr<PlanMessage> MessageForSubPlan(DecomposedPlan* plansplit, int plan_ndx);
   };
 

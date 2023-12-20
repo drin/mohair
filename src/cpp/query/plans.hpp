@@ -21,8 +21,8 @@
 #pragma once
 
 //  >> Internal libs
-#include "mohair.hpp"
-#include "messaging.hpp"
+#include "../mohair.hpp"
+#include "messages.hpp"
 
 //    |> generated protobuf code
 #include "substrait/algebra.pb.h"

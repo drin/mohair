@@ -9,17 +9,14 @@
 // ------------------------------
 // Dependencies
 
-// >> Configuration-based macros
-#include "../mohair-config.hpp"
-
-#include "../services/service_faodel.hpp"
+#include "../services/service_mohair.hpp"
 
 
 // ------------------------------
 // Functions
 int ValidateArgs(int argc, char **argv) {
   if (argc != 2) {
-    std::cerr << "Usage: faodel-client <path-to-plan-file>" << std::endl;
+    std::cerr << "Usage: mohair-client <path-to-plan-file>" << std::endl;
     return 1;
   }
 

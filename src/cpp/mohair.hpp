@@ -21,7 +21,7 @@
 #pragma once
 
 // >> Configuration-based macros
-#include "../mohair-config.hpp"
+#include "mohair-config.hpp"
 
 // >> Standard libs
 #include <functional>
