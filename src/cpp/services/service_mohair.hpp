@@ -21,7 +21,10 @@
 #pragma once
 
 //  >> Common definitions for this library
-#include "../mohair/mohair.hpp"
+#include "../mohair.hpp"
+
+// >> integration with mohair query processing
+#include "../query/plans.hpp"
 
 //  >> Third-party libs
 //    |> Arrow flight

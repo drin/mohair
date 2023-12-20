@@ -21,7 +21,7 @@
 #pragma once
 
 //  >> Internal libs
-#include "../mohair/mohair.hpp"
+#include "../mohair.hpp"
 
 //  >> Acero deps
 #include <arrow/engine/api.h>

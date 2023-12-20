@@ -22,7 +22,7 @@
 // NOTE: include filesystem before trying to incude <arrow/filesystem/api.h>
 #include <filesystem>
 
-#include "../mohair/mohair.hpp"
+#include "../mohair.hpp"
 
 
 // >> Aliases
