@@ -2,7 +2,7 @@
 # Project Definition
 
 # >> configuration
-project('mohair-faodel'
+project('mohair'
   ,'cpp'
   ,version         : '0.1'
   ,default_options : ['warning_level=3','cpp_std=c++17']
@@ -71,19 +71,15 @@ endif
 # >> System-dependent dependencies
 
 # Include directory for arrow headers
-arrow_incdir = '' 
+arrow_incdir = ''
 
 if   buildsys_type == 'macosx'
-  cpp_compiler = meson.get_compiler('cpp')
-
-  arrow_prefix = '/usr' / 'local' / 'apache-arrow-14.0.2'
-  arrow_libdir = arrow_prefix / 'lib'
-  arrow_incdir = arrow_prefix / 'include'
+  arrow_incdir = '/opt/homebrew/include'
 
   #   |> Arrow
-  dep_arrow  = cpp_compiler.find_library('arrow'          , dirs: arrow_libdir, static: false)
-  dep_acero  = cpp_compiler.find_library('arrow_substrait', dirs: arrow_libdir, static: false)
-  dep_flight = cpp_compiler.find_library('arrow_flight'   , dirs: arrow_libdir, static: false)
+  dep_arrow  = dependency('arrow')
+  dep_acero  = dependency('arrow-substrait') # this is Acero + substrait
+  dep_flight = dependency('arrow-flight')
 
 elif buildsys_type == 'archlinux'
   #   |> Arrow
@@ -96,8 +92,9 @@ endif
 
 # >> Required dependencies
 #   |> Protobuf (for substrait)
+# dep_proto   = dependency('protobuf_simple')
 dep_proto   = dependency('protobuf')
-dep_absllog = dependency('absl_log')
+# dep_absllog = dependency('absl_log')
 
 
 # >> Optional dependencies
@@ -124,8 +121,8 @@ mohair_cfgfile = configure_file(
 
 
 # >> Grouped dependencies
-dep_service = [dep_acero, dep_flight, dep_ompi, dep_faodel, dep_proto, dep_absllog]
-dep_query   = [dep_acero, dep_proto, dep_absllog]
+dep_service = [dep_arrow, dep_acero, dep_flight, dep_ompi, dep_faodel, dep_proto]
+dep_query   = [dep_arrow, dep_acero, dep_proto]
 
 #   |> add optional dependencies
 if dep_faodel.found()
@@ -202,14 +199,15 @@ substrait_srclist = [
 # >> For decomposable queries
 query_srclist = [
    cpp_srcdir   / 'util.cpp'
+  ,cpp_querydir / 'messages.cpp'
   ,cpp_querydir / 'plans.cpp'
   ,cpp_querydir / 'operators.cpp'
-  # ,cpp_querydir / 'messages.cpp'
 ]
 
 # >> For flight services
 services_srclist = [
    cpp_srcdir     / 'util.cpp'
+  ,cpp_querydir   / 'messages.cpp'
   ,cpp_querydir   / 'plans.cpp'
   ,cpp_querydir   / 'operators.cpp'
   ,cpp_enginedir  / 'execution.cpp'
@@ -277,9 +275,12 @@ bin_mohairquery = executable('mohair'
 )
 
 #   |> minimal client for mohair services
-mohair_srv_srcmain = [ cpp_tooldir / 'mohair-client.cpp' ]
+bin_mohairclient_srclist = (
+    [ cpp_tooldir / 'mohair-client.cpp' ]
+  + mohair_srv_srclist
+)
 bin_mohairclient   = executable('mohair-client'
-  ,(mohair_srv_srcmain + mohair_srv_srclist)
+  ,bin_mohairclient_srclist
   ,dependencies       : dep_service
   ,include_directories: arrow_incdir
   ,install            : false
@@ -293,14 +294,17 @@ bin_mohairclient   = executable('mohair-client'
 if dep_faodel.found()
 
   # main source file and faodel-specific source files
-  faodel_srv_srclist = [
-     cpp_tooldir    / 'faodel-service.cpp'
-    ,cpp_enginedir  / 'faodel.cpp'
-    ,cpp_servicedir / 'service_faodel.cpp'
-  ]
+  faodel_srv_srclist = (
+      [
+         cpp_tooldir    / 'faodel-service.cpp'
+        ,cpp_enginedir  / 'faodel.cpp'
+        ,cpp_servicedir / 'service_faodel.cpp'
+      ]
+    + mohair_srv_srclist
+  )
 
   bin_srv_faodel = executable('faodel-service'
-    ,(faodel_srv_srclist + mohair_srv_srclist)
+    ,faodel_srv_srclist
     ,dependencies       : dep_service
     ,include_directories: arrow_incdir
     ,install            : false
