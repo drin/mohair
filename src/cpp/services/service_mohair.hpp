@@ -155,25 +155,6 @@ namespace mohair::services {
 
   // >> Convenience functions
   Status SetDefaultLocation(Location *srv_loc);
-
-  Status StartService(unique_ptr<FlightServerBase>& service) {
-    // Initialize a location
-    Location *srv_loc { nullptr };
-    ARROW_RETURN_NOT_OK(SetDefaultLocation(srv_loc));
-
-    // Create the service instance
-    FlightServerOptions options { *srv_loc };
-
-    std::cout << "Initializing service..." << std::endl;
-    ARROW_RETURN_NOT_OK(service->Init(options));
-
-    std::cout << "Setting shutdown signal handler..." << std::endl;
-    ARROW_RETURN_NOT_OK(service->SetShutdownOnSignals({SIGTERM}));
-
-    std::cout << "Starting service [localhost:" << service->port() << "]" << std::endl;
-    ARROW_RETURN_NOT_OK(service->Serve());
-
-    return Status::OK();
-  }
+  Status StartService(unique_ptr<FlightServerBase>& service);
 
 } // namespace: mohair::services
