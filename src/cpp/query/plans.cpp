@@ -27,73 +27,22 @@
 
 namespace mohair {
 
-  // >> Debug functions
-
-  template <typename MsgType>
-  void PrintProtoMessage(MsgType *msg) {
-    string proto_str;
-
-    auto success = TextFormat::PrintToString(*msg, &proto_str);
-    if (not success) {
-      std::cerr << "Unable to print message" << std::endl;
-      return;
-    }
-
-    std::cout << "Proto message:" << std::endl
-              << proto_str        << std::endl;
-  }
-
-  void  PrintSubstraitRel(Rel  *rel_msg ) { PrintProtoMessage<Rel>(rel_msg);   }
-  void PrintSubstraitPlan(Plan *plan_msg) { PrintProtoMessage<Plan>(plan_msg); }
-
-
-  // >> Conversion functions
-  unique_ptr<Plan> SubstraitPlanFromString(string &plan_msg) {
-    auto substrait_plan = std::make_unique<Plan>();
-
-    substrait_plan->ParseFromString(plan_msg);
-    // substrait_plan->PrintDebugString();
-
-    return substrait_plan;
-  }
-
-  unique_ptr<Plan> SubstraitPlanFromFile(fstream *plan_fstream) {
-    auto substrait_plan = std::make_unique<Plan>();
-    if (substrait_plan->ParseFromIstream(plan_fstream)) { return substrait_plan; }
-
-    std::cerr << "Failed to parse substrait plan" << std::endl;
-    return nullptr;
-  }
-
+  // >> Conversion functions (into/out of mohair representation)
   unique_ptr<QueryOp> MohairPlanFrom(Plan *substrait_plan) {
     // walk the top level relations until we find the root (should only be one)
-    int root_count = 0;
-    unique_ptr<QueryOp> mohair_root;
+    int root_ndx = FindPlanRoot(substrait_plan);
+    PlanRel plan_root { substrait_plan->relations(root_ndx) };
 
-    for (int ndx = 0; ndx < substrait_plan->relations_size(); ++ndx) {
-      PlanRel plan_root { substrait_plan->relations(ndx) };
-
-      // Don't break after we find a RootRel; validate there is only 1
-      if (plan_root.rel_type_case() == PlanRel::RelTypeCase::kRoot) {
-        ++root_count;
-        mohair_root = MohairFrom(plan_root.mutable_root()->mutable_input());
-      }
-    }
-
-    if (root_count != 1) {
-      std::cerr << "Found [" << std::to_string(root_count) << "] RootRels" << std::endl;
-      return nullptr;
-    }
-
-    return mohair_root;
+    return MohairFrom(plan_root.mutable_root()->mutable_input());
   }
 
 
   // >> Query plan traversal functions
-  unique_ptr<AppPlan>& FindLongPipelineLeaf(PlanVec &plans) {
+  size_t FindLongPipelineLeaf(PlanVec &plans) {
     int    longest_pipelen = 0;
     size_t match_ndx       = 0;
 
+    // An element in PlanVec may be null if we previously moved it
     for (size_t plan_ndx = 0; plan_ndx < plans.size(); ++plan_ndx) {
       unique_ptr<AppPlan>& plan = plans[plan_ndx];
       if (plan == nullptr) { continue; }
@@ -105,29 +54,23 @@ namespace mohair {
       }
     }
 
-    return plans[match_ndx];
+    return match_ndx;
   }
 
-  unique_ptr<DecomposedPlan> SplitPlan(unique_ptr<AppPlan> &plan, DecomposeAlg method) {
+  unique_ptr<PlanSplit> DecomposePlan(unique_ptr<AppPlan> plan, DecomposeAlg method) {
     switch (method) {
       // LongPipelineLeaf is currently default algorithm
       case LongPipelineLeaf:
       default: {
-        // get a reference to the anchor operator
-        unique_ptr<AppPlan>& plan_splitop = FindLongPipelineLeaf(plan->bleaf_ops);
+        // Find which operator to use as an anchor
+        size_t split_ndx = FindLongPipelineLeaf(plan->bleaf_ops);
 
-        // return the DecomposedPlan
-        return std::make_unique<DecomposedPlan>(
-           std::move(plan), std::move(plan_splitop), plan_splitop->GetOpInputs()
+        // return a PlanSplit (a cut in the provided query plan graph)
+        return std::make_unique<PlanSplit>(
+          std::move(plan), std::move(plan->bleaf_ops[split_ndx])
         );
       }
     }
-  }
-
-  // >> DecomposedPlan member functions
-  // TODO: do a bit of refactoring so that we can create a subplan message
-  unique_ptr<Plan> DecomposedPlan::MessageForSubPlan() {
-    auto sub_plan = std::make_unique<Plan>(query_plan->plan_op);
   }
 
 
@@ -177,7 +120,9 @@ namespace mohair {
    * then the corresponding PlanAttrs is moved into an AppPlan and inserted into either
    * break_ops or bleaf_ops.
    */
-  PlanAttrs WalkPlanForDiscovery(QueryOp* parent_op, PlanVec& break_ops, PlanVec& bleaf_ops) {
+  PlanAttrs WalkPlanForDiscovery( QueryOp* parent_op
+                                 ,PlanVec& break_ops
+                                 ,PlanVec& bleaf_ops) {
     // Base case: if there are no input ops, then return an empty PlanAttrs
     auto child_ops = parent_op->GetOpInputs();
     if (child_ops.size() == 0) { return PlanAttrs{}; }
@@ -208,15 +153,6 @@ namespace mohair {
     // Return attribute struct (with some value adjustments)
     if (parent_op->IsBreaker()) { ++b_height; }
     return PlanAttrs { p_len + 1, pl_width, pl_height + 1, b_height };
-
-    /*
-    PlanAttrs p_attrs;
-    p_attrs.pipe_len     = p_len     + 1;
-    p_attrs.plan_height  = pl_height + 1;
-    p_attrs.break_height = b_height;
-    if (pl_width > 0) { p_attrs.plan_width = pl_width; }
-    return p_attrs;
-    */
   }
 
   unique_ptr<AppPlan> FromPlanOp(QueryOp *op) {
@@ -257,6 +193,51 @@ namespace mohair {
     ViewOp(plan_op, &indent, &plan_str);
 
     return plan_str.str();
+  }
+
+} // namespace: mohair
+
+
+// >> Implementations for SubstraitMessage that require dependencies from plans.hpp
+namespace mohair {
+
+  /**
+   * A method that creates a substrait message for the pushdown plan given a PlanSplit.
+   *
+   * The overall process is to:
+   *  1. create a copy of the original substrait message
+   *  2. replace the original plan root with the new plan root (root of the sub-plan)
+   *  3. set an anchor, which is the parent operator of the new plan root in the
+   *     super-plan.
+   * 
+   * The order of 2 and 3 is unimportant (we already have references to both in
+   * PlanSplit). Step 2 is what will allow the next consumer to only see the sub-plan.
+   * Step 3 will allow us to make merging of the pushback plan trivial (we will be able to
+   * use operator equality).
+   */
+  unique_ptr<SubstraitMessage> SubstraitMessage::FromSplit(PlanSplit* split) {
+    // 1. Create a copy of the query plan
+    auto sub_plan = std::make_unique<Plan>(*(this->payload)); 
+
+    // grab a reference to the RelRoot
+    int     root_ndx = FindPlanRoot(sub_plan.get());
+    PlanRel root_rel { sub_plan->relations(root_ndx) };
+
+    // grab a reference to the new root (TODO: make a message for each sub-plan)
+    QueryOp* anchor_op    = split->anchor_op->plan_op;
+    QueryOp* subplan_root = anchor_op->GetOpInputs()[0];
+
+    // 2. Swap old root (RelRoot input) to the new root (from PlanSplit)
+    // TODO: need to modify names; also need to check mem mgmt
+    root_rel.mutable_root()->set_allocated_input(subplan_root->op_wrap);
+
+    // 3. Create a PlanAnchor and pack it into the Plan
+    unique_ptr<PlanAnchor> anchor_msg { anchor_op->plan_anchor() };
+    sub_plan->mutable_advanced_extensions()->mutable_optimization()->PackFrom(
+      *(anchor_msg.release())
+    );
+
+    return std::make_unique<SubstraitMessage>(std::move(sub_plan));
   }
 
 } // namespace: mohair

@@ -50,46 +50,58 @@ using google::protobuf::TextFormat;
 
 
 // ------------------------------
+// Functions
+
+namespace mohair {
+
+  // >> Debug functions
+  void PrintSubstraitPlan(Plan *plan_msg);
+  void PrintSubstraitRel(Rel   *rel_msg);
+
+  // >> Reader functions
+  unique_ptr<Plan> SubstraitPlanFromString(string &plan_msg);
+  unique_ptr<Plan> SubstraitPlanFromFile(fstream *plan_fstream);
+
+  // >> Helper functions
+  int FindPlanRoot(Plan *substrait_plan);
+
+} // namespace: mohair
+
+
+// ------------------------------
 // Classes and structs
 
 namespace mohair {
 
   struct PlanMessage {
-    virtual ~PlanMessage();
-
-    PlanMessage(string&  msg);
-    PlanMessage(fstream& msg);
-
-    virtual string Serialize();
-
-    // TODO: can't reference DecomposedPlan from here if this is a leaf compilation unit
-    virtual unique_ptr<PlanMessage> MessageForSubPlan(DecomposedPlan* plansplit, int plan_ndx);
-  };
-
-
-  // >> Adapters for substrait
-  /**
-   * An adapter for sending plans as messages via substrait.
-   */
-  // TODO
-  struct SubstraitPlanMessage : PlanMessage {
-    unique_ptr<Plan> substrait_plan;
+    unique_ptr<Plan> payload;
     PlanRel*         root_relation;
     int              root_relndx;
 
-    unique_ptr<PlanMessage> MessageForSubPlan();
+    virtual ~PlanMessage() = default;
+
+    PlanMessage(string&  msg): payload(SubstraitPlanFromString(msg)) {}
+    PlanMessage(fstream& msg): payload(SubstraitPlanFromFile(&msg))  {}
+
+    PlanMessage(unique_ptr<Plan>&& msg): payload(std::move(msg)) {}
   };
 
-} // namespace: mohair
 
+  // Forward declaration of PlanSplit for FromSplit prototype
+  struct PlanSplit;
 
-namespace mohair {
+  // >> Adapter for substrait messages
+  struct SubstraitMessage : PlanMessage {
 
-  // >> Reader Functions
-  unique_ptr<Plan> SubstraitPlanFromString(string &plan_msg);
-  unique_ptr<Plan> SubstraitPlanFromFile(fstream *plan_fstream);
+    virtual ~SubstraitMessage() = default;
 
-  void PrintSubstraitPlan(Plan *plan_msg);
-  void PrintSubstraitRel(Rel   *rel_msg);
+    SubstraitMessage(unique_ptr<Plan>&& msg)
+      : PlanMessage(std::move(msg)) {}
+
+    virtual string Serialize();
+
+    // function implementation in plans.cpp
+    virtual unique_ptr<SubstraitMessage> FromSplit(PlanSplit* split);
+  };
 
 } // namespace: mohair
