@@ -27,6 +27,7 @@
 //    |> generated protobuf code
 #include "substrait/algebra.pb.h"
 #include "substrait/plan.pb.h"
+#include "substrait/extensions/extensions.pb.h"
 
 #include "mohair/algebra.pb.h"
 
@@ -40,6 +41,9 @@
 // >> Substrait types
 using substrait::Plan;
 using substrait::Rel;
+
+// used but not named
+//using substrait::extensions::AdvancedExtension;
 
 // ------------------------------
 // Base classes for query operators
@@ -206,22 +210,20 @@ namespace mohair {
 namespace mohair {
 
   /**
-   * A class that points to a super-plan, its sub-plans, and the anchor that represents
-   * the operator that is a parent of each sub-plan and a leaf in the super-plan.
+   * A class that points to a super-plan and an anchor operator.
+   *
+   * The anchor is an operator whose input is on the cut of the plan. This means that the
+   * anchor is a leaf in the super-plan and a parent of each sub-plan root.
    */
-  struct DecomposedPlan {
+  struct PlanSplit {
     // maybe these shouldn't be pointers, but we'll try it out for now
-    unique_ptr<AppPlan>   query_plan;
-    unique_ptr<AppPlan>   anchor_root;
-    std::vector<QueryOp*> anchor_subplans;
+    unique_ptr<AppPlan> query_plan;
+    unique_ptr<AppPlan> anchor_op;
 
-    DecomposedPlan( unique_ptr<AppPlan>&& qplan
-                   ,unique_ptr<AppPlan>&& anchor
-                   ,std::vector<QueryOp*> subplan_roots)
-      :  query_plan(qplan)
-        ,anchor_root(anchor)
-        ,anchor_subplans(subplan_roots)
-      {}
+    PlanSplit(unique_ptr<AppPlan>&& qplan, unique_ptr<AppPlan>&& anchor)
+      : query_plan(std::move(qplan)), anchor_op(std::move(anchor))
+    {}
+
   };
 
   enum DecomposeAlg {
@@ -245,7 +247,7 @@ namespace mohair {
   unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<QueryOp> &mohair_op);
 
   // >> Functions for query plan processing
-  unique_ptr<DecomposedPlan> SplitPlan(
+  unique_ptr<PlanSplit> DecomposePlan(
      unique_ptr<AppPlan> &plan
     ,DecomposeAlg method = LongPipelineLeaf
   );
