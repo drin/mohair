@@ -123,6 +123,8 @@ namespace mohair {
       : PlanAttrs(other.pipe_len, other.plan_width, other.plan_height, other.break_height)
       {}
 
+    PlanAttrs& operator=(const PlanAttrs& other);
+
     string ToString();
   };
 

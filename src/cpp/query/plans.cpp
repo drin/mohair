@@ -98,6 +98,15 @@ namespace mohair {
   }
 
   // >> PlanAttrs functions
+  PlanAttrs& PlanAttrs::operator=(const PlanAttrs& other) {
+    pipe_len     = other.pipe_len;
+    plan_width   = other.plan_width;
+    plan_height  = other.plan_height;
+    break_height = other.break_height;
+
+    return *this;
+  }
+
   string PlanAttrs::ToString() {
     std::stringstream prop_stream;
 
