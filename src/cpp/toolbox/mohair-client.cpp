@@ -47,15 +47,14 @@ int SendMohairRequest(const char* plan_fpath) {
 
   // >> Connect to the mohair service
   // grab the default service location
-  Location service_loc;
-  auto status_loc = Location::ForGrpcTcp("0.0.0.0", 40847, &service_loc);
-  if (not status_loc.ok()) {
-    mohair::PrintError("Error getting service location", status_loc);
+  auto result_loc = Location::ForGrpcTcp("0.0.0.0", 40847);
+  if (not result_loc.ok()) {
+    mohair::PrintError("Error getting service location", result_loc.status());
     return 3;
   }
 
   // Get a client connected to the flight service
-  auto result_client = FlightClient::Connect(service_loc);
+  auto result_client = FlightClient::Connect(std::move(result_loc).ValueOrDie());
   if (not result_client.ok()) {
     mohair::PrintError("Error connecting to service", result_client.status());
     return 4;
