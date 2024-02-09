@@ -73,28 +73,23 @@ endif
 # Include directory for arrow headers
 arrow_incdir = ''
 
+# NOTE: with brew installed dependencies, macosx can resolve like archlinux
+#       otherwise, macosx deps might need "manual" resolution (specific paths)
 if   buildsys_type == 'macosx'
   arrow_incdir = '/opt/homebrew/include'
-
-  #   |> Arrow
-  dep_arrow  = dependency('arrow')
-  dep_acero  = dependency('arrow-substrait') # this is Acero + substrait
-  dep_flight = dependency('arrow-flight')
-
 elif buildsys_type == 'archlinux'
-  #   |> Arrow
-  dep_arrow  = dependency('arrow')
-  dep_acero  = dependency('arrow-substrait') # this is Acero + substrait
-  dep_flight = dependency('arrow-flight')
-
 endif
 
 
 # >> Required dependencies
+
+#   |> Arrow
+dep_arrow  = dependency('arrow')
+dep_acero  = dependency('arrow-substrait') # this is Acero + substrait
+dep_flight = dependency('arrow-flight')
+
 #   |> Protobuf (for substrait)
-# dep_proto   = dependency('protobuf_simple')
 dep_proto   = dependency('protobuf')
-# dep_absllog = dependency('absl_log')
 
 
 # >> Optional dependencies
