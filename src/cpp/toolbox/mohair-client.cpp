@@ -16,7 +16,8 @@
 // Functions
 int ValidateArgs(int argc, char **argv) {
   if (argc != 2) {
-    std::cerr << "Usage: mohair-client <path-to-plan-file>" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " <path-to-plan-file>"
+              << std::endl;
     return 1;
   }
 
@@ -87,6 +88,8 @@ int SendMohairRequest(const char* plan_fpath) {
   while (result_response.ok());
 
   std::cout << "Query results:" << std::endl;
+
+  return 0;
 }
 
 
