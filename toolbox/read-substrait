@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # ------------------------------
 # Dependencies
 
@@ -7,12 +9,6 @@ import sys
 from pathlib import Path
 
 # >> Third-party
-import pyarrow
-import pandas
-import ibis
-
-from ibis_substrait.compiler.core import SubstraitCompiler
-
 from mohair.substrait.plan_pb2 import Plan
 from mohair.substrait.algebra_pb2 import Rel
 
@@ -20,18 +16,24 @@ from mohair.substrait.algebra_pb2 import Rel
 # ------------------------------
 # Module variables
 
-example_input = Path('resources') / 'examples' / 'average-expression.substrait'
+example_fpath = Path('resources') / 'examples' / 'average-expression.substrait'
 
 
 if __name__ == '__main__':
+    # Take a file path to the substrait plan as an optional input
+    input_fpath = None
+    if len(sys.argv) == 2:
+        input_fpath = Path(sys.argv[1])
+
+    plan_fpath = input_fpath or example_fpath
+    print(f'Plan source: {plan_fpath}')
+
     # initialize a protobuf structure
     substrait_plan = Plan()
 
     # populate the protobuf structure from binary
-    plan_message_fpath = Path(sys.argv[1]) or example_input
-    with open(plan_message_fpath, 'rb') as file_handle:
-        print(f'Source of plan: {plan_message_fpath}')
-        substrait_plan.ParseFromString(file_handle.read())
+    with open(plan_fpath, 'rb') as plan_fh:
+        substrait_plan.ParseFromString(plan_fh.read())
 
     # print the structure
     print(substrait_plan)

@@ -13,10 +13,10 @@ files = [
 
 [[package]]
 name = "bidict"
-version = "0.22.1"
+version = "0.23.1"
 description = "The bidirectional mapping library for Python."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
     {file = "bidict-0.22.1-py3-none-any.whl", hash = "sha256:6ef212238eb884b664f28da76f33f1d28b260f665fc737b413b287d5487d1e7b"},
     {file = "bidict-0.22.1.tar.gz", hash = "sha256:1e0f7f74e4860e6d0943a05d4134c63a2fad86f3d4732fb265bd79e4e856d81d"},
@@ -57,7 +57,7 @@ name = "cython"
 version = "0.29.37"
 description = "The Cython compiler for writing C extensions for the Python language."
 optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 files = [
     {file = "Cython-0.29.37-cp27-cp27m-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:f2d621fe4cb50007446742134a890500b34e3f50abaf7993baaca02634af7e15"},
     {file = "Cython-0.29.37-cp27-cp27m-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:d94caf90ae9cb56116ca6d54cdcbccd3c4df6b0cb7233922b2233ee7fe81d05b"},
@@ -105,19 +105,21 @@ files = [
 
 [[package]]
 name = "datafusion"
-version = "20.0.0"
+version = "35.0.0"
 description = "Build and run queries against data"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "datafusion-20.0.0-cp37-abi3-macosx_10_7_x86_64.whl", hash = "sha256:a529dcf69d1ed99e2dea312d7269c8c7c28330db88f197e73cba3d08a45712d9"},
-    {file = "datafusion-20.0.0-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:6fe29e51af3b473db1268756f1bbae367367a66c99f438f2bd47a98fe4ae2d2d"},
-    {file = "datafusion-20.0.0-cp37-abi3-manylinux_2_34_x86_64.whl", hash = "sha256:d950193c58103d28bff13e88c7a331bd897334efbe490f745376195bf04a62ca"},
-    {file = "datafusion-20.0.0.tar.gz", hash = "sha256:e3b5ad340188b804ffb3e4666fbc3580f6c715ba3971760e60d3023aa0fb71e0"},
+    {file = "datafusion-35.0.0-cp38-abi3-macosx_10_12_x86_64.whl", hash = "sha256:8e460dff1f6588632273629145d53d77878b2969b6fbeccec034a9404bed8dbe"},
+    {file = "datafusion-35.0.0-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:e817d61c82d93fc0f64334b86045e1fcdae39f9a84b2afb82c5b66d7f6b9b85d"},
+    {file = "datafusion-35.0.0-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ca943440ad61ac3f9cd894e5bd2266986809132076f951687ea40642b1bd1103"},
+    {file = "datafusion-35.0.0-cp38-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:fb299b7550b5466f84463c3715605153c356f78fdd0c67ea630feb67631789d2"},
+    {file = "datafusion-35.0.0-cp38-abi3-win_amd64.whl", hash = "sha256:9c66e2b258b705adbfd611b492698eb52b42f2bd123ff838e5cbe7353e54bd3d"},
+    {file = "datafusion-35.0.0.tar.gz", hash = "sha256:467f8d8f963256a321031f405cc553c8aa27e3cab6402389eb10ddb2db55a40d"},
 ]
 
 [package.dependencies]
-pyarrow = ">=6.0.1"
+pyarrow = ">=11.0.0"
 
 [[package]]
 name = "ibis-framework"
@@ -355,6 +357,7 @@ parquet = ["pyarrow (>=10.0.1)"]
 performance = ["bottleneck (>=1.3.6)", "numba (>=0.56.4)", "numexpr (>=2.8.4)"]
 plot = ["matplotlib (>=3.6.3)"]
 postgresql = ["SQLAlchemy (>=2.0.0)", "adbc-driver-postgresql (>=0.8.0)", "psycopg2 (>=2.9.6)"]
+pyarrow = ["pyarrow (>=10.0.1)"]
 spss = ["pyreadstat (>=1.2.0)"]
 sql-other = ["SQLAlchemy (>=2.0.0)", "adbc-driver-postgresql (>=0.8.0)", "adbc-driver-sqlite (>=0.8.0)"]
 test = ["hypothesis (>=6.46.1)", "pytest (>=7.3.2)", "pytest-xdist (>=2.2.0)"]
@@ -448,7 +451,18 @@ files = [
 ]
 
 [package.dependencies]
-numpy = ">=1.16.6"
+numpy = ">=1.16.6,<2"
+
+[[package]]
+name = "pyarrow-hotfix"
+version = "0.6"
+description = ""
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "pyarrow_hotfix-0.6-py3-none-any.whl", hash = "sha256:dcc9ae2d220dff0083be6a9aa8e0cdee5182ad358d4931fce825c545e5c89178"},
+    {file = "pyarrow_hotfix-0.6.tar.gz", hash = "sha256:79d3e030f7ff890d408a100ac16d6f00b14d44a502d7897cd9fc3e3a534e9945"},
+]
 
 [[package]]
 name = "pyarrow-hotfix"
@@ -647,13 +661,13 @@ files = [
 
 [[package]]
 name = "wheel"
-version = "0.37.1"
+version = "0.42.0"
 description = "A built-package format for Python"
 optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
+python-versions = ">=3.7"
 files = [
-    {file = "wheel-0.37.1-py2.py3-none-any.whl", hash = "sha256:4bdcd7d840138086126cd09254dc6195fb4fc6f01c050a1d7236f2630db1d22a"},
-    {file = "wheel-0.37.1.tar.gz", hash = "sha256:e9a504e793efbca1b8e0e9cb979a249cf4a0a7b5b8c9e8b65a5e39d49529c1c4"},
+    {file = "wheel-0.42.0-py3-none-any.whl", hash = "sha256:177f9c9b0d45c47873b619f5b650346d632cdc35fb5e4d25058e09c9e581433d"},
+    {file = "wheel-0.42.0.tar.gz", hash = "sha256:c45be39f7882c9d34243236f2d63cbd58039e360f85d0913425fbd7ceea617a8"},
 ]
 
 [package.extras]
