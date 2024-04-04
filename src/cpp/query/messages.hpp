@@ -63,7 +63,7 @@ namespace mohair {
   unique_ptr<Plan> SubstraitPlanFromFile(fstream *plan_fstream);
 
   // >> Helper functions
-  int FindPlanRoot(Plan *substrait_plan);
+  int FindPlanRoot(Plan& substrait_plan);
 
 } // namespace: mohair
 
@@ -75,15 +75,19 @@ namespace mohair {
 
   struct PlanMessage {
     unique_ptr<Plan> payload;
+    int              root_relndx { -1 }; // initialized to -1 as a sentinel
     PlanRel*         root_relation;
-    int              root_relndx;
 
     virtual ~PlanMessage() = default;
 
-    PlanMessage(string&  msg): payload(SubstraitPlanFromString(msg)) {}
-    PlanMessage(fstream& msg): payload(SubstraitPlanFromFile(&msg))  {}
-
     PlanMessage(unique_ptr<Plan>&& msg): payload(std::move(msg)) {}
+    PlanMessage(unique_ptr<Plan>&& msg, int root_relndx)
+      : payload(std::move(msg)), root_relndx(root_relndx) {
+      this->root_relation = this->payload->mutable_relations(root_relndx);
+    }
+
+    PlanMessage(string&  msg): PlanMessage(SubstraitPlanFromString(msg)) {}
+    PlanMessage(fstream& msg): PlanMessage(SubstraitPlanFromFile(&msg))  {}
   };
 
 
@@ -95,13 +99,18 @@ namespace mohair {
 
     virtual ~SubstraitMessage() = default;
 
-    SubstraitMessage(unique_ptr<Plan>&& msg)
-      : PlanMessage(std::move(msg)) {}
+    SubstraitMessage(unique_ptr<Plan>&& msg): PlanMessage(std::move(msg)) {}
+    SubstraitMessage(unique_ptr<Plan>&& msg, int root_relndx)
+      : PlanMessage(std::move(msg), root_relndx) {}
+
+    SubstraitMessage(string&  msg): PlanMessage(msg) {}
+    SubstraitMessage(fstream& msg): PlanMessage(msg) {}
 
     virtual string Serialize();
+    virtual bool   SerializeToFile(const char *out_fpath);
 
     // function implementation in plans.cpp
-    virtual unique_ptr<SubstraitMessage> FromSplit(PlanSplit* split);
+    virtual vector<unique_ptr<SubstraitMessage>> SubplansFromSplit(PlanSplit& split);
   };
 
 } // namespace: mohair
