@@ -70,7 +70,8 @@ using arrow::Schema;
 namespace mohair {
 
   //  >> Reader functions (from files)
-  fstream StreamForFile(const char *in_fpath);
+  fstream InputStreamForFile(const char *in_fpath);
+  fstream OutputStreamForFile(const char *out_fpath);
   bool    FileToString(const char *in_fpath, string &file_data);
 
   Result<shared_ptr<Table>>
