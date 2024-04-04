@@ -81,14 +81,19 @@ namespace mohair {
   //  >> Reader functions
 
   /** Given a file path, return a binary input stream. */
-  fstream StreamForFile(const char *in_fpath) {
+  fstream InputStreamForFile(const char *in_fpath) {
     return fstream { in_fpath, std::ios::in | std::ios::binary };
+  }
+
+  /** Given a file path, return a binary output stream. */
+  fstream OutputStreamForFile(const char *out_fpath) {
+    return fstream { out_fpath, std::ios::out | std::ios::trunc | std::ios::binary };
   }
 
   /** Given a file path, read the file data as binary into an output string. */
   bool FileToString(const char *in_fpath, string &file_data) {
     // create an IO stream for the file
-    auto file_stream = StreamForFile(in_fpath);
+    auto file_stream = InputStreamForFile(in_fpath);
     if (!file_stream) {
       std::cerr << "Failed to open IO stream for file" << std::endl;
       return false;
