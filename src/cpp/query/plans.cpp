@@ -71,6 +71,7 @@ namespace mohair {
     return match_ndx;
   }
 
+
   size_t FindLongPipelineLeaf(PlanVec &plans) {
     int    longest_pipelen = 0;
     size_t match_ndx       = 0;
@@ -95,26 +96,19 @@ namespace mohair {
     return match_ndx;
   }
 
+
   unique_ptr<PlanSplit>
-  DecomposePlan(unique_ptr<AppPlan> plan, DecomposeAlg method) {
+  DecomposePlan(AppPlan& plan, DecomposeAlg method) {
     switch (method) {
       case TallJoinLeaf: {
-        size_t split_ndx = FindTallJoinLeaf(plan->break_ops);
-
-        return std::make_unique<PlanSplit>(
-           std::move(plan)
-          ,std::move(plan->break_ops[split_ndx])
-        );
+        size_t split_ndx = FindTallJoinLeaf(plan.break_ops);
+        return std::make_unique<PlanSplit>(plan, *(plan.break_ops[split_ndx]));
       }
 
       // LongPipelineLeaf is currently default algorithm
       case LongPipelineLeaf: {
-        size_t split_ndx = FindLongPipelineLeaf(plan->bleaf_ops);
-
-        return std::make_unique<PlanSplit>(
-           std::move(plan)
-          ,std::move(plan->bleaf_ops[split_ndx])
-        );
+        size_t split_ndx = FindLongPipelineLeaf(plan.bleaf_ops);
+        return std::make_unique<PlanSplit>(plan, *(plan.bleaf_ops[split_ndx]));
       }
 
       default: {
@@ -123,7 +117,6 @@ namespace mohair {
       }
     }
   }
-
 
 } // namespace: mohair
 
@@ -277,7 +270,7 @@ namespace mohair {
   vector<unique_ptr<SubstraitMessage>>
   SubstraitMessage::SubplansFromSplit(PlanSplit& split) {
     // Get the anchor op and initialize some variables
-    QueryOp*         anchor_op     = split.anchor_op->plan_op;
+    QueryOp*         anchor_op     = split.anchor_op.plan_op;
     auto             anchor_msg    = PlanAnchorFrom(anchor_op);
     vector<QueryOp*> anchor_inputs = anchor_op->GetOpInputs();
 
