@@ -81,6 +81,10 @@ elif buildsys_type == 'archlinux'
 endif
 
 
+# Include directory for duckdb-substrait
+duckstrait_incdir = '/usr' / 'local' / 'duckdb-substrait' / 'include'
+
+
 # >> Required dependencies
 
 #   |> Arrow
@@ -89,7 +93,7 @@ dep_acero  = dependency('arrow-substrait') # this is Acero + substrait
 dep_flight = dependency('arrow-flight')
 
 #   |> Protobuf (for substrait)
-dep_proto   = dependency('protobuf')
+dep_proto  = dependency('protobuf')
 
 
 # >> Optional dependencies
@@ -97,7 +101,10 @@ dep_proto   = dependency('protobuf')
 dep_ompi   = dependency('ompi-cxx', required: get_option('mpi'))
 dep_faodel = dependency('faodel'  , required: get_option('faodel'))
 dep_tiledb = dependency('tiledb'  , required: get_option('tiledb'))
-dep_duckdb = dependency('duckdb'  , required: get_option('duckdb'))
+dep_duckdb = dependency('duckdb'
+  ,method: 'cmake'
+  ,required: get_option('duckdb')
+)
 
 
 # >> Make configuration data available to source files
@@ -251,8 +258,8 @@ bin_readarrow_srclist = [
 
 bin_readarrow = executable('read-arrow'
   ,bin_readarrow_srclist
-  ,dependencies       : dep_arrow
-  ,include_directories: arrow_incdir
+  ,dependencies       : [dep_arrow, dep_duckdb]
+  ,include_directories: [arrow_incdir, duckstrait_incdir]
   ,install            : false
 )
 
@@ -264,8 +271,8 @@ bin_mohairquery_srclist = (
 
 bin_mohairquery = executable('mohair'
   ,bin_mohairquery_srclist
-  ,dependencies       : dep_query
-  ,include_directories: arrow_incdir
+  ,dependencies       : [dep_query, dep_duckdb]
+  ,include_directories: [arrow_incdir, duckstrait_incdir]
   ,install            : false
 )
 

@@ -24,19 +24,88 @@
 
 #include "../mohair.hpp"
 
+#include "duckdb.hpp"
+
 
 // >> Aliases
 // NOTE: an alias for a namespace must use the `namespace` keyword
 namespace fs = std::filesystem;
 
 
+using duckdb::DuckDB;
+using duckdb::Connection;
+using duckdb::QueryResult;
+using duckdb::DataChunk;
+using duckdb::ErrorData;
+using duckdb::Value;
+
+
 // ------------------------------
 // Variables
 const std::string local_file_protocol { "file://" };
 
+const char* test_query = (
+  "  SELECT  gene_id"
+  "         ,COUNT(*)        AS cell_count"
+  "         ,AVG(e.expr)     AS expr_avg"
+  "         ,VAR_POP(e.expr) AS expr_var"
+  "    FROM metaclusters mc"
+
+  "          JOIN clusters c"
+  "         USING (cluster_id)"
+
+  "          JOIN cluster_membership cm"
+  "         USING (cluster_id)"
+
+  "          JOIN  expression e"
+  "         USING (cell_id)"
+
+  "   WHERE mc.mcluster_id = 12"
+
+  "GROUP BY e.gene_id"
+);
+
 
 // ------------------------------
 // Functions
+
+int ViewQueryResults(duckdb::unique_ptr<QueryResult> result_set) {
+  ErrorData             result_err;
+  duckdb::unique_ptr<DataChunk> result_chunk { nullptr };
+
+  do {
+    if (not result_set->TryFetch(result_chunk, result_err)) {
+      std::cerr << result_err.Message() << std::endl;
+      return 2;
+    }
+
+    if (result_chunk) {
+      std::cout << result_chunk->ToString() << std::endl;
+    }
+  }
+  while (result_chunk != nullptr);
+
+  return 0;
+}
+
+
+int UseDuckDB(shared_ptr<Table> data) {
+  // "Connect" to database and load extension
+  DuckDB testdb;
+
+  // Create a connection through which we can send requests
+  Connection duck_conn { testdb };
+
+  // Produce substrait from SQL
+  string plan_msg { duck_conn.GetSubstrait(test_query) };
+
+  // Translate substrait to physical plan
+  duckdb::vector<Value> fn_args { Value::BLOB_RAW(plan_msg) };
+  duckdb::unique_ptr<QueryResult> result = duck_conn.TableFunction("translate_mohair", fn_args)
+                                                    ->Execute();
+
+  return ViewQueryResults(std::move(result));
+}
 
 
 // ------------------------------
@@ -70,5 +139,5 @@ int main(int argc, char **argv) {
     // print the first 10 rows for readability
     mohair::PrintTable(*result_projection, 0, 10);
 
-    return 0;
+    return UseDuckDB(*result_projection);
 }
