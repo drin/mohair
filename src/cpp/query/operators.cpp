@@ -52,7 +52,7 @@ namespace mohair {
     return anchor_msg;
   }
 
-  unique_ptr<PlanAnchor> OpProj::plan_anchor() {
+  unique_ptr<PlanAnchor> OpProj::ToPlanAnchor() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_project()->clear_input();
@@ -61,7 +61,7 @@ namespace mohair {
     return PlanAnchorForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpSel::plan_anchor() {
+  unique_ptr<PlanAnchor> OpSel::ToPlanAnchor() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_filter()->clear_input();
@@ -70,7 +70,7 @@ namespace mohair {
     return PlanAnchorForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpLimit::plan_anchor() {
+  unique_ptr<PlanAnchor> OpLimit::ToPlanAnchor() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_fetch()->clear_input();
@@ -79,7 +79,7 @@ namespace mohair {
     return PlanAnchorForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpSort::plan_anchor() {
+  unique_ptr<PlanAnchor> OpSort::ToPlanAnchor() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_sort()->clear_input();
@@ -88,7 +88,7 @@ namespace mohair {
     return PlanAnchorForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpAggr::plan_anchor() {
+  unique_ptr<PlanAnchor> OpAggr::ToPlanAnchor() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_aggregate()->clear_input();
@@ -97,7 +97,7 @@ namespace mohair {
     return PlanAnchorForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpCrossJoin::plan_anchor() {
+  unique_ptr<PlanAnchor> OpCrossJoin::ToPlanAnchor() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_cross()->clear_left();
@@ -107,7 +107,7 @@ namespace mohair {
     return PlanAnchorForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpJoin::plan_anchor() {
+  unique_ptr<PlanAnchor> OpJoin::ToPlanAnchor() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_join()->clear_left();
@@ -117,7 +117,7 @@ namespace mohair {
     return PlanAnchorForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpHashJoin::plan_anchor() {
+  unique_ptr<PlanAnchor> OpHashJoin::ToPlanAnchor() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_hash_join()->clear_left();
@@ -127,7 +127,7 @@ namespace mohair {
     return PlanAnchorForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpMergeJoin::plan_anchor() {
+  unique_ptr<PlanAnchor> OpMergeJoin::ToPlanAnchor() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_merge_join()->clear_left();
@@ -307,9 +307,12 @@ namespace mohair {
   }
 
   // >> Translation from Mohair to Substrait
-  unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<QueryOp> &mohair_op) {
-    return mohair_op->plan_anchor();
+  unique_ptr<PlanAnchor> PlanAnchorFrom(QueryOp* mohair_op) {
+    return mohair_op->ToPlanAnchor();
   }
+
+
+  // >> Convenience functions
 
   string SourceNameForRead(ReadRel *substrait_op) {
     switch (substrait_op->read_type_case()) {

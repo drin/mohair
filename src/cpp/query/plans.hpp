@@ -60,11 +60,11 @@ namespace mohair {
     QueryOp(Rel *rel)               : op_wrap(rel), table_name("")    {}
     QueryOp(Rel *rel, string &tname): op_wrap(rel), table_name(tname) {}
 
-    virtual const string           ToString()    { return table_name;       }
-    virtual const string           ViewStr()     { return this->ToString(); }
-    virtual bool                   IsBreaker()   { return false;            }
-    virtual vector<QueryOp *>      GetOpInputs() { return {};               }
-    virtual unique_ptr<PlanAnchor> plan_anchor() { return nullptr;          }
+    virtual const string           ToString()     { return table_name;       }
+    virtual const string           ViewStr()      { return this->ToString(); }
+    virtual bool                   IsBreaker()    { return false;            }
+    virtual vector<QueryOp *>      GetOpInputs()  { return {};               }
+    virtual unique_ptr<PlanAnchor> ToPlanAnchor() { return nullptr;          }
   };
 
   // Classes for distinguishing pipeline-able operators from pipeline breakers
@@ -156,7 +156,7 @@ namespace mohair {
 
   using PlanVec = vector<unique_ptr<AppPlan>>;
 
-  unique_ptr<AppPlan> FromPlanOp(QueryOp *op);
+  unique_ptr<AppPlan> AppPlanFromQueryOp(QueryOp *op);
 
 
   /**
@@ -218,14 +218,12 @@ namespace mohair {
    * anchor is a leaf in the super-plan and a parent of each sub-plan root.
    */
   struct PlanSplit {
-    // maybe these shouldn't be pointers, but we'll try it out for now
     unique_ptr<AppPlan> query_plan;
     unique_ptr<AppPlan> anchor_op;
 
     PlanSplit(unique_ptr<AppPlan>&& qplan, unique_ptr<AppPlan>&& anchor)
       : query_plan(std::move(qplan)), anchor_op(std::move(anchor))
     {}
-
   };
 
   enum DecomposeAlg {
@@ -245,14 +243,13 @@ namespace mohair {
 
   // >> Translation Functions
   unique_ptr<QueryOp>    MohairFrom(Rel *rel_msg);
-  unique_ptr<QueryOp>    MohairPlanFrom(Plan *substrait_plan);
-  unique_ptr<PlanAnchor> PlanAnchorFrom(unique_ptr<QueryOp> &mohair_op);
+  unique_ptr<QueryOp>    MohairPlanFrom(PlanMessage& substrait_plan);
+  unique_ptr<PlanAnchor> PlanAnchorFrom(QueryOp* mohair_op);
+  Rel&                   SubstraitRelFrom(QueryOp* mohair_op);
 
   // >> Functions for query plan processing
-  unique_ptr<PlanSplit> DecomposePlan(
-     unique_ptr<AppPlan> &plan
-    ,DecomposeAlg method = LongPipelineLeaf
-  );
+  unique_ptr<PlanSplit>
+  DecomposePlan(unique_ptr<AppPlan> plan, DecomposeAlg method = LongPipelineLeaf);
 
 
 } // namespace: mohair

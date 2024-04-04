@@ -51,12 +51,13 @@ namespace mohair {
     auto substrait_plan = std::make_unique<Plan>();
 
     substrait_plan->ParseFromString(plan_msg);
+    // TODO: enable in debug mode
     // substrait_plan->PrintDebugString();
 
     return substrait_plan;
   }
 
-  unique_ptr<Plan> SubstraitPlanFromFile(fstream *plan_fstream) {
+  unique_ptr<Plan> SubstraitPlanFromFile(fstream* plan_fstream) {
     auto substrait_plan = std::make_unique<Plan>();
     if (substrait_plan->ParseFromIstream(plan_fstream)) { return substrait_plan; }
 
@@ -66,12 +67,12 @@ namespace mohair {
 
 
   // >> Helper functions
-  int FindPlanRoot(Plan *substrait_plan) {
+  int FindPlanRoot(Plan& substrait_plan) {
     int root_count = 0;
     int root_ndx   = -1;
 
-    for (int ndx = 0; ndx < substrait_plan->relations_size(); ++ndx) {
-      PlanRel plan_root { substrait_plan->relations(ndx) };
+    for (int ndx = 0; ndx < substrait_plan.relations_size(); ++ndx) {
+      PlanRel plan_root { substrait_plan.relations(ndx) };
 
       // Don't break after we find a RelRoot; validate there is only 1
       // We expect there to be a reasonably small number of RelRoot
@@ -107,6 +108,21 @@ namespace mohair {
     }
 
     return msg_serialized;
+  }
+
+  bool SubstraitMessage::SerializeToFile(const char *out_fpath) {
+    auto file_stream = OutputStreamForFile(out_fpath);
+    if (!file_stream) {
+      std::cerr << "Failed to open IO stream for serialization" << std::endl;
+      return false;
+    }
+
+    if (not this->payload->SerializeToOstream(&file_stream)) {
+      std::cerr << "Unable to substrait message to file" << std::endl;
+      return false;
+    }
+
+    return true;
   }
 
 } // namespace: mohair
