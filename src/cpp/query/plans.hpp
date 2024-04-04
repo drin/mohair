@@ -218,12 +218,10 @@ namespace mohair {
    * anchor is a leaf in the super-plan and a parent of each sub-plan root.
    */
   struct PlanSplit {
-    unique_ptr<AppPlan> query_plan;
-    unique_ptr<AppPlan> anchor_op;
+    AppPlan& query_plan;
+    AppPlan& anchor_op;
 
-    PlanSplit(unique_ptr<AppPlan>&& qplan, unique_ptr<AppPlan>&& anchor)
-      : query_plan(std::move(qplan)), anchor_op(std::move(anchor))
-    {}
+    PlanSplit(AppPlan& qplan, AppPlan& anchor): query_plan(qplan), anchor_op(anchor) {}
   };
 
   enum DecomposeAlg {
@@ -249,7 +247,6 @@ namespace mohair {
 
   // >> Functions for query plan processing
   unique_ptr<PlanSplit>
-  DecomposePlan(unique_ptr<AppPlan> plan, DecomposeAlg method = LongPipelineLeaf);
-
+  DecomposePlan(AppPlan& plan, DecomposeAlg method = LongPipelineLeaf);
 
 } // namespace: mohair

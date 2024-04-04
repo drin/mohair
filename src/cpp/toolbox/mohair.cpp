@@ -108,19 +108,30 @@ int main(int argc, char **argv) {
     std::cout << breaker->ViewPlan() << std::endl;
   }
 
-  unique_ptr<PlanSplit> plan_split = DecomposePlan(
-     std::move(application_plan), DecomposeAlg::TallJoinLeaf
-  );
+  int subplan_total = 1;
+  for (size_t split_ndx = 0; split_ndx < plan_breakers.size(); ++split_ndx) {
+    auto plan_split = std::make_unique<PlanSplit>(
+      *application_plan, *(plan_breakers[split_ndx])
+    );
 
-  auto subplan_msgs = substrait_msg->SubplansFromSplit(*plan_split);
-  for (int subplan_ndx = 0; subplan_ndx < subplan_msgs.size(); ++subplan_ndx) {
-    string out_fname { "subplan." + std::to_string(subplan_ndx) + ".substrait" };
-    std::cout << "Creating subplan [" << std::to_string(subplan_ndx) << "]" << std::endl;
+    auto subplan_msgs = substrait_msg->SubplansFromSplit(*plan_split);
+    for (int subplan_ndx = 0; subplan_ndx < subplan_msgs.size(); ++subplan_ndx) {
+      std::cout << "Creating subplan [" << std::to_string(subplan_total) << "]"
+                << std::endl
+      ;
 
-    SubstraitMessage& subplan_msg = *(subplan_msgs)[subplan_ndx];
-    auto success = subplan_msg.SerializeToFile(out_fname.data());
+      string out_fname {
+        "resources/subplans/" +       std::to_string(split_ndx)
+                              + "." + std::to_string(subplan_ndx)
+                              + "." + std::to_string(subplan_total++)
+                              + ".substrait"
+      };
 
-    if (not success) { return 11; }
+      SubstraitMessage& subplan_msg = *(subplan_msgs)[subplan_ndx];
+      auto success = subplan_msg.SerializeToFile(out_fname.data());
+
+      if (not success) { return 11; }
+    }
   }
 
   return 0;
