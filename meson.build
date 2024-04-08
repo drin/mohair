@@ -4,7 +4,7 @@
 # >> configuration
 project('mohair'
   ,'cpp'
-  ,version         : '0.1'
+  ,version         : '0.1.0'
   ,default_options : ['warning_level=3','cpp_std=c++17']
 )
 
@@ -104,11 +104,18 @@ dep_duckdb = dependency('duckdb'
 
 
 # >> Make configuration data available to source files
+version_str    = meson.project_version()
+version_fields = version_str.split('.')
+
 mohair_cfgdata = configuration_data({
-   'MPI'   : dep_ompi.found()
-  ,'FAODEL': dep_faodel.found()
-  ,'TILEDB': dep_tiledb.found()
-  ,'DUCKDB': dep_duckdb.found()
+   'VERSION_STR'  : meson.project_version()
+  ,'VERSION_MAJOR': version_fields[0]
+  ,'VERSION_MINOR': version_fields[1]
+  ,'VERSION_PATCH': version_fields[2]
+  ,'MPI'          : dep_ompi.found()
+  ,'FAODEL'       : dep_faodel.found()
+  ,'TILEDB'       : dep_tiledb.found()
+  ,'DUCKDB'       : dep_duckdb.found()
 })
 
 mohair_cfgfile = configure_file(

@@ -1,5 +1,10 @@
 #pragma once
 
+#define VERSION_STRING "@VERSION_STR@"
+#define VERSION_MAJOR  "@VERSION_MAJOR@"
+#define VERSION_MINOR  "@VERSION_MINOR@"
+#define VERSION_PATCH  "@VERSION_PATCH@"
+
 #define USE_MPI    @MPI@
 #define USE_FAODEL @FAODEL@
 #define USE_TILEDB @TILEDB@

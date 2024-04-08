@@ -65,6 +65,16 @@ using arrow::Schema;
 
 
 // ------------------------------
+// Public global variables
+namespace mohair {
+  const string version       = VERSION_STRING;
+  const string version_major = VERSION_MAJOR;
+  const string version_minor = VERSION_MINOR;
+  const string version_patch = VERSION_PATCH;
+};
+
+
+// ------------------------------
 // Public classes and functions
 
 namespace mohair {
@@ -75,10 +85,10 @@ namespace mohair {
   bool    FileToString(const char *in_fpath, string &file_data);
 
   Result<shared_ptr<Table>>
-  ReadIPCFile(const std::string &path_to_file);
+  ReadIPCFile(const string &path_to_file);
 
   Result<shared_ptr<Table>>
-  ReadIPCStream(const std::string &path_to_file);
+  ReadIPCStream(const string &path_to_file);
 
   //  >> Convenience Functions
   void PrintTable(shared_ptr<Table> table_data, int64_t offset, int64_t length);
