@@ -1,6 +1,6 @@
 [submodule "submodules/substrait-proto"]
 	path = submodules/substrait-proto
-	url = git@github.com:drin/substrait.git
+	url = https://github.com/drin/substrait.git
 [submodule "submodules/mohair-proto"]
 	path = submodules/mohair-proto
-	url = git@github.com:drin/mohair-protocol.git
+	url = https://github.com/drin/mohair-protocol.git
