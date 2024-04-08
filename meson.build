@@ -81,10 +81,6 @@ elif buildsys_type == 'archlinux'
 endif
 
 
-# Include directory for duckdb-substrait
-duckstrait_incdir = '/usr' / 'local' / 'duckdb-substrait' / 'include'
-
-
 # >> Required dependencies
 
 #   |> Arrow
@@ -259,7 +255,7 @@ bin_readarrow_srclist = [
 bin_readarrow = executable('read-arrow'
   ,bin_readarrow_srclist
   ,dependencies       : [dep_arrow, dep_duckdb]
-  ,include_directories: [arrow_incdir, duckstrait_incdir]
+  ,include_directories: arrow_incdir
   ,install            : false
 )
 
@@ -272,7 +268,7 @@ bin_mohairquery_srclist = (
 bin_mohairquery = executable('mohair'
   ,bin_mohairquery_srclist
   ,dependencies       : [dep_query, dep_duckdb]
-  ,include_directories: [arrow_incdir, duckstrait_incdir]
+  ,include_directories: arrow_incdir
   ,install            : false
 )
 
