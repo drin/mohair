@@ -276,7 +276,7 @@ bin_mohairquery = executable('mohair'
   ,bin_mohairquery_srclist
   ,dependencies       : [dep_query, dep_duckdb]
   ,include_directories: arrow_incdir
-  ,install            : false
+  ,install            : true
 )
 
 #   |> minimal client for mohair services
