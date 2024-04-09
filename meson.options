@@ -18,6 +18,6 @@ option('tiledb'
 
 option('duckdb'
   ,type       : 'feature'
-  ,value      : 'disabled'
+  ,value      : 'auto'
   ,description: 'If enabled, adapters for DuckDB are built'
 )
