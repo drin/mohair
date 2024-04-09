@@ -32,7 +32,7 @@ import sys
 import logging
 import argparse
 
-from mohair import AddConsoleLogHandler
+from mohair import CreateMohairLogger
 from mohair import default_loglevel
 
 
@@ -40,9 +40,7 @@ from mohair import default_loglevel
 # Module variables
 
 # >> Logging
-logger = logging.getLogger(__name__)
-logger.setLevel(default_loglevel)
-AddConsoleLogHandler(logger)
+logger = CreateMohairLogger(__name__, logger_level=default_loglevel)
 
 
 # ------------------------------

@@ -42,7 +42,7 @@ import duckdb
 
 from ibis_substrait.compiler.core import SubstraitCompiler
 
-from mohair import AddConsoleLogHandler
+from mohair import CreateMohairLogger
 from mohair import default_loglevel
 
 from mohair.util import ArgparseBuilder
@@ -52,9 +52,7 @@ from mohair.util import ArgparseBuilder
 # Module variables
 
 # >> Logging
-logger = logging.getLogger(__name__)
-logger.setLevel(default_loglevel)
-AddConsoleLogHandler(logger)
+logger = CreateMohairLogger(__name__, logger_level=default_loglevel)
 
 # >> Default variables
 example_fpath = Path('resources') / 'examples' / 'average-expression.substrait'
