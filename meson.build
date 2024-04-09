@@ -2,7 +2,7 @@
 # Project Definition
 
 # >> configuration
-project('mohair'
+project('libmohair'
   ,'cpp'
   ,version         : '0.1.0'
   ,default_options : ['warning_level=3','cpp_std=c++17']
@@ -224,7 +224,7 @@ services_srclist = [
 # Composed header and source lists (organized by library/binary)
 
 # >> Library for mohair query processing
-lib_mohair_srclist = (substrait_srclist + query_srclist)
+libmohair_srclist = (substrait_srclist + query_srclist)
 
 # >> Binary for mohair flight services
 mohair_srv_srclist = (substrait_srclist + services_srclist)
@@ -233,19 +233,24 @@ mohair_srv_srclist = (substrait_srclist + services_srclist)
 # ------------------------------
 # Library definitions
 
-lib_mohair = library('mohair'
-  ,lib_mohair_srclist
+libmohair = library('mohair'
+  ,libmohair_srclist
   ,dependencies       : dep_query
   ,include_directories: arrow_incdir
   ,install            : true
 )
 
-module_pkgcfg.generate(lib_mohair)
+module_pkgcfg.generate(libmohair)
 
 # ------------------------------
 # Installation
 
 install_headers(query_hdrlist, subdir: 'mohair')
+libmohair_dep = declare_dependency(
+   include_directories: arrow_incdir
+  ,dependencies       : [dep_arrow, dep_duckdb]
+  ,link_with          : libmohair
+)
 
 
 # ------------------------------
@@ -269,7 +274,7 @@ bin_readarrow = executable('read-arrow'
 #   |> minimal query processor
 bin_mohairquery_srclist = (
     [ cpp_tooldir / 'mohair.cpp' ]
-  + lib_mohair_srclist
+  + libmohair_srclist
 )
 
 bin_mohairquery = executable('mohair'
