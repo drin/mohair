@@ -79,7 +79,21 @@ To build `C++` code, I use [meson][web-meson]. To manage `python` code, I use
 
 To build the `C++` code:
 ```bash
-brew install meson ninja
+brew install meson ninja git-lfs
+
+git clone https://github.com/drin/mohair.git
+pushd mohair
+
+# Optional: these submodules are only needed for regenerating protobuf code
+# git submodule init   -- submodules/substrait-proto
+# git submodule update -- submodules/substrait-proto
+# git submodule init   -- submodules/mohair-proto
+# git submodule update -- submodules/mohair-proto
+# NOTE: to regenerate, refer to the `Compiling Protobuf Wrappers` section
+
+# Optional: git-lfs is only really needed for getting examples and such
+# git lfs install --local
+# git lfs pull
 
 # "build-dir" is the name I use for my build directory
 meson setup      build-dir
@@ -98,6 +112,27 @@ brew install poetry
 
 # poetry commands assume you're in the repository root
 poetry install
+```
+
+##### Compiling Protobuf Wrappers
+
+This will be done at a future date (it shouldn't be important now).
+
+The short story is:
+```bash
+buf generate --template buf.gen.yaml submodules/substrait-proto
+buf generate --template buf.gen.yaml submodules/mohair-proto
+
+# NOTE: the below fixes don't accommodate the extensions.proto includes because of the
+#       extra nesting
+
+# For fixing the includes in the C++ code
+# sed -i '' 's/include ["]substrait[/]/include "..\/substrait\//' (grep -Rl "include \"substrait" src/cpp/query/substrait/)
+# sed -i '' 's/include ["]mohair[/]/include "..\/mohair\//'       (grep -Rl "include \"mohair"    src/cpp/query/mohair/)
+
+# For fixing the imports in the python code
+# sed -i '' 's/from substrait/from mohair.substrait/' (grep -Rl "from substrait" src/python/mohair/substrait/)
+# sed -i '' 's/from substrait/from mohair.substrait/' (grep -Rl "from substrait" src/python/mohair/mohair/)
 ```
 
 
