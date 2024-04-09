@@ -35,6 +35,72 @@ as appropriate).
    3. Execute the 2nd piece on the intermediate results of the 1st piece.
 
 
+# Getting Started
+
+This section is a bootstrap guide for trying out the code in this repository. Here, I will
+try to highlight the types of interactions I am trying to support and where in the code
+they are implemented (so that it's possible to further explore the code if you're
+interested).
+
+## Installation
+
+Note that I may have forgotten to include some steps necessary for installation. If this
+is the case, let me know or file an issue in the [mohair issue tracker][issues-mohair].
+
+### Dependencies
+
+The C++ code in this repository depends on [Arrow][web-arrow], [Substrait][web-substrait],
+and [DuckDB][web-duckdb]. I am trying to simplify installation of dependencies, but for
+now this is only done for macosx using [Homebrew][web-homebrew].
+
+I created a [homebrew tap][docs-tap], which is located at
+[drin/homebrew-hatchery][repo-hatchery]:
+```bash
+# Opening my tap is optional
+brew tap drin/hatchery
+brew install apache-arrow-substrait
+
+# In case my tap isn't tapped
+# brew install drin/hatchery/apache-arrow-substrait
+
+# and then the other formulas
+brew install duckdb-substrait
+
+# this is not yet working
+# brew install skytether-mohair
+```
+
+### Build systems
+
+To build `C++` code, I use [meson][web-meson]. To manage `python` code, I use
+[poetry][web-poetry].
+
+##### Building C++
+
+To build the `C++` code:
+```bash
+brew install meson ninja
+
+# "build-dir" is the name I use for my build directory
+meson setup      build-dir
+meson compile -C build-dir
+```
+
+Although the formula itself doesn't work (I'm not yet sure why), the formula logic should
+be helpful as a reference for what commands to use:
+[drin/homebrew-hatchery/skytether-mohair][formula-mohair].
+
+##### Building Python
+
+To build the `python` code:
+```bash
+brew install poetry
+
+# poetry commands assume you're in the repository root
+poetry install
+```
+
+
 <!-- resources -->
 [web-substrait]:  https://substrait.io/
 [web-arrow]:      https://arrow.apache.org/
