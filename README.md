@@ -38,9 +38,19 @@ as appropriate).
 <!-- resources -->
 [web-substrait]:  https://substrait.io/
 [web-arrow]:      https://arrow.apache.org/
+[web-duckdb]:     https://duckdb.org/
+[web-homebrew]:   https://brew.sh/
+[web-meson]:      https://mesonbuild.com/
+[web-poetry]:     https://python-poetry.org/
 
 [docs-flight]:    https://arrow.apache.org/docs/format/Flight.html
 [docs-acero]:     https://arrow.apache.org/docs/cpp/streaming_execution.html
+[docs-tap]:       https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap
 
 [repo-skytether]: https://gitlab.com/skyhookdm/skytether-singlecell
 [repo-skyhookdm]: https://github.com/uccross/skyhookdm-ceph-cls
+[repo-hatchery]:  https://github.com/drin/homebrew-hatchery
+
+[issues-mohair]:  https://github.com/drin/mohair/issues
+
+[formula-mohair]: https://github.com/drin/homebrew-hatchery/blob/mainline/Formula/skytether-mohair.rb
