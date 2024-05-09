@@ -115,7 +115,7 @@ mohair_cfgdata = configuration_data({
   ,'MPI'          : dep_ompi.found()
   ,'FAODEL'       : dep_faodel.found()
   ,'TILEDB'       : dep_tiledb.found()
-  ,'DUCKDB'       : dep_duckdb.found()
+  ,'DUCKDB'       : dep_duckdb.found() ? 1 : 0
 })
 
 mohair_cfgfile = configure_file(
@@ -263,6 +263,13 @@ bin_readarrow_srclist = [
    cpp_tooldir  / 'read-arrow.cpp'
   ,cpp_srcdir   / 'util.cpp'
 ]
+
+if dep_duckdb.found()
+  message('Adding duckdb source to read-arrow source list')
+  bin_readarrow_srclist += [cpp_enginedir / 'duckdb.cpp']
+
+  message(bin_readarrow_srclist)
+endif
 
 bin_readarrow = executable('read-arrow'
   ,bin_readarrow_srclist
