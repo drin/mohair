@@ -24,20 +24,19 @@
 
 #include "../mohair.hpp"
 
-#include "duckdb.hpp"
+#if USE_DUCKDB
+  #include "../engines/adapter_duckdb.hpp"
+
+  using mohair::adapters::EngineDuckDB;
+#endif
 
 
-// >> Aliases
-// NOTE: an alias for a namespace must use the `namespace` keyword
+// ------------------------------
+// Type aliases
+
+// >> Namespaces
 namespace fs = std::filesystem;
 
-
-using duckdb::DuckDB;
-using duckdb::Connection;
-using duckdb::QueryResult;
-using duckdb::DataChunk;
-using duckdb::ErrorData;
-using duckdb::Value;
 
 
 // ------------------------------
@@ -69,42 +68,47 @@ const char* test_query = (
 // ------------------------------
 // Functions
 
-int ViewQueryResults(duckdb::unique_ptr<QueryResult> result_set) {
-  ErrorData             result_err;
-  duckdb::unique_ptr<DataChunk> result_chunk { nullptr };
+int ViewArrowIPCFromFile(fs::path arrow_fpath, bool& is_feather) {
+    // Create a RecordBatchStreamReader for the given `arrow_fpath`
+    is_feather = true;
+    arrow::Result<shared_ptr<Table>> read_result = mohair::ReadIPCFile(arrow_fpath.string());
+    if (not read_result.ok()) {
+      std::cerr << "Could not read file:"       << std::endl
+                << "\t" << read_result.status() << std::endl
+      ;
 
-  do {
-    if (not result_set->TryFetch(result_chunk, result_err)) {
-      std::cerr << result_err.Message() << std::endl;
-      return 2;
+      is_feather = false;
     }
 
-    if (result_chunk) {
-      std::cout << result_chunk->ToString() << std::endl;
+    if (not is_feather) {
+      std::cout << "Trying to read file as IPC stream..." << std::endl;
+
+      read_result = mohair::ReadIPCStream(arrow_fpath.string());
+      if (not read_result.ok()) {
+        std::cerr << "Could not read file:"       << std::endl
+                  << "\t" << read_result.status() << std::endl
+        ;
+
+        return 2;
+      }
     }
-  }
-  while (result_chunk != nullptr);
 
-  return 0;
-}
+    arrow::Result<shared_ptr<Table>> proj_result = read_result;
+    if ((*read_result)->num_columns() >= 10) {
+      std::cout << "Projecting first 10 columns for readability" << std::endl;
 
+      auto proj_result = (*read_result)->SelectColumns({0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+      if (not proj_result.ok()) {
+        std::cerr << "Could not do projection:"   << std::endl
+                  << "\t" << proj_result.status() << std::endl
+        ;
+        return 3;
+      }
+    }
 
-int UseDuckDB(shared_ptr<Table> data) {
-  // "Connect" to database and load extension
-  DuckDB testdb;
-
-  // Create a connection through which we can send requests
-  Connection duck_conn { testdb };
-
-  // Produce substrait from SQL
-  string plan_msg { duck_conn.GetSubstrait(test_query) };
-
-  // Translate substrait to physical plan
-  duckdb::vector<Value> fn_args { Value::BLOB_RAW(plan_msg) };
-  duckdb::unique_ptr<QueryResult> result = duck_conn.TableFunction("translate_mohair", fn_args)
-                                                    ->Execute();
-
-  return ViewQueryResults(std::move(result));
+    // print the first 10 rows for readability
+    mohair::PrintTable(*proj_result, 0, 10);
+    return 0;
 }
 
 
@@ -117,27 +121,29 @@ int main(int argc, char **argv) {
     }
 
     fs::path path_to_arrow = local_file_protocol + fs::absolute(argv[1]).string();
+    bool is_feather = true;
 
-    // Create a RecordBatchStreamReader for the given `path_to_arrow`
-    arrow::Result<shared_ptr<Table>> read_result = mohair::ReadIPCFile(path_to_arrow.string());
-    if (not read_result.ok()) {
-      std::cerr << "Could not read file:"       << std::endl
-                << "\t" << read_result.status() << std::endl
-      ;
-      return 2;
+    int view_status = ViewArrowIPCFromFile(path_to_arrow, is_feather);
+    if (view_status > 0) {
+      std::cerr << "Exiting early" << std::endl;
+      return view_status;
     }
 
-    // project the first 10 columns for readability
-    auto result_projection = (*read_result)->SelectColumns({0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-    if (not result_projection.ok()) {
-      std::cerr << "Could not do projection:"         << std::endl
-                << "\t" << result_projection.status() << std::endl
-      ;
-      return 3;
-    }
+    // Try using DuckDB
+    #if USE_DUCKDB
+      std::cout << "Attempting to scan data with DuckDB" << std::endl;
+      EngineDuckDB duck_engine = mohair::adapters::DuckDBForMem();
 
-    // print the first 10 rows for readability
-    mohair::PrintTable(*result_projection, 0, 10);
+      std::cout << "Constructing scan op" << std::endl;
+      auto queryid_result = duck_engine.ArrowScanOp(path_to_arrow);
+      if (not queryid_result.ok()) {
+        std::cerr << "Failed to construct scan op for Arrow IPC" << std::endl;
+      }
 
-    return UseDuckDB(*result_projection);
+      std::cout << "Executing Relation" << std::endl;
+      auto execute_status = duck_engine.ExecuteRelation(*queryid_result);
+      if (not execute_status.ok()) { return 4; }
+    #endif
+
+    return 0;
 }
