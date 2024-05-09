@@ -39,8 +39,9 @@ using IPCReadOpts = arrow::ipc::IpcReadOptions;
 
 namespace mohair {
 
-  // >> Internal functions only
+  // Anonymous namespace for internal functions
   namespace {
+
     /** Given a file path, return an arrow::ReadableFile. */
     Result<shared_ptr<RandomAccessFile>> HandleForIPCFile(const std::string &path_as_uri) {
       std::cout << "Creating handle for arrow IPC-formatted file: " << path_as_uri << std::endl;
@@ -76,7 +77,8 @@ namespace mohair {
       // read from the handle using `RecordBatchStreamReader`
       return RecordBatchFileReader::Open(input_file_handle, IPCReadOpts::Defaults());
     }
-  } // anonymous namespace for internal functions
+
+  } // anonymous namespace: mohair::<anonymous>
 
   //  >> Reader functions
 
@@ -112,6 +114,26 @@ namespace mohair {
 
     // On success, the number of characters read will match size
     return file_stream.gcount() == size;
+  }
+
+
+  /** Given a file path to an Arrow IPC stream, return the data as a buffer. */
+  Result<shared_ptr<Buffer>> BufferFromIPCStream(const std::string& path_to_file) {
+    std::cout << "Parsing file: " << path_to_file << std::endl;
+
+    // use the `FileSystem` instance to open a handle to the file
+    ARROW_ASSIGN_OR_RAISE(auto arrow_fhandle, HandleForIPCFile(path_to_file));
+
+    // get the size of the file handle (arrow::io::RandomAccessFile) and read it whole
+    ARROW_ASSIGN_OR_RAISE(auto  arrow_fsize, arrow_fhandle->GetSize());
+    ARROW_ASSIGN_OR_RAISE(auto arrow_buffer, arrow_fhandle->ReadAt(0, arrow_fsize));
+
+    if (not arrow_buffer->is_cpu()) {
+      return Status::Invalid("Read IPC stream file into memory but it is not CPU-accessible");
+    }
+
+    std::cout << "Returning IPC buffer" << std::endl;
+    return arrow_buffer;
   }
 
   /** Given a file path to an Arrow IPC stream, return a Table. */

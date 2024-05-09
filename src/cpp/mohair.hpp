@@ -63,6 +63,11 @@ using arrow::Buffer;
 using arrow::Table;
 using arrow::Schema;
 
+using arrow::RecordBatchVector;
+using arrow::io::RandomAccessFile;
+using arrow::ipc::RecordBatchStreamReader;
+using arrow::ipc::RecordBatchFileReader;
+
 
 // ------------------------------
 // Public global variables
@@ -79,10 +84,13 @@ namespace mohair {
 
 namespace mohair {
 
-  //  >> Reader functions (from files)
+  // >> Reader functions (from files)
   fstream InputStreamForFile(const char *in_fpath);
   fstream OutputStreamForFile(const char *out_fpath);
   bool    FileToString(const char *in_fpath, string &file_data);
+
+  Result<shared_ptr<Buffer>>
+  BufferFromIPCStream(const std::string& path_to_file);
 
   Result<shared_ptr<Table>>
   ReadIPCFile(const string &path_to_file);
@@ -90,11 +98,11 @@ namespace mohair {
   Result<shared_ptr<Table>>
   ReadIPCStream(const string &path_to_file);
 
-  //  >> Convenience Functions
+  // >> Convenience Functions
   void PrintTable(shared_ptr<Table> table_data, int64_t offset, int64_t length);
   string JoinStr(vector<string> str_parts, const char *delim);
 
-  //  >> Debugging Functions
+  // >> Debugging Functions
   void PrintError(const char *msg, const Status arrow_status);
 
 } // namespace: mohair
