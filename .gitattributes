@@ -7,3 +7,9 @@ resources/examples/sample-data.tsv filter=lfs diff=lfs merge=lfs -text
 resources/examples/E-GEOD-76312.48-2152.x565.feather filter=lfs diff=lfs merge=lfs -text
 resources/examples/result.split-avg-expr.txt filter=lfs diff=lfs merge=lfs -text
 resources/examples/1_1_1_1_1_500000.expression.arrow filter=lfs diff=lfs merge=lfs -text
+resources/subplans/1.1.4.substrait filter=lfs diff=lfs merge=lfs -text
+resources/subplans/2.0.5.substrait filter=lfs diff=lfs merge=lfs -text
+resources/subplans/2.1.6.substrait filter=lfs diff=lfs merge=lfs -text
+resources/subplans/0.0.1.substrait filter=lfs diff=lfs merge=lfs -text
+resources/subplans/0.1.2.substrait filter=lfs diff=lfs merge=lfs -text
+resources/subplans/1.0.3.substrait filter=lfs diff=lfs merge=lfs -text
