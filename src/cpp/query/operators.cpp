@@ -210,14 +210,86 @@ namespace mohair {
     return binary_op;
   }
 
-  unique_ptr<QueryOp> FromReadMsg(Rel *rel_msg, ReadRel *substrait_op) {
-    // construct the operator
-    string op_tname { SourceNameForRead(substrait_op) };
-    unique_ptr<QueryOp> read_op = std::make_unique<OpRead>(
-      substrait_op, rel_msg, op_tname
-    );
 
-    return read_op;
+  unique_ptr<LocalFiles> LocalFileWithName(string fname) {
+    // Create the `LocalFiles` we'll eventually return
+    auto readfile_msg = std::make_unique<ReadRel::LocalFiles>();
+
+    // Add a single `FileOrFiles`; producer shouldn't know physical design
+    FileOrFiles* sky_partition = readfile_msg->add_items();
+
+    // Set attributes of `FileOrFiles`:
+    //  the table name is the path
+    sky_partition->set_uri_path(fname);
+
+    //  we set ArrowReadOptions to flag it as Arrow format
+    auto arrow_fileopts = std::make_unique<ArrowReadOptions>();
+    sky_partition->set_allocated_arrow(arrow_fileopts.release());
+
+    // assign and return
+    return readfile_msg;
+  }
+
+  unique_ptr<QueryOp> FromReadMsg(Rel *rel_msg, ReadRel *substrait_op) {
+    // Initialize table name to a default value
+    string op_tname { "ReadRel" };
+
+    switch (substrait_op->read_type_case()) {
+      case ReadRel::ReadTypeCase::kNamedTable: {
+        auto& src_table = substrait_op->named_table();
+
+        // Grab the parts of the table name, but ibis only encodes 1.
+        std::stringstream tname_stream;
+        tname_stream << src_table.names(0);
+        for (int tname_ndx = 1; tname_ndx < src_table.names_size(); ++tname_ndx) {
+          tname_stream << "." << src_table.names(tname_ndx);
+        }
+
+        // Set the table name
+        op_tname = string { tname_stream.str() };
+
+        // TODO: For now, convert `NamedTable` to `LocalFiles`
+        std::cerr << "Converting NamedTable to LocalFiles" << std::endl;
+        auto local_files_message = LocalFileWithName(op_tname);
+        substrait_op->set_allocated_local_files(local_files_message.release());
+        std::cerr << "Converted." << std::endl;
+        break;
+      }
+
+      case ReadRel::ReadTypeCase::kLocalFiles: {
+        auto& src_files = substrait_op->local_files();
+
+        // For mohair, we only ever expect to receive single URI paths
+        if (src_files.items_size() > 1) {
+          std::cerr << "Error: mohair should only specify 1 File per ReadRel" << std::endl;
+          return nullptr;
+        }
+
+        auto& src_file = src_files.items(0);
+        if (not src_file.has_uri_path()) {
+          std::cerr << "Error: mohair should only specify URI path" << std::endl;
+          return nullptr;
+        }
+
+        if (not src_file.has_arrow()) {
+          std::cerr << "Error: currently, mohair only supports Arrow files" << std::endl;
+          return nullptr;
+        }
+
+        op_tname = string { src_file.uri_path() };
+        break;
+      }
+
+      // all other cases can get a default name for now
+      case ReadRel::ReadTypeCase::kVirtualTable:
+          std::cerr << "Error: unexpected ReadRel type 'VirtualTable'" << std::endl;
+      case ReadRel::ReadTypeCase::kExtensionTable:
+          std::cerr << "Error: unexpected ReadRel type 'ExtensionTable'" << std::endl;
+      default:
+          return nullptr;
+    }
+
+    return std::make_unique<OpRead>(substrait_op, rel_msg, op_tname);
   }
 
   /*

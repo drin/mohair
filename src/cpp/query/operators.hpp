@@ -50,6 +50,11 @@ using substrait::ReadRel;
 
 using mohair::SkyRel;
 
+// >> Convenience aliases
+using LocalFiles       = substrait::ReadRel::LocalFiles;
+using FileOrFiles      = substrait::ReadRel::LocalFiles::FileOrFiles;
+using ArrowReadOptions = substrait::ReadRel::LocalFiles::FileOrFiles::ArrowReadOptions;
+
 
 // ------------------------------
 // Classes and Methods
