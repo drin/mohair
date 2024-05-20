@@ -120,27 +120,18 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    fs::path path_to_arrow = local_file_protocol + fs::absolute(argv[1]).string();
-    bool is_feather = true;
-
-    int view_status = ViewArrowIPCFromFile(path_to_arrow, is_feather);
-    if (view_status > 0) {
-      std::cerr << "Exiting early" << std::endl;
-      return view_status;
-    }
+    fs::path arrow_fpath = fs::absolute(argv[1]).string();
 
     // Try using DuckDB
     #if USE_DUCKDB
-      std::cout << "Attempting to scan data with DuckDB" << std::endl;
       EngineDuckDB duck_engine = mohair::adapters::DuckDBForMem();
 
-      std::cout << "Constructing scan op" << std::endl;
-      auto queryid_result = duck_engine.ArrowScanOp(path_to_arrow);
+      // Use new path, `scan_arrows_file`
+      auto queryid_result = duck_engine.ArrowScanOpFile(arrow_fpath);
       if (not queryid_result.ok()) {
         std::cerr << "Failed to construct scan op for Arrow IPC" << std::endl;
       }
 
-      std::cout << "Executing Relation" << std::endl;
       auto execute_status = duck_engine.ExecuteRelation(*queryid_result);
       if (not execute_status.ok()) { return 4; }
     #endif
