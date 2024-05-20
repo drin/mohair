@@ -44,11 +44,18 @@ namespace mohair {
 
     /** Given a file path, return an arrow::ReadableFile. */
     Result<shared_ptr<RandomAccessFile>> HandleForIPCFile(const std::string &path_as_uri) {
-      std::cout << "Creating handle for arrow IPC-formatted file: " << path_as_uri << std::endl;
+      std::cout << "Creating handle for arrow IPC-formatted file: "
+                << path_as_uri
+                << std::endl
+      ;
+
       std::string path_to_file;
 
       // get a `FileSystem` instance (local fs scheme is "file://")
-      ARROW_ASSIGN_OR_RAISE(auto localfs, arrow::fs::FileSystemFromUri(path_as_uri, &path_to_file));
+      ARROW_ASSIGN_OR_RAISE(
+         auto localfs
+        ,arrow::fs::FileSystemFromUri(path_as_uri, &path_to_file)
+      );
 
       // use the `FileSystem` instance to open a handle to the file
       return localfs->OpenInputFile(path_to_file);
