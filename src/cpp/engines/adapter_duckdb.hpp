@@ -123,7 +123,8 @@ using std::unordered_map;
       EngineDuckDB(DuckDB db): engine_conn(db), context_id(0) {}
 
       // >> Functions
-      Result<int> ArrowScanOp(fs::path arrow_fpath);
+      Result<int> ArrowScanOpIPC(fs::path arrow_fpath);
+      Result<int> ArrowScanOpFile(fs::path arrow_fpath);
       Status ExecuteRelation(int prepared_relid);
     };
 
