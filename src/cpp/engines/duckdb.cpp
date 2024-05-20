@@ -61,7 +61,7 @@
                              ,idx_t chunk_offset, idx_t chunk_count
                              ,idx_t col_offset  , idx_t col_count
                              ,idx_t row_offset  , idx_t row_count) {
-      int64_t   chunk_ndx { 0 };
+      idx_t     chunk_ndx { 0 };
       ErrorData result_err;
 
       // Grab first chunk
@@ -105,7 +105,9 @@
       return EngineDuckDB(mem_db);
     }
 
-    Result<int> EngineDuckDB::ArrowScanOp(fs::path arrow_fpath) {
+
+    //! Create a duckdb scan operator from an IPC buffer (extracted from an arrow file)
+    Result<int> EngineDuckDB::ArrowScanOpIPC(fs::path arrow_fpath) {
       // Scan table with duckdb by grabbing the whole file as one IPC buffer
       auto buffer_result = BufferFromIPCStream(arrow_fpath);
       if (not buffer_result.ok()) {
@@ -121,8 +123,7 @@
 
       // Push the IPC buffer into the QueryContext
       auto &ipc_buffer = (
-        scan_context->rel_mem
-                     .emplace_back(std::move(buffer_result).ValueOrDie())
+        scan_context->rel_mem.emplace_back(std::move(buffer_result).ValueOrDie())
       );
 
       // `scan_arrow_ipc` takes IPC buffers as a list of structs
@@ -131,7 +132,6 @@
       };
 
       // Get a relation representing a scan of Arrow IPC buffers
-      std::cout << "Constructing `scan_arrow_ipc` TableFunction" << std::endl;
       scan_context->duck_rel = engine_conn.TableFunction("scan_arrow_ipc", fn_args);
 
       int prepared_ctxtid = ++context_id;
@@ -140,6 +140,28 @@
       return prepared_ctxtid;
     }
 
+
+    //! Create a duckdb scan operator from an arrow file
+    Result<int> EngineDuckDB::ArrowScanOpFile(fs::path arrow_fpath) {
+      // Construct a QueryContext to keep everything alive
+      auto scan_context = std::make_unique<QueryContext>();
+
+      // `scan_arrows_file` takes a vector of file paths as input
+      duckdb::vector<Value> fn_args {
+        Value::LIST({ Value { arrow_fpath } })
+      };
+
+      // Get a relation representing a scan of Arrow IPC buffers
+      scan_context->duck_rel = engine_conn.TableFunction("scan_arrows_file", fn_args);
+
+      int prepared_ctxtid = ++context_id;
+      query_contexts[prepared_ctxtid] = std::move(scan_context);
+
+      return prepared_ctxtid;
+    }
+
+
+    //! Given an ID for a query context, execute that query
     Status EngineDuckDB::ExecuteRelation(int context_id) {
       // Execute the relation and move the result
       auto& rel_context = query_contexts[context_id];
