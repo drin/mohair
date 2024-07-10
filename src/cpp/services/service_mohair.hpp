@@ -48,19 +48,22 @@ using arrow::flight::FlightMetadataWriter;
 using arrow::flight::SchemaResult;
 using arrow::flight::ResultStream;
 
-// >= 13.0.0
-// using arrow::flight::PollInfo;
+using arrow::flight::PollInfo;
 using arrow::flight::FlightInfo;
 using arrow::flight::FlightListing;
 using arrow::flight::SimpleFlightListing;
 
-using arrow::flight::ServerCallContext;
 using arrow::flight::Criteria;
-using arrow::flight::FlightDescriptor;
-using arrow::flight::Ticket;
-using arrow::flight::Location;
+using arrow::flight::ServerCallContext;
 using arrow::flight::Action;
 using arrow::flight::ActionType;
+using arrow::flight::FlightDescriptor;
+using arrow::flight::FlightEndpoint;
+using arrow::flight::Ticket;
+using arrow::flight::Location;
+
+using arrow::flight::SimpleResultStream;
+using FlightResult = arrow::flight::Result;
 
 
 // ------------------------------
@@ -70,65 +73,16 @@ namespace mohair::services {
 
   struct MohairService : public FlightServerBase {
 
-    //  >> FlightServerBase functions to override
-    Status Init(const FlightServerOptions &options);
+    static const string hkey_queryticket;
 
-    virtual Status ListFlights(
-       const ServerCallContext&   context
-      ,const Criteria*            criteria
-      ,unique_ptr<FlightListing>* listings
-    );
+    // >> Convenience functions
+    virtual Result<FlightInfo>
+    MakeFlightInfo(string partition_key, shared_ptr<Table> data_table);
 
-    virtual Status GetFlightInfo(
-       const ServerCallContext& context
-      ,const FlightDescriptor&  request
-      ,unique_ptr<FlightInfo>*  info
-    );
+    virtual Result<FlightInfo>
+    MakeFlightInfo(fs::path arrow_fpath, bool is_feather);
 
-    // >= 13.0.0
-    /*
-    Status PollFlightInfo(
-       const ServerCallContext& context
-      ,const FlightDescriptor&  request
-      ,unique_ptr<PollInfo>*    info
-    );
-    */
- 
-    virtual Status GetSchema(
-       const ServerCallContext  &context
-      ,const FlightDescriptor   &request
-      ,unique_ptr<SchemaResult> *schema
-    );
-
-    virtual Status DoGet(
-       const ServerCallContext&      context
-      ,const Ticket&                 request
-      ,unique_ptr<FlightDataStream>* stream
-    );
-
-    virtual Status DoPut(
-       const ServerCallContext&         context
-      ,unique_ptr<FlightMessageReader>  reader
-      ,unique_ptr<FlightMetadataWriter> writer
-    );
-
-    virtual Status DoExchange(
-       const ServerCallContext         &context
-      ,unique_ptr<FlightMessageReader>  reader
-      ,unique_ptr<FlightMessageWriter>  writer
-    );
-
-    virtual Status DoAction(
-       const ServerCallContext&  context
-      ,const Action&             action
-      ,unique_ptr<ResultStream>* result
-    );
-
-    virtual Status ListActions(
-       const ServerCallContext& context
-      ,vector<ActionType>*      actions
-    );
-
+    // >> Custom Flight API
     virtual Status ActionQuery(
        const ServerCallContext&  context
       ,const shared_ptr<Buffer>  plan_msg
@@ -140,8 +94,42 @@ namespace mohair::services {
       ,const string action_type
     );
 
-    //  >> Convenience functions
-    virtual FlightInfo MakeFlightInfo();
+    // >> Standard Flight API
+
+    Status ListFlights( const ServerCallContext&   context
+                       ,const Criteria*            criteria
+                       ,unique_ptr<FlightListing>* listings) override;
+
+    Status GetFlightInfo( const ServerCallContext& context
+                         ,const FlightDescriptor&  request
+                         ,unique_ptr<FlightInfo>*  info) override;
+
+    Status PollFlightInfo( const ServerCallContext& context
+                          ,const FlightDescriptor&  request
+                          ,unique_ptr<PollInfo>*    info) override;
+
+    Status GetSchema( const ServerCallContext  &context
+                     ,const FlightDescriptor   &request
+                     ,unique_ptr<SchemaResult> *schema) override;
+
+    Status DoGet( const ServerCallContext&      context
+                 ,const Ticket&                 request
+                 ,unique_ptr<FlightDataStream>* stream) override;
+
+    Status DoPut( const ServerCallContext&         context
+                 ,unique_ptr<FlightMessageReader>  reader
+                 ,unique_ptr<FlightMetadataWriter> writer) override;
+
+    Status DoExchange( const ServerCallContext         &context
+                      ,unique_ptr<FlightMessageReader>  reader
+                      ,unique_ptr<FlightMessageWriter>  writer) override;
+
+    Status DoAction( const ServerCallContext&  context
+                    ,const Action&             action
+                    ,unique_ptr<ResultStream>* result) override;
+
+    Status ListActions( const ServerCallContext& context
+                       ,vector<ActionType>*      actions) override;
 
   };
 
@@ -150,11 +138,16 @@ namespace mohair::services {
 
 // ------------------------------
 // Functions
-
 namespace mohair::services {
 
   // >> Convenience functions
   Status SetDefaultLocation(Location *srv_loc);
   Status StartService(unique_ptr<FlightServerBase>& service);
+
+  Result<Location>       MyLocation(MohairService& mohair_srv);
+  Result<FlightEndpoint> MyEndpoint(MohairService& mohair_srv);
+
+  // >> Engine-specific functions
+  Status StartMohairDuckDB();
 
 } // namespace: mohair::services
