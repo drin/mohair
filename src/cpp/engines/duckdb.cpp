@@ -99,10 +99,19 @@
 
   namespace mohair::adapters {
 
-    EngineDuckDB DuckDBForMem() {
-      DuckDB mem_db;
+    unique_ptr<EngineDuckDB> DuckDBForMem() {
+      std::cout << "Initializing in-memory DuckDB" << std::endl;
 
-      return EngineDuckDB(mem_db);
+      DuckDB mem_db;
+      return std::make_unique<EngineDuckDB>(mem_db);
+    }
+
+
+    unique_ptr<EngineDuckDB> DuckDBForFile(fs::path db_fpath) {
+      std::cout << "Initializing file-backed DuckDB" << std::endl;
+
+      DuckDB disk_db(db_fpath);
+      return std::make_unique<EngineDuckDB>(disk_db);
     }
 
 
@@ -161,6 +170,24 @@
     }
 
 
+    //! Create a duckdb query plan from a substrait plan message
+    Result<int> EngineDuckDB::SubstraitPlanMessage(std::string plan_msg) {
+      // Construct a QueryContext to keep everything alive
+      auto scan_context = std::make_unique<QueryContext>();
+
+      // `from_substrait` takes a single binary blob as input
+      duckdb::vector<Value> fn_args { Value::BLOB_RAW(plan_msg) };
+
+      // Get a relation representing the execution of the substrait plan
+      scan_context->duck_rel = engine_conn.TableFunction("from_substrait", fn_args);
+
+      int prepared_ctxtid = ++context_id;
+      query_contexts[prepared_ctxtid] = std::move(scan_context);
+
+      return prepared_ctxtid;
+    }
+
+
     //! Given an ID for a query context, execute that query
     Status EngineDuckDB::ExecuteRelation(int context_id) {
       // Execute the relation and move the result
@@ -172,6 +199,20 @@
       RETURN_NOT_OK(PrintQueryResults(query_result));
 
       return Status::OK();
+    }
+
+
+    //! Given an ID for a query context, return the previously stored relation
+    Relation& EngineDuckDB::GetRelation(int context_id) {
+      auto& rel_context = query_contexts[context_id];
+      return *(rel_context->duck_rel);
+    }
+
+
+    //! Given an ID for a query context, return the result of the previous execution
+    QueryResult& EngineDuckDB::GetResult(int context_id) {
+      auto& rel_context = query_contexts[context_id];
+      return *(rel_context->rel_result);
     }
 
   } // namespace: mohair::adapters
