@@ -32,6 +32,8 @@ import sys
 import logging
 import argparse
 
+import pyarrow
+
 from mohair import CreateMohairLogger
 from mohair import default_loglevel
 
@@ -44,7 +46,72 @@ logger = CreateMohairLogger(__name__, logger_level=default_loglevel)
 
 
 # ------------------------------
-# utility classes
+# Utility functions
+
+# >> Readers
+def TableFromBinary(ipc_stream_buffer):
+    """ Opens an IPC stream from :ipc_stream_buffer: and returns an Arrow Table. """
+    stream_reader = pyarrow.ipc.open_stream(ipc_stream_buffer)
+
+    return stream_reader.read_all()
+
+
+def SchemaFromBinary(ipc_stream_buffer):
+    """ Opens an IPC stream from :data_blob: and returns an Arrow Table. """
+    stream_reader = pyarrow.ipc.open_stream(ipc_stream_buffer)
+
+    return stream_reader.schema
+
+
+# >> Writers
+def BinaryFromRecordBatch(data_batch, stream_writer=None):
+    """ Serializes an Arrow RecordBatch, :data_batch:, using IPC format. """
+
+    use_tmp_buffer = stream_writer is None
+
+    # If not given a writer, create a buffer and a writer that targets it
+    if use_tmp_buffer:
+        arrow_buffer  = pyarrow.BufferOutputStream()
+        stream_writer = pyarrow.RecordBatchStreamWriter(arrow_buffer, data_batch.schema)
+
+    # Actually serialize the batch to the buffer
+    stream_writer.write_batch(data_batch)
+
+    # If we created the writer, return the serialized buffer
+    if use_tmp_buffer:
+        stream_writer.close()
+        return arrow_buffer.getvalue()
+
+    # If given a writer, just return None (like a 'void' function)
+    return None
+
+
+def BinaryFromTable(data_table):
+    """ Serializes an Arrow Table, :data_table:, using IPC format. """
+
+    arrow_buffer  = pyarrow.BufferOutputStream()
+    stream_writer = pyarrow.RecordBatchStreamWriter(arrow_buffer, data_table.schema)
+
+    for record_batch in data_table.to_batches():
+        stream_writer.write_batch(record_batch)
+
+    stream_writer.close()
+
+    return arrow_buffer.getvalue()
+
+
+def BinaryFromSchema(data_schema):
+    """ Serializes an Arrow Schema, :data_schema:, using IPC format. """
+
+    arrow_buffer  = pyarrow.BufferOutputStream()
+    stream_writer = pyarrow.RecordBatchStreamWriter(arrow_buffer, data_schema)
+    stream_writer.close()
+
+    return arrow_buffer.getvalue()
+
+
+# ------------------------------
+# Utility classes
 class ArgparseBuilder(object):
     """
     A wrapper that makes it easier to build a parser for CLI arguments.
@@ -164,11 +231,12 @@ class ArgparseBuilder(object):
 
         return self
 
-    def add_output_file_arg(self, required=False, help_str=''):
+    def add_output_file_arg(self, default_fpath=None, required=False, help_str=''):
         self._arg_parser.add_argument(
              '--output-file'
             ,dest='output_file'
             ,type=str
+            ,default=default_fpath
             ,required=required
             ,help=(help_str or 'Path to file for this program to produce')
         )
@@ -332,6 +400,29 @@ class ArgparseBuilder(object):
             ,type=str
             ,required=required
             ,help=(help_str or 'Name of table to be used in SkyhookDM naming scheme')
+        )
+
+        return self
+
+    def add_skytether_domain_arg(self, required=False, help_str=''):
+        self._arg_parser.add_argument(
+             '--domain'
+            ,dest='domain_key'
+            ,type=str
+            ,required=required
+            ,help=(help_str or 'Name of data domain to access data from.')
+        )
+
+        return self
+
+    def add_skytether_partition_arg(self, required=False, help_str=''):
+        self._arg_parser.add_argument(
+             '--partitions'
+            ,dest='partition_keys'
+            ,type=str
+            ,nargs='+'
+            ,required=required
+            ,help=(help_str or 'Name of data partitions to access data from (one or more).')
         )
 
         return self
