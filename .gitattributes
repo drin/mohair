@@ -13,3 +13,4 @@ resources/subplans/2.1.6.substrait filter=lfs diff=lfs merge=lfs -text
 resources/subplans/0.0.1.substrait filter=lfs diff=lfs merge=lfs -text
 resources/subplans/0.1.2.substrait filter=lfs diff=lfs merge=lfs -text
 resources/subplans/1.0.3.substrait filter=lfs diff=lfs merge=lfs -text
+resources/examples/1_1_1_1_1_500000.arrow filter=lfs diff=lfs merge=lfs -text
