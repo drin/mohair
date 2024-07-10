@@ -1,0 +1,278 @@
+#!/usr/bin/env python
+
+# ------------------------------
+# License
+
+# Copyright 2024 Aldrin Montana
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# ------------------------------
+# Overview
+"""
+Write a query plan in substrait using ibis.
+"""
+
+
+# ------------------------------
+# Dependencies
+
+# >> Standard modules
+import os
+import sys
+
+from pathlib import Path
+
+# >> Third-party
+import pyarrow
+import pandas
+import ibis
+
+from ibis import udf
+from ibis_substrait.compiler.core import SubstraitCompiler
+from ibis_substrait.compiler.core import stp as substrait # substrait.plan_pb2 module
+
+
+# >> Internal
+from mohair.util import ArgparseBuilder
+from mohair.query.relations import ( SkyDomain
+                                    ,SkyPartition
+                                    ,SkyPartitionMeta
+                                    ,SkyPartitionSlice)
+
+# >> Functions
+from mohair.util import TableFromBinary, SchemaFromBinary
+
+
+# ------------------------------
+# Module variables
+SAMPLE_FPATH  = Path('resources') / 'sample-data.tsv'
+SAMPLE_SCHEMA = pyarrow.schema([
+     pyarrow.field('gene_id'   , pyarrow.string())
+    ,pyarrow.field('cell_id'   , pyarrow.string())
+    ,pyarrow.field('expression', pyarrow.float32())
+])
+
+
+# ------------------------------
+# Parse CLI arguments first
+if __name__ == '__main__':
+    parsed_args, extra_args = (
+        ArgparseBuilder.with_description('Write a substrait plan for a sample query')
+                       .add_skytether_domain_arg(required=True)
+                       .add_skytether_partition_arg(required=True)
+                       .add_input_dir_arg(
+                            required=True
+                           ,help_str='Path to directory containing source domain'
+                        )
+                       .add_output_file_arg(
+                            help_str='Path to write resulting substrait plan message'
+                           ,default_fpath=os.path.join(
+                                'resources', 'average-expression.substrait'
+                            )
+                        )
+                       .parse_args()
+    )
+
+    # Validate args
+    substrait_fpath = Path(parsed_args.output_file)
+    if substrait_fpath.is_file():
+        sys.exit(f'Output file already exists: "{substrait_fpath}"')
+
+
+def TableFromTSV(data_fpath: Path = SAMPLE_FPATH) -> pyarrow.Table:
+    """
+    Convenience function that creates an arrow table from :data_fpath: using hard-coded
+    assumptions.
+    """
+
+    # read data from the given file; assume 3 columns (see `SAMPLE_SCHEMA`)
+    with open(data_fpath) as data_handle:
+        col_names   = next(data_handle).split(' ')
+        data_by_col = [ [] for _ in col_names ]
+
+        for line in data_handle:
+            fields = line.strip().split(' ')
+
+            data_by_col[0].append(fields[0])
+            data_by_col[1].append(fields[1])
+            data_by_col[2].append(float(fields[2]))
+
+    # construct the table and return it
+    return pyarrow.Table.from_arrays(
+         [
+              pyarrow.array(data_by_col[0], type=pyarrow.string())
+             ,pyarrow.array(data_by_col[1], type=pyarrow.string())
+             ,pyarrow.array(data_by_col[2], type=pyarrow.float32())
+         ]
+        ,schema=SAMPLE_SCHEMA
+    )
+
+def WriteSubstraitToFile(substrait_msg: substrait.Plan) -> str:
+    with substrait_fpath.open('wb') as file_handle:
+        file_handle.write(substrait_msg.SerializeToString())
+
+    return str(substrait_fpath)
+
+
+def EncodeMetaKey(key_name: str) -> bytes:
+    """ Convenience function to encode a metadata key as utf-8. """
+    return key_name.encode('utf-8')
+
+def EncodePartitionCount(pcount: int)  -> bytes:
+    """ Convenience function to encode partition count in a `size_t` size. """
+    return pcount.to_bytes(8)
+
+def EncodeStripeSize(stripe_size: int) -> bytes:
+    """ Convenience function to encode partition count in a `uint8_t` size. """
+    return stripe_size.to_bytes(1)
+
+
+def SetPartitionData(sky_partition: SkyPartition, data_table: pyarrow.Table) -> SkyPartition:
+    """
+    Convenience function to set the data of :sky_partition:. This will overwrite data
+    currently held by :sky_partition: with hard-coded assumptions.
+    """
+
+    # clear data in the partition, just to be sure
+    sky_partition.slices = []
+
+    # cache some data for use in this function
+    partition_key = Path(sky_partition.domain.key) / sky_partition.meta.key
+
+    # Create 4 slices, assuming 20 rows in slices of max chunk size 5
+    for ndx, pslice in enumerate(data_table.to_batches(max_chunksize=5)):
+
+        # Each slice is treated as a table for simplicity
+        sky_partition.slices.append(
+            SkyPartitionSlice(
+                 slice_index=ndx
+                ,key=f'{partition_key};{ndx}'
+                ,data=pyarrow.Table.from_batches([pslice])
+            )
+        )
+
+    # our partition is 3 columns wide, has 4 slices
+    sky_partition.meta.slice_width = 3
+    sky_partition.meta.slice_count = ndx + 1
+
+    # set schema first, then update `schema_meta` and schema metadata
+    sky_partition.meta.schema = data_table.schema
+    sky_partition.meta.WithMetadata({
+         EncodeMetaKey('partition_count'): EncodePartitionCount(ndx + 1)
+        ,EncodeMetaKey('stripe_size')    : EncodeStripeSize(1)
+    })
+
+    return sky_partition
+
+
+def TStatAccumulate(data_table):
+    squared_expr = data_table['expr_val'] * data_table['expr_val']
+    return (
+        data_table.group_by(data_table['feature_name'])
+                  .aggregate(
+                        cell_count=data_table.count()
+                       ,expr_total=(data_table['expr_val'].sum())
+                       ,expr_sumsq=squared_expr.sum()
+                   )
+    )
+
+def TStatCombine(left_table, right_table):
+    return (
+        left_table.join(right_table, ['feature_name'])
+          [
+               left_table['feature_name'].name('feature_name')
+              ,(left_table['cell_count'] + right_table['cell_count']).name('cell_count')
+              ,(left_table['expr_total'] + right_table['expr_total']).name('expr_total')
+              ,(left_table['expr_sumsq'] + right_table['expr_sumsq']).name('expr_sumsq')
+          ]
+    )
+
+def TStatComplete(data_table):
+    expr_avg = data_table['expr_total'] / data_table['cell_count']
+    expr_var = (data_table['expr_sumsq'] / data_table['cell_count']) - (expr_avg * expr_avg)
+    return (
+        data_table[
+             data_table['feature_name']
+            ,expr_avg.name('expr_avg')
+            ,expr_var.name('expr_var')
+        ]
+    )
+
+
+# ------------------------------
+# Main logic
+
+if __name__ == '__main__':
+    # Initialize domain and partitions
+    sky_domain = SkyDomain(parsed_args.domain_key)
+    sky_partitions = [
+        sky_domain.PartitionFor(partition_key)
+        for partition_key in parsed_args.partition_keys
+    ]
+
+    # ibis_catalog = [(sky_partition.name(), None) for sky_partition in sky_partitions]
+
+    # Populate schemas and optionally data
+    for sky_partition in sky_partitions:
+        partition_fpath = Path(parsed_args.input_dir) / sky_partition.name()
+        with open(partition_fpath, 'rb') as partition_handle:
+            partition_schema = SchemaFromBinary(partition_handle.read())
+            partition_schema = (
+                partition_schema.set(
+                     2
+                    ,partition_schema.field(2)
+                                     .with_type(pyarrow.int32())
+                )
+            )
+            print(partition_schema)
+            # partition_data = TableFromBinary(partition_handle.read())
+
+        sky_partition.SetSchema(partition_schema)
+        # sky_partition.SetData(partition_data)
+
+
+    # "Connect" to pandas
+    # ibis_conn = ibis.pandas.connect(dict(ibis_catalog))
+    # ibis_conn = ibis.pandas.connect()
+
+    # TODO: create a query using the schemas in :sky_partitions:
+    tstat_query = TStatAccumulate(
+        # ibis_conn.table(
+        ibis.table(
+             name=sky_partitions[0].name()
+            ,schema=sky_partitions[0].schema()
+        )
+    )
+
+    for sky_partition in sky_partitions[1:]:
+        partition_query = TStatAccumulate(
+            # ibis_conn.table(
+            ibis.table(
+                 name=sky_partition.name()
+                ,schema=sky_partition.schema()
+            )
+        )
+
+        tstat_query = TStatCombine(tstat_query, partition_query)
+
+    # final projection
+    tstat_query = TStatComplete(tstat_query)
+
+    print(tstat_query.unbind())
+
+    substrait_compiler = SubstraitCompiler()
+    proto_msg = substrait_compiler.compile(tstat_query.unbind())
+
+    WriteSubstraitToFile(proto_msg)
+
