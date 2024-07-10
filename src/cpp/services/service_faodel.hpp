@@ -39,7 +39,7 @@
       mohair::adapters::Faodel faodel_if;
       kelpie::Pool             faodel_pool;
 
-      Status Init(const FlightServerOptions &options) override;
+      FaodelService();
 
       Status ListFlights(
          const ServerCallContext&   context

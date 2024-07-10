@@ -35,12 +35,7 @@ namespace mohair::services {
 
   //  >> FaodelService
 
-  Status FaodelService::Init(const FlightServerOptions &options) {
-    // Call base Init and return if an error occurred
-    std::cout << "Initializing Base Server" << std::endl;
-    auto parent_status = FlightServerBase::Init(options);
-    if (not parent_status.ok()) { return parent_status; }
-
+  FaodelService::FaodelService() {
     // Initialize a Faodel adapter for this service to interact with
     std::cout << "Bootstrapping Faodel" << std::endl;
     faodel_if.BootstrapWithKelpie(/*argc=*/0, /*argv=*/nullptr);
@@ -49,8 +44,6 @@ namespace mohair::services {
     // register a compute function with kelpie
     faodel_if.RegisterEngineAcero();
     faodel_pool = faodel_if.ConnectToPool();
-
-    return Status::OK();
   }
 
   Status FaodelService::ListFlights( [[maybe_unused]] const ServerCallContext   &context
