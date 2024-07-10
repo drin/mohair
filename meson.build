@@ -107,15 +107,18 @@ dep_duckdb = dependency('duckdb'
 version_str    = meson.project_version()
 version_fields = version_str.split('.')
 
+is_debug       = get_option('buildtype') == 'debug' ? 1 : 0
+
 mohair_cfgdata = configuration_data({
-   'VERSION_STR'  : meson.project_version()
-  ,'VERSION_MAJOR': version_fields[0]
-  ,'VERSION_MINOR': version_fields[1]
-  ,'VERSION_PATCH': version_fields[2]
-  ,'MPI'          : dep_ompi.found()
-  ,'FAODEL'       : dep_faodel.found()
-  ,'TILEDB'       : dep_tiledb.found()
-  ,'DUCKDB'       : dep_duckdb.found() ? 1 : 0
+   'VERSION_STR'   : meson.project_version()
+  ,'VERSION_MAJOR' : version_fields[0]
+  ,'VERSION_MINOR' : version_fields[1]
+  ,'VERSION_PATCH' : version_fields[2]
+  ,'BUILD_IS_DEBUG': is_debug
+  ,'MPI'           : dep_ompi.found()
+  ,'FAODEL'        : dep_faodel.found()
+  ,'TILEDB'        : dep_tiledb.found()
+  ,'DUCKDB'        : dep_duckdb.found() ? 1 : 0
 })
 
 mohair_cfgfile = configure_file(
@@ -298,6 +301,24 @@ bin_mohairclient_srclist = (
 )
 bin_mohairclient   = executable('mohair-client'
   ,bin_mohairclient_srclist
+  ,dependencies       : dep_service
+  ,include_directories: arrow_incdir
+  ,install            : false
+)
+
+#   |> server-side entry point for mohair services
+# NOTE: as this supports more engines, more sources need to be added
+csd_srv_srclist = (
+    [
+       cpp_tooldir    / 'csd-service.cpp'
+      ,cpp_enginedir  / 'duckdb.cpp'
+      ,cpp_servicedir / 'service_duckdb.cpp'
+    ]
+  + mohair_srv_srclist
+)
+
+bin_srv_csd = executable('csd-service'
+  ,csd_srv_srclist
   ,dependencies       : dep_service
   ,include_directories: arrow_incdir
   ,install            : false
