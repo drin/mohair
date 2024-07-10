@@ -274,6 +274,13 @@ namespace mohair {
     auto             anchor_msg    = PlanAnchorFrom(anchor_op);
     vector<QueryOp*> anchor_inputs = anchor_op->GetOpInputs();
 
+    // This is a debug macro
+    MohairDebugMsg(
+         "Anchor op has ["
+      << std::to_string(anchor_inputs.size())
+      << "] inputs"
+    );
+
     // Initialize the list of messages to return
     vector<unique_ptr<SubstraitMessage>> subplan_msgs;
     subplan_msgs.reserve(anchor_inputs.size());
