@@ -42,7 +42,26 @@
 
 
 // ------------------------------
+// Macros
+#if MOHAIR_DEBUG
+  #define MohairDebugMsg(msg_str)              \
+          do {                                 \
+            std::cout << msg_str << std::endl; \
+          } while (0);
+
+#else
+  #define MohairDebugMsg(msg_str) {}
+
+#endif
+
+
+// ------------------------------
 // Type aliases
+
+
+// >> Namespaces
+namespace fs = std::filesystem;
+
 
 //  >> Standard types
 using std::shared_ptr;
@@ -71,6 +90,7 @@ using arrow::ipc::RecordBatchFileReader;
 
 // ------------------------------
 // Public global variables
+
 namespace mohair {
   const string version       = VERSION_STRING;
   const string version_major = VERSION_MAJOR;
