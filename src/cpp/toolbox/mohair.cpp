@@ -108,10 +108,20 @@ int main(int argc, char **argv) {
     std::cout << breaker->ViewPlan() << std::endl;
   }
 
-  int subplan_total = 1;
-  for (size_t split_ndx = 0; split_ndx < plan_breakers.size(); ++split_ndx) {
+  // prepare to iterate over internal plan breakers
+  int    subplan_total = 1;
+  size_t count_anchors = plan_breakers.size();
+  std::vector<unique_ptr<AppPlan>>* plan_anchors = &plan_breakers;
+
+  // otherwise, iterate over leaf breaker ops (these will be simple subplans)
+  if (not plan_breakers.size()) {
+    count_anchors = plan_bleaves.size();
+    plan_anchors  = &plan_bleaves;
+  }
+
+  for (size_t split_ndx = 0; split_ndx < count_anchors; ++split_ndx) {
     auto plan_split = std::make_unique<PlanSplit>(
-      *application_plan, *(plan_breakers[split_ndx])
+      *application_plan, *((*plan_anchors)[split_ndx])
     );
 
     auto subplan_msgs = substrait_msg->SubplansFromSplit(*plan_split);
@@ -130,7 +140,7 @@ int main(int argc, char **argv) {
       SubstraitMessage& subplan_msg = *(subplan_msgs)[subplan_ndx];
       auto success = subplan_msg.SerializeToFile(out_fname.data());
 
-      if (not success) { return 11; }
+      if (not success) { return 12; }
     }
   }
 
