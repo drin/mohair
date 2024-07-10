@@ -45,9 +45,6 @@ using std::unordered_map;
   // ------------------------------
   // Type aliases
 
-  // >> Namespaces
-  namespace fs = std::filesystem;
-
   // >> Low-level types
   template <typename ptype>
   using duck_sptr = duckdb::shared_ptr<ptype>;
@@ -112,7 +109,6 @@ using std::unordered_map;
 
     struct EngineDuckDB {
       // >> Attributes
-      DuckDB     engine_db;
       Connection engine_conn;
       int        context_id;
 
@@ -125,11 +121,15 @@ using std::unordered_map;
       // >> Functions
       Result<int> ArrowScanOpIPC(fs::path arrow_fpath);
       Result<int> ArrowScanOpFile(fs::path arrow_fpath);
-      Status ExecuteRelation(int prepared_relid);
+      Result<int> SubstraitPlanMessage(string plan_msg);
+
+      Status       ExecuteRelation(int prepared_relid);
+      Relation&    GetRelation(int prepared_relid);
+      QueryResult& GetResult(int prepared_relid);
     };
 
-    EngineDuckDB DuckDBForFile(fs::path db_fpath);
-    EngineDuckDB DuckDBForMem();
+    unique_ptr<EngineDuckDB> DuckDBForFile(fs::path db_fpath);
+    unique_ptr<EngineDuckDB> DuckDBForMem();
 
   } // namespace: mohair::adapters
 
