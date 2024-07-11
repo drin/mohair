@@ -56,9 +56,9 @@
 
       // >> Standard Flight API
       Status
-      MohairService::DoGet( const ServerCallContext&      context
-                           ,const Ticket&                 request
-                           ,unique_ptr<FlightDataStream>* stream) override;
+      DoGet( const ServerCallContext&      context
+            ,const Ticket&                 request
+            ,unique_ptr<FlightDataStream>* stream) override;
 
     };
 
