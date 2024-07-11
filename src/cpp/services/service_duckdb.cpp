@@ -89,7 +89,7 @@ namespace mohair::services {
 
   //    |> Standard Flight API
   Status
-  MohairService::DoGet( const ServerCallContext&      context
+  DuckDBService::DoGet( const ServerCallContext&      context
                        ,const Ticket&                 request
                        ,unique_ptr<FlightDataStream>* stream) {
     int   query_id    = std::stoi(request.ticket);
