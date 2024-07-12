@@ -58,9 +58,9 @@ extern ComputeResourcesDefaultTypeInternal _ComputeResources_default_instance_;
 class MemoryResources;
 struct MemoryResourcesDefaultTypeInternal;
 extern MemoryResourcesDefaultTypeInternal _MemoryResources_default_instance_;
-class MohairService;
-struct MohairServiceDefaultTypeInternal;
-extern MohairServiceDefaultTypeInternal _MohairService_default_instance_;
+class ServiceConfig;
+struct ServiceConfigDefaultTypeInternal;
+extern ServiceConfigDefaultTypeInternal _ServiceConfig_default_instance_;
 }  // namespace mohair
 namespace google {
 namespace protobuf {
@@ -548,23 +548,23 @@ class ComputeResources final : public ::google::protobuf::Message
 };
 // -------------------------------------------------------------------
 
-class MohairService final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:mohair.MohairService) */ {
+class ServiceConfig final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:mohair.ServiceConfig) */ {
  public:
-  inline MohairService() : MohairService(nullptr) {}
-  ~MohairService() override;
+  inline ServiceConfig() : ServiceConfig(nullptr) {}
+  ~ServiceConfig() override;
   template <typename = void>
-  explicit PROTOBUF_CONSTEXPR MohairService(
+  explicit PROTOBUF_CONSTEXPR ServiceConfig(
       ::google::protobuf::internal::ConstantInitialized);
 
-  inline MohairService(const MohairService& from) : MohairService(nullptr, from) {}
-  inline MohairService(MohairService&& from) noexcept
-      : MohairService(nullptr, std::move(from)) {}
-  inline MohairService& operator=(const MohairService& from) {
+  inline ServiceConfig(const ServiceConfig& from) : ServiceConfig(nullptr, from) {}
+  inline ServiceConfig(ServiceConfig&& from) noexcept
+      : ServiceConfig(nullptr, std::move(from)) {}
+  inline ServiceConfig& operator=(const ServiceConfig& from) {
     CopyFrom(from);
     return *this;
   }
-  inline MohairService& operator=(MohairService&& from) noexcept {
+  inline ServiceConfig& operator=(ServiceConfig&& from) noexcept {
     if (this == &from) return *this;
     if (GetArena() == from.GetArena()
 #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -596,16 +596,16 @@ class MohairService final : public ::google::protobuf::Message
   static const ::google::protobuf::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const MohairService& default_instance() {
+  static const ServiceConfig& default_instance() {
     return *internal_default_instance();
   }
-  static inline const MohairService* internal_default_instance() {
-    return reinterpret_cast<const MohairService*>(
-        &_MohairService_default_instance_);
+  static inline const ServiceConfig* internal_default_instance() {
+    return reinterpret_cast<const ServiceConfig*>(
+        &_ServiceConfig_default_instance_);
   }
   static constexpr int kIndexInFileMessages = 2;
-  friend void swap(MohairService& a, MohairService& b) { a.Swap(&b); }
-  inline void Swap(MohairService* other) {
+  friend void swap(ServiceConfig& a, ServiceConfig& b) { a.Swap(&b); }
+  inline void Swap(ServiceConfig* other) {
     if (other == this) return;
 #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetArena() != nullptr && GetArena() == other->GetArena()) {
@@ -617,7 +617,7 @@ class MohairService final : public ::google::protobuf::Message
       ::google::protobuf::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(MohairService* other) {
+  void UnsafeArenaSwap(ServiceConfig* other) {
     if (other == this) return;
     ABSL_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
@@ -625,13 +625,13 @@ class MohairService final : public ::google::protobuf::Message
 
   // implements Message ----------------------------------------------
 
-  MohairService* New(::google::protobuf::Arena* arena = nullptr) const final {
-    return ::google::protobuf::Message::DefaultConstruct<MohairService>(arena);
+  ServiceConfig* New(::google::protobuf::Arena* arena = nullptr) const final {
+    return ::google::protobuf::Message::DefaultConstruct<ServiceConfig>(arena);
   }
   using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const MohairService& from);
+  void CopyFrom(const ServiceConfig& from);
   using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const MohairService& from) { MohairService::MergeImpl(*this, from); }
+  void MergeFrom(const ServiceConfig& from) { ServiceConfig::MergeImpl(*this, from); }
 
   private:
   static void MergeImpl(
@@ -652,16 +652,16 @@ class MohairService final : public ::google::protobuf::Message
   private:
   void SharedCtor(::google::protobuf::Arena* arena);
   void SharedDtor();
-  void InternalSwap(MohairService* other);
+  void InternalSwap(ServiceConfig* other);
  private:
   friend class ::google::protobuf::internal::AnyMetadata;
-  static ::absl::string_view FullMessageName() { return "mohair.MohairService"; }
+  static ::absl::string_view FullMessageName() { return "mohair.ServiceConfig"; }
 
  protected:
-  explicit MohairService(::google::protobuf::Arena* arena);
-  MohairService(::google::protobuf::Arena* arena, const MohairService& from);
-  MohairService(::google::protobuf::Arena* arena, MohairService&& from) noexcept
-      : MohairService(arena) {
+  explicit ServiceConfig(::google::protobuf::Arena* arena);
+  ServiceConfig(::google::protobuf::Arena* arena, const ServiceConfig& from);
+  ServiceConfig(::google::protobuf::Arena* arena, ServiceConfig&& from) noexcept
+      : ServiceConfig(arena) {
     *this = ::std::move(from);
   }
   const ::google::protobuf::Message::ClassData* GetClassData() const final;
@@ -676,25 +676,25 @@ class MohairService final : public ::google::protobuf::Message
     kServiceComputeFieldNumber = 5,
     kServiceLocationFieldNumber = 1,
     kServiceMemFieldNumber = 4,
-    kServicePlatformFieldNumber = 2,
+    kPlatformClassFieldNumber = 2,
   };
-  // repeated .mohair.MohairService downstream_services = 3 [json_name = "downstreamServices"];
+  // repeated .mohair.ServiceConfig downstream_services = 3 [json_name = "downstreamServices"];
   int downstream_services_size() const;
   private:
   int _internal_downstream_services_size() const;
 
   public:
   void clear_downstream_services() ;
-  ::mohair::MohairService* mutable_downstream_services(int index);
-  ::google::protobuf::RepeatedPtrField<::mohair::MohairService>* mutable_downstream_services();
+  ::mohair::ServiceConfig* mutable_downstream_services(int index);
+  ::google::protobuf::RepeatedPtrField<::mohair::ServiceConfig>* mutable_downstream_services();
 
   private:
-  const ::google::protobuf::RepeatedPtrField<::mohair::MohairService>& _internal_downstream_services() const;
-  ::google::protobuf::RepeatedPtrField<::mohair::MohairService>* _internal_mutable_downstream_services();
+  const ::google::protobuf::RepeatedPtrField<::mohair::ServiceConfig>& _internal_downstream_services() const;
+  ::google::protobuf::RepeatedPtrField<::mohair::ServiceConfig>* _internal_mutable_downstream_services();
   public:
-  const ::mohair::MohairService& downstream_services(int index) const;
-  ::mohair::MohairService* add_downstream_services();
-  const ::google::protobuf::RepeatedPtrField<::mohair::MohairService>& downstream_services() const;
+  const ::mohair::ServiceConfig& downstream_services(int index) const;
+  ::mohair::ServiceConfig* add_downstream_services();
+  const ::google::protobuf::RepeatedPtrField<::mohair::ServiceConfig>& downstream_services() const;
   // repeated .mohair.ComputeResources service_compute = 5 [json_name = "serviceCompute"];
   int service_compute_size() const;
   private:
@@ -743,17 +743,17 @@ class MohairService final : public ::google::protobuf::Message
   ::mohair::MemoryResources* _internal_mutable_service_mem();
 
   public:
-  // .mohair.DeviceClass service_platform = 2 [json_name = "servicePlatform"];
-  void clear_service_platform() ;
-  ::mohair::DeviceClass service_platform() const;
-  void set_service_platform(::mohair::DeviceClass value);
+  // .mohair.DeviceClass platform_class = 2 [json_name = "platformClass"];
+  void clear_platform_class() ;
+  ::mohair::DeviceClass platform_class() const;
+  void set_platform_class(::mohair::DeviceClass value);
 
   private:
-  ::mohair::DeviceClass _internal_service_platform() const;
-  void _internal_set_service_platform(::mohair::DeviceClass value);
+  ::mohair::DeviceClass _internal_platform_class() const;
+  void _internal_set_platform_class(::mohair::DeviceClass value);
 
   public:
-  // @@protoc_insertion_point(class_scope:mohair.MohairService)
+  // @@protoc_insertion_point(class_scope:mohair.ServiceConfig)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
@@ -763,7 +763,7 @@ class MohairService final : public ::google::protobuf::Message
       _table_;
 
   static constexpr const void* _raw_default_instance_ =
-      &_MohairService_default_instance_;
+      &_ServiceConfig_default_instance_;
 
   friend class ::google::protobuf::MessageLite;
   friend class ::google::protobuf::Arena;
@@ -778,14 +778,14 @@ class MohairService final : public ::google::protobuf::Message
                           ::google::protobuf::Arena* arena);
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
-                          const MohairService& from_msg);
+                          const ServiceConfig& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     mutable ::google::protobuf::internal::CachedSize _cached_size_;
-    ::google::protobuf::RepeatedPtrField< ::mohair::MohairService > downstream_services_;
+    ::google::protobuf::RepeatedPtrField< ::mohair::ServiceConfig > downstream_services_;
     ::google::protobuf::RepeatedPtrField< ::mohair::ComputeResources > service_compute_;
     ::google::protobuf::internal::ArenaStringPtr service_location_;
     ::mohair::MemoryResources* service_mem_;
-    int service_platform_;
+    int platform_class_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -987,48 +987,48 @@ inline void MemoryResources::_internal_set_memory_freq(::uint32_t value) {
 
 // -------------------------------------------------------------------
 
-// MohairService
+// ServiceConfig
 
 // string service_location = 1 [json_name = "serviceLocation"];
-inline void MohairService::clear_service_location() {
+inline void ServiceConfig::clear_service_location() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.service_location_.ClearToEmpty();
 }
-inline const std::string& MohairService::service_location() const
+inline const std::string& ServiceConfig::service_location() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:mohair.MohairService.service_location)
+  // @@protoc_insertion_point(field_get:mohair.ServiceConfig.service_location)
   return _internal_service_location();
 }
 template <typename Arg_, typename... Args_>
-inline PROTOBUF_ALWAYS_INLINE void MohairService::set_service_location(Arg_&& arg,
+inline PROTOBUF_ALWAYS_INLINE void ServiceConfig::set_service_location(Arg_&& arg,
                                                      Args_... args) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.service_location_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
-  // @@protoc_insertion_point(field_set:mohair.MohairService.service_location)
+  // @@protoc_insertion_point(field_set:mohair.ServiceConfig.service_location)
 }
-inline std::string* MohairService::mutable_service_location() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline std::string* ServiceConfig::mutable_service_location() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   std::string* _s = _internal_mutable_service_location();
-  // @@protoc_insertion_point(field_mutable:mohair.MohairService.service_location)
+  // @@protoc_insertion_point(field_mutable:mohair.ServiceConfig.service_location)
   return _s;
 }
-inline const std::string& MohairService::_internal_service_location() const {
+inline const std::string& ServiceConfig::_internal_service_location() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.service_location_.Get();
 }
-inline void MohairService::_internal_set_service_location(const std::string& value) {
+inline void ServiceConfig::_internal_set_service_location(const std::string& value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.service_location_.Set(value, GetArena());
 }
-inline std::string* MohairService::_internal_mutable_service_location() {
+inline std::string* ServiceConfig::_internal_mutable_service_location() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _impl_.service_location_.Mutable( GetArena());
 }
-inline std::string* MohairService::release_service_location() {
+inline std::string* ServiceConfig::release_service_location() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:mohair.MohairService.service_location)
+  // @@protoc_insertion_point(field_release:mohair.ServiceConfig.service_location)
   return _impl_.service_location_.Release();
 }
-inline void MohairService::set_allocated_service_location(std::string* value) {
+inline void ServiceConfig::set_allocated_service_location(std::string* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.service_location_.SetAllocated(value, GetArena());
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -1036,101 +1036,101 @@ inline void MohairService::set_allocated_service_location(std::string* value) {
           _impl_.service_location_.Set("", GetArena());
         }
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:mohair.MohairService.service_location)
+  // @@protoc_insertion_point(field_set_allocated:mohair.ServiceConfig.service_location)
 }
 
-// .mohair.DeviceClass service_platform = 2 [json_name = "servicePlatform"];
-inline void MohairService::clear_service_platform() {
+// .mohair.DeviceClass platform_class = 2 [json_name = "platformClass"];
+inline void ServiceConfig::clear_platform_class() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.service_platform_ = 0;
+  _impl_.platform_class_ = 0;
 }
-inline ::mohair::DeviceClass MohairService::service_platform() const {
-  // @@protoc_insertion_point(field_get:mohair.MohairService.service_platform)
-  return _internal_service_platform();
+inline ::mohair::DeviceClass ServiceConfig::platform_class() const {
+  // @@protoc_insertion_point(field_get:mohair.ServiceConfig.platform_class)
+  return _internal_platform_class();
 }
-inline void MohairService::set_service_platform(::mohair::DeviceClass value) {
-  _internal_set_service_platform(value);
-  // @@protoc_insertion_point(field_set:mohair.MohairService.service_platform)
+inline void ServiceConfig::set_platform_class(::mohair::DeviceClass value) {
+  _internal_set_platform_class(value);
+  // @@protoc_insertion_point(field_set:mohair.ServiceConfig.platform_class)
 }
-inline ::mohair::DeviceClass MohairService::_internal_service_platform() const {
+inline ::mohair::DeviceClass ServiceConfig::_internal_platform_class() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return static_cast<::mohair::DeviceClass>(_impl_.service_platform_);
+  return static_cast<::mohair::DeviceClass>(_impl_.platform_class_);
 }
-inline void MohairService::_internal_set_service_platform(::mohair::DeviceClass value) {
+inline void ServiceConfig::_internal_set_platform_class(::mohair::DeviceClass value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.service_platform_ = value;
+  _impl_.platform_class_ = value;
 }
 
-// repeated .mohair.MohairService downstream_services = 3 [json_name = "downstreamServices"];
-inline int MohairService::_internal_downstream_services_size() const {
+// repeated .mohair.ServiceConfig downstream_services = 3 [json_name = "downstreamServices"];
+inline int ServiceConfig::_internal_downstream_services_size() const {
   return _internal_downstream_services().size();
 }
-inline int MohairService::downstream_services_size() const {
+inline int ServiceConfig::downstream_services_size() const {
   return _internal_downstream_services_size();
 }
-inline void MohairService::clear_downstream_services() {
+inline void ServiceConfig::clear_downstream_services() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.downstream_services_.Clear();
 }
-inline ::mohair::MohairService* MohairService::mutable_downstream_services(int index)
+inline ::mohair::ServiceConfig* ServiceConfig::mutable_downstream_services(int index)
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable:mohair.MohairService.downstream_services)
+  // @@protoc_insertion_point(field_mutable:mohair.ServiceConfig.downstream_services)
   return _internal_mutable_downstream_services()->Mutable(index);
 }
-inline ::google::protobuf::RepeatedPtrField<::mohair::MohairService>* MohairService::mutable_downstream_services()
+inline ::google::protobuf::RepeatedPtrField<::mohair::ServiceConfig>* ServiceConfig::mutable_downstream_services()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable_list:mohair.MohairService.downstream_services)
+  // @@protoc_insertion_point(field_mutable_list:mohair.ServiceConfig.downstream_services)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _internal_mutable_downstream_services();
 }
-inline const ::mohair::MohairService& MohairService::downstream_services(int index) const
+inline const ::mohair::ServiceConfig& ServiceConfig::downstream_services(int index) const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:mohair.MohairService.downstream_services)
+  // @@protoc_insertion_point(field_get:mohair.ServiceConfig.downstream_services)
   return _internal_downstream_services().Get(index);
 }
-inline ::mohair::MohairService* MohairService::add_downstream_services() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::mohair::ServiceConfig* ServiceConfig::add_downstream_services() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  ::mohair::MohairService* _add = _internal_mutable_downstream_services()->Add();
-  // @@protoc_insertion_point(field_add:mohair.MohairService.downstream_services)
+  ::mohair::ServiceConfig* _add = _internal_mutable_downstream_services()->Add();
+  // @@protoc_insertion_point(field_add:mohair.ServiceConfig.downstream_services)
   return _add;
 }
-inline const ::google::protobuf::RepeatedPtrField<::mohair::MohairService>& MohairService::downstream_services() const
+inline const ::google::protobuf::RepeatedPtrField<::mohair::ServiceConfig>& ServiceConfig::downstream_services() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:mohair.MohairService.downstream_services)
+  // @@protoc_insertion_point(field_list:mohair.ServiceConfig.downstream_services)
   return _internal_downstream_services();
 }
-inline const ::google::protobuf::RepeatedPtrField<::mohair::MohairService>&
-MohairService::_internal_downstream_services() const {
+inline const ::google::protobuf::RepeatedPtrField<::mohair::ServiceConfig>&
+ServiceConfig::_internal_downstream_services() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.downstream_services_;
 }
-inline ::google::protobuf::RepeatedPtrField<::mohair::MohairService>*
-MohairService::_internal_mutable_downstream_services() {
+inline ::google::protobuf::RepeatedPtrField<::mohair::ServiceConfig>*
+ServiceConfig::_internal_mutable_downstream_services() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.downstream_services_;
 }
 
 // optional .mohair.MemoryResources service_mem = 4 [json_name = "serviceMem"];
-inline bool MohairService::has_service_mem() const {
+inline bool ServiceConfig::has_service_mem() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.service_mem_ != nullptr);
   return value;
 }
-inline void MohairService::clear_service_mem() {
+inline void ServiceConfig::clear_service_mem() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.service_mem_ != nullptr) _impl_.service_mem_->Clear();
   _impl_._has_bits_[0] &= ~0x00000001u;
 }
-inline const ::mohair::MemoryResources& MohairService::_internal_service_mem() const {
+inline const ::mohair::MemoryResources& ServiceConfig::_internal_service_mem() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   const ::mohair::MemoryResources* p = _impl_.service_mem_;
   return p != nullptr ? *p : reinterpret_cast<const ::mohair::MemoryResources&>(::mohair::_MemoryResources_default_instance_);
 }
-inline const ::mohair::MemoryResources& MohairService::service_mem() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:mohair.MohairService.service_mem)
+inline const ::mohair::MemoryResources& ServiceConfig::service_mem() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:mohair.ServiceConfig.service_mem)
   return _internal_service_mem();
 }
-inline void MohairService::unsafe_arena_set_allocated_service_mem(::mohair::MemoryResources* value) {
+inline void ServiceConfig::unsafe_arena_set_allocated_service_mem(::mohair::MemoryResources* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (GetArena() == nullptr) {
     delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.service_mem_);
@@ -1141,9 +1141,9 @@ inline void MohairService::unsafe_arena_set_allocated_service_mem(::mohair::Memo
   } else {
     _impl_._has_bits_[0] &= ~0x00000001u;
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mohair.MohairService.service_mem)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mohair.ServiceConfig.service_mem)
 }
-inline ::mohair::MemoryResources* MohairService::release_service_mem() {
+inline ::mohair::MemoryResources* ServiceConfig::release_service_mem() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
   _impl_._has_bits_[0] &= ~0x00000001u;
@@ -1162,16 +1162,16 @@ inline ::mohair::MemoryResources* MohairService::release_service_mem() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return released;
 }
-inline ::mohair::MemoryResources* MohairService::unsafe_arena_release_service_mem() {
+inline ::mohair::MemoryResources* ServiceConfig::unsafe_arena_release_service_mem() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:mohair.MohairService.service_mem)
+  // @@protoc_insertion_point(field_release:mohair.ServiceConfig.service_mem)
 
   _impl_._has_bits_[0] &= ~0x00000001u;
   ::mohair::MemoryResources* temp = _impl_.service_mem_;
   _impl_.service_mem_ = nullptr;
   return temp;
 }
-inline ::mohair::MemoryResources* MohairService::_internal_mutable_service_mem() {
+inline ::mohair::MemoryResources* ServiceConfig::_internal_mutable_service_mem() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.service_mem_ == nullptr) {
     auto* p = ::google::protobuf::Message::DefaultConstruct<::mohair::MemoryResources>(GetArena());
@@ -1179,13 +1179,13 @@ inline ::mohair::MemoryResources* MohairService::_internal_mutable_service_mem()
   }
   return _impl_.service_mem_;
 }
-inline ::mohair::MemoryResources* MohairService::mutable_service_mem() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::mohair::MemoryResources* ServiceConfig::mutable_service_mem() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   _impl_._has_bits_[0] |= 0x00000001u;
   ::mohair::MemoryResources* _msg = _internal_mutable_service_mem();
-  // @@protoc_insertion_point(field_mutable:mohair.MohairService.service_mem)
+  // @@protoc_insertion_point(field_mutable:mohair.ServiceConfig.service_mem)
   return _msg;
 }
-inline void MohairService::set_allocated_service_mem(::mohair::MemoryResources* value) {
+inline void ServiceConfig::set_allocated_service_mem(::mohair::MemoryResources* value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (message_arena == nullptr) {
@@ -1203,54 +1203,54 @@ inline void MohairService::set_allocated_service_mem(::mohair::MemoryResources* 
   }
 
   _impl_.service_mem_ = reinterpret_cast<::mohair::MemoryResources*>(value);
-  // @@protoc_insertion_point(field_set_allocated:mohair.MohairService.service_mem)
+  // @@protoc_insertion_point(field_set_allocated:mohair.ServiceConfig.service_mem)
 }
 
 // repeated .mohair.ComputeResources service_compute = 5 [json_name = "serviceCompute"];
-inline int MohairService::_internal_service_compute_size() const {
+inline int ServiceConfig::_internal_service_compute_size() const {
   return _internal_service_compute().size();
 }
-inline int MohairService::service_compute_size() const {
+inline int ServiceConfig::service_compute_size() const {
   return _internal_service_compute_size();
 }
-inline void MohairService::clear_service_compute() {
+inline void ServiceConfig::clear_service_compute() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.service_compute_.Clear();
 }
-inline ::mohair::ComputeResources* MohairService::mutable_service_compute(int index)
+inline ::mohair::ComputeResources* ServiceConfig::mutable_service_compute(int index)
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable:mohair.MohairService.service_compute)
+  // @@protoc_insertion_point(field_mutable:mohair.ServiceConfig.service_compute)
   return _internal_mutable_service_compute()->Mutable(index);
 }
-inline ::google::protobuf::RepeatedPtrField<::mohair::ComputeResources>* MohairService::mutable_service_compute()
+inline ::google::protobuf::RepeatedPtrField<::mohair::ComputeResources>* ServiceConfig::mutable_service_compute()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable_list:mohair.MohairService.service_compute)
+  // @@protoc_insertion_point(field_mutable_list:mohair.ServiceConfig.service_compute)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _internal_mutable_service_compute();
 }
-inline const ::mohair::ComputeResources& MohairService::service_compute(int index) const
+inline const ::mohair::ComputeResources& ServiceConfig::service_compute(int index) const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:mohair.MohairService.service_compute)
+  // @@protoc_insertion_point(field_get:mohair.ServiceConfig.service_compute)
   return _internal_service_compute().Get(index);
 }
-inline ::mohair::ComputeResources* MohairService::add_service_compute() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::mohair::ComputeResources* ServiceConfig::add_service_compute() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   ::mohair::ComputeResources* _add = _internal_mutable_service_compute()->Add();
-  // @@protoc_insertion_point(field_add:mohair.MohairService.service_compute)
+  // @@protoc_insertion_point(field_add:mohair.ServiceConfig.service_compute)
   return _add;
 }
-inline const ::google::protobuf::RepeatedPtrField<::mohair::ComputeResources>& MohairService::service_compute() const
+inline const ::google::protobuf::RepeatedPtrField<::mohair::ComputeResources>& ServiceConfig::service_compute() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:mohair.MohairService.service_compute)
+  // @@protoc_insertion_point(field_list:mohair.ServiceConfig.service_compute)
   return _internal_service_compute();
 }
 inline const ::google::protobuf::RepeatedPtrField<::mohair::ComputeResources>&
-MohairService::_internal_service_compute() const {
+ServiceConfig::_internal_service_compute() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.service_compute_;
 }
 inline ::google::protobuf::RepeatedPtrField<::mohair::ComputeResources>*
-MohairService::_internal_mutable_service_compute() {
+ServiceConfig::_internal_mutable_service_compute() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.service_compute_;
 }
