@@ -25,68 +25,145 @@
 // >> Internal
 #include "../services/service_mohair.hpp"
 
+#include "../query/mohair/topology.pb.h"
+
 
 // ------------------------------
 // Macros and Aliases
 
 using std::unordered_map;
 
+using mohair::ServiceConfig;
+using mohair::DeviceClass;
+
 
 // ------------------------------
 // Classes
 
-// >> A class directly defined here because nothing else needs to know about it
-struct TopologyService : public MohairService {
+// >> An anonymous namespace for implementations nothing else needs to know about
+namespace {
 
-  // >> Attributes
-  unordered_map<FlightEndpoint, vector<Location>> service_map;
-
-
-  // >> Constructors
-  TopologyService() = default;
+  // ----------
+  // Aliases we only need in here
+  using mohair::services::MohairService;
+  using mohair::services::HashFunctorMohairLocation;
 
 
-  // >> Helper functions
-  Result<FlightEndpoint> GetDownstreamServices(FlightEndpoint& upstream_srv) {
-    // TODO
-    // auto downstream_srvs = std::make_unique<FlightEndpoint>();
-    return Status::NotImplemented("WIP");
+  // ----------
+  // Metadata service implementations
+
+  // An ActionType has 2 attributes:
+  //  1. type:        std::string
+  //  2. description: std::string
+  vector<ActionType> SupportedActionsForTopology() {
+    return {
+       { "register-service"   }, { "Add a service to the CS system"      }
+      ,{ "deregister-service" }, { "Remove a service from the CS system" }
+    };
   }
 
+  // >> For pure topological information
+  using location_map = unordered_map<Location, vector<Location>, HashFunctorMohairLocation>;
 
-  // >> Standard Flight API
-  Status ListFlights( const ServerCallContext&   context
-                     ,const Criteria*            criteria
-                     ,unique_ptr<FlightListing>* listings) override {
-  }
+  struct TopologyService : public MohairService {
 
-  Status GetFlightInfo( const ServerCallContext& context
-                       ,const FlightDescriptor&  request
-                       ,unique_ptr<FlightInfo>*  info) override {
-  }
+    // |> Attributes
+    vector<Location> cs_servers;
+    location_map     cs_devices;
 
-  Status PollFlightInfo( const ServerCallContext& context
-                        ,const FlightDescriptor&  request
-                        ,unique_ptr<PollInfo>*    info) override {
-  }
+    // |> Constructors
+    TopologyService() = default;
 
-  Status GetSchema( const ServerCallContext  &context
-                   ,const FlightDescriptor   &request
-                   ,unique_ptr<SchemaResult> *schema) override {
-  }
+    // |> Helper functions
+    Result<FlightEndpoint> GetDownstreamServices([[maybe_unused]] FlightEndpoint& upstream_srv) {
+      // TODO
+      // auto downstream_srvs = std::make_unique<FlightEndpoint>();
+      return Status::NotImplemented("WIP");
+    }
 
-  Status ListActions( const ServerCallContext& context
-                     ,vector<ActionType>*      actions) override {
-  }
+    // >> Custom Flight API
+    Status
+    ActionRegisterService( [[maybe_unused]] const ServerCallContext&  context
+                          ,                 const shared_ptr<Buffer>  service_msg
+                          ,[[maybe_unused]] unique_ptr<ResultStream>* response_stream) {
+      // NOTE: hoping Buffer implicitly converts to string
+      string service_cfg = service_msg->ToString();
 
-};
+      auto service_info = std::make_unique<ServiceConfig>();
+      if (not service_info->ParseFromString(service_cfg)) {
+        return Status::Invalid("Unable to parse service configuration from message");
+      }
+      
+      ARROW_ASSIGN_OR_RAISE(
+         auto service_loc
+        ,Location::Parse(service_info->service_location())
+      );
+
+      cs_servers.push_back(std::move(service_loc));
+      return Status::OK();
+    }
+
+
+    // |> Standard Flight API
+    Status ListFlights( [[maybe_unused]] const ServerCallContext&   context
+                       ,[[maybe_unused]] const Criteria*            criteria
+                       ,[[maybe_unused]] unique_ptr<FlightListing>* listings) override {
+      return Status::NotImplemented("WIP");
+    }
+
+    Status GetFlightInfo( [[maybe_unused]] const ServerCallContext& context
+                         ,[[maybe_unused]] const FlightDescriptor&  request
+                         ,[[maybe_unused]] unique_ptr<FlightInfo>*  info) override {
+      return Status::NotImplemented("WIP");
+    }
+
+    Status PollFlightInfo( [[maybe_unused]] const ServerCallContext& context
+                          ,[[maybe_unused]] const FlightDescriptor&  request
+                          ,[[maybe_unused]] unique_ptr<PollInfo>*    info) override {
+      return Status::NotImplemented("WIP");
+    }
+
+    Status GetSchema( [[maybe_unused]] const ServerCallContext  &context
+                     ,[[maybe_unused]] const FlightDescriptor   &request
+                     ,[[maybe_unused]] unique_ptr<SchemaResult> *schema) override {
+      return Status::NotImplemented("WIP");
+    }
+
+    Status DoAction( const ServerCallContext&  context
+                    ,const Action&             action
+                    ,unique_ptr<ResultStream>* result) {
+
+      // known actions
+      if (action.type == "register-service") {
+        return ActionRegisterService(context, action.body, result);
+      }
+
+      /*
+      else if (action.type == "deregister-service") {
+        return ActionDeregisterService(context, action.body, result);
+      }
+      */
+
+      // Catch all that returns Status::NotImplemented()
+      return ActionUnknown(context, action.type);
+    }
+
+    Status ListActions( [[maybe_unused]] const ServerCallContext& context
+                       ,                 vector<ActionType>*      actions) override {
+      *actions = SupportedActionsForTopology();
+      return Status::OK();
+    }
+
+  };
+
+} // namespace: anonymous
 
 
 // ------------------------------
 // Functions
 
 // >> Engine-agnostic
-int ValidateArgs(int argc, char **argv) {
+int ValidateArgs(int argc, [[maybe_unused]] char **argv) {
   if (argc != 1) {
     std::cerr << "Usage: csd-service" << std::endl;
     return 1;
@@ -96,12 +173,13 @@ int ValidateArgs(int argc, char **argv) {
 }
 
 
-// >> For DuckDB engine
-int StartServiceDuckDB() {
-    auto status_service = mohair::services::StartMohairDuckDB();
+// >> For topological service
+int StartServiceTopo() {
+    unique_ptr<FlightServerBase> topo_service = std::make_unique<TopologyService>();
+    auto status_service = mohair::services::StartService(topo_service);
 
     if (not status_service.ok()) {
-      mohair::PrintError("Error running cs-engine [duckdb]", status_service);
+      mohair::PrintError("Error running topological service", status_service);
       return 2;
     }
 
@@ -118,13 +196,5 @@ int main(int argc, char **argv) {
     return validate_status;
   }
 
-  #if USE_DUCKDB
-    // Start the flight service
-    return StartServiceDuckDB();
-
-  #else
-    std::cerr << "No known cs-engine is enabled." << std::endl;
-    return 0;
-
-  #endif
+  return StartServiceTopo();
 }
