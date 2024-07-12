@@ -156,6 +156,7 @@ endif
 # >> For substrait definitions
 substrait_hdrlist = [
    cpp_proto_mohair    / 'algebra.pb.h'
+  ,cpp_proto_mohair    / 'topology.pb.h'
   ,cpp_proto_substrait / 'algebra.pb.h'
   ,cpp_proto_substrait / 'extensions' / 'extensions.pb.h'
   ,cpp_proto_substrait / 'type.pb.h'
@@ -193,6 +194,7 @@ services_hdrlist = [
 # >> For substrait implementations
 substrait_srclist = [
    cpp_proto_mohair    / 'algebra.pb.cc'
+  ,cpp_proto_mohair    / 'topology.pb.cc'
   ,cpp_proto_substrait / 'algebra.pb.cc'
   ,cpp_proto_substrait / 'extensions' / 'extensions.pb.cc'
   ,cpp_proto_substrait / 'type.pb.cc'
@@ -319,6 +321,19 @@ csd_srv_srclist = (
 
 bin_srv_csd = executable('csd-service'
   ,csd_srv_srclist
+  ,dependencies       : dep_service
+  ,include_directories: arrow_incdir
+  ,install            : false
+)
+
+#   |> simple metadata service for prototyping mohair services
+topo_srv_srclist = (
+    [ cpp_tooldir / 'topo-service.cpp' ]
+  + mohair_srv_srclist
+)
+
+bin_srv_topo = executable('topo-service'
+  ,topo_srv_srclist
   ,dependencies       : dep_service
   ,include_directories: arrow_incdir
   ,install            : false
