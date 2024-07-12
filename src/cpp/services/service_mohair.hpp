@@ -20,14 +20,13 @@
 // Dependencies
 #pragma once
 
-//  >> Common definitions for this library
+// >> Common definitions for this library
 #include "../mohair.hpp"
 
 // >> integration with mohair query processing
 #include "../query/plans.hpp"
 
-//  >> Third-party libs
-//    |> Arrow flight
+// >> Third-party libs
 #include <arrow/flight/api.h>
 
 
@@ -70,6 +69,33 @@ using FlightResult = arrow::flight::Result;
 // Classes
 
 namespace mohair::services {
+
+  // ----------
+  // Hash implementations for mohair services (implicit definition fails)
+
+  // >> For Tickets
+  struct HashFunctorMohairTicket {
+    // A mohair ticket may be a service location or a query identifier
+    static const std::hash<string> HashMohairTicketId;
+
+    std::size_t operator()(const Ticket& mohair_ticket) const {
+      return HashMohairTicketId(mohair_ticket.ticket);
+    }
+  };
+
+  // >> For Flight Locations
+  struct HashFunctorMohairLocation {
+    // A location is essentially a URI
+    static const std::hash<string> HashMohairLocation;
+
+    std::size_t operator()(const Location& mohair_location) const {
+      return HashMohairLocation(mohair_location.ToString());
+    }
+  };
+
+
+  // ----------
+  // Service implementations
 
   struct MohairService : public FlightServerBase {
 

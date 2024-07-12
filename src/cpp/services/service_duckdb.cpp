@@ -89,15 +89,15 @@ namespace mohair::services {
 
   //    |> Standard Flight API
   Status
-  DuckDBService::DoGet( const ServerCallContext&      context
+  DuckDBService::DoGet( [[maybe_unused]] const ServerCallContext&      context
                        ,const Ticket&                 request
-                       ,unique_ptr<FlightDataStream>* stream) {
+                       ,[[maybe_unused]] unique_ptr<FlightDataStream>* stream) {
     int   query_id    = std::stoi(request.ticket);
     auto& duck_result = duck_if->GetResult(query_id);
 
     // NOTE: this is just for debugging purposes until we convert
     std::cout << "Accessed results:" << std::endl;
-    mohair::adapters::PrintQueryResults(duck_result);
+    ARROW_RETURN_NOT_OK(mohair::adapters::PrintQueryResults(duck_result));
 
     // TODO: convert the results from duckdb to arrow
     return Status::NotImplemented("TODO: query service");
