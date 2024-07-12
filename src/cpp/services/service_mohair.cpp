@@ -178,6 +178,7 @@ namespace mohair::services {
     // known actions
     if (action.type == "query") { return ActionQuery(context, action.body, result); }
 
+
     // Catch all that returns Status::NotImplemented()
     return ActionUnknown(context, action.type);
   }
