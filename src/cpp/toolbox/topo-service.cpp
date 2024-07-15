@@ -29,12 +29,19 @@
 
 
 // ------------------------------
-// Macros and Aliases
+// Type Aliases
 
 using std::unordered_map;
 
 using mohair::ServiceConfig;
 using mohair::DeviceClass;
+
+
+// ------------------------------
+// Reference variables
+constexpr int argc_min   { 1 };
+constexpr int argc_max   { 2 };
+constexpr int argndx_loc { 1 };
 
 
 // ------------------------------
@@ -86,7 +93,7 @@ namespace {
     ActionRegisterService( [[maybe_unused]] const ServerCallContext&  context
                           ,                 const shared_ptr<Buffer>  service_msg
                           ,[[maybe_unused]] unique_ptr<ResultStream>* response_stream) {
-      // NOTE: hoping Buffer implicitly converts to string
+      MohairDebugMsg("Handling request: [register-service]");
       string service_cfg = service_msg->ToString();
 
       auto service_info = std::make_unique<ServiceConfig>();
@@ -99,7 +106,9 @@ namespace {
         ,Location::Parse(service_info->service_location())
       );
 
+      MohairDebugMsg("registering service location: " << service_loc.ToString());
       cs_servers.push_back(std::move(service_loc));
+
       return Status::OK();
     }
 
@@ -164,23 +173,31 @@ namespace {
 
 // >> Engine-agnostic
 int ValidateArgs(int argc, [[maybe_unused]] char **argv) {
-  if (argc != 1) {
-    std::cerr << "Usage: csd-service" << std::endl;
-    return 1;
+  // default status is success
+  int errcode_validation { 0 };
+
+  // Error if we have an invalid amount of arguments
+  errcode_validation = mohair::services::ValidateArgCount(argc, argc_min, argc_max);
+  MohairCheckErrCode(errcode_validation, "Usage: topo-service [<Location URI>]");
+
+  // Error if we have an invalid Uri scheme
+  if (argc == 2) {
+    errcode_validation = mohair::services::ValidateArgLocationUri(argv[argndx_loc]);
+    MohairCheckErrCode(errcode_validation, "Invalid scheme for location URI");
   }
 
-  return 0;
+  return errcode_validation;
 }
 
 
 // >> For topological service
-int StartServiceTopo() {
+int StartServiceTopo(const Location& srv_loc) {
     unique_ptr<FlightServerBase> topo_service = std::make_unique<TopologyService>();
-    auto status_service = mohair::services::StartService(topo_service);
+    auto status_service = mohair::services::StartService(topo_service, srv_loc);
 
     if (not status_service.ok()) {
       mohair::PrintError("Error running topological service", status_service);
-      return 2;
+      return ERRCODE_START_SRV;
     }
 
     return 0;
@@ -190,11 +207,25 @@ int StartServiceTopo() {
 // ------------------------------
 // Main Logic
 int main(int argc, char **argv) {
-  int validate_status = ValidateArgs(argc, argv);
-  if (validate_status != 0) {
-    std::cerr << "Failed to validate input command-line args" << std::endl;
-    return validate_status;
+  int errcode_validation = ValidateArgs(argc, argv);
+  MohairCheckErrCode(errcode_validation, "Failed to validate input command-line args");
+
+  Location service_loc;
+  int      errcode_service { 0 };
+
+  // If no location URI is specified, use default location (localhost; any port)
+  if (argc == 1) {
+    errcode_service = mohair::services::SetDefaultLocation(&service_loc);
+    MohairCheckErrCode(errcode_service, "Unable to set default location URI");
   }
 
-  return StartServiceTopo();
+  if (argc == 2) {
+    errcode_service = mohair::services::ParseArgLocationUri(argv[argndx_loc], &service_loc);
+    MohairCheckErrCode(errcode_service, "Unable to parse location URI");
+  }
+
+  errcode_service = StartServiceTopo(service_loc);
+  MohairCheckErrCode(errcode_service, "Unable to start csd-service");
+
+  return 0;
 }

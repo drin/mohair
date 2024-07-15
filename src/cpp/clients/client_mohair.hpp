@@ -23,11 +23,11 @@
 // >> Common definitions for this library
 #include "../mohair.hpp"
 
+// >> Internal libs
+#include "../query/mohair/topology.pb.h"
+
 // >> Third-party libs
 #include <arrow/flight/api.h>
-
-// >> Internal libs
-#include "../query/topology.pb.h"
 
 
 // ------------------------------
@@ -80,11 +80,16 @@ namespace mohair::services {
 
     // >> Methods
     Result<unique_ptr<ResultStream>> RegisterService(Location& service_loc);
-
-    // >> Static builders
-    static Result<unique_ptr<MohairClient>>
-    ForTcpLocation(const string& host, const int port);
   };
 
 } // namespace: mohair::services
 
+
+// ------------------------------
+// Functions
+
+namespace mohair::services {
+
+    Result<unique_ptr<MohairClient>> ClientForLocation(const Location& conn_loc);
+
+} // namespace: mohair::services

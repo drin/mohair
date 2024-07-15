@@ -32,7 +32,7 @@ namespace mohair::services {
   MohairClient::RegisterService(Location& service_loc) {
     ServiceConfig service_cfg;
 
-    service_cfg.set_allocated_service_location(service_loc.ToString());
+    service_cfg.set_service_location(service_loc.ToString());
     service_cfg.set_platform_class(DeviceClass::DEVICE_CLASS_SERVER);
 
     string serialized_msg;
@@ -41,15 +41,18 @@ namespace mohair::services {
     }
 
     Action action_register { "register-service", Buffer::FromString(serialized_msg) };
-    return conn->DoAction(*conn_opts, action_register);
+    return conn->DoAction(conn_opts, action_register);
   }
 
+} // namespace: mohair::services
 
-  static Result<unique_ptr<MohairClient>>
-  MohairClient::ForTcpLocation(const string& host, const int port) {
-    // Construct an arrow::flight::Location for the service
-    ARRROW_ASSIGN_OR_RAISE(auto conn_loc, Location::ForGrpcTcp(host, port));
 
+// ------------------------------
+// Functions
+
+namespace mohair::services {
+
+  Result<unique_ptr<MohairClient>> ClientForLocation(const Location& conn_loc) {
     // Get a client connected to the service
     ARROW_ASSIGN_OR_RAISE(auto conn_client, FlightClient::Connect(conn_loc));
 

@@ -31,20 +31,26 @@ namespace mohair::services {
 
   const string MohairService::hkey_queryticket { "QueryTicket" };
 
-  Status SetDefaultLocation(Location* srv_loc) {
-    // Assign into the location pointed to by `srv_loc`
-    ARROW_ASSIGN_OR_RAISE(*srv_loc, Location::ForGrpcTcp("0.0.0.0", 0));
 
-    return Status::OK();
+  // >> Public
+
+  // Create and assign a default location corresponding to any port on localhost
+  int SetDefaultLocation(Location* srv_loc) {
+    auto result_tcploc = Location::ForGrpcTcp("0.0.0.0", 0);
+    if (not result_tcploc.ok()) {
+      mohair::PrintError("Error creating default location", result_tcploc.status());
+      return ERRCODE_CREATE_LOC;
+    }
+
+    *srv_loc = std::move(result_tcploc).ValueOrDie();
+    return 0;
   }
 
 
-  Status StartService(unique_ptr<FlightServerBase>& service) {
-    // Initialize a location
-    MohairDebugMsg("Initializing location...");
-    Location srv_loc;
-    ARROW_RETURN_NOT_OK(SetDefaultLocation(&srv_loc));
+  // >> Internal
 
+  // Run the given flight server until it dies using the given location URI
+  Status StartService(unique_ptr<FlightServerBase>& service, const Location& srv_loc) {
     // Create the service instance
     MohairDebugMsg("Initializing options...");
     FlightServerOptions options { srv_loc };
@@ -55,17 +61,59 @@ namespace mohair::services {
     MohairDebugMsg("Setting shutdown signal handler...");
     ARROW_RETURN_NOT_OK(service->SetShutdownOnSignals({SIGTERM}));
 
-    MohairDebugMsg("Starting service [localhost:" << service->port() << "]");
+    MohairDebugMsg("Starting service [" << service->location().ToString() << "]");
     ARROW_RETURN_NOT_OK(service->Serve());
 
     return Status::OK();
   }
 
 
-  Result<Location> MyLocation(MohairService& mohair_srv) {
+  vector<string> GetUriSchemeWhitelist() {
+    static vector<string> whitelist_urischemes;
+    whitelist_urischemes.reserve(1);
+    whitelist_urischemes.push_back(string { "grpc+tcp://" });
+
+    return whitelist_urischemes;
   }
 
-  Result<FlightEndpoint> MyEndpoint(MohairService& mohair_srv) {
+  int ValidateArgCount(const int argc, const int argc_exact) {
+    if (argc != argc_exact) { return ERRCODE_INV_ARGS; }
+
+    return 0;
+  }
+
+  int ValidateArgCount(const int argc, const int argc_min, const int argc_max) {
+    if (argc < argc_min or argc > argc_max) { return ERRCODE_INV_ARGS; }
+
+    return 0;
+  }
+
+  int ValidateArgLocationUri(const char* arg_loc_uri) {
+    string loc_uri { arg_loc_uri };
+
+    // comparison against whitelist
+    for (const string& uri_scheme : GetUriSchemeWhitelist()) {
+      if (loc_uri.compare(0, uri_scheme.length(), uri_scheme) == 0) { return 0; }
+    }
+
+    // otherwise, fail
+    return ERRCODE_INV_URISCHEME;
+  }
+
+  int ParseArgLocationUri(const char* arg_loc_uri, Location* out_srvloc) {
+    string input_loc { arg_loc_uri };
+
+    auto result_loc = Location::Parse(input_loc);
+    if (not result_loc.ok()) {
+      std::cerr << "Failed to parse specified location URI:" << std::endl
+                << "\t" << result_loc.status().message()     << std::endl
+      ;
+
+      return ERRCODE_PARSE_URI;
+    }
+
+    *out_srvloc = *result_loc;
+    return 0;
   }
 
 } // namespace: mohair::services

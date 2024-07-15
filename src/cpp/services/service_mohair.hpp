@@ -31,6 +31,21 @@
 
 
 // ------------------------------
+// Macros
+
+#define ERRCODE_INV_ARGS      1
+#define ERRCODE_INV_URISCHEME 2
+#define ERRCODE_PARSE_URI     3
+#define ERRCODE_CREATE_LOC    4
+
+#define ERRCODE_START_SRV     5
+#define ERRCODE_NO_ENGINE     6
+#define ERRCODE_CONN_CLIENT   7
+
+#define ERRCODE_API_REGISTER  8
+
+
+// ------------------------------
 // Type aliases
 
 //  >> Flight type aliases
@@ -166,14 +181,24 @@ namespace mohair::services {
 // Functions
 namespace mohair::services {
 
+  // ----------
   // >> Convenience functions
-  Status SetDefaultLocation(Location *srv_loc);
-  Status StartService(unique_ptr<FlightServerBase>& service);
 
-  Result<Location>       MyLocation(MohairService& mohair_srv);
-  Result<FlightEndpoint> MyEndpoint(MohairService& mohair_srv);
+  // validating and parsing CLI args
+  int ValidateArgCount(const int argc, const int argc_exact);
+  int ValidateArgCount(const int argc, const int argc_min, const int argc_max);
+  int ValidateArgLocationUri(const char* arg_loc_uri);
+  int ParseArgLocationUri(const char* arg_loc_uri, Location* out_srvloc);
 
-  // >> Engine-specific functions
-  Status StartMohairDuckDB();
+  vector<string> GetUriSchemeWhitelist();
+
+  // initialize a service (internal)
+  Status StartService(unique_ptr<FlightServerBase>& service, const Location& srv_loc);
+
+
+  // ----------
+  // >> public API (used from applications using this library)
+  int SetDefaultLocation(Location *srv_loc);
+  int StartMohairDuckDB(const Location& srv_loc);
 
 } // namespace: mohair::services
