@@ -30,9 +30,17 @@
 
 namespace mohair::services {
 
-  Status StartMohairDuckDB() {
+  // Create a flight server that runs until it dies
+  int StartMohairDuckDB(const Location& srv_loc) {
     unique_ptr<FlightServerBase> duckdb_service = std::make_unique<DuckDBService>();
-    return StartService(duckdb_service);
+
+    auto status_service = StartService(duckdb_service, srv_loc);
+    if (not status_service.ok()) {
+      mohair::PrintError("Error running cs-engine [duckdb]", status_service);
+      return ERRCODE_START_SRV;
+    }
+
+    return 0;
   }
 
 } // namespace: mohair::services

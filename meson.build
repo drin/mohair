@@ -28,6 +28,9 @@ cpp_enginedir = cpp_srcdir / 'engines'
 # dir for flight services
 cpp_servicedir = cpp_srcdir / 'services'
 
+# dir for flight clients
+cpp_clientdir  = cpp_srcdir / 'clients'
+
 # dir for binary sources (1-1 with binaries)
 cpp_tooldir   = cpp_srcdir / 'toolbox'
 
@@ -185,6 +188,7 @@ services_hdrlist = [
   ,cpp_enginedir  / 'adapter_faodel.hpp'
   ,cpp_servicedir / 'service_mohair.hpp'
   ,cpp_servicedir / 'service_faodel.hpp'
+  ,cpp_servicedir / 'service_duckdb.hpp'
 ]
 
 
@@ -222,6 +226,9 @@ services_srclist = [
   ,cpp_querydir   / 'operators.cpp'
   ,cpp_enginedir  / 'execution.cpp'
   ,cpp_servicedir / 'service_mohair.cpp'
+
+  # this maybe can be moved to a separate list
+  ,cpp_clientdir  / 'client_mohair.cpp'
 ]
 
 

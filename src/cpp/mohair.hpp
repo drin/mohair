@@ -43,6 +43,8 @@
 
 // ------------------------------
 // Macros
+
+// macro to print message if debug mode is on
 #if MOHAIR_DEBUG
   #define MohairDebugMsg(msg_str)              \
           do {                                 \
@@ -53,6 +55,15 @@
   #define MohairDebugMsg(msg_str) {}
 
 #endif
+
+// macro for error code checking boilerplate
+#define MohairCheckErrCode(err_code, err_msg)  \
+        do {                                   \
+          if (err_code) {                      \
+            std::cerr << err_msg << std::endl; \
+            return err_code;                   \
+          }                                    \
+        } while (0);
 
 
 // ------------------------------
