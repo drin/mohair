@@ -20,8 +20,13 @@
 // Dependencies
 #pragma once
 
-// >> Configuration-based macros
+// >> Internal
+
+// Configuration-based macros
 #include "mohair-config.hpp"
+
+// Status codes for CLI use
+#include "mohair_codes.hpp"
 
 // >> Standard libs
 #include <functional>
@@ -116,24 +121,21 @@ namespace mohair {
 namespace mohair {
 
   // >> Reader functions (from files)
-  fstream InputStreamForFile(const char *in_fpath);
-  fstream OutputStreamForFile(const char *out_fpath);
-  bool    FileToString(const char *in_fpath, string &file_data);
+  fstream InputStreamForFile(const char* in_fpath);
+  fstream OutputStreamForFile(const char* out_fpath);
+  bool    FileToString(const char* in_fpath, string& file_data);
 
-  Result<shared_ptr<Buffer>>
-  BufferFromIPCStream(const std::string& path_to_file);
+  Result<shared_ptr<Buffer>> BufferFromFile(const char* fpath);
+  Result<shared_ptr<Buffer>> BufferFromIPCStream(const string& fpath);
 
-  Result<shared_ptr<Table>>
-  ReadIPCFile(const string &path_to_file);
-
-  Result<shared_ptr<Table>>
-  ReadIPCStream(const string &path_to_file);
+  Result<shared_ptr<Table>> ReadIPCFile(const string& fpath);
+  Result<shared_ptr<Table>> ReadIPCStream(const string& fpath);
 
   // >> Convenience Functions
   void PrintTable(shared_ptr<Table> table_data, int64_t offset, int64_t length);
-  string JoinStr(vector<string> str_parts, const char *delim);
+  string JoinStr(vector<string> str_parts, const char* delim);
 
   // >> Debugging Functions
-  void PrintError(const char *msg, const Status arrow_status);
+  void PrintError(const char* msg, const Status& arrow_status);
 
 } // namespace: mohair
