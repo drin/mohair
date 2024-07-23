@@ -49,16 +49,16 @@ namespace mohair {
                 << std::endl
       ;
 
-      std::string path_to_file;
+      std::string fpath;
 
       // get a `FileSystem` instance (local fs scheme is "file://")
       ARROW_ASSIGN_OR_RAISE(
          auto localfs
-        ,arrow::fs::FileSystemFromUri(path_as_uri, &path_to_file)
+        ,arrow::fs::FileSystemFromUri(path_as_uri, &fpath)
       );
 
       // use the `FileSystem` instance to open a handle to the file
-      return localfs->OpenInputFile(path_to_file);
+      return localfs->OpenInputFile(fpath);
     }
 
     /** Given a file path, create a RecordBatchStreamReader. */
@@ -90,17 +90,17 @@ namespace mohair {
   //  >> Reader functions
 
   /** Given a file path, return a binary input stream. */
-  fstream InputStreamForFile(const char *in_fpath) {
+  fstream InputStreamForFile(const char* in_fpath) {
     return fstream { in_fpath, std::ios::in | std::ios::binary };
   }
 
   /** Given a file path, return a binary output stream. */
-  fstream OutputStreamForFile(const char *out_fpath) {
+  fstream OutputStreamForFile(const char* out_fpath) {
     return fstream { out_fpath, std::ios::out | std::ios::trunc | std::ios::binary };
   }
 
   /** Given a file path, read the file data as binary into an output string. */
-  bool FileToString(const char *in_fpath, string &file_data) {
+  bool FileToString(const char* in_fpath, string& file_data) {
     // create an IO stream for the file
     auto file_stream = InputStreamForFile(in_fpath);
     if (!file_stream) {
@@ -124,12 +124,24 @@ namespace mohair {
   }
 
 
+  Result<shared_ptr<Buffer>> BufferFromFile(const char* fpath) {
+    MohairDebugMsg("Reading file: '" << fpath << "'");
+
+    string file_data;
+    if (not mohair::FileToString(fpath, file_data)) {
+      return Status::Invalid("Failed to parse file data into string");
+    }
+
+    return Buffer::FromString(file_data);
+  }
+
+
   /** Given a file path to an Arrow IPC stream, return the data as a buffer. */
-  Result<shared_ptr<Buffer>> BufferFromIPCStream(const std::string& path_to_file) {
-    std::cout << "Parsing file: " << path_to_file << std::endl;
+  Result<shared_ptr<Buffer>> BufferFromIPCStream(const std::string& fpath) {
+    std::cout << "Parsing file: " << fpath << std::endl;
 
     // use the `FileSystem` instance to open a handle to the file
-    ARROW_ASSIGN_OR_RAISE(auto arrow_fhandle, HandleForIPCFile(path_to_file));
+    ARROW_ASSIGN_OR_RAISE(auto arrow_fhandle, HandleForIPCFile(fpath));
 
     // get the size of the file handle (arrow::io::RandomAccessFile) and read it whole
     ARROW_ASSIGN_OR_RAISE(auto  arrow_fsize, arrow_fhandle->GetSize());
@@ -144,21 +156,21 @@ namespace mohair {
   }
 
   /** Given a file path to an Arrow IPC stream, return a Table. */
-  Result<shared_ptr<Table>> ReadIPCStream(const std::string& path_to_file) {
-    std::cout << "Parsing file: " << path_to_file << std::endl;
+  Result<shared_ptr<Table>> ReadIPCStream(const std::string& fpath) {
+    std::cout << "Parsing file: " << fpath << std::endl;
 
     // Declares and initializes `batch_reader`
-    ARROW_ASSIGN_OR_RAISE(auto batch_reader, ReaderForIPCStream(path_to_file));
+    ARROW_ASSIGN_OR_RAISE(auto batch_reader, ReaderForIPCStream(fpath));
 
     return arrow::Table::FromRecordBatchReader(batch_reader.get());
   }
 
   /** Given a file path to an Arrow IPC file, return a Table. */
-  Result<shared_ptr<Table>> ReadIPCFile(const std::string& path_to_file) {
-    std::cout << "Reading file: " << path_to_file << std::endl;
+  Result<shared_ptr<Table>> ReadIPCFile(const std::string& fpath) {
+    std::cout << "Reading file: " << fpath << std::endl;
 
     // Declares and initializes `ipc_file_reader`
-    ARROW_ASSIGN_OR_RAISE(auto ipc_file_reader, ReaderForIPCFile(path_to_file));
+    ARROW_ASSIGN_OR_RAISE(auto ipc_file_reader, ReaderForIPCFile(fpath));
 
     // Based on RecordBatchFileReader::ToTable (Arrow >12.0.1)
     // https://github.com/apache/arrow/blob/main/cpp/src/arrow/ipc/reader.h#L236-L237
@@ -218,7 +230,7 @@ namespace mohair {
   //  >> Debugging Functions
 
   /** Simple function to print a string literal and an arrow status. */
-  void PrintError(const char *msg, const Status arrow_status) {
+  void PrintError(const char *msg, const Status& arrow_status) {
       std::cerr << msg                             << std::endl
                 << "\t" << arrow_status.ToString() << std::endl
       ;

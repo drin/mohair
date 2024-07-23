@@ -174,6 +174,7 @@ substrait_hdrlist = [
 # >> For decomposable queries
 query_hdrlist = [
    cpp_srcdir   / 'mohair.hpp'
+  ,cpp_srcdir   / 'mohair_codes.hpp'
   ,cpp_querydir / 'plans.hpp'
   ,cpp_querydir / 'operators.hpp'
   ,cpp_querydir / 'messages.hpp'
@@ -182,11 +183,13 @@ query_hdrlist = [
 # >> For flight services
 services_hdrlist = [
    cpp_srcdir     / 'mohair.hpp'
+  ,cpp_srcdir     / 'mohair_codes.hpp'
   ,cpp_querydir   / 'plans.hpp'
   ,cpp_querydir   / 'messages.hpp'
   ,cpp_enginedir  / 'adapter_acero.hpp'
   ,cpp_enginedir  / 'adapter_faodel.hpp'
   ,cpp_servicedir / 'service_mohair.hpp'
+  ,cpp_servicedir / 'service_topology.hpp'
   ,cpp_servicedir / 'service_faodel.hpp'
   ,cpp_servicedir / 'service_duckdb.hpp'
 ]
@@ -335,7 +338,10 @@ bin_srv_csd = executable('csd-service'
 
 #   |> simple metadata service for prototyping mohair services
 topo_srv_srclist = (
-    [ cpp_tooldir / 'topo-service.cpp' ]
+    [
+       cpp_tooldir    / 'topo-service.cpp'
+      ,cpp_servicedir / 'service_topology.cpp'
+    ]
   + mohair_srv_srclist
 )
 
