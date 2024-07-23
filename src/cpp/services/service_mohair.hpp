@@ -20,29 +20,12 @@
 // Dependencies
 #pragma once
 
-// >> Common definitions for this library
+// >> Internal libs
 #include "../mohair.hpp"
-
-// >> integration with mohair query processing
 #include "../query/plans.hpp"
 
 // >> Third-party libs
 #include <arrow/flight/api.h>
-
-
-// ------------------------------
-// Macros
-
-#define ERRCODE_INV_ARGS      1
-#define ERRCODE_INV_URISCHEME 2
-#define ERRCODE_PARSE_URI     3
-#define ERRCODE_CREATE_LOC    4
-
-#define ERRCODE_START_SRV     5
-#define ERRCODE_NO_ENGINE     6
-#define ERRCODE_CONN_CLIENT   7
-
-#define ERRCODE_API_REGISTER  8
 
 
 // ------------------------------
@@ -85,36 +68,24 @@ using FlightResult = arrow::flight::Result;
 
 namespace mohair::services {
 
-  // ----------
-  // Hash implementations for mohair services (implicit definition fails)
-
-  // >> For Tickets
-  struct HashFunctorMohairTicket {
-    // A mohair ticket may be a service location or a query identifier
-    static const std::hash<string> HashMohairTicketId;
-
-    std::size_t operator()(const Ticket& mohair_ticket) const {
-      return HashMohairTicketId(mohair_ticket.ticket);
-    }
-  };
-
-  // >> For Flight Locations
-  struct HashFunctorMohairLocation {
-    // A location is essentially a URI
-    static const std::hash<string> HashMohairLocation;
-
-    std::size_t operator()(const Location& mohair_location) const {
-      return HashMohairLocation(mohair_location.ToString());
-    }
-  };
+  // >> Forward types for hash functors for use with topology service
+  // struct HashFunctorMohairTicket;
+  // struct HashFunctorMohairLocation;
 
 
   // ----------
   // Service implementations
 
+  struct ShutdownCallback { virtual Status operator()(); };
+
   struct MohairService : public FlightServerBase {
 
+    // >> Class attributes
     static const string hkey_queryticket;
+
+    // >> Instance Attributes
+    ShutdownCallback* cb_shutdown { nullptr };
+    ServiceConfig     service_cfg;
 
     // >> Convenience functions
     virtual Result<FlightInfo>
@@ -129,6 +100,14 @@ namespace mohair::services {
       ,const shared_ptr<Buffer>  plan_msg
       ,unique_ptr<ResultStream>* result
     );
+
+    virtual Status ActionViewChange(
+       const ServerCallContext&  context
+      ,const shared_ptr<Buffer>  service_cfg
+      ,unique_ptr<ResultStream>* result
+    );
+
+    virtual Status ActionShutdown(const ServerCallContext& context);
 
     virtual Status ActionUnknown(
        const ServerCallContext& context
@@ -189,16 +168,19 @@ namespace mohair::services {
   int ValidateArgCount(const int argc, const int argc_min, const int argc_max);
   int ValidateArgLocationUri(const char* arg_loc_uri);
   int ParseArgLocationUri(const char* arg_loc_uri, Location* out_srvloc);
+  int ParseArgPlatformClass(const char* arg_pclass, int* out_pclass);
 
   vector<string> GetUriSchemeWhitelist();
 
   // initialize a service (internal)
-  Status StartService(unique_ptr<FlightServerBase>& service, const Location& srv_loc);
+  Status StartService(FlightServerBase* service, const Location& srv_loc);
 
 
   // ----------
   // >> public API (used from applications using this library)
   int SetDefaultLocation(Location *srv_loc);
+
   int StartMohairDuckDB(const Location& srv_loc);
+  int StartMohairDuckDB(const Location& srv_loc, ShutdownCallback* fn_shutdown);
 
 } // namespace: mohair::services

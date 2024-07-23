@@ -31,7 +31,6 @@ namespace mohair::services {
 
   const string MohairService::hkey_queryticket { "QueryTicket" };
 
-
   // >> Public
 
   // Create and assign a default location corresponding to any port on localhost
@@ -50,7 +49,7 @@ namespace mohair::services {
   // >> Internal
 
   // Run the given flight server until it dies using the given location URI
-  Status StartService(unique_ptr<FlightServerBase>& service, const Location& srv_loc) {
+  Status StartService(FlightServerBase* service, const Location& srv_loc) {
     // Create the service instance
     MohairDebugMsg("Initializing options...");
     FlightServerOptions options { srv_loc };
@@ -116,11 +115,37 @@ namespace mohair::services {
     return 0;
   }
 
+  int ParseArgPlatformClass(const char* arg_pclass, int* out_pclass) {
+    MohairDebugMsg("Parsing platform class (expecting int32_t)");
+    string input_pclass { arg_pclass };
+
+    try {
+      *out_pclass = std::stoi(input_pclass);
+    }
+
+    catch (std::invalid_argument const& err_arg) {
+      std::cerr << "Unable to parse numeric value: " << err_arg.what() << std::endl;
+      return ERRCODE_INV_ARGS;
+    }
+
+    catch (std::out_of_range const& err_val) {
+      std::cerr << "Unexpected value: " << err_val.what() << std::endl;
+      return ERRCODE_PARSE_NUMERIC;
+    }
+
+    *out_pclass = -1;
+    return 0;
+  }
+
 } // namespace: mohair::services
 
 
 // >> Default MohairService implementations
 namespace mohair::services {
+
+  Status ShutdownCallback::operator()() {
+    return Status::OK();
+  }
 
   Result<FlightInfo>
   MohairService::MakeFlightInfo(string partition_key, shared_ptr<Table> data_table) {
