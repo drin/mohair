@@ -76,6 +76,7 @@ inline constexpr ServiceConfig::Impl_::Impl_(
             &::google::protobuf::internal::fixed_address_empty_string,
             ::_pbi::ConstantInitialized()),
         service_mem_{nullptr},
+        is_active_{false},
         platform_class_{static_cast< ::mohair::DeviceClass >(0)} {}
 
 template <typename>
@@ -132,11 +133,13 @@ const ::uint32_t
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
+        PROTOBUF_FIELD_OFFSET(::mohair::ServiceConfig, _impl_.is_active_),
         PROTOBUF_FIELD_OFFSET(::mohair::ServiceConfig, _impl_.service_location_),
         PROTOBUF_FIELD_OFFSET(::mohair::ServiceConfig, _impl_.platform_class_),
         PROTOBUF_FIELD_OFFSET(::mohair::ServiceConfig, _impl_.downstream_services_),
         PROTOBUF_FIELD_OFFSET(::mohair::ServiceConfig, _impl_.service_mem_),
         PROTOBUF_FIELD_OFFSET(::mohair::ServiceConfig, _impl_.service_compute_),
+        ~0u,
         ~0u,
         ~0u,
         ~0u,
@@ -148,7 +151,7 @@ static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, -1, -1, sizeof(::mohair::ComputeResources)},
         {10, 22, -1, sizeof(::mohair::MemoryResources)},
-        {26, 39, -1, sizeof(::mohair::ServiceConfig)},
+        {26, 40, -1, sizeof(::mohair::ServiceConfig)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::mohair::_ComputeResources_default_instance_._instance,
@@ -166,24 +169,25 @@ const char descriptor_table_protodef_mohair_2ftopology_2eproto[] ABSL_ATTRIBUTE_
     "TypeH\000R\nmemoryType\210\001\001\022*\n\016count_channels\030"
     "\003 \001(\rH\001R\rcountChannels\210\001\001\022$\n\013memory_freq"
     "\030\004 \001(\rH\002R\nmemoryFreq\210\001\001B\016\n\014_memory_typeB"
-    "\021\n\017_count_channelsB\016\n\014_memory_freq\"\320\002\n\rS"
-    "erviceConfig\022)\n\020service_location\030\001 \001(\tR\017"
-    "serviceLocation\022:\n\016platform_class\030\002 \001(\0162"
-    "\023.mohair.DeviceClassR\rplatformClass\022F\n\023d"
-    "ownstream_services\030\003 \003(\0132\025.mohair.Servic"
-    "eConfigR\022downstreamServices\022=\n\013service_m"
-    "em\030\004 \001(\0132\027.mohair.MemoryResourcesH\000R\nser"
-    "viceMem\210\001\001\022A\n\017service_compute\030\005 \003(\0132\030.mo"
-    "hair.ComputeResourcesR\016serviceComputeB\016\n"
-    "\014_service_mem*\202\001\n\013DeviceClass\022\027\n\023DEVICE_"
-    "CLASS_SERVER\020\000\022\026\n\022DEVICE_CLASS_DRIVE\020\001\022\024"
-    "\n\020DEVICE_CLASS_SOC\020\002\022\026\n\022DEVICE_CLASS_ARR"
-    "AY\020\003\022\024\n\020DEVICE_CLASS_DPU\020\004*v\n\nMemoryType"
-    "\022\023\n\017MEMORY_TYPE_DDR\020\000\022\024\n\020MEMORY_TYPE_GDD"
-    "R\020\001\022\023\n\017MEMORY_TYPE_NVM\020\002\022\023\n\017MEMORY_TYPE_"
-    "CXL\020\003\022\023\n\017MEMORY_TYPE_CAM\020\004BS\n\ncom.mohair"
-    "B\rTopologyProtoP\001\242\002\003MXX\252\002\006Mohair\312\002\006Mohai"
-    "r\342\002\022Mohair\\GPBMetadata\352\002\006Mohairb\006proto3"
+    "\021\n\017_count_channelsB\016\n\014_memory_freq\"\355\002\n\rS"
+    "erviceConfig\022\033\n\tis_active\030\001 \001(\010R\010isActiv"
+    "e\022)\n\020service_location\030\002 \001(\tR\017serviceLoca"
+    "tion\022:\n\016platform_class\030\003 \001(\0162\023.mohair.De"
+    "viceClassR\rplatformClass\022F\n\023downstream_s"
+    "ervices\030\004 \003(\0132\025.mohair.ServiceConfigR\022do"
+    "wnstreamServices\022=\n\013service_mem\030\005 \001(\0132\027."
+    "mohair.MemoryResourcesH\000R\nserviceMem\210\001\001\022"
+    "A\n\017service_compute\030\006 \003(\0132\030.mohair.Comput"
+    "eResourcesR\016serviceComputeB\016\n\014_service_m"
+    "em*\202\001\n\013DeviceClass\022\027\n\023DEVICE_CLASS_SERVE"
+    "R\020\000\022\026\n\022DEVICE_CLASS_DRIVE\020\001\022\024\n\020DEVICE_CL"
+    "ASS_SOC\020\002\022\026\n\022DEVICE_CLASS_ARRAY\020\003\022\024\n\020DEV"
+    "ICE_CLASS_DPU\020\004*v\n\nMemoryType\022\023\n\017MEMORY_"
+    "TYPE_DDR\020\000\022\024\n\020MEMORY_TYPE_GDDR\020\001\022\023\n\017MEMO"
+    "RY_TYPE_NVM\020\002\022\023\n\017MEMORY_TYPE_CXL\020\003\022\023\n\017ME"
+    "MORY_TYPE_CAM\020\004BS\n\ncom.mohairB\rTopologyP"
+    "rotoP\001\242\002\003MXX\252\002\006Mohair\312\002\006Mohair\342\002\022Mohair\\"
+    "GPBMetadata\352\002\006Mohairb\006proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_mohair_2ftopology_2eproto_deps[1] =
     {
@@ -193,7 +197,7 @@ static ::absl::once_flag descriptor_table_mohair_2ftopology_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_mohair_2ftopology_2eproto = {
     false,
     false,
-    1079,
+    1108,
     descriptor_table_protodef_mohair_2ftopology_2eproto,
     "mohair/topology.proto",
     &descriptor_table_mohair_2ftopology_2eproto_once,
@@ -745,7 +749,13 @@ ServiceConfig::ServiceConfig(
   _impl_.service_mem_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::mohair::MemoryResources>(
                               arena, *from._impl_.service_mem_)
                         : nullptr;
-  _impl_.platform_class_ = from._impl_.platform_class_;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, is_active_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, is_active_),
+           offsetof(Impl_, platform_class_) -
+               offsetof(Impl_, is_active_) +
+               sizeof(Impl_::platform_class_));
 
   // @@protoc_insertion_point(copy_constructor:mohair.ServiceConfig)
 }
@@ -799,15 +809,15 @@ ServiceConfig::GetClassData() const {
   return _data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 5, 3, 45, 2> ServiceConfig::_table_ = {
+const ::_pbi::TcParseTable<3, 6, 3, 45, 2> ServiceConfig::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_._has_bits_),
     0, // no _extensions_
-    5, 56,  // max_field_number, fast_idx_mask
+    6, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967264,  // skipmap
+    4294967232,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    5,  // num_field_entries
+    6,  // num_field_entries
     3,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     &_ServiceConfig_default_instance_._instance,
@@ -818,39 +828,44 @@ const ::_pbi::TcParseTable<3, 5, 3, 45, 2> ServiceConfig::_table_ = {
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
     {::_pbi::TcParser::MiniParse, {}},
-    // string service_location = 1 [json_name = "serviceLocation"];
+    // bool is_active = 1 [json_name = "isActive"];
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(ServiceConfig, _impl_.is_active_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.is_active_)}},
+    // string service_location = 2 [json_name = "serviceLocation"];
     {::_pbi::TcParser::FastUS1,
-     {10, 63, 0, PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.service_location_)}},
-    // .mohair.DeviceClass platform_class = 2 [json_name = "platformClass"];
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.service_location_)}},
+    // .mohair.DeviceClass platform_class = 3 [json_name = "platformClass"];
     {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ServiceConfig, _impl_.platform_class_), 63>(),
-     {16, 63, 0, PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.platform_class_)}},
-    // repeated .mohair.ServiceConfig downstream_services = 3 [json_name = "downstreamServices"];
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.platform_class_)}},
+    // repeated .mohair.ServiceConfig downstream_services = 4 [json_name = "downstreamServices"];
     {::_pbi::TcParser::FastMtR1,
-     {26, 63, 0, PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.downstream_services_)}},
-    // optional .mohair.MemoryResources service_mem = 4 [json_name = "serviceMem"];
+     {34, 63, 0, PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.downstream_services_)}},
+    // optional .mohair.MemoryResources service_mem = 5 [json_name = "serviceMem"];
     {::_pbi::TcParser::FastMtS1,
-     {34, 0, 1, PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.service_mem_)}},
-    // repeated .mohair.ComputeResources service_compute = 5 [json_name = "serviceCompute"];
+     {42, 0, 1, PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.service_mem_)}},
+    // repeated .mohair.ComputeResources service_compute = 6 [json_name = "serviceCompute"];
     {::_pbi::TcParser::FastMtR1,
-     {42, 63, 2, PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.service_compute_)}},
-    {::_pbi::TcParser::MiniParse, {}},
+     {50, 63, 2, PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.service_compute_)}},
     {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
-    // string service_location = 1 [json_name = "serviceLocation"];
+    // bool is_active = 1 [json_name = "isActive"];
+    {PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.is_active_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // string service_location = 2 [json_name = "serviceLocation"];
     {PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.service_location_), -1, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
-    // .mohair.DeviceClass platform_class = 2 [json_name = "platformClass"];
+    // .mohair.DeviceClass platform_class = 3 [json_name = "platformClass"];
     {PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.platform_class_), -1, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
-    // repeated .mohair.ServiceConfig downstream_services = 3 [json_name = "downstreamServices"];
+    // repeated .mohair.ServiceConfig downstream_services = 4 [json_name = "downstreamServices"];
     {PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.downstream_services_), -1, 0,
     (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
-    // optional .mohair.MemoryResources service_mem = 4 [json_name = "serviceMem"];
+    // optional .mohair.MemoryResources service_mem = 5 [json_name = "serviceMem"];
     {PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.service_mem_), _Internal::kHasBitsOffset + 0, 1,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // repeated .mohair.ComputeResources service_compute = 5 [json_name = "serviceCompute"];
+    // repeated .mohair.ComputeResources service_compute = 6 [json_name = "serviceCompute"];
     {PROTOBUF_FIELD_OFFSET(ServiceConfig, _impl_.service_compute_), -1, 2,
     (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
@@ -858,7 +873,7 @@ const ::_pbi::TcParseTable<3, 5, 3, 45, 2> ServiceConfig::_table_ = {
     {::_pbi::TcParser::GetTable<::mohair::MemoryResources>()},
     {::_pbi::TcParser::GetTable<::mohair::ComputeResources>()},
   }}, {{
-    "\24\20\0\0\0\0\0\0"
+    "\24\0\20\0\0\0\0\0"
     "mohair.ServiceConfig"
     "service_location"
   }},
@@ -879,7 +894,9 @@ PROTOBUF_NOINLINE void ServiceConfig::Clear() {
     ABSL_DCHECK(_impl_.service_mem_ != nullptr);
     _impl_.service_mem_->Clear();
   }
-  _impl_.platform_class_ = 0;
+  ::memset(&_impl_.is_active_, 0, static_cast<::size_t>(
+      reinterpret_cast<char*>(&_impl_.platform_class_) -
+      reinterpret_cast<char*>(&_impl_.is_active_)) + sizeof(_impl_.platform_class_));
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -891,47 +908,54 @@ PROTOBUF_NOINLINE void ServiceConfig::Clear() {
   ::uint32_t cached_has_bits = 0;
   (void)cached_has_bits;
 
-  // string service_location = 1 [json_name = "serviceLocation"];
+  // bool is_active = 1 [json_name = "isActive"];
+  if (this->_internal_is_active() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(
+        1, this->_internal_is_active(), target);
+  }
+
+  // string service_location = 2 [json_name = "serviceLocation"];
   if (!this->_internal_service_location().empty()) {
     const std::string& _s = this->_internal_service_location();
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
         _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "mohair.ServiceConfig.service_location");
-    target = stream->WriteStringMaybeAliased(1, _s, target);
+    target = stream->WriteStringMaybeAliased(2, _s, target);
   }
 
-  // .mohair.DeviceClass platform_class = 2 [json_name = "platformClass"];
+  // .mohair.DeviceClass platform_class = 3 [json_name = "platformClass"];
   if (this->_internal_platform_class() != 0) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteEnumToArray(
-        2, this->_internal_platform_class(), target);
+        3, this->_internal_platform_class(), target);
   }
 
-  // repeated .mohair.ServiceConfig downstream_services = 3 [json_name = "downstreamServices"];
+  // repeated .mohair.ServiceConfig downstream_services = 4 [json_name = "downstreamServices"];
   for (unsigned i = 0, n = static_cast<unsigned>(
                            this->_internal_downstream_services_size());
        i < n; i++) {
     const auto& repfield = this->_internal_downstream_services().Get(i);
     target =
         ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-            3, repfield, repfield.GetCachedSize(),
+            4, repfield, repfield.GetCachedSize(),
             target, stream);
   }
 
   cached_has_bits = _impl_._has_bits_[0];
-  // optional .mohair.MemoryResources service_mem = 4 [json_name = "serviceMem"];
+  // optional .mohair.MemoryResources service_mem = 5 [json_name = "serviceMem"];
   if (cached_has_bits & 0x00000001u) {
     target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-        4, *_impl_.service_mem_, _impl_.service_mem_->GetCachedSize(), target, stream);
+        5, *_impl_.service_mem_, _impl_.service_mem_->GetCachedSize(), target, stream);
   }
 
-  // repeated .mohair.ComputeResources service_compute = 5 [json_name = "serviceCompute"];
+  // repeated .mohair.ComputeResources service_compute = 6 [json_name = "serviceCompute"];
   for (unsigned i = 0, n = static_cast<unsigned>(
                            this->_internal_service_compute_size());
        i < n; i++) {
     const auto& repfield = this->_internal_service_compute().Get(i);
     target =
         ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-            5, repfield, repfield.GetCachedSize(),
+            6, repfield, repfield.GetCachedSize(),
             target, stream);
   }
 
@@ -953,30 +977,35 @@ PROTOBUF_NOINLINE void ServiceConfig::Clear() {
   (void) cached_has_bits;
 
   ::_pbi::Prefetch5LinesFrom7Lines(reinterpret_cast<const void*>(this));
-  // repeated .mohair.ServiceConfig downstream_services = 3 [json_name = "downstreamServices"];
+  // repeated .mohair.ServiceConfig downstream_services = 4 [json_name = "downstreamServices"];
   total_size += 1UL * this->_internal_downstream_services_size();
   for (const auto& msg : this->_internal_downstream_services()) {
     total_size += ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
   }
-  // repeated .mohair.ComputeResources service_compute = 5 [json_name = "serviceCompute"];
+  // repeated .mohair.ComputeResources service_compute = 6 [json_name = "serviceCompute"];
   total_size += 1UL * this->_internal_service_compute_size();
   for (const auto& msg : this->_internal_service_compute()) {
     total_size += ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
   }
-  // string service_location = 1 [json_name = "serviceLocation"];
+  // string service_location = 2 [json_name = "serviceLocation"];
   if (!this->_internal_service_location().empty()) {
     total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                     this->_internal_service_location());
   }
 
-  // optional .mohair.MemoryResources service_mem = 4 [json_name = "serviceMem"];
+  // optional .mohair.MemoryResources service_mem = 5 [json_name = "serviceMem"];
   cached_has_bits = _impl_._has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
     total_size +=
         1 + ::google::protobuf::internal::WireFormatLite::MessageSize(*_impl_.service_mem_);
   }
 
-  // .mohair.DeviceClass platform_class = 2 [json_name = "platformClass"];
+  // bool is_active = 1 [json_name = "isActive"];
+  if (this->_internal_is_active() != 0) {
+    total_size += 2;
+  }
+
+  // .mohair.DeviceClass platform_class = 3 [json_name = "platformClass"];
   if (this->_internal_platform_class() != 0) {
     total_size += 1 +
                   ::_pbi::WireFormatLite::EnumSize(this->_internal_platform_class());
@@ -1011,6 +1040,9 @@ void ServiceConfig::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::g
     } else {
       _this->_impl_.service_mem_->MergeFrom(*from._impl_.service_mem_);
     }
+  }
+  if (from._internal_is_active() != 0) {
+    _this->_impl_.is_active_ = from._impl_.is_active_;
   }
   if (from._internal_platform_class() != 0) {
     _this->_impl_.platform_class_ = from._impl_.platform_class_;
