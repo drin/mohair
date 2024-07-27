@@ -34,7 +34,42 @@ namespace mohair::services {
   int StartMohairDuckDB(const Location& srv_loc) {
     unique_ptr<FlightServerBase> duckdb_service = std::make_unique<DuckDBService>();
 
-    auto status_service = StartService(duckdb_service, srv_loc);
+    auto status_service = StartService(duckdb_service.get(), srv_loc);
+    if (not status_service.ok()) {
+      mohair::PrintError("Error running cs-engine [duckdb]", status_service);
+      return ERRCODE_START_SRV;
+    }
+
+    return 0;
+  }
+
+  int StartMohairDuckDB(const Location& srv_loc, ShutdownCallback* fn_shutdown) {
+    auto duckdb_service = std::make_unique<DuckDBService>();
+    duckdb_service->cb_shutdown = fn_shutdown;
+
+    FlightServerBase* service = dynamic_cast<FlightServerBase*>(duckdb_service.get());
+    auto status_service = StartService(service, srv_loc);
+    if (not status_service.ok()) {
+      mohair::PrintError("Error running cs-engine [duckdb]", status_service);
+      return ERRCODE_START_SRV;
+    }
+
+    return 0;
+  }
+
+  int StartMohairDuckDB(const ServiceConfig& srv_cfg, ShutdownCallback* fn_shutdown) {
+    auto duckdb_service = std::make_unique<DuckDBService>();
+    duckdb_service->service_cfg = srv_cfg;
+    duckdb_service->cb_shutdown = fn_shutdown;
+
+    auto result_loc = Location::Parse(srv_cfg.service_location());
+    if (not result_loc.ok()) {
+      mohair::PrintError("Error parsing location from config", result_loc.status());
+      return ERRCODE_CREATE_LOC;
+    }
+
+    FlightServerBase* service = dynamic_cast<FlightServerBase*>(duckdb_service.get());
+    auto status_service = StartService(service, std::move(result_loc).ValueOrDie());
     if (not status_service.ok()) {
       mohair::PrintError("Error running cs-engine [duckdb]", status_service);
       return ERRCODE_START_SRV;
@@ -49,11 +84,10 @@ namespace mohair::services {
 // ------------------------------
 // Classes and Methods
 
+// >> DuckDBService implementations
 namespace mohair::services {
 
-  // >> DuckDBService
-
-  //   |> Constructors
+  // Constructors
   DuckDBService::DuckDBService() {
     duck_if = mohair::adapters::DuckDBForMem();
   }
@@ -62,7 +96,8 @@ namespace mohair::services {
     duck_if = mohair::adapters::DuckDBForFile(db_fpath);
   }
 
-  //    |> Custom Flight API
+
+  // Custom Flight API
   Status
   DuckDBService::ActionQuery( [[maybe_unused]] const ServerCallContext&  context
                              ,                 const shared_ptr<Buffer>  plan_msg
@@ -71,34 +106,26 @@ namespace mohair::services {
     string plan_data = plan_msg->ToString();
 
     // convert substrait plan to duckdb plan
-    auto queryid_result = duck_if->SubstraitPlanMessage(plan_data);
-    if (not queryid_result.ok()) {
-      std::cerr << "Failed to translate substrait query plan:" << std::endl
-                << "\t" << queryid_result.status().message()   << std::endl
-      ;
-
-      return Status::Invalid("Failed to translate substrait plan message");
-    }
-
-    // the result of conversion is a query ID
-    int    query_id     = *queryid_result;
-    string query_ticket = std::to_string(query_id);
+    int context_id = duck_if->ExecContextForSubstrait(plan_data);
+    if (not context_id) { return Status::Invalid("Failed to translate substrait"); }
 
     // write the query ID to the `ResultStream` as a usable ticket
-    auto result_buffer = Buffer::FromString(query_ticket);
+    string query_ticket { std::to_string(context_id) };
+    auto ticket_buffer = Buffer::FromString(query_ticket);
     *result = std::make_unique<SimpleResultStream>(
-      vector<FlightResult> { FlightResult { result_buffer } }
+      vector<FlightResult> { FlightResult { ticket_buffer } }
     );
 
     // execute the query and return the result (or OK)
-    ARROW_RETURN_NOT_OK(duck_if->ExecuteRelation(query_id));
+    ARROW_RETURN_NOT_OK(duck_if->ExecuteRelation(context_id));
     return Status::OK();
   }
 
-  //    |> Standard Flight API
+
+  // Standard Flight API
   Status
   DuckDBService::DoGet( [[maybe_unused]] const ServerCallContext&      context
-                       ,const Ticket&                 request
+                       ,                 const Ticket&                 request
                        ,[[maybe_unused]] unique_ptr<FlightDataStream>* stream) {
     int   query_id    = std::stoi(request.ticket);
     auto& duck_result = duck_if->GetResult(query_id);
@@ -112,3 +139,4 @@ namespace mohair::services {
   }
 
 } // namespace: mohair::services
+

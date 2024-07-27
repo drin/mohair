@@ -25,6 +25,28 @@
 // ------------------------------
 // Functions
 
+// >> Internal functions
+namespace mohair::services {
+
+  void SerializeConfig( stringstream&        print_stream
+                       ,string&              prefix
+                       ,const ServiceConfig* service_cfg) {
+    // Print root location
+    print_stream << prefix << service_cfg->service_location() << std::endl;
+
+    string downstream_prefix { prefix + "\t" };
+    const auto& downstream_cfgs = service_cfg->downstream_services();
+    for (size_t cfg_ndx = 0; cfg_ndx < downstream_cfgs.size(); ++cfg_ndx) {
+      const auto& downstream_cfg = downstream_cfgs[cfg_ndx];
+
+      if (not downstream_cfg.is_active()) { continue; }
+
+      SerializeConfig(print_stream, downstream_prefix, &downstream_cfg);
+    }
+  }
+
+} // namespace: mohair::services
+
 
 // >> Convenience functions
 namespace mohair::services {
@@ -32,6 +54,28 @@ namespace mohair::services {
   const string MohairService::hkey_queryticket { "QueryTicket" };
 
   // >> Public
+
+  // Print service configurations using pre-order traversal
+  void PrintConfig(ServiceConfig* service_cfg) {
+    stringstream print_stream;
+    string       empty_prefix;
+
+    // Print root location
+    print_stream << service_cfg->service_location() << std::endl;
+
+    // Then recurse on each downstream config
+    string downstream_prefix { empty_prefix + "\t" };
+    const auto& downstream_cfgs = service_cfg->downstream_services();
+    for (size_t cfg_ndx = 0; cfg_ndx < downstream_cfgs.size(); ++cfg_ndx) {
+      const auto& downstream_cfg = downstream_cfgs[cfg_ndx];
+
+      if (not downstream_cfg.is_active()) { continue; }
+
+      SerializeConfig(print_stream, downstream_prefix, &downstream_cfg);
+    }
+
+    std::cout << print_stream.str() << std::endl;
+  }
 
   // Create and assign a default location corresponding to any port on localhost
   int SetDefaultLocation(Location* srv_loc) {
@@ -187,6 +231,43 @@ namespace mohair::services {
     return Status::NotImplemented("TODO");
   }
 
+  Status MohairService::ActionViewChange( [[maybe_unused]] const ServerCallContext&  context
+                                         ,                 const shared_ptr<Buffer>  config_msg
+                                         ,[[maybe_unused]] unique_ptr<ResultStream>* result) {
+    MohairDebugMsg("Receiving view change");
+    ServiceConfig updated_cfg;
+
+    string serialized_msg = config_msg->ToString();
+    if (not updated_cfg.ParseFromString(serialized_msg)) {
+      return Status::Invalid("Unable to parse service config for view change");
+    }
+
+    if (updated_cfg.service_location() == service_cfg.service_location()) {
+      service_cfg = std::move(updated_cfg);
+
+      MohairDebugMsg("New config:");
+      PrintConfig(&service_cfg);
+
+      return Status::OK();
+    }
+
+    stringstream err_msg;
+    err_msg << "Cannot accept update for a different location."
+            << std::endl
+            << "\tExpected [" << service_cfg.service_location() << "]"
+            << std::endl
+            << "\tReceived [" << updated_cfg.service_location() << "]"
+            << std::endl
+    ;
+
+    return Status::Invalid(err_msg.str());
+  }
+
+  Status MohairService::ActionShutdown([[maybe_unused]] const ServerCallContext& context) {
+    if (cb_shutdown != nullptr) { ARROW_RETURN_NOT_OK((*cb_shutdown)()); }
+    return Shutdown();
+  }
+
   Status MohairService::ActionUnknown( const ServerCallContext& context
                                       ,const string             action_type) {
     return Status::NotImplemented("Unknown action: [", action_type, "]");
@@ -249,7 +330,17 @@ namespace mohair::services {
                           ,unique_ptr<ResultStream>* result) {
 
     // known actions
-    if (action.type == "query") { return ActionQuery(context, action.body, result); }
+    if (action.type == "mohair-query") {
+      return ActionQuery(context, action.body, result);
+    }
+
+    else if (action.type == "view-change") {
+      return ActionViewChange(context, action.body, result);
+    }
+
+    else if (action.type == "service-shutdown") {
+      return ActionShutdown(context);
+    }
 
 
     // Catch all that returns Status::NotImplemented()
