@@ -1,7 +1,7 @@
 // ------------------------------
 // License
 //
-// Copyright 2023 Aldrin Montana
+// Copyright 2024 Aldrin Montana
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,10 +20,9 @@
 // Dependencies
 #pragma once
 
-// >> Common definitions for this library
-#include "../mohair.hpp"
-
 // >> Internal libs
+#include "../services/service_mohair.hpp"
+
 #include "../query/mohair/topology.pb.h"
 
 // >> Third-party libs
@@ -79,7 +78,21 @@ namespace mohair::services {
     MohairClient(unique_ptr<FlightClient>&& client): conn(std::move(client)) {}
 
     // >> Methods
-    Result<unique_ptr<ResultStream>> RegisterService(Location& service_loc);
+    Result<unique_ptr<ResultStream>> ShutdownService();
+    Result<unique_ptr<ResultStream>> ExecQueryPlan(shared_ptr<Buffer>& plan_msg);
+    Result<unique_ptr<ResultStream>> RegisterService(const Location& service_loc);
+    Result<unique_ptr<ResultStream>> DeregisterService(const Location& service_loc);
+    Result<unique_ptr<ResultStream>> UpdateView(const ServiceConfig& service_cfg);
+  };
+
+  struct DeregistrationCallback: public ShutdownCallback {
+    MohairClient* client_conn;
+    Location*     target_loc;
+
+    DeregistrationCallback(MohairClient* client, Location* loc)
+      : client_conn(client), target_loc(loc) {}
+
+    Status operator()() override;
   };
 
 } // namespace: mohair::services
