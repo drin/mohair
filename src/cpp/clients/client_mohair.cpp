@@ -1,7 +1,7 @@
 // ------------------------------
 // License
 //
-// Copyright 2023 Aldrin Montana
+// Copyright 2024 Aldrin Montana
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,21 +27,50 @@
 
 namespace mohair::services {
 
+  // >> Shutdown callbacks
+  Status DeregistrationCallback::operator()() {
+    auto result_dereg = client_conn->DeregisterService(*target_loc);
+    if (not result_dereg.status().ok()) {
+      mohair::PrintError("Unable to de-register service", result_dereg.status());
+    }
+
+    MohairDebugMsg("De-registered service");
+  }
+
   // >> Mohair client implementations
   Result<unique_ptr<ResultStream>>
-  MohairClient::RegisterService(Location& service_loc) {
-    ServiceConfig service_cfg;
+  MohairClient::ShutdownService() {
+    Action action_shutdown { "service-shutdown", nullptr };
+    return conn->DoAction(conn_opts, action_shutdown);
+  }
 
-    service_cfg.set_service_location(service_loc.ToString());
-    service_cfg.set_platform_class(DeviceClass::DEVICE_CLASS_SERVER);
+  Result<unique_ptr<ResultStream>>
+  MohairClient::ExecQueryPlan(shared_ptr<Buffer>& plan_msg) {
+    Action action_query { "mohair-query", plan_msg };
+    return conn->DoAction(conn_opts, action_query);
+  }
 
+  Result<unique_ptr<ResultStream>>
+  MohairClient::RegisterService(const Location& service_loc) {
+    Action action_register { "service-activate", Buffer::FromString(service_loc.ToString()) };
+    return conn->DoAction(conn_opts, action_register);
+  }
+
+  Result<unique_ptr<ResultStream>>
+  MohairClient::DeregisterService(const Location& service_loc) {
+    Action action_register { "service-deactivate", Buffer::FromString(service_loc.ToString()) };
+    return conn->DoAction(conn_opts, action_register);
+  }
+
+  Result<unique_ptr<ResultStream>>
+  MohairClient::UpdateView(const ServiceConfig& service_cfg) {
     string serialized_msg;
     if (not service_cfg.SerializeToString(&serialized_msg)) {
       return Status::Invalid("Unable to serialize ServiceConfig message");
     }
 
-    Action action_register { "register-service", Buffer::FromString(serialized_msg) };
-    return conn->DoAction(conn_opts, action_register);
+    Action action_viewchange { "view-change", Buffer::FromString(serialized_msg) };
+    return conn->DoAction(conn_opts, action_viewchange);
   }
 
 } // namespace: mohair::services
