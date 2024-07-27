@@ -672,13 +672,14 @@ class ServiceConfig final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kDownstreamServicesFieldNumber = 3,
-    kServiceComputeFieldNumber = 5,
-    kServiceLocationFieldNumber = 1,
-    kServiceMemFieldNumber = 4,
-    kPlatformClassFieldNumber = 2,
+    kDownstreamServicesFieldNumber = 4,
+    kServiceComputeFieldNumber = 6,
+    kServiceLocationFieldNumber = 2,
+    kServiceMemFieldNumber = 5,
+    kIsActiveFieldNumber = 1,
+    kPlatformClassFieldNumber = 3,
   };
-  // repeated .mohair.ServiceConfig downstream_services = 3 [json_name = "downstreamServices"];
+  // repeated .mohair.ServiceConfig downstream_services = 4 [json_name = "downstreamServices"];
   int downstream_services_size() const;
   private:
   int _internal_downstream_services_size() const;
@@ -695,7 +696,7 @@ class ServiceConfig final : public ::google::protobuf::Message
   const ::mohair::ServiceConfig& downstream_services(int index) const;
   ::mohair::ServiceConfig* add_downstream_services();
   const ::google::protobuf::RepeatedPtrField<::mohair::ServiceConfig>& downstream_services() const;
-  // repeated .mohair.ComputeResources service_compute = 5 [json_name = "serviceCompute"];
+  // repeated .mohair.ComputeResources service_compute = 6 [json_name = "serviceCompute"];
   int service_compute_size() const;
   private:
   int _internal_service_compute_size() const;
@@ -712,7 +713,7 @@ class ServiceConfig final : public ::google::protobuf::Message
   const ::mohair::ComputeResources& service_compute(int index) const;
   ::mohair::ComputeResources* add_service_compute();
   const ::google::protobuf::RepeatedPtrField<::mohair::ComputeResources>& service_compute() const;
-  // string service_location = 1 [json_name = "serviceLocation"];
+  // string service_location = 2 [json_name = "serviceLocation"];
   void clear_service_location() ;
   const std::string& service_location() const;
   template <typename Arg_ = const std::string&, typename... Args_>
@@ -728,7 +729,7 @@ class ServiceConfig final : public ::google::protobuf::Message
   std::string* _internal_mutable_service_location();
 
   public:
-  // optional .mohair.MemoryResources service_mem = 4 [json_name = "serviceMem"];
+  // optional .mohair.MemoryResources service_mem = 5 [json_name = "serviceMem"];
   bool has_service_mem() const;
   void clear_service_mem() ;
   const ::mohair::MemoryResources& service_mem() const;
@@ -743,7 +744,17 @@ class ServiceConfig final : public ::google::protobuf::Message
   ::mohair::MemoryResources* _internal_mutable_service_mem();
 
   public:
-  // .mohair.DeviceClass platform_class = 2 [json_name = "platformClass"];
+  // bool is_active = 1 [json_name = "isActive"];
+  void clear_is_active() ;
+  bool is_active() const;
+  void set_is_active(bool value);
+
+  private:
+  bool _internal_is_active() const;
+  void _internal_set_is_active(bool value);
+
+  public:
+  // .mohair.DeviceClass platform_class = 3 [json_name = "platformClass"];
   void clear_platform_class() ;
   ::mohair::DeviceClass platform_class() const;
   void set_platform_class(::mohair::DeviceClass value);
@@ -758,7 +769,7 @@ class ServiceConfig final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      3, 5, 3,
+      3, 6, 3,
       45, 2>
       _table_;
 
@@ -785,6 +796,7 @@ class ServiceConfig final : public ::google::protobuf::Message
     ::google::protobuf::RepeatedPtrField< ::mohair::ComputeResources > service_compute_;
     ::google::protobuf::internal::ArenaStringPtr service_location_;
     ::mohair::MemoryResources* service_mem_;
+    bool is_active_;
     int platform_class_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -989,7 +1001,29 @@ inline void MemoryResources::_internal_set_memory_freq(::uint32_t value) {
 
 // ServiceConfig
 
-// string service_location = 1 [json_name = "serviceLocation"];
+// bool is_active = 1 [json_name = "isActive"];
+inline void ServiceConfig::clear_is_active() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.is_active_ = false;
+}
+inline bool ServiceConfig::is_active() const {
+  // @@protoc_insertion_point(field_get:mohair.ServiceConfig.is_active)
+  return _internal_is_active();
+}
+inline void ServiceConfig::set_is_active(bool value) {
+  _internal_set_is_active(value);
+  // @@protoc_insertion_point(field_set:mohair.ServiceConfig.is_active)
+}
+inline bool ServiceConfig::_internal_is_active() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.is_active_;
+}
+inline void ServiceConfig::_internal_set_is_active(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.is_active_ = value;
+}
+
+// string service_location = 2 [json_name = "serviceLocation"];
 inline void ServiceConfig::clear_service_location() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.service_location_.ClearToEmpty();
@@ -1039,7 +1073,7 @@ inline void ServiceConfig::set_allocated_service_location(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:mohair.ServiceConfig.service_location)
 }
 
-// .mohair.DeviceClass platform_class = 2 [json_name = "platformClass"];
+// .mohair.DeviceClass platform_class = 3 [json_name = "platformClass"];
 inline void ServiceConfig::clear_platform_class() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.platform_class_ = 0;
@@ -1061,7 +1095,7 @@ inline void ServiceConfig::_internal_set_platform_class(::mohair::DeviceClass va
   _impl_.platform_class_ = value;
 }
 
-// repeated .mohair.ServiceConfig downstream_services = 3 [json_name = "downstreamServices"];
+// repeated .mohair.ServiceConfig downstream_services = 4 [json_name = "downstreamServices"];
 inline int ServiceConfig::_internal_downstream_services_size() const {
   return _internal_downstream_services().size();
 }
@@ -1110,7 +1144,7 @@ ServiceConfig::_internal_mutable_downstream_services() {
   return &_impl_.downstream_services_;
 }
 
-// optional .mohair.MemoryResources service_mem = 4 [json_name = "serviceMem"];
+// optional .mohair.MemoryResources service_mem = 5 [json_name = "serviceMem"];
 inline bool ServiceConfig::has_service_mem() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.service_mem_ != nullptr);
@@ -1206,7 +1240,7 @@ inline void ServiceConfig::set_allocated_service_mem(::mohair::MemoryResources* 
   // @@protoc_insertion_point(field_set_allocated:mohair.ServiceConfig.service_mem)
 }
 
-// repeated .mohair.ComputeResources service_compute = 5 [json_name = "serviceCompute"];
+// repeated .mohair.ComputeResources service_compute = 6 [json_name = "serviceCompute"];
 inline int ServiceConfig::_internal_service_compute_size() const {
   return _internal_service_compute().size();
 }
