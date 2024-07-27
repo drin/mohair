@@ -127,12 +127,8 @@ int main(int argc, char **argv) {
       unique_ptr<EngineDuckDB> duck_engine = mohair::adapters::DuckDBForMem();
 
       // Use new path, `scan_arrows_file`
-      auto queryid_result = duck_engine->ArrowScanOpFile(arrow_fpath);
-      if (not queryid_result.ok()) {
-        std::cerr << "Failed to construct scan op for Arrow IPC" << std::endl;
-      }
-
-      auto execute_status = duck_engine->ExecuteRelation(*queryid_result);
+      int  context_id     = duck_engine->ArrowScanOpFile(arrow_fpath);
+      auto execute_status = duck_engine->ExecuteRelation(context_id);
       if (not execute_status.ok()) { return 4; }
     #endif
 
