@@ -1,7 +1,7 @@
 // ------------------------------
 // License
 //
-// Copyright 2023 Aldrin Montana
+// Copyright 2024 Aldrin Montana
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,13 +43,12 @@
 
 // classes
 using mohair::services::MohairClient;
+using mohair::services::DeregistrationCallback;
 
 // functions
 using mohair::services::ValidateArgCount;
 using mohair::services::ValidateArgLocationUri;
 using mohair::services::ParseArgLocationUri;
-
-using mohair::services::ClientForLocation;
 
 
 // ------------------------------
@@ -111,25 +110,54 @@ int StartServiceDuckDB(int argc, char** argv) {
   errcode_service = ParseArgLocationUri(argv[argndx_metaloc], &meta_loc);
   MohairCheckErrCode(errcode_service, "Unable to parse location URI for metadata service");
 
-  auto result_client = ClientForLocation(meta_loc);
+  // Connect a client to the topological service
+  auto result_client = mohair::services::ClientForLocation(meta_loc);
   if (not result_client.ok()) {
     mohair::PrintError("Unable to connect flight client", result_client.status());
     return ERRCODE_CONN_CLIENT;
   }
-
   unique_ptr<MohairClient> meta_conn = std::move(result_client).ValueOrDie();
+
+  // Register our location
   auto result_register = meta_conn->RegisterService(service_loc);
   if (not result_register.ok()) {
     mohair::PrintError("Error during service registration", result_register.status());
     return ERRCODE_API_REGISTER;
   }
 
+  unique_ptr<ResultStream> result_stream  = std::move(result_register).ValueOrDie();
+  auto result_cfgmsg = result_stream->Next();
+  if (not result_cfgmsg .ok()) {
+    mohair::PrintError("Failed to get result from stream", result_cfgmsg.status());
+    return ERRCODE_API_REGISTER;
+  }
+
+  unique_ptr<FlightResult> config_msg     = std::move(result_cfgmsg).ValueOrDie();
+  string                   serialized_cfg = config_msg->body->ToString();
+
+  ServiceConfig service_cfg;
+  if (not service_cfg.ParseFromString(serialized_cfg)) {
+    std::cerr << "Error parsing initial ServiceConfig" << std::endl;
+    return ERRCODE_API_REGISTER;
+  }
+
+  if (service_cfg.service_location() != service_loc.ToString()) {
+    std::cerr << "Invalid location in configuration. "            << std::endl
+              << "\tExpected: " << service_loc.ToString()         << std::endl
+              << "\tReceived: " << service_cfg.service_location() << std::endl
+    ;
+    return ERRCODE_API_REGISTER;
+  }
+
+  std::cout << "Initializing service with config:" << std::endl;
+  mohair::services::PrintConfig(&service_cfg);
+
+  // Define a callback to deregister the location for when the service shuts down
+  DeregistrationCallback callback_shutdown { meta_conn.get(), &service_loc };
+
   // Run this service until it dies
-  errcode_service = mohair::services::StartMohairDuckDB(service_loc);
+  errcode_service = mohair::services::StartMohairDuckDB(service_cfg, &callback_shutdown);
   MohairCheckErrCode(errcode_service, "Unable to start csd-service");
-
-
-  // Now that we're done, de-register our location
 
   return 0;
 }

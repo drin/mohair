@@ -20,21 +20,23 @@
 // Dependencies
 
 // >> Standard lib
-#include <unordered_map>
 
 // >> Internal
-#include "../services/service_mohair.hpp"
-
-#include "../query/mohair/topology.pb.h"
+#include "../services/service_topology.hpp"
+#include "../clients/client_mohair.hpp"
 
 
 // ------------------------------
 // Type Aliases
 
-using std::unordered_map;
+// classes
+using mohair::services::TopologyService;
+using mohair::services::ServiceHierarchy;
+using mohair::services::MohairClient;
 
-using mohair::ServiceConfig;
-using mohair::DeviceClass;
+// functions
+using mohair::services::TopologyFromConfig;
+using mohair::services::ParseArgLocationUri;
 
 
 // ------------------------------
@@ -42,130 +44,6 @@ using mohair::DeviceClass;
 constexpr int argc_min   { 1 };
 constexpr int argc_max   { 2 };
 constexpr int argndx_loc { 1 };
-
-
-// ------------------------------
-// Classes
-
-// >> An anonymous namespace for implementations nothing else needs to know about
-namespace {
-
-  // ----------
-  // Aliases we only need in here
-  using mohair::services::MohairService;
-  using mohair::services::HashFunctorMohairLocation;
-
-
-  // ----------
-  // Metadata service implementations
-
-  // An ActionType has 2 attributes:
-  //  1. type:        std::string
-  //  2. description: std::string
-  vector<ActionType> SupportedActionsForTopology() {
-    return {
-       { "register-service"   }, { "Add a service to the CS system"      }
-      ,{ "deregister-service" }, { "Remove a service from the CS system" }
-    };
-  }
-
-  // >> For pure topological information
-  using location_map = unordered_map<Location, vector<Location>, HashFunctorMohairLocation>;
-
-  struct TopologyService : public MohairService {
-
-    // |> Attributes
-    vector<Location> cs_servers;
-    location_map     cs_devices;
-
-    // |> Constructors
-    TopologyService() = default;
-
-    // |> Helper functions
-    Result<FlightEndpoint> GetDownstreamServices([[maybe_unused]] FlightEndpoint& upstream_srv) {
-      // TODO
-      // auto downstream_srvs = std::make_unique<FlightEndpoint>();
-      return Status::NotImplemented("WIP");
-    }
-
-    // >> Custom Flight API
-    Status
-    ActionRegisterService( [[maybe_unused]] const ServerCallContext&  context
-                          ,                 const shared_ptr<Buffer>  service_msg
-                          ,[[maybe_unused]] unique_ptr<ResultStream>* response_stream) {
-      MohairDebugMsg("Handling request: [register-service]");
-      string service_cfg = service_msg->ToString();
-
-      auto service_info = std::make_unique<ServiceConfig>();
-      if (not service_info->ParseFromString(service_cfg)) {
-        return Status::Invalid("Unable to parse service configuration from message");
-      }
-      
-      ARROW_ASSIGN_OR_RAISE(
-         auto service_loc
-        ,Location::Parse(service_info->service_location())
-      );
-
-      MohairDebugMsg("registering service location: " << service_loc.ToString());
-      cs_servers.push_back(std::move(service_loc));
-
-      return Status::OK();
-    }
-
-
-    // |> Standard Flight API
-    Status ListFlights( [[maybe_unused]] const ServerCallContext&   context
-                       ,[[maybe_unused]] const Criteria*            criteria
-                       ,[[maybe_unused]] unique_ptr<FlightListing>* listings) override {
-      return Status::NotImplemented("WIP");
-    }
-
-    Status GetFlightInfo( [[maybe_unused]] const ServerCallContext& context
-                         ,[[maybe_unused]] const FlightDescriptor&  request
-                         ,[[maybe_unused]] unique_ptr<FlightInfo>*  info) override {
-      return Status::NotImplemented("WIP");
-    }
-
-    Status PollFlightInfo( [[maybe_unused]] const ServerCallContext& context
-                          ,[[maybe_unused]] const FlightDescriptor&  request
-                          ,[[maybe_unused]] unique_ptr<PollInfo>*    info) override {
-      return Status::NotImplemented("WIP");
-    }
-
-    Status GetSchema( [[maybe_unused]] const ServerCallContext  &context
-                     ,[[maybe_unused]] const FlightDescriptor   &request
-                     ,[[maybe_unused]] unique_ptr<SchemaResult> *schema) override {
-      return Status::NotImplemented("WIP");
-    }
-
-    Status DoAction( const ServerCallContext&  context
-                    ,const Action&             action
-                    ,unique_ptr<ResultStream>* result) {
-
-      // known actions
-      if (action.type == "register-service") {
-        return ActionRegisterService(context, action.body, result);
-      }
-
-      /*
-      else if (action.type == "deregister-service") {
-        return ActionDeregisterService(context, action.body, result);
-      }
-      */
-
-      // Catch all that returns Status::NotImplemented()
-      return ActionUnknown(context, action.type);
-    }
-
-    Status ListActions( [[maybe_unused]] const ServerCallContext& context
-                       ,                 vector<ActionType>*      actions) override {
-      *actions = SupportedActionsForTopology();
-      return Status::OK();
-    }
-
-  };
-
-} // namespace: anonymous
 
 
 // ------------------------------
@@ -193,7 +71,22 @@ int ValidateArgs(int argc, [[maybe_unused]] char **argv) {
 // >> For topological service
 int StartServiceTopo(const Location& srv_loc) {
     unique_ptr<FlightServerBase> topo_service = std::make_unique<TopologyService>();
-    auto status_service = mohair::services::StartService(topo_service, srv_loc);
+    auto status_service = mohair::services::StartService(topo_service.get(), srv_loc);
+
+    if (not status_service.ok()) {
+      mohair::PrintError("Error running topological service", status_service);
+      return ERRCODE_START_SRV;
+    }
+
+    return 0;
+}
+
+int StartServiceTopo(const Location& srv_loc, ServiceHierarchy* topology) {
+    auto topo_service = std::make_unique<TopologyService>();
+    topo_service->service_map = topology;
+
+    FlightServerBase* service = dynamic_cast<FlightServerBase*>(topo_service.get());
+    auto status_service = mohair::services::StartService(service, srv_loc);
 
     if (not status_service.ok()) {
       mohair::PrintError("Error running topological service", status_service);
@@ -205,27 +98,114 @@ int StartServiceTopo(const Location& srv_loc) {
 
 
 // ------------------------------
+// Structs and Classes
+
+struct ServiceActions {
+  Location    service_loc;
+  const char* config_fpath;
+  bool        should_print_topo { false };
+  bool        should_verbose    { false };
+
+  ServiceActions(): service_loc(), config_fpath(nullptr) {}
+
+  // Public entry point
+  int Start() {
+    if (config_fpath == nullptr) {
+      // Create and start the topology service
+      int errcode_service = StartServiceTopo(service_loc);
+      MohairCheckErrCode(errcode_service, "Unable to start topo-service");
+
+      return 0;
+    }
+
+    auto result_topology = TopologyFromConfig(config_fpath, should_verbose);
+    if (not result_topology.status().ok()) {
+      mohair::PrintError("Failed to parse topology config", result_topology.status());
+      return ERRCODE_API_CONFIG;
+    }
+
+    auto topology = std::move(result_topology).ValueOrDie();
+
+    if (should_print_topo) {
+      std::cout << std::endl << "Topology:" << std::endl;
+      mohair::services::PrintTopology(&topology);
+    }
+
+    if (should_verbose) {
+      std::cout << "Upstream entries:" << std::endl;
+      for (auto& entry : topology.upstream_locs) {
+        std::cout << "\t"   << entry.first.ToString()
+                  << " <- " << entry.second.ToString()
+                  << std::endl
+        ;
+      }
+    }
+
+    int errcode_service = StartServiceTopo(service_loc, &topology);
+    MohairCheckErrCode(errcode_service, "Unable to start topo-service");
+
+    return 0;
+  }
+};
+
+
+// ------------------------------
+// Functions
+
+int PrintHelp() {
+    std::cout << "topo-service"
+              << " [-h]"
+              << " -l service-location-uri"
+              << " -f path-to-config-file"
+              << std::endl
+    ;
+
+    return 1;
+}
+
+
+// ------------------------------
 // Main Logic
+
 int main(int argc, char **argv) {
-  int errcode_validation = ValidateArgs(argc, argv);
-  MohairCheckErrCode(errcode_validation, "Failed to validate input command-line args");
+  ServiceActions client_actions;
 
-  Location service_loc;
-  int      errcode_service { 0 };
+  // Parse each argument and internalize the provided option
+  constexpr char  is_done_parsing = -1;
+  const     char* opt_template    = "l:f:hpv";
 
-  // If no location URI is specified, use default location (localhost; any port)
-  if (argc == 1) {
-    errcode_service = mohair::services::SetDefaultLocation(&service_loc);
-    MohairCheckErrCode(errcode_service, "Unable to set default location URI");
+  char parsed_opt;
+  int  errcode_cli;
+
+  while ((parsed_opt = (char) getopt(argc, argv, opt_template)) != is_done_parsing) {
+    switch (parsed_opt) {
+
+      case 'h': { return PrintHelp(); }
+
+      case 'l': {
+        errcode_cli = ParseArgLocationUri(optarg, &(client_actions.service_loc));
+        MohairCheckErrCode(errcode_cli, "Failed to parse service location");
+        break;
+      }
+
+      case 'f': {
+        client_actions.config_fpath = optarg;
+        break;
+      }
+
+      case 'p': {
+        client_actions.should_print_topo = true;
+        break;
+      }
+
+      case 'v': {
+        client_actions.should_verbose = true;
+        break;
+      }
+
+      default: { break; }
+    }
   }
 
-  if (argc == 2) {
-    errcode_service = mohair::services::ParseArgLocationUri(argv[argndx_loc], &service_loc);
-    MohairCheckErrCode(errcode_service, "Unable to parse location URI");
-  }
-
-  errcode_service = StartServiceTopo(service_loc);
-  MohairCheckErrCode(errcode_service, "Unable to start csd-service");
-
-  return 0;
+  return client_actions.Start();
 }
