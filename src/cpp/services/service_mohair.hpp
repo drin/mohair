@@ -24,12 +24,19 @@
 #include "../mohair.hpp"
 #include "../query/plans.hpp"
 
+// >> Protobuf deps
+#include "../query/mohair/topology.pb.h"
+
 // >> Third-party libs
 #include <arrow/flight/api.h>
 
 
 // ------------------------------
 // Type aliases
+
+// >> Internal protobuf classes
+using mohair::ServiceConfig;
+using mohair::DeviceClass;
 
 //  >> Flight type aliases
 using arrow::flight::FlightClient;
@@ -172,6 +179,9 @@ namespace mohair::services {
 
   vector<string> GetUriSchemeWhitelist();
 
+  // Viewing data structures
+  void PrintConfig(ServiceConfig* service_cfg);
+
   // initialize a service (internal)
   Status StartService(FlightServerBase* service, const Location& srv_loc);
 
@@ -182,5 +192,6 @@ namespace mohair::services {
 
   int StartMohairDuckDB(const Location& srv_loc);
   int StartMohairDuckDB(const Location& srv_loc, ShutdownCallback* fn_shutdown);
+  int StartMohairDuckDB(const ServiceConfig& srv_cfg, ShutdownCallback* fn_shutdown);
 
 } // namespace: mohair::services

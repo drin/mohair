@@ -44,21 +44,17 @@
       DuckDBService();
       DuckDBService(fs::path db_fpath);
 
-      // >> Convenience functions
-      // NOTE: use default `MakeFlightInfo` for now
-      // Result<FlightInfo> MakeFlightInfo() override;
 
       // >> Custom Flight API
-      Status
-      ActionQuery( const ServerCallContext&  context
-                  ,const shared_ptr<Buffer>  plan_msg
-                  ,unique_ptr<ResultStream>* result) override;
+      Status ActionQuery( const ServerCallContext&  context
+                         ,const shared_ptr<Buffer>  plan_msg
+                         ,unique_ptr<ResultStream>* result) override;
+
 
       // >> Standard Flight API
-      Status
-      DoGet( const ServerCallContext&      context
-            ,const Ticket&                 request
-            ,unique_ptr<FlightDataStream>* stream) override;
+      Status DoGet( const ServerCallContext&      context
+                   ,const Ticket&                 request
+                   ,unique_ptr<FlightDataStream>* stream) override;
 
     };
 
