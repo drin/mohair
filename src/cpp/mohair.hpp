@@ -53,7 +53,7 @@
 #if MOHAIR_DEBUG
   #define MohairDebugMsg(msg_str)              \
           do {                                 \
-            std::cout << msg_str << std::endl; \
+            std::cerr << msg_str << std::endl; \
           } while (0);
 
 #else

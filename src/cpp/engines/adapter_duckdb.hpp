@@ -119,9 +119,9 @@ using std::unordered_map;
       EngineDuckDB(DuckDB db): engine_conn(db), context_id(0) {}
 
       // >> Functions
-      Result<int> ArrowScanOpIPC(fs::path arrow_fpath);
-      Result<int> ArrowScanOpFile(fs::path arrow_fpath);
-      Result<int> SubstraitPlanMessage(string plan_msg);
+      int ArrowScanOpIPC(shared_ptr<Buffer> ipc_buffer);
+      int ArrowScanOpFile(fs::path arrow_fpath);
+      int ExecContextForSubstrait(string plan_msg);
 
       Status       ExecuteRelation(int prepared_relid);
       Relation&    GetRelation(int prepared_relid);

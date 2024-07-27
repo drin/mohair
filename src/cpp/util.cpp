@@ -138,7 +138,7 @@ namespace mohair {
 
   /** Given a file path to an Arrow IPC stream, return the data as a buffer. */
   Result<shared_ptr<Buffer>> BufferFromIPCStream(const std::string& fpath) {
-    std::cout << "Parsing file: " << fpath << std::endl;
+    MohairDebugMsg("Parsing file: " << fpath);
 
     // use the `FileSystem` instance to open a handle to the file
     ARROW_ASSIGN_OR_RAISE(auto arrow_fhandle, HandleForIPCFile(fpath));
@@ -151,13 +151,13 @@ namespace mohair {
       return Status::Invalid("Read IPC stream file into memory but it is not CPU-accessible");
     }
 
-    std::cout << "Returning IPC buffer" << std::endl;
+    MohairDebugMsg("Returning IPC buffer");
     return arrow_buffer;
   }
 
   /** Given a file path to an Arrow IPC stream, return a Table. */
   Result<shared_ptr<Table>> ReadIPCStream(const std::string& fpath) {
-    std::cout << "Parsing file: " << fpath << std::endl;
+    MohairDebugMsg("Parsing file: " << fpath);
 
     // Declares and initializes `batch_reader`
     ARROW_ASSIGN_OR_RAISE(auto batch_reader, ReaderForIPCStream(fpath));
@@ -167,7 +167,7 @@ namespace mohair {
 
   /** Given a file path to an Arrow IPC file, return a Table. */
   Result<shared_ptr<Table>> ReadIPCFile(const std::string& fpath) {
-    std::cout << "Reading file: " << fpath << std::endl;
+    MohairDebugMsg("Reading file: " << fpath.data());
 
     // Declares and initializes `ipc_file_reader`
     ARROW_ASSIGN_OR_RAISE(auto ipc_file_reader, ReaderForIPCFile(fpath));
@@ -187,6 +187,23 @@ namespace mohair {
 
 
   // >> Convenience Functions
+
+  /**
+   * Join each string in a vector using a given delimiter string literal.
+   */
+  string JoinStr(vector<string> str_parts, const char *delim) {
+    stringstream join_stream;
+
+    join_stream << str_parts[0];
+    for (size_t ndx = 1; ndx < str_parts.size(); ++ndx) {
+      join_stream << delim << str_parts[ndx];
+    }
+
+    return join_stream.str();
+  }
+
+
+  //  >> Debugging Functions
 
   /** Print an Arrow Table to stdout given an offset and length (row count). */
   void PrintTable(shared_ptr<Table> table_data, int64_t offset, int64_t length) {
@@ -213,21 +230,6 @@ namespace mohair {
     ;
   }
 
-  /**
-   * Join each string in a vector using a given delimiter string literal.
-   */
-  string JoinStr(vector<string> str_parts, const char *delim) {
-    stringstream join_stream;
-
-    join_stream << str_parts[0];
-    for (size_t ndx = 1; ndx < str_parts.size(); ++ndx) {
-      join_stream << delim << str_parts[ndx];
-    }
-
-    return join_stream.str();
-  }
-
-  //  >> Debugging Functions
 
   /** Simple function to print a string literal and an arrow status. */
   void PrintError(const char *msg, const Status& arrow_status) {

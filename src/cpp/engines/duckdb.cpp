@@ -116,24 +116,10 @@
 
 
     //! Create a duckdb scan operator from an IPC buffer (extracted from an arrow file)
-    Result<int> EngineDuckDB::ArrowScanOpIPC(fs::path arrow_fpath) {
-      // Scan table with duckdb by grabbing the whole file as one IPC buffer
-      auto buffer_result = BufferFromIPCStream(arrow_fpath);
-      if (not buffer_result.ok()) {
-        std::cerr << "Unable to parse buffer from IPC stream" << std::endl
-                  << "\t" << buffer_result.status().message() << std::endl
-        ;
-
-        return Status::Invalid("Unable to parse buffer from IPC stream");
-      }
-
-      // Construct a QueryContext to keep everything alive
+    int EngineDuckDB::ArrowScanOpIPC(shared_ptr<Buffer> ipc_buffer) {
+      // Construct a QueryContext to keep the IPC buffer alive
       auto scan_context = std::make_unique<QueryContext>();
-
-      // Push the IPC buffer into the QueryContext
-      auto &ipc_buffer = (
-        scan_context->rel_mem.emplace_back(std::move(buffer_result).ValueOrDie())
-      );
+      scan_context->rel_mem.push_back(ipc_buffer);
 
       // `scan_arrow_ipc` takes IPC buffers as a list of structs
       duckdb::vector<Value> fn_args {
@@ -151,7 +137,7 @@
 
 
     //! Create a duckdb scan operator from an arrow file
-    Result<int> EngineDuckDB::ArrowScanOpFile(fs::path arrow_fpath) {
+    int EngineDuckDB::ArrowScanOpFile(fs::path arrow_fpath) {
       // Construct a QueryContext to keep everything alive
       auto scan_context = std::make_unique<QueryContext>();
 
@@ -171,7 +157,7 @@
 
 
     //! Create a duckdb query plan from a substrait plan message
-    Result<int> EngineDuckDB::SubstraitPlanMessage(std::string plan_msg) {
+    int EngineDuckDB::ExecContextForSubstrait(std::string plan_msg) {
       // Construct a QueryContext to keep everything alive
       auto scan_context = std::make_unique<QueryContext>();
 
