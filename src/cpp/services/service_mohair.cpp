@@ -264,6 +264,7 @@ namespace mohair::services {
   }
 
   Status MohairService::ActionShutdown([[maybe_unused]] const ServerCallContext& context) {
+    MohairDebugMsg("Shutting down...");
     if (cb_shutdown != nullptr) { ARROW_RETURN_NOT_OK((*cb_shutdown)()); }
     return Shutdown();
   }
