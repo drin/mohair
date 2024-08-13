@@ -19,11 +19,14 @@
 // ------------------------------
 // Dependencies
 
-// NOTE: include filesystem before trying to incude <arrow/filesystem/api.h>
+// >> Standard libs
+#include <unistd.h>
 #include <filesystem>
 
+// >> Internal
 #include "../mohair.hpp"
 
+//  service-specific includes
 #if USE_DUCKDB
   #include "../engines/adapter_duckdb.hpp"
 
@@ -38,91 +41,13 @@
 namespace fs = std::filesystem;
 
 
-
 // ------------------------------
-// Variables
-const std::string local_file_protocol { "file://" };
+// Structs and Classes
 
-const char* test_query = (
-  "  SELECT  gene_id"
-  "         ,COUNT(*)        AS cell_count"
-  "         ,AVG(e.expr)     AS expr_avg"
-  "         ,VAR_POP(e.expr) AS expr_var"
-  "    FROM metaclusters mc"
+struct ToolInterface {
+  fs::path arrow_fpath;
 
-  "          JOIN clusters c"
-  "         USING (cluster_id)"
-
-  "          JOIN cluster_membership cm"
-  "         USING (cluster_id)"
-
-  "          JOIN  expression e"
-  "         USING (cell_id)"
-
-  "   WHERE mc.mcluster_id = 12"
-
-  "GROUP BY e.gene_id"
-);
-
-
-// ------------------------------
-// Functions
-
-int ViewArrowIPCFromFile(fs::path arrow_fpath, bool& is_feather) {
-    // Create a RecordBatchStreamReader for the given `arrow_fpath`
-    is_feather = true;
-    arrow::Result<shared_ptr<Table>> read_result = mohair::ReadIPCFile(arrow_fpath.string());
-    if (not read_result.ok()) {
-      std::cerr << "Could not read file:"       << std::endl
-                << "\t" << read_result.status() << std::endl
-      ;
-
-      is_feather = false;
-    }
-
-    if (not is_feather) {
-      std::cout << "Trying to read file as IPC stream..." << std::endl;
-
-      read_result = mohair::ReadIPCStream(arrow_fpath.string());
-      if (not read_result.ok()) {
-        std::cerr << "Could not read file:"       << std::endl
-                  << "\t" << read_result.status() << std::endl
-        ;
-
-        return 2;
-      }
-    }
-
-    arrow::Result<shared_ptr<Table>> proj_result = read_result;
-    if ((*read_result)->num_columns() >= 10) {
-      std::cout << "Projecting first 10 columns for readability" << std::endl;
-
-      auto proj_result = (*read_result)->SelectColumns({0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-      if (not proj_result.ok()) {
-        std::cerr << "Could not do projection:"   << std::endl
-                  << "\t" << proj_result.status() << std::endl
-        ;
-        return 3;
-      }
-    }
-
-    // print the first 10 rows for readability
-    mohair::PrintTable(*proj_result, 0, 10);
-    return 0;
-}
-
-
-// ------------------------------
-// Main Logic
-int main(int argc, char **argv) {
-    if (argc != 2) {
-        printf("parse-arrow <path-to-arrow-file>\n");
-        return 1;
-    }
-
-    fs::path arrow_fpath = fs::absolute(argv[1]).string();
-
-    // Try using DuckDB
+  int ExecuteFileScan() {
     #if USE_DUCKDB
       unique_ptr<EngineDuckDB> duck_engine = mohair::adapters::DuckDBForMem();
 
@@ -130,7 +55,61 @@ int main(int argc, char **argv) {
       int  context_id     = duck_engine->ArrowScanOpFile(arrow_fpath);
       auto execute_status = duck_engine->ExecuteRelation(context_id);
       if (not execute_status.ok()) { return 4; }
-    #endif
 
-    return 0;
+    #else
+      MohairDebugMsg("Unknown service backend");
+      return 0;
+
+    #endif
+  }
+
+  int Start() {
+    if (not arrow_fpath.empty()) { return ExecuteFileScan(); }
+
+    MohairDebugMsg("No data source provided.");
+    return ERRCODE_CLIENT;
+  }
+};
+
+
+// ------------------------------
+// Functions
+
+int PrintHelp() {
+    std::cout << "read-arrow"
+              << " [-h]"
+              << " -f <path-to-arrow-IPC-file>"
+              << std::endl
+    ;
+
+    return 1;
+}
+
+
+// ------------------------------
+// Main Logic
+
+int main(int argc, char **argv) {
+  ToolInterface my_cli;
+
+  // Parse each argument and internalize the provided option
+  constexpr char  is_done_parsing = -1;
+  const     char* opt_template    = "f:h";
+
+  char parsed_opt;
+  while ((parsed_opt = (char) getopt(argc, argv, opt_template)) != is_done_parsing) {
+    switch (parsed_opt) {
+
+      case 'h': { return PrintHelp(); }
+
+      case 'f': {
+        my_cli.arrow_fpath = fs::absolute(optarg).string();
+        break;
+      }
+
+      default: { break; }
+    }
+  }
+
+  return my_cli.Start();
 }
