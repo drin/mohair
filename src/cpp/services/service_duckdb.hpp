@@ -20,12 +20,11 @@
 // Dependencies
 #pragma once
 
-// >> flight deps
+// >> Internal deps and flight deps
 #include "service_mohair.hpp"
 
-// >> integration with duckdb
+// >> Engine deps
 #if USE_DUCKDB
-  // This brings in all useful duckdb dependencies
   #include "../engines/adapter_duckdb.hpp"
 #endif
 
@@ -36,19 +35,28 @@
 #if USE_DUCKDB
   namespace mohair::services {
 
-    struct DuckDBService : public MohairService {
+    struct DuckDBService : public EngineService {
       // >> Attributes
-      unique_ptr<mohair::adapters::EngineDuckDB> duck_if;
+      unique_ptr<mohair::adapters::EngineDuckDB> engine;
 
-      // >> Constructors
+      // >> Deconstructors and Constructors
+      virtual ~DuckDBService() = default;
+
+      DuckDBService(ShutdownCallback* cb_custom);
+      DuckDBService(ShutdownCallback* cb_custom, fs::path db_fpath);
+
       DuckDBService();
       DuckDBService(fs::path db_fpath);
 
 
       // >> Custom Flight API
-      Status ActionQuery( const ServerCallContext&  context
-                         ,const shared_ptr<Buffer>  plan_msg
-                         ,unique_ptr<ResultStream>* result) override;
+      Status DoPlanPushdown  ( const ServerCallContext&  context
+                              ,const shared_ptr<Buffer>  plan_msg
+                              ,unique_ptr<ResultStream>* result) override;
+
+      Status DoPlanExecution ( const ServerCallContext&  context
+                              ,const shared_ptr<Buffer>  plan_msg
+                              ,unique_ptr<ResultStream>* result) override;
 
 
       // >> Standard Flight API
