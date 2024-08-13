@@ -26,90 +26,44 @@
 
 
 // ------------------------------
-// Functions
-
-namespace mohair::services {
-
-  // Create a flight server that runs until it dies
-  int StartMohairDuckDB(const Location& srv_loc) {
-    unique_ptr<FlightServerBase> duckdb_service = std::make_unique<DuckDBService>();
-
-    auto status_service = StartService(duckdb_service.get(), srv_loc);
-    if (not status_service.ok()) {
-      mohair::PrintError("Error running cs-engine [duckdb]", status_service);
-      return ERRCODE_START_SRV;
-    }
-
-    return 0;
-  }
-
-  int StartMohairDuckDB(const Location& srv_loc, ShutdownCallback* fn_shutdown) {
-    auto duckdb_service = std::make_unique<DuckDBService>();
-    duckdb_service->cb_shutdown = fn_shutdown;
-
-    FlightServerBase* service = dynamic_cast<FlightServerBase*>(duckdb_service.get());
-    auto status_service = StartService(service, srv_loc);
-    if (not status_service.ok()) {
-      mohair::PrintError("Error running cs-engine [duckdb]", status_service);
-      return ERRCODE_START_SRV;
-    }
-
-    return 0;
-  }
-
-  int StartMohairDuckDB(const ServiceConfig& srv_cfg, ShutdownCallback* fn_shutdown) {
-    auto duckdb_service = std::make_unique<DuckDBService>();
-    duckdb_service->service_cfg = srv_cfg;
-    duckdb_service->cb_shutdown = fn_shutdown;
-
-    auto result_loc = Location::Parse(srv_cfg.service_location());
-    if (not result_loc.ok()) {
-      mohair::PrintError("Error parsing location from config", result_loc.status());
-      return ERRCODE_CREATE_LOC;
-    }
-
-    FlightServerBase* service = dynamic_cast<FlightServerBase*>(duckdb_service.get());
-    auto status_service = StartService(service, std::move(result_loc).ValueOrDie());
-    if (not status_service.ok()) {
-      mohair::PrintError("Error running cs-engine [duckdb]", status_service);
-      return ERRCODE_START_SRV;
-    }
-
-    return 0;
-  }
-
-} // namespace: mohair::services
-
-
-// ------------------------------
 // Classes and Methods
 
 // >> DuckDBService implementations
 namespace mohair::services {
 
   // Constructors
-  DuckDBService::DuckDBService() {
-    duck_if = mohair::adapters::DuckDBForMem();
+  DuckDBService::DuckDBService(ShutdownCallback* cb_custom)
+    : EngineService(cb_custom) {
+    engine = mohair::adapters::DuckDBForMem();
   }
 
-  DuckDBService::DuckDBService(fs::path db_fpath) {
-    duck_if = mohair::adapters::DuckDBForFile(db_fpath);
+  DuckDBService::DuckDBService(ShutdownCallback* cb_custom, fs::path db_fpath)
+    : EngineService(cb_custom) {
+    engine = mohair::adapters::DuckDBForFile(db_fpath);
   }
 
+  DuckDBService::DuckDBService()
+    : DuckDBService::DuckDBService(nullptr) {}
+
+  DuckDBService::DuckDBService(fs::path db_fpath)
+    : DuckDBService::DuckDBService(nullptr, db_fpath) {}
 
   // Custom Flight API
   Status
-  DuckDBService::ActionQuery( [[maybe_unused]] const ServerCallContext&  context
-                             ,                 const shared_ptr<Buffer>  plan_msg
-                             ,                 unique_ptr<ResultStream>* result) {
+  DuckDBService::DoPlanPushdown( [[maybe_unused]] const ServerCallContext&  context
+                                ,                 const shared_ptr<Buffer>  plan_msg
+                                ,                 unique_ptr<ResultStream>* result) {
     // convert message to string type
+    MohairDebugMsg("Received query request");
     string plan_data = plan_msg->ToString();
 
     // convert substrait plan to duckdb plan
-    int context_id = duck_if->ExecContextForSubstrait(plan_data);
+    MohairDebugMsg("Passing query plan to query engine");
+    int context_id = engine->ExecContextForSubstrait(plan_data);
     if (not context_id) { return Status::Invalid("Failed to translate substrait"); }
 
     // write the query ID to the `ResultStream` as a usable ticket
+    MohairDebugMsg("Preparing ticket for response data");
     string query_ticket { std::to_string(context_id) };
     auto ticket_buffer = Buffer::FromString(query_ticket);
     *result = std::make_unique<SimpleResultStream>(
@@ -117,8 +71,16 @@ namespace mohair::services {
     );
 
     // execute the query and return the result (or OK)
-    ARROW_RETURN_NOT_OK(duck_if->ExecuteRelation(context_id));
+    MohairDebugMsg("Executing query plan");
+    ARROW_RETURN_NOT_OK(engine->ExecuteRelation(context_id));
     return Status::OK();
+  }
+
+  Status
+  DuckDBService::DoPlanExecution( [[maybe_unused]] const ServerCallContext&  context
+                                 ,[[maybe_unused]] const shared_ptr<Buffer>  plan_msg
+                                 ,[[maybe_unused]] unique_ptr<ResultStream>* result) {
+    return Status::NotImplemented("TODO: query service");
   }
 
 
@@ -128,7 +90,7 @@ namespace mohair::services {
                        ,                 const Ticket&                 request
                        ,[[maybe_unused]] unique_ptr<FlightDataStream>* stream) {
     int   query_id    = std::stoi(request.ticket);
-    auto& duck_result = duck_if->GetResult(query_id);
+    auto& duck_result = engine->GetResult(query_id);
 
     // NOTE: this is just for debugging purposes until we convert
     std::cout << "Accessed results:" << std::endl;
