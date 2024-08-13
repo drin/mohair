@@ -28,9 +28,6 @@ cpp_enginedir = cpp_srcdir / 'engines'
 # dir for flight services
 cpp_servicedir = cpp_srcdir / 'services'
 
-# dir for flight clients
-cpp_clientdir  = cpp_srcdir / 'clients'
-
 # dir for binary sources (1-1 with binaries)
 cpp_tooldir   = cpp_srcdir / 'toolbox'
 
@@ -160,29 +157,36 @@ endif
 substrait_hdrlist = [
    cpp_proto_mohair    / 'algebra.pb.h'
   ,cpp_proto_mohair    / 'topology.pb.h'
-  ,cpp_proto_substrait / 'algebra.pb.h'
-  ,cpp_proto_substrait / 'extensions' / 'extensions.pb.h'
   ,cpp_proto_substrait / 'type.pb.h'
   ,cpp_proto_substrait / 'function.pb.h'
-  ,cpp_proto_substrait / 'type_expressions.pb.h'
-  ,cpp_proto_substrait / 'parameterized_types.pb.h'
-  ,cpp_proto_substrait / 'extended_expression.pb.h'
-  ,cpp_proto_substrait / 'capabilities.pb.h'
   ,cpp_proto_substrait / 'plan.pb.h'
+  ,cpp_proto_substrait / 'algebra.pb.h'
+  ,cpp_proto_substrait / 'capabilities.pb.h'
+  ,cpp_proto_substrait / 'parameterized_types.pb.h'
+  ,cpp_proto_substrait / 'type_expressions.pb.h'
+  ,cpp_proto_substrait / 'extended_expression.pb.h'
+  ,cpp_proto_substrait / 'extensions' / 'extensions.pb.h'
 ]
 
 # >> For decomposable queries
 query_hdrlist = [
    cpp_srcdir   / 'mohair.hpp'
+  ,cpp_srcdir   / 'mohair_macros.hpp'
   ,cpp_srcdir   / 'mohair_codes.hpp'
   ,cpp_querydir / 'plans.hpp'
   ,cpp_querydir / 'operators.hpp'
   ,cpp_querydir / 'messages.hpp'
+
+   # External dependencies
+  ,cpp_srcdir   / 'apidep_standard.hpp'
+  ,cpp_srcdir   / 'apidep_arrow.hpp'
+  ,cpp_querydir / 'apidep_substrait.hpp'
 ]
 
 # >> For flight services
 services_hdrlist = [
    cpp_srcdir     / 'mohair.hpp'
+  ,cpp_srcdir     / 'mohair_macros.hpp'
   ,cpp_srcdir     / 'mohair_codes.hpp'
   ,cpp_querydir   / 'plans.hpp'
   ,cpp_querydir   / 'messages.hpp'
@@ -192,6 +196,12 @@ services_hdrlist = [
   ,cpp_servicedir / 'service_topology.hpp'
   ,cpp_servicedir / 'service_faodel.hpp'
   ,cpp_servicedir / 'service_duckdb.hpp'
+
+   # External dependencies
+  ,cpp_srcdir     / 'apidep_standard.hpp'
+  ,cpp_srcdir     / 'apidep_arrow.hpp'
+  ,cpp_querydir   / 'apidep_substrait.hpp'
+  ,cpp_servicedir / 'apidep_flight.hpp'
 ]
 
 
@@ -223,15 +233,10 @@ query_srclist = [
 
 # >> For flight services
 services_srclist = [
-   cpp_srcdir     / 'util.cpp'
-  ,cpp_querydir   / 'messages.cpp'
-  ,cpp_querydir   / 'plans.cpp'
-  ,cpp_querydir   / 'operators.cpp'
-  ,cpp_enginedir  / 'execution.cpp'
+   cpp_servicedir / 'adapter_flight.cpp'
   ,cpp_servicedir / 'service_mohair.cpp'
-
-  # this maybe can be moved to a separate list
-  ,cpp_clientdir  / 'client_mohair.cpp'
+  ,cpp_servicedir / 'client_mohair.cpp'
+  ,cpp_enginedir  / 'execution.cpp'
 ]
 
 
@@ -242,7 +247,7 @@ services_srclist = [
 libmohair_srclist = (substrait_srclist + query_srclist)
 
 # >> Binary for mohair flight services
-mohair_srv_srclist = (substrait_srclist + services_srclist)
+mohair_srv_srclist = (substrait_srclist + query_srclist + services_srclist)
 
 
 # ------------------------------
@@ -308,7 +313,10 @@ bin_mohairquery = executable('mohair'
 
 #   |> minimal client for mohair services
 bin_mohairclient_srclist = (
-    [ cpp_tooldir / 'mohair-client.cpp' ]
+    [
+       cpp_tooldir / 'mohair-client.cpp'
+      ,cpp_tooldir / 'mohair_cli.cpp'
+    ]
   + mohair_srv_srclist
 )
 bin_mohairclient   = executable('mohair-client'
@@ -323,6 +331,7 @@ bin_mohairclient   = executable('mohair-client'
 csd_srv_srclist = (
     [
        cpp_tooldir    / 'csd-service.cpp'
+      ,cpp_tooldir    / 'mohair_cli.cpp'
       ,cpp_enginedir  / 'duckdb.cpp'
       ,cpp_servicedir / 'service_duckdb.cpp'
     ]
@@ -340,6 +349,7 @@ bin_srv_csd = executable('csd-service'
 topo_srv_srclist = (
     [
        cpp_tooldir    / 'topo-service.cpp'
+      ,cpp_tooldir    / 'mohair_cli.cpp'
       ,cpp_servicedir / 'service_topology.cpp'
     ]
   + mohair_srv_srclist

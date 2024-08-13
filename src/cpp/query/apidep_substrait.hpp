@@ -17,31 +17,33 @@
 
 
 // ------------------------------
-// Dependencies
-#pragma once
+// Overview
+//
+// Substrait is a specification of how to represent a query plan. This implementation uses
+// protobuf definitions provided by substrait.
 
 
 // ------------------------------
-// Macro definitions for common status codes
+// Dependencies
+#pragma once
 
-#define ERRCODE_INV_ARGS        1
-#define ERRCODE_INV_URISCHEME   2
-#define ERRCODE_PARSE_URI       3
-#define ERRCODE_PARSE_NUMERIC   4
-#define ERRCODE_CREATE_LOC      5
+// >> Protobuf deps for interacting with framework
+#include <google/protobuf/text_format.h>
 
-#define ERRCODE_START_SRV       6
-#define ERRCODE_NO_ENGINE       7
-#define ERRCODE_CONN_CLIENT     8
+// >> Generated protobuf deps for substrait
+#include "substrait/plan.pb.h"
+#include "substrait/algebra.pb.h"
+#include "substrait/extensions/extensions.pb.h"
 
-#define ERRCODE_API_REGISTER    9
-#define ERRCODE_API_DEREGISTER 10
-#define ERRCODE_API_QUERY      12
-#define ERRCODE_API_SHUTDOWN   13
-#define ERRCODE_API_CONFIG     16
 
-#define ERRCODE_CLIENT         11
+// ------------------------------
+// Type Aliases
 
-#define ERRCODE_CLI_HELP       14
-#define ERRCODE_FILE_PARSE     15
+//  >> Protobuf framework types
+using google::protobuf::TextFormat;
+
+//  >> Substrait types
+using substrait::Plan;
+using substrait::PlanRel;
+using substrait::Rel;
 

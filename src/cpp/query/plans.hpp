@@ -21,29 +21,14 @@
 #pragma once
 
 //  >> Internal libs
-#include "../mohair.hpp"
+#include "adapter_mohair.hpp"
+
 #include "messages.hpp"
-
-//    |> generated protobuf code
-#include "substrait/algebra.pb.h"
-#include "substrait/plan.pb.h"
-#include "substrait/extensions/extensions.pb.h"
-
-#include "mohair/algebra.pb.h"
-
-//  >> External libs
-#include <google/protobuf/text_format.h>
 
 
 // ------------------------------
 // Type aliases
 
-// >> Substrait types
-using substrait::Plan;
-using substrait::Rel;
-
-// used but not named
-//using substrait::extensions::AdvancedExtension;
 
 // ------------------------------
 // Base classes for query operators

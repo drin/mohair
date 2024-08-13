@@ -51,7 +51,7 @@ namespace mohair::services {
 // >> Convenience functions
 namespace mohair::services {
 
-  const string MohairService::hkey_queryticket { "QueryTicket" };
+  const string EngineService::hkey_queryticket { "QueryTicket" };
 
   // >> Public
 
@@ -89,110 +89,53 @@ namespace mohair::services {
     return 0;
   }
 
-
-  // >> Internal
-
-  // Run the given flight server until it dies using the given location URI
-  Status StartService(FlightServerBase* service, const Location& srv_loc) {
-    // Create the service instance
+  // Functions to start a service
+  Status StartService(ServerAdapter& mohair_service, const Location& bind_loc) {
     MohairDebugMsg("Initializing options...");
-    FlightServerOptions options { srv_loc };
+    FlightServerOptions server_opts { bind_loc };
 
     MohairDebugMsg("Initializing service...");
-    ARROW_RETURN_NOT_OK(service->Init(options));
+    ARROW_RETURN_NOT_OK(mohair_service.Init(server_opts));
 
-    MohairDebugMsg("Setting shutdown signal handler...");
-    ARROW_RETURN_NOT_OK(service->SetShutdownOnSignals({SIGTERM}));
+    MohairDebugMsg("Setting SIGTERM handler...");
+    ARROW_RETURN_NOT_OK(mohair_service.SetShutdownOnSignals({SIGTERM}));
 
-    MohairDebugMsg("Starting service [" << service->location().ToString() << "]");
-    ARROW_RETURN_NOT_OK(service->Serve());
+    MohairDebugMsg("Starting service [" << mohair_service.location().ToString() << "]");
+    ARROW_RETURN_NOT_OK(mohair_service.Serve());
 
     return Status::OK();
   }
 
-
-  vector<string> GetUriSchemeWhitelist() {
-    static vector<string> whitelist_urischemes;
-    whitelist_urischemes.reserve(1);
-    whitelist_urischemes.push_back(string { "grpc+tcp://" });
-
-    return whitelist_urischemes;
-  }
-
-  int ValidateArgCount(const int argc, const int argc_exact) {
-    if (argc != argc_exact) { return ERRCODE_INV_ARGS; }
-
-    return 0;
-  }
-
-  int ValidateArgCount(const int argc, const int argc_min, const int argc_max) {
-    if (argc < argc_min or argc > argc_max) { return ERRCODE_INV_ARGS; }
-
-    return 0;
-  }
-
-  int ValidateArgLocationUri(const char* arg_loc_uri) {
-    string loc_uri { arg_loc_uri };
-
-    // comparison against whitelist
-    for (const string& uri_scheme : GetUriSchemeWhitelist()) {
-      if (loc_uri.compare(0, uri_scheme.length(), uri_scheme) == 0) { return 0; }
+  Status StartService(ServerAdapter& mohair_service, const ServiceConfig& service_cfg) {
+    auto result_bindloc = Location::Parse(service_cfg.service_location());
+    if (not result_bindloc.ok()) {
+      return Status::Invalid("Error parsing location from config");
     }
 
-    // otherwise, fail
-    return ERRCODE_INV_URISCHEME;
-  }
+    MohairDebugMsg("Initializing options...");
+    auto bind_loc = std::move(result_bindloc).ValueOrDie();
+    FlightServerOptions server_opts { bind_loc };
 
-  int ParseArgLocationUri(const char* arg_loc_uri, Location* out_srvloc) {
-    string input_loc { arg_loc_uri };
+    MohairDebugMsg("Initializing service...");
+    ARROW_RETURN_NOT_OK(mohair_service.Init(server_opts));
 
-    auto result_loc = Location::Parse(input_loc);
-    if (not result_loc.ok()) {
-      std::cerr << "Failed to parse specified location URI:" << std::endl
-                << "\t" << result_loc.status().message()     << std::endl
-      ;
+    MohairDebugMsg("Setting SIGTERM handler...");
+    ARROW_RETURN_NOT_OK(mohair_service.SetShutdownOnSignals({SIGTERM}));
 
-      return ERRCODE_PARSE_URI;
-    }
+    MohairDebugMsg("Starting service [" << mohair_service.location().ToString() << "]");
+    ARROW_RETURN_NOT_OK(mohair_service.Serve());
 
-    *out_srvloc = *result_loc;
-    return 0;
-  }
-
-  int ParseArgPlatformClass(const char* arg_pclass, int* out_pclass) {
-    MohairDebugMsg("Parsing platform class (expecting int32_t)");
-    string input_pclass { arg_pclass };
-
-    try {
-      *out_pclass = std::stoi(input_pclass);
-    }
-
-    catch (std::invalid_argument const& err_arg) {
-      std::cerr << "Unable to parse numeric value: " << err_arg.what() << std::endl;
-      return ERRCODE_INV_ARGS;
-    }
-
-    catch (std::out_of_range const& err_val) {
-      std::cerr << "Unexpected value: " << err_val.what() << std::endl;
-      return ERRCODE_PARSE_NUMERIC;
-    }
-
-    *out_pclass = -1;
-    return 0;
+    return Status::OK();
   }
 
 } // namespace: mohair::services
 
 
-// >> Default MohairService implementations
+// >> EngineService implementations
 namespace mohair::services {
 
-  Status ShutdownCallback::operator()() {
-    return Status::OK();
-  }
-
   Result<FlightInfo>
-  MohairService::MakeFlightInfo(string partition_key, shared_ptr<Table> data_table) {
+  EngineService::MakeFlightInfo(string partition_key, shared_ptr<Table> data_table) {
     // these are all dummy values for now
     vector<FlightEndpoint> cs_services;
     int64_t                count_rows  { 0    };
@@ -210,7 +153,7 @@ namespace mohair::services {
   }
 
   Result<FlightInfo>
-  MohairService::MakeFlightInfo(fs::path arrow_fpath, bool is_feather) {
+  EngineService::MakeFlightInfo(fs::path arrow_fpath, bool is_feather) {
     shared_ptr<Table> data_table;
 
     if (is_feather) {
@@ -225,13 +168,23 @@ namespace mohair::services {
   }
 
   //  |> Default implementations for custom flight API
-  Status MohairService::ActionQuery( const ServerCallContext&  context
-                                    ,const shared_ptr<Buffer>  plan_msg
-                                    ,unique_ptr<ResultStream>* result) {
+  Status
+  EngineService::DoPlanPushdown( [[maybe_unused]] const ServerCallContext&  context
+                                ,[[maybe_unused]] const shared_ptr<Buffer>  plan_msg
+                                ,[[maybe_unused]] unique_ptr<ResultStream>* result) {
+    // TODO: distinguish between pushdown and execution paths
     return Status::NotImplemented("TODO");
   }
 
-  Status MohairService::ActionViewChange( [[maybe_unused]] const ServerCallContext&  context
+  Status
+  EngineService::DoPlanExecution( [[maybe_unused]] const ServerCallContext&  context
+                                 ,[[maybe_unused]] const shared_ptr<Buffer>  plan_msg
+                                 ,[[maybe_unused]] unique_ptr<ResultStream>* result) {
+    // TODO: distinguish between pushdown and execution paths
+    return Status::NotImplemented("TODO");
+  }
+
+  Status EngineService::DoViewChange( [[maybe_unused]] const ServerCallContext&  context
                                          ,                 const shared_ptr<Buffer>  config_msg
                                          ,[[maybe_unused]] unique_ptr<ResultStream>* result) {
     MohairDebugMsg("Receiving view change");
@@ -263,95 +216,28 @@ namespace mohair::services {
     return Status::Invalid(err_msg.str());
   }
 
-  Status MohairService::ActionShutdown([[maybe_unused]] const ServerCallContext& context) {
-    MohairDebugMsg("Shutting down...");
-    if (cb_shutdown != nullptr) { ARROW_RETURN_NOT_OK((*cb_shutdown)()); }
-    return Shutdown();
-  }
-
-  Status MohairService::ActionUnknown( const ServerCallContext& context
-                                      ,const string             action_type) {
-    return Status::NotImplemented("Unknown action: [", action_type, "]");
-  }
-
 
   //  |> Default implementations for standard flight API
   Status
-  MohairService::ListFlights( [[maybe_unused]] const ServerCallContext&   context
-                             ,[[maybe_unused]] const Criteria*            criteria
-                             ,[[maybe_unused]] unique_ptr<FlightListing>* listings) {
-    return Status::NotImplemented("TODO");
-  }
+  EngineService::DoServiceAction( const ServerCallContext&  context
+                                 ,const Action&             action
+                                 ,unique_ptr<ResultStream>* result) {
 
-  Status
-  MohairService::GetFlightInfo( [[maybe_unused]] const ServerCallContext& context
-                               ,[[maybe_unused]] const FlightDescriptor&  request
-                               ,[[maybe_unused]] unique_ptr<FlightInfo>*  info) {
-    return Status::NotImplemented("TODO");
-  }
-
-  Status
-  MohairService::PollFlightInfo( [[maybe_unused]] const ServerCallContext& context
-                                ,[[maybe_unused]] const FlightDescriptor&  request
-                                ,[[maybe_unused]] unique_ptr<PollInfo>*    info) {
-    return Status::NotImplemented("TODO");
-  }
-
-  Status
-  MohairService::GetSchema( [[maybe_unused]] const ServerCallContext  &context
-                           ,[[maybe_unused]] const FlightDescriptor   &request
-                           ,[[maybe_unused]] unique_ptr<SchemaResult> *schema) {
-    return Status::NotImplemented("TODO");
-  }
-
-  Status
-  MohairService::DoGet( [[maybe_unused]] const ServerCallContext&      context
-                       ,[[maybe_unused]] const Ticket&                 request
-                       ,[[maybe_unused]] unique_ptr<FlightDataStream>* stream) {
-    return Status::NotImplemented("TODO");
-  }
-
-  Status
-  MohairService::DoPut( [[maybe_unused]] const ServerCallContext&         context
-                       ,[[maybe_unused]] unique_ptr<FlightMessageReader>  reader
-                       ,[[maybe_unused]] unique_ptr<FlightMetadataWriter> writer) {
-    return Status::NotImplemented("TODO");
-  }
-
-  Status
-  MohairService::DoExchange( [[maybe_unused]] const ServerCallContext         &context
-                            ,[[maybe_unused]] unique_ptr<FlightMessageReader>  reader
-                            ,[[maybe_unused]] unique_ptr<FlightMessageWriter>  writer) {
-    return Status::NotImplemented("TODO");
-  }
-
-  Status
-  MohairService::DoAction( const ServerCallContext&  context
-                          ,const Action&             action
-                          ,unique_ptr<ResultStream>* result) {
-
-    // known actions
-    if (action.type == "mohair-query") {
-      return ActionQuery(context, action.body, result);
+    // known actions (uses macros from apidep_flight.hpp)
+    if (action.type == ActionQuery) {
+      return DoPlanPushdown(context, action.body, result);
     }
 
-    else if (action.type == "view-change") {
-      return ActionViewChange(context, action.body, result);
+    else if (action.type == ActionViewChange) {
+      return DoViewChange(context, action.body, result);
     }
 
-    else if (action.type == "service-shutdown") {
-      return ActionShutdown(context);
+    else if (action.type == ActionShutdown) {
+      return DoShutdown(context);
     }
-
 
     // Catch all that returns Status::NotImplemented()
-    return ActionUnknown(context, action.type);
-  }
-
-  Status
-  MohairService::ListActions( [[maybe_unused]] const ServerCallContext& context
-                             ,[[maybe_unused]] vector<ActionType>*      actions) {
-    return Status::NotImplemented("TODO");
+    return DoUnknown(context, action.type);
   }
 
 } // namespace: mohair::services

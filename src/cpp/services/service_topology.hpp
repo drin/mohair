@@ -30,20 +30,23 @@
 // ------------------------------
 // Type aliases
 
+// >> For types in standard lib
 using std::unordered_map;
 
 
 // ------------------------------
-// Functions and Callables
+// Functions
 
 namespace mohair::services {
+
+  // >> type forwards
+  struct ServiceHierarchy;
 
   // `ActionType` has 2 attributes: <type: std::string>, <descr: std::string>
   vector<ActionType> SupportedActionsForTopology();
 
   // Constructs a topology from the config
-  struct ServiceHierarchy;
-  Result<ServiceHierarchy>
+  Result<unique_ptr<ServiceHierarchy>>
   TopologyFromConfig(const char* config_fpath, bool be_verbose = false);
 
   void PrintTopology(ServiceHierarchy* service_map);
@@ -54,11 +57,10 @@ namespace mohair::services {
 // ------------------------------
 // Classes
 
+// >> Support classes
 namespace mohair::services {
 
-  // ----------
-  // Hash functor definitions
-
+  // >> Hash functor definitions
   struct HashFunctorMohairTicket {
     std::size_t operator()(const Ticket& mohair_ticket) const;
   };
@@ -67,14 +69,14 @@ namespace mohair::services {
     std::size_t operator()(const Location& mohair_location) const;
   };
 
+  // >> Aliases for templated types
+  using service_topology = unordered_map< Location
+                                         ,unique_ptr<ServiceConfig>
+                                         ,HashFunctorMohairLocation>;
 
-  // ----------
-  // Convenient data structures
-  using service_topology = unordered_map<
-    Location, unique_ptr<ServiceConfig>, HashFunctorMohairLocation
-  >;
-
-  using upstream_map = unordered_map<Location, Location, HashFunctorMohairLocation>;
+  using upstream_map = unordered_map< Location
+                                     ,Location
+                                     ,HashFunctorMohairLocation>;
 
   struct ServiceHierarchy {
     vector<Location> cs_servers;
@@ -82,53 +84,46 @@ namespace mohair::services {
     upstream_map     upstream_locs;
   };
 
+} // namespace: mohair::services
 
-  // ----------
-  // Service definitions
 
-  struct TopologyService : public MohairService {
+// >> Service definitions
+namespace mohair::services {
 
-    // |> Attributes
-    ServiceHierarchy* service_map;
+  struct TopologyService : public ServerAdapter {
 
-    // |> Helper functions
+    // Attributes
+    unique_ptr<ServiceHierarchy> service_map;
+
+    // Constructors
+    TopologyService(unique_ptr<ServiceHierarchy>&& srv_topology)
+      : ServerAdapter(), service_map(std::move(srv_topology)) {}
+
+    // Helper functions
     Result<FlightEndpoint>
     GetDownstreamServices(FlightEndpoint& upstream_srv);
 
-    // >> Custom Flight API
-    Status
-    ActionRegisterService( const ServerCallContext&  context
-                          ,const shared_ptr<Buffer>  service_msg
-                          ,unique_ptr<ResultStream>* response_stream);
+    // Custom Flight API
+    Status DoServiceAction ( const ServerCallContext&  context
+                            ,const Action&             action
+                            ,unique_ptr<ResultStream>* result) override;
 
-    Status
-    ActionDeregisterService( const ServerCallContext&  context
-                            ,const shared_ptr<Buffer>  service_msg
-                            ,unique_ptr<ResultStream>* response_stream);
+    // Custom topology API
+    virtual Status DoActivateService(
+       const ServerCallContext&  context
+      ,const shared_ptr<Buffer>  service_msg
+      ,unique_ptr<ResultStream>* response_stream
+    );
 
-    // |> Standard Flight API
-    Status ListFlights( const ServerCallContext&   context
-                       ,const Criteria*            criteria
-                       ,unique_ptr<FlightListing>* listings) override;
+    virtual Status DoDeactivateService(
+       const ServerCallContext&  context
+      ,const shared_ptr<Buffer>  service_msg
+      ,unique_ptr<ResultStream>* response_stream
+    );
 
-    Status GetFlightInfo( const ServerCallContext& context
-                         ,const FlightDescriptor&  request
-                         ,unique_ptr<FlightInfo>*  info) override;
-
-    Status PollFlightInfo( const ServerCallContext& context
-                          ,const FlightDescriptor&  request
-                          ,unique_ptr<PollInfo>*    info) override;
-
-    Status GetSchema( const ServerCallContext  &context
-                     ,const FlightDescriptor   &request
-                     ,unique_ptr<SchemaResult> *schema) override;
-
-    Status DoAction( const ServerCallContext&  context
-                    ,const Action&             action
-                    ,unique_ptr<ResultStream>* result) override;
-
-    Status ListActions( const ServerCallContext& context
-                       ,vector<ActionType>*      actions) override;
+    // Standard Flight API
+    Status ListActions ( const ServerCallContext& context
+                        ,vector<ActionType>*      actions) override;
 
   };
 

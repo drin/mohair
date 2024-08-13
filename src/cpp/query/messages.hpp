@@ -20,33 +20,8 @@
 // Dependencies
 #pragma once
 
-//  >> Internal libs
-#include "../mohair.hpp"
-
-//    |> generated protobuf code
-#include "substrait/algebra.pb.h"
-#include "substrait/plan.pb.h"
-
-#include "mohair/algebra.pb.h"
-
-//  >> External libs
-#include <google/protobuf/text_format.h>
-
-
-// ------------------------------
-// Type Aliases
-
-//  >> Substrait types
-using substrait::Plan;
-using substrait::PlanRel;
-using substrait::Rel;
-
-// >> Mohair types (substrait extension)
-using mohair::PlanAnchor;
-using mohair::ErrRel;
-
-//  >> Protobuf types
-using google::protobuf::TextFormat;
+// >> Header that centralizes substrait and mohair deps
+#include "adapter_mohair.hpp"
 
 
 // ------------------------------

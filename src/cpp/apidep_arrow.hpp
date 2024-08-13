@@ -20,28 +20,35 @@
 // Dependencies
 #pragma once
 
+// >> Arrow core API
+#include <arrow/api.h>
+
+// >> Arrow serialization API
+#include <arrow/ipc/api.h>
+
+// >> Arrow filesystem API
+#include <arrow/filesystem/api.h>
+
 
 // ------------------------------
-// Macro definitions for common status codes
+// Type aliases
 
-#define ERRCODE_INV_ARGS        1
-#define ERRCODE_INV_URISCHEME   2
-#define ERRCODE_PARSE_URI       3
-#define ERRCODE_PARSE_NUMERIC   4
-#define ERRCODE_CREATE_LOC      5
+// >> Support types for control flow
+using arrow::Result;
+using arrow::Status;
 
-#define ERRCODE_START_SRV       6
-#define ERRCODE_NO_ENGINE       7
-#define ERRCODE_CONN_CLIENT     8
+// >> Support types for memory management
+using arrow::Buffer;
 
-#define ERRCODE_API_REGISTER    9
-#define ERRCODE_API_DEREGISTER 10
-#define ERRCODE_API_QUERY      12
-#define ERRCODE_API_SHUTDOWN   13
-#define ERRCODE_API_CONFIG     16
+// >> Data types
+using arrow::Table;
+using arrow::Schema;
 
-#define ERRCODE_CLIENT         11
+// >> Convenience aliases for templated types
+using arrow::RecordBatchVector;
 
-#define ERRCODE_CLI_HELP       14
-#define ERRCODE_FILE_PARSE     15
+// >> Support types for I/O
+using arrow::io::RandomAccessFile;
+using arrow::ipc::RecordBatchStreamReader;
+using arrow::ipc::RecordBatchFileReader;
 
