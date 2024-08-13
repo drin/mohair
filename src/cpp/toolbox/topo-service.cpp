@@ -19,24 +19,28 @@
 // ------------------------------
 // Dependencies
 
-// >> Standard lib
-
 // >> Internal
+#include "mohair_cli.hpp"
+
+// >> Topology-specific definitions
 #include "../services/service_topology.hpp"
-#include "../clients/client_mohair.hpp"
 
 
 // ------------------------------
 // Type Aliases
 
 // classes
-using mohair::services::TopologyService;
 using mohair::services::ServiceHierarchy;
 using mohair::services::MohairClient;
+using mohair::services::TopologyService;
 
 // functions
+using mohair::cli::ParseArgLocationUri;
+using mohair::cli::ValidateArgCount;
+using mohair::cli::ValidateArgLocationUri;
+
 using mohair::services::TopologyFromConfig;
-using mohair::services::ParseArgLocationUri;
+using mohair::services::StartService;
 
 
 // ------------------------------
@@ -55,45 +59,16 @@ int ValidateArgs(int argc, [[maybe_unused]] char **argv) {
   int errcode_validation { 0 };
 
   // Error if we have an invalid amount of arguments
-  errcode_validation = mohair::services::ValidateArgCount(argc, argc_min, argc_max);
+  errcode_validation = ValidateArgCount(argc, argc_min, argc_max);
   MohairCheckErrCode(errcode_validation, "Usage: topo-service [<Location URI>]");
 
   // Error if we have an invalid Uri scheme
   if (argc == 2) {
-    errcode_validation = mohair::services::ValidateArgLocationUri(argv[argndx_loc]);
+    errcode_validation = ValidateArgLocationUri(argv[argndx_loc]);
     MohairCheckErrCode(errcode_validation, "Invalid scheme for location URI");
   }
 
   return errcode_validation;
-}
-
-
-// >> For topological service
-int StartServiceTopo(const Location& srv_loc) {
-    unique_ptr<FlightServerBase> topo_service = std::make_unique<TopologyService>();
-    auto status_service = mohair::services::StartService(topo_service.get(), srv_loc);
-
-    if (not status_service.ok()) {
-      mohair::PrintError("Error running topological service", status_service);
-      return ERRCODE_START_SRV;
-    }
-
-    return 0;
-}
-
-int StartServiceTopo(const Location& srv_loc, ServiceHierarchy* topology) {
-    auto topo_service = std::make_unique<TopologyService>();
-    topo_service->service_map = topology;
-
-    FlightServerBase* service = dynamic_cast<FlightServerBase*>(topo_service.get());
-    auto status_service = mohair::services::StartService(service, srv_loc);
-
-    if (not status_service.ok()) {
-      mohair::PrintError("Error running topological service", status_service);
-      return ERRCODE_START_SRV;
-    }
-
-    return 0;
 }
 
 
@@ -110,30 +85,29 @@ struct ServiceActions {
 
   // Public entry point
   int Start() {
+    // Validate args
     if (config_fpath == nullptr) {
-      // Create and start the topology service
-      int errcode_service = StartServiceTopo(service_loc);
-      MohairCheckErrCode(errcode_service, "Unable to start topo-service");
-
-      return 0;
+      std::cerr << "Topology configuration required" << std::endl;
+      return ERRCODE_INV_ARGS;
     }
 
+    // Parse input (topology config)
     auto result_topology = TopologyFromConfig(config_fpath, should_verbose);
-    if (not result_topology.status().ok()) {
+    if (not result_topology.ok()) {
       mohair::PrintError("Failed to parse topology config", result_topology.status());
       return ERRCODE_API_CONFIG;
     }
-
     auto topology = std::move(result_topology).ValueOrDie();
 
+    // Debugging options
     if (should_print_topo) {
       std::cout << std::endl << "Topology:" << std::endl;
-      mohair::services::PrintTopology(&topology);
+      mohair::services::PrintTopology(topology.get());
     }
 
     if (should_verbose) {
       std::cout << "Upstream entries:" << std::endl;
-      for (auto& entry : topology.upstream_locs) {
+      for (auto& entry : topology->upstream_locs) {
         std::cout << "\t"   << entry.first.ToString()
                   << " <- " << entry.second.ToString()
                   << std::endl
@@ -141,8 +115,13 @@ struct ServiceActions {
       }
     }
 
-    int errcode_service = StartServiceTopo(service_loc, &topology);
-    MohairCheckErrCode(errcode_service, "Unable to start topo-service");
+    // Create and start the topology service
+    auto topo_service = std::make_unique<TopologyService>(std::move(topology));
+    auto status_start = StartService(*topo_service, service_loc);
+    if (not status_start.ok()) {
+      mohair::PrintError("Unable to start topo-service", status_start);
+      return ERRCODE_START_SRV;
+    }
 
     return 0;
   }

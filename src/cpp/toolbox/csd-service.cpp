@@ -19,22 +19,14 @@
 // ------------------------------
 // Dependencies
 
-// >> Configuration-based macros
-#include "../mohair-config.hpp"
+// >> Internal
+#include "mohair_cli.hpp"
 
-// >> Client dependencies
-#include "../clients/client_mohair.hpp"
-
-// >> Service dependencies
-// TODO: re-add faodel if time permits
-// #if USE_FAODEL
-//   #include "../services/service_faodel.hpp"
-// #endif
-
+// >> Engine-specific definitions
 #if USE_DUCKDB
   #include "../services/service_duckdb.hpp"
 
-  using mohair::adapters::EngineDuckDB;
+  using mohair::services::DuckDBService;
 #endif
 
 
@@ -42,139 +34,167 @@
 // Macros and Type Aliases
 
 // classes
+using mohair::services::DeactivationCallback;
 using mohair::services::MohairClient;
-using mohair::services::DeregistrationCallback;
 
 // functions
-using mohair::services::ValidateArgCount;
-using mohair::services::ValidateArgLocationUri;
-using mohair::services::ParseArgLocationUri;
+using mohair::services::StartService;
+
+using mohair::cli::ParseArgLocationUri;
+using mohair::cli::ValidateArgCount;
+using mohair::cli::ValidateArgLocationUri;
 
 
 // ------------------------------
-// Reference variables
-constexpr int argc_min       { 2 };
-constexpr int argc_max       { 3 };
-constexpr int argndx_metaloc { 1 };
-constexpr int argndx_myloc   { 2 };
+// Structs and Classes
+
+struct ServiceActions {
+  Location    service_loc;
+  Location    metasrv_loc;
+  bool        backend_isduckdb { true };
+
+  unique_ptr<MohairClient>  metasrv_conn { nullptr };
+  unique_ptr<ServiceConfig> service_cfg  { nullptr };
+
+  ServiceActions(): service_loc(), metasrv_loc() {}
+
+  // Convenience methods
+  int ConnectToMetadataService() {
+    metasrv_conn = MohairClient::ForLocation(metasrv_loc);
+    if (metasrv_conn == nullptr) {
+      std::cerr << "Unable to connect to service" << std::endl;
+      return ERRCODE_CONN_CLIENT;
+    }
+
+    return 0;
+  }
+
+  int ReceiveServiceConfig(unique_ptr<ResultStream> result_stream) {
+    // Get the next arrow::flight::Result from the response stream
+    // (should only have 1)
+    auto result_cfgmsg = result_stream->Next();
+    if (not result_cfgmsg.ok()) {
+      mohair::PrintError("Failed to get result from stream", result_cfgmsg.status());
+      return ERRCODE_API_REGISTER;
+    }
+    unique_ptr<FlightResult> config_msg = std::move(result_cfgmsg).ValueOrDie();
+
+    // Create a ServiceConfig structure and parse the protobuf message into it
+    service_cfg = std::make_unique<ServiceConfig>();
+    if (not service_cfg->ParseFromString(config_msg->body->ToString())) {
+      std::cerr << "Error parsing initial ServiceConfig" << std::endl;
+      return ERRCODE_API_REGISTER;
+    }
+
+    // Validate that the config we received is for our location
+    if (service_cfg->service_location() != service_loc.ToString()) {
+      std::cerr << "Invalid location in configuration. "            << std::endl
+                << "\tExpected: " << service_loc.ToString()         << std::endl
+                << "\tReceived: " << service_cfg->service_location() << std::endl
+      ;
+      return ERRCODE_API_REGISTER;
+    }
+
+    MohairDebugMsg("Initializing service with config:");
+    mohair::services::PrintConfig(service_cfg.get());
+
+    return 0;
+  }
+
+  int RequestActivation() {
+    // Activate our place in the topology
+    auto result_response = metasrv_conn->SendActivation(service_loc);
+    if (not result_response.ok()) {
+      mohair::PrintError("Error during service registration", result_response.status());
+      return ERRCODE_API_REGISTER;
+    }
+
+    return ReceiveServiceConfig(std::move(result_response).ValueOrDie());
+  }
+
+  // Public entry point
+  int Start() {
+    MohairDebugMsg("Starting mohair service [" << service_loc.ToString() << "]");
+    int errcode_service { 0 };
+
+    // Connect a client to the topology service
+    errcode_service = ConnectToMetadataService();
+    MohairCheckErrCode(errcode_service, "Unable to connect to topology service");
+
+    // Make an activation request to the topology service and get our config
+    errcode_service = RequestActivation();
+    MohairCheckErrCode(errcode_service, "Unable to request activation");
+
+    // Create and start the service
+    DeactivationCallback fn_deactivate { metasrv_conn.get(), &service_loc };
+
+    #if USE_DUCKDB
+      auto mohair_duckcse = std::make_unique<DuckDBService>(&fn_deactivate);
+      auto status_start   = StartService(*mohair_duckcse, *service_cfg);
+      if (not status_start.ok()) {
+        mohair::PrintError("Unable to start csd-service", status_start);
+        return ERRCODE_START_SRV;
+      }
+
+      return 0;
+
+    #else
+      MohairDebugMsg("No known cs-engine is enabled.");
+      return ERRCODE_NO_ENGINE;
+
+    #endif
+  }
+};
 
 
 // ------------------------------
 // Functions
 
-// >> Engine-agnostic
-int ValidateArgs(int argc, char **argv) {
-  // default status is success
-  int errcode_validation { 0 };
-
-  // Error if we have an invalid amount of arguments
-  errcode_validation = ValidateArgCount(argc, argc_min, argc_max);
-  MohairCheckErrCode(errcode_validation, "Usage: csd-service [<Location URI>]");
-
-  // Error if we have an invalid Uri scheme for metadata service
-  errcode_validation = ValidateArgLocationUri(argv[argndx_metaloc]);
-  MohairCheckErrCode(errcode_validation, "Invalid scheme for location URI (metadata service)");
-
-  // Error if we have an invalid Uri scheme for this service
-  if (argc == 3) {
-    errcode_validation = ValidateArgLocationUri(argv[argndx_myloc]);
-    MohairCheckErrCode(errcode_validation, "Invalid scheme for location URI (this service)");
-  }
-
-  return errcode_validation;
-}
-
-
-// >> For DuckDB engine
-int StartServiceDuckDB(int argc, char** argv) {
-  MohairDebugMsg("Starting mohair service [duckdb]");
-  int errcode_service { 0 };
-
-  // Initialize our location
-  Location service_loc;
-
-  // If no location URI is specified, use default location (localhost; any port)
-  if (argc == 2) {
-    errcode_service = mohair::services::SetDefaultLocation(&service_loc);
-    MohairCheckErrCode(errcode_service, "Unable to set default location URI");
-  }
-
-  // Otherwise, use specified location
-  else if (argc == 3) {
-    errcode_service = ParseArgLocationUri(argv[argndx_myloc], &service_loc);
-    MohairCheckErrCode(errcode_service, "Unable to parse location URI for this service");
-  }
-
-  // Grab location of metadata service and register our location
-  Location meta_loc;
-  errcode_service = ParseArgLocationUri(argv[argndx_metaloc], &meta_loc);
-  MohairCheckErrCode(errcode_service, "Unable to parse location URI for metadata service");
-
-  // Connect a client to the topological service
-  auto result_client = mohair::services::ClientForLocation(meta_loc);
-  if (not result_client.ok()) {
-    mohair::PrintError("Unable to connect flight client", result_client.status());
-    return ERRCODE_CONN_CLIENT;
-  }
-  unique_ptr<MohairClient> meta_conn = std::move(result_client).ValueOrDie();
-
-  // Register our location
-  auto result_register = meta_conn->RegisterService(service_loc);
-  if (not result_register.ok()) {
-    mohair::PrintError("Error during service registration", result_register.status());
-    return ERRCODE_API_REGISTER;
-  }
-
-  unique_ptr<ResultStream> result_stream  = std::move(result_register).ValueOrDie();
-  auto result_cfgmsg = result_stream->Next();
-  if (not result_cfgmsg .ok()) {
-    mohair::PrintError("Failed to get result from stream", result_cfgmsg.status());
-    return ERRCODE_API_REGISTER;
-  }
-
-  unique_ptr<FlightResult> config_msg     = std::move(result_cfgmsg).ValueOrDie();
-  string                   serialized_cfg = config_msg->body->ToString();
-
-  ServiceConfig service_cfg;
-  if (not service_cfg.ParseFromString(serialized_cfg)) {
-    std::cerr << "Error parsing initial ServiceConfig" << std::endl;
-    return ERRCODE_API_REGISTER;
-  }
-
-  if (service_cfg.service_location() != service_loc.ToString()) {
-    std::cerr << "Invalid location in configuration. "            << std::endl
-              << "\tExpected: " << service_loc.ToString()         << std::endl
-              << "\tReceived: " << service_cfg.service_location() << std::endl
+int PrintHelp() {
+    std::cout << "csd-service"
+              << " [-h]"
+              << " -l <service-location>"
+              << " -m <topology-service-location>"
+              << std::endl
     ;
-    return ERRCODE_API_REGISTER;
-  }
 
-  std::cout << "Initializing service with config:" << std::endl;
-  mohair::services::PrintConfig(&service_cfg);
-
-  // Define a callback to deregister the location for when the service shuts down
-  DeregistrationCallback callback_shutdown { meta_conn.get(), &service_loc };
-
-  // Run this service until it dies
-  errcode_service = mohair::services::StartMohairDuckDB(service_cfg, &callback_shutdown);
-  MohairCheckErrCode(errcode_service, "Unable to start csd-service");
-
-  return 0;
+    return 1;
 }
 
 
 // ------------------------------
 // Main Logic
-int main(int argc, char** argv) {
-  int errcode_validation = ValidateArgs(argc, argv);
-  MohairCheckErrCode(errcode_validation, "Failed to validate input command-line args");
 
-  #if USE_DUCKDB
-    return StartServiceDuckDB(argc, argv);
+int main(int argc, char **argv) {
+  ServiceActions client_actions;
 
-  #else
-    std::cerr << "No known cs-engine is enabled." << std::endl;
-    return ERRCODE_NO_ENGINE;
+  // Parse each argument and internalize the provided option
+  constexpr char  is_done_parsing = -1;
+  const     char* opt_template    = "l:m:h";
 
-  #endif
+  char parsed_opt;
+  int  errcode_cli;
+
+  while ((parsed_opt = (char) getopt(argc, argv, opt_template)) != is_done_parsing) {
+    switch (parsed_opt) {
+
+      case 'h': { return PrintHelp(); }
+
+      case 'l': {
+        errcode_cli = ParseArgLocationUri(optarg, &(client_actions.service_loc));
+        MohairCheckErrCode(errcode_cli, "Failed to parse service location");
+        break;
+      }
+
+      case 'm': {
+        errcode_cli = ParseArgLocationUri(optarg, &(client_actions.metasrv_loc));
+        MohairCheckErrCode(errcode_cli, "Failed to parse service location");
+        break;
+      }
+
+      default: { break; }
+    }
+  }
+
+  return client_actions.Start();
 }

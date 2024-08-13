@@ -23,20 +23,18 @@
 #include <unistd.h>
 
 // >> Internal
-#include "../mohair-config.hpp"
+#include "mohair_cli.hpp"
 #include "../services/service_mohair.hpp"
-#include "../clients/client_mohair.hpp"
 
 
-// -
+// ------------------------------
 // Macros and Type Aliases
 
 // >> Structs
 using mohair::services::MohairClient;
 
 // >> Functions
-using mohair::services::ClientForLocation;
-using mohair::services::ParseArgLocationUri;
+using mohair::cli::ParseArgLocationUri;
 
 
 // ------------------------------
@@ -60,12 +58,19 @@ struct ClientActions {
   // Internal implementations
   Status SendQuery(MohairClient& client_conn) {
     // Send execution request and receive response
-    ARROW_ASSIGN_OR_RAISE(auto query_results, client_conn.ExecQueryPlan(request_payload));
+    MohairDebugMsg("Sending query request");
+    if (request_payload == nullptr) {
+      return Status::Invalid("query plan must be provided");
+    }
+
+    ARROW_ASSIGN_OR_RAISE(auto query_results, client_conn.SendPlanPushdown(request_payload));
 
     // Iterate over responses (end-of-stream signaled by null result)
+    MohairDebugMsg("Receiving query response");
     ARROW_ASSIGN_OR_RAISE(auto query_result, query_results->Next());
+
+    MohairDebugMsg("Iterating on query results");
     while (query_result != nullptr) {
-      std::cout << "parsed successful results" << std::endl;
       ARROW_ASSIGN_OR_RAISE(query_result, query_results->Next());
     }
 
@@ -76,14 +81,8 @@ struct ClientActions {
   // Public entry point
   int SendRequests() {
     // Create and connect a FlightClient
-    auto result_client = ClientForLocation(service_loc);
-    if (not result_client.ok()) {
-      mohair::PrintError("Unable to connect flight client", result_client.status());
-      return ERRCODE_CONN_CLIENT;
-    }
-
-    // Make the client accessible
-    unique_ptr<MohairClient> client_conn = std::move(result_client).ValueOrDie();
+    auto client_conn = MohairClient::ForLocation(service_loc);
+    if (client_conn == nullptr) { return ERRCODE_CONN_CLIENT; }
 
     // Handle each action depending on what actions were set
     if (request_payload != nullptr) {
@@ -95,16 +94,16 @@ struct ClientActions {
     }
 
     if (should_shutdown) {
-      auto result_shutdown = client_conn->ShutdownService();
-      if (not result_shutdown.status().ok()) {
+      auto result_shutdown = client_conn->SendSignalShutdown();
+      if (not result_shutdown.ok()) {
         mohair::PrintError("Unable to shutdown service", result_shutdown.status());
         return ERRCODE_API_SHUTDOWN;
       }
     }
 
     if (should_dereg) {
-      auto result_dereg = client_conn->DeregisterService(target_loc);
-      if (not result_dereg.status().ok()) {
+      auto result_dereg = client_conn->SendDeactivation(target_loc);
+      if (not result_dereg.ok()) {
         mohair::PrintError("Unable to deregister service", result_dereg.status());
         return ERRCODE_API_DEREGISTER;
       }
@@ -162,11 +161,11 @@ int main(int argc, char **argv) {
 
       case 'q': {
         auto result_buffer = mohair::BufferFromFile(optarg);
-        if (not result_buffer.status().ok()) {
+        if (not result_buffer.ok()) {
           mohair::PrintError("Unable to read plan file", result_buffer.status());
           return ERRCODE_FILE_PARSE;
         }
-        client_actions.request_payload = std::move(result_buffer).ValueOrDie();
+        client_actions.request_payload = result_buffer.ValueOrDie();
         break;
       }
 
