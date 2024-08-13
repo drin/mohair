@@ -20,7 +20,7 @@
 // Dependencies
 
 #include "service_topology.hpp"
-#include "../clients/client_mohair.hpp"
+#include "../services/client_mohair.hpp"
 
 
 // ------------------------------
@@ -45,8 +45,8 @@ namespace mohair::services {
   // General support of TopologyService
   vector<ActionType> SupportedActionsForTopology() {
     return {
-       { "register-service"  , "Add a service to the CS system"      }
-      ,{ "deregister-service", "Remove a service from the CS system" }
+       { ActionActivate  , "Add a service to the CS system"      }
+      ,{ ActionDeactivate, "Remove a service from the CS system" }
     };
   }
 
@@ -67,7 +67,8 @@ namespace mohair::services {
   }
 
 
-  Result<ServiceHierarchy> TopologyFromConfig(const char* config_fpath, bool be_verbose) {
+  Result<unique_ptr<ServiceHierarchy>>
+  TopologyFromConfig(const char* config_fpath, bool be_verbose) {
     // Read data from the file
     string topo_config;
     if (not FileToString(config_fpath, topo_config)) {
@@ -76,7 +77,7 @@ namespace mohair::services {
 
     // Parse the data
     // unordered_map<Location, unique_ptr<ServiceConfig>>
-    ServiceHierarchy    service_map;
+    auto service_map = std::make_unique<ServiceHierarchy>();
     TopologyConfigEntry entry_info;
 
     Location                  service_loc;
@@ -110,12 +111,12 @@ namespace mohair::services {
         entry_info.loc_len      = 0;
 
         // Set the active service for the entry
-        if (service_map.cs_devices.find(service_loc) == service_map.cs_devices.end()) {
+        if (service_map->cs_devices.find(service_loc) == service_map->cs_devices.end()) {
           parsed_service = std::make_unique<ServiceConfig>();
           parsed_service->set_service_location(service_loc.ToString());
         }
         else {
-          parsed_service = std::move(service_map.cs_devices[service_loc]);
+          parsed_service = std::move(service_map->cs_devices[service_loc]);
         }
       }
 
@@ -136,8 +137,8 @@ namespace mohair::services {
         );
 
         // Add the downstream config
-        service_map.upstream_locs[downstream_loc] = service_loc;
-        service_map.cs_devices[downstream_loc]    = (
+        service_map->upstream_locs[downstream_loc] = service_loc;
+        service_map->cs_devices[downstream_loc]    = (
           AddDownstream(parsed_service, downstream_loc)
         );
 
@@ -156,7 +157,7 @@ namespace mohair::services {
         );
 
         // Make sure the ServiceConfig doesn't yet exist
-        if (service_map.cs_devices.find(downstream_loc) != service_map.cs_devices.end()) {
+        if (service_map->cs_devices.find(downstream_loc) != service_map->cs_devices.end()) {
           MohairDebugMsg("[Error] Parsed duplicate location");
           return Status::Invalid("Downstream location already exists");
         }
@@ -164,7 +165,7 @@ namespace mohair::services {
         // Add it to the list of top-level locations if there's no active ServiceConfig
         else if (parsed_service == nullptr) {
           if (be_verbose) { MohairDebugMsg("Parsed top-level entry"); }
-          service_map.cs_servers.push_back(downstream_loc);
+          service_map->cs_servers.push_back(downstream_loc);
         }
 
         // Otherwise, create it then add to the service map
@@ -173,12 +174,12 @@ namespace mohair::services {
             MohairDebugMsg("Parsed entry for [" << service_loc.ToString() << "]");
           }
 
-          service_map.upstream_locs[downstream_loc] = service_loc;
-          service_map.cs_devices[downstream_loc]    = (
+          service_map->upstream_locs[downstream_loc] = service_loc;
+          service_map->cs_devices[downstream_loc]    = (
             AddDownstream(parsed_service, downstream_loc)
           );
 
-          service_map.cs_devices[service_loc] = std::move(parsed_service);
+          service_map->cs_devices[service_loc] = std::move(parsed_service);
         }
 
         // Add completed entry to service map and clear state for next entry
@@ -249,10 +250,8 @@ namespace mohair::services {
 // ------------------------------
 // Classes
 
+// >> Hash functor implementations
 namespace mohair::services {
-
-  // ----------
-  // Hash functor implementations
 
   std::size_t HashFunctorMohairTicket::operator()(const Ticket& mohair_ticket) const {
     // A mohair ticket may be a service location or a query identifier
@@ -268,7 +267,11 @@ namespace mohair::services {
     return HashMohairLocation(mohair_location.ToString());
   }
 
-  // >> TopologyService implementations
+} // namespace: mohair::services
+
+
+// >> TopologyService implementations
+namespace mohair::services {
 
   // |> Helper functions
   Result<FlightEndpoint>
@@ -278,9 +281,9 @@ namespace mohair::services {
 
   // >> Custom Flight API
   Status
-  TopologyService::ActionRegisterService( [[maybe_unused]] const ServerCallContext&  context
-                                         ,                 const shared_ptr<Buffer>  serialized_loc
-                                         ,[[maybe_unused]] unique_ptr<ResultStream>* response_stream) {
+  TopologyService::DoActivateService( [[maybe_unused]] const ServerCallContext&  context
+                                     ,                 const shared_ptr<Buffer>  serialized_loc
+                                     ,[[maybe_unused]] unique_ptr<ResultStream>* response_stream) {
     MohairDebugMsg("Handling request: [register-service]");
 
     // Deserialize the location URI and parse it into a `Location`
@@ -319,19 +322,24 @@ namespace mohair::services {
       Location& upstream_loc = upstream_entry->second;
       auto&     upstream_cfg = service_map->cs_devices[upstream_loc];
 
-      ARROW_ASSIGN_OR_RAISE(auto client_conn, ClientForLocation(upstream_loc));
-      client_conn->UpdateView(*upstream_cfg);
-      MohairDebugMsg("Sent view change to [" << upstream_loc.ToString() << "]");
+      MohairDebugMsg("Connecting to service [" << upstream_loc.ToString() << "]");
+      auto mohair_conn = MohairClient::ForLocation(upstream_loc);
+      if (mohair_conn == nullptr) {
+        return Status::Invalid("Unable to connect to service");
+      }
+
+      MohairDebugMsg("Sending view change");
+      mohair_conn->SendViewUpdate(*upstream_cfg);
     }
 
     return Status::OK();
   }
 
   Status
-  TopologyService::ActionDeregisterService( [[maybe_unused]] const ServerCallContext&  context
-                                           ,                 const shared_ptr<Buffer>  serialized_loc
-                                           ,[[maybe_unused]] unique_ptr<ResultStream>* response_stream) {
-    MohairDebugMsg("Handling request: [deregister-service]");
+  TopologyService::DoDeactivateService( [[maybe_unused]] const ServerCallContext&  context
+                                       ,                 const shared_ptr<Buffer>  serialized_loc
+                                       ,[[maybe_unused]] unique_ptr<ResultStream>* response_stream) {
+    MohairDebugMsg("Handling request: [" << ActionDeactivate << "]");
 
     // Deserialize location URI and parse it into a `Location`
     string location_uri = serialized_loc->ToString();
@@ -348,7 +356,7 @@ namespace mohair::services {
       return Status::Invalid("Location already inactive");
     }
 
-    MohairDebugMsg("De-registering location [" << service_loc.ToString() << "]");
+    MohairDebugMsg("De-activating location [" << service_loc.ToString() << "]");
     config_entry->second->set_is_active(false);
 
     // If there is an upstream service, send it a view change
@@ -357,66 +365,42 @@ namespace mohair::services {
       Location& upstream_loc = upstream_entry->second;
       auto&     upstream_cfg = service_map->cs_devices[upstream_loc];
 
-      ARROW_ASSIGN_OR_RAISE(auto client_conn, ClientForLocation(upstream_loc));
-      client_conn->UpdateView(*upstream_cfg);
+      auto client_conn = MohairClient::ForLocation(upstream_loc);
+      if (client_conn == nullptr) {
+        return Status::Invalid("Unable to connect to service");
+      }
+
+      client_conn->SendViewUpdate(*upstream_cfg);
       MohairDebugMsg("Sent view change to [" << upstream_loc.ToString() << "]");
     }
 
     return Status::OK();
   }
 
-
-  // |> Standard Flight API
   Status
-  TopologyService::ListFlights( [[maybe_unused]] const ServerCallContext&   context
-                               ,[[maybe_unused]] const Criteria*            criteria
-                               ,[[maybe_unused]] unique_ptr<FlightListing>* listings) {
-    return Status::NotImplemented("WIP");
-  }
+  TopologyService::DoServiceAction( const ServerCallContext&  context
+                                   ,const Action&             action
+                                   ,unique_ptr<ResultStream>* result) {
 
-  Status
-  TopologyService::GetFlightInfo( [[maybe_unused]] const ServerCallContext& context
-                                 ,[[maybe_unused]] const FlightDescriptor&  request
-                                 ,[[maybe_unused]] unique_ptr<FlightInfo>*  info) {
-    return Status::NotImplemented("WIP");
-  }
-
-  Status
-  TopologyService::PollFlightInfo( [[maybe_unused]] const ServerCallContext& context
-                                  ,[[maybe_unused]] const FlightDescriptor&  request
-                                  ,[[maybe_unused]] unique_ptr<PollInfo>*    info) {
-    return Status::NotImplemented("WIP");
-  }
-
-  Status
-  TopologyService::GetSchema( [[maybe_unused]] const ServerCallContext  &context
-                             ,[[maybe_unused]] const FlightDescriptor   &request
-                             ,[[maybe_unused]] unique_ptr<SchemaResult> *schema) {
-    return Status::NotImplemented("WIP");
-  }
-
-  Status
-  TopologyService::DoAction( const ServerCallContext&  context
-                            ,const Action&             action
-                            ,unique_ptr<ResultStream>* result) {
-
-    // known actions
-    if (action.type == "service-activate") {
-      return ActionRegisterService(context, action.body, result);
+    // known actions (uses macros from apidep_flight.hpp)
+    if (action.type == ActionActivate) {
+      return DoActivateService(context, action.body, result);
     }
 
-    else if (action.type == "service-deactivate") {
-      return ActionDeregisterService(context, action.body, result);
+    else if (action.type == ActionDeactivate) {
+      return DoDeactivateService(context, action.body, result);
     }
 
-    else if (action.type == "service-shutdown") {
-      return ActionShutdown(context);
+    else if (action.type == ActionShutdown) {
+      return DoShutdown(context);
     }
 
     // Catch all that returns Status::NotImplemented()
-    return ActionUnknown(context, action.type);
+    return DoUnknown(context, action.type);
   }
 
+
+  // |> Standard Flight API
   Status
   TopologyService::ListActions( [[maybe_unused]] const ServerCallContext& context
                                ,                 vector<ActionType>*      actions) {

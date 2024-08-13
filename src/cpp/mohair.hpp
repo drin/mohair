@@ -20,88 +20,19 @@
 // Dependencies
 #pragma once
 
-// >> Internal
+
+// >> Internal deps
 
 // Configuration-based macros
 #include "mohair-config.hpp"
 
-// Status codes for CLI use
-#include "mohair_codes.hpp"
+#include "mohair_macros.hpp" // Common macro definitions
+#include "mohair_codes.hpp"  // Common status codes for functions
 
-// >> Standard libs
-#include <functional>
-#include <memory>
+// >> API dependencies
 
-#include <string>
-#include <iostream>
-#include <sstream>
-#include <fstream>
-
-#include <vector>
-
-// >> Third-party libs
-//  |> Arrow
-#include <arrow/api.h>
-#include <arrow/ipc/api.h>
-#include <arrow/filesystem/api.h>
-
-
-// ------------------------------
-// Macros
-
-// macro to print message if debug mode is on
-#if MOHAIR_DEBUG
-  #define MohairDebugMsg(msg_str)              \
-          do {                                 \
-            std::cerr << msg_str << std::endl; \
-          } while (0);
-
-#else
-  #define MohairDebugMsg(msg_str) {}
-
-#endif
-
-// macro for error code checking boilerplate
-#define MohairCheckErrCode(err_code, err_msg)  \
-        do {                                   \
-          if (err_code) {                      \
-            std::cerr << err_msg << std::endl; \
-            return err_code;                   \
-          }                                    \
-        } while (0);
-
-
-// ------------------------------
-// Type aliases
-
-
-// >> Namespaces
-namespace fs = std::filesystem;
-
-
-//  >> Standard types
-using std::shared_ptr;
-using std::unique_ptr;
-
-using std::string;
-using std::stringstream;
-using std::fstream;
-
-using std::vector;
-
-
-//  >> Arrow types
-using arrow::Result;
-using arrow::Status;
-
-using arrow::Buffer;
-using arrow::Table;
-using arrow::Schema;
-
-using arrow::RecordBatchVector;
-using arrow::io::RandomAccessFile;
-using arrow::ipc::RecordBatchStreamReader;
-using arrow::ipc::RecordBatchFileReader;
+#include "apidep_standard.hpp" // standard library
+#include "apidep_arrow.hpp"    // arrow library
 
 
 // ------------------------------

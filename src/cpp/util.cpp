@@ -22,14 +22,8 @@
 #include "mohair.hpp"
 
 
-// >> Aliases
-
-using arrow::RecordBatchVector;
-
-using arrow::io::RandomAccessFile;
-
-using arrow::ipc::RecordBatchStreamReader;
-using arrow::ipc::RecordBatchFileReader;
+// ------------------------------
+// Type aliases
 
 using IPCReadOpts = arrow::ipc::IpcReadOptions;
 

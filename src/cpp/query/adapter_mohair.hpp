@@ -17,31 +17,36 @@
 
 
 // ------------------------------
-// Dependencies
-#pragma once
+// Overview
+//
+// Mohair is a protocol that extends substrait in order to propagate query plans
+// (represented using substrait) between query engines. Each query engine that uses the
+// mohair protocol should cooperate on query processing and execution.
 
 
 // ------------------------------
-// Macro definitions for common status codes
+// Dependencies
+#pragma once
 
-#define ERRCODE_INV_ARGS        1
-#define ERRCODE_INV_URISCHEME   2
-#define ERRCODE_PARSE_URI       3
-#define ERRCODE_PARSE_NUMERIC   4
-#define ERRCODE_CREATE_LOC      5
+// >> Common internal deps
+#include "../mohair.hpp"
 
-#define ERRCODE_START_SRV       6
-#define ERRCODE_NO_ENGINE       7
-#define ERRCODE_CONN_CLIENT     8
+// >> Definitions for mohair protocol
+#include "mohair/algebra.pb.h"
+#include "mohair/topology.pb.h"
 
-#define ERRCODE_API_REGISTER    9
-#define ERRCODE_API_DEREGISTER 10
-#define ERRCODE_API_QUERY      12
-#define ERRCODE_API_SHUTDOWN   13
-#define ERRCODE_API_CONFIG     16
+// >> Third-party deps
+#include "apidep_substrait.hpp"
 
-#define ERRCODE_CLIENT         11
 
-#define ERRCODE_CLI_HELP       14
-#define ERRCODE_FILE_PARSE     15
+// ------------------------------
+// Type Aliases
+
+// >> Mohair query processing types
+using mohair::PlanAnchor;
+using mohair::ErrRel;
+
+// >> Mohair topology types
+using mohair::ServiceConfig;
+using mohair::DeviceClass;
 
