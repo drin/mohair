@@ -158,6 +158,8 @@
 
     //! Create a duckdb query plan from a substrait plan message
     int EngineDuckDB::ExecContextForSubstrait(std::string plan_msg) {
+      MohairDebugMsg("Creating execution context for query plan");
+
       // Construct a QueryContext to keep everything alive
       auto scan_context = std::make_unique<QueryContext>();
 
@@ -165,11 +167,14 @@
       duckdb::vector<Value> fn_args { Value::BLOB_RAW(plan_msg) };
 
       // Get a relation representing the execution of the substrait plan
+      MohairDebugMsg("Creating table function from query plan");
       scan_context->duck_rel = engine_conn.TableFunction("from_substrait", fn_args);
+      MohairDebugMsg("Created table function");
 
       int prepared_ctxtid = ++context_id;
       query_contexts[prepared_ctxtid] = std::move(scan_context);
 
+      MohairDebugMsg("Returning context id");
       return prepared_ctxtid;
     }
 
