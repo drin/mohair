@@ -29,9 +29,13 @@ namespace mohair::services {
 
   // >> Implementation for shutdown callback that sends deactivation request
   Status DeactivationCallback::operator()() {
-    MohairDebugMsg("Sending deactivation request");
-    auto mohair_conn = static_cast<MohairClient*>(client_conn);
-    ARROW_RETURN_NOT_OK(mohair_conn->SendDeactivation(*target_loc));
+    if (client_conn != nullptr and target_loc != nullptr) {
+      MohairDebugMsg("Sending deactivation request");
+      auto mohair_conn = static_cast<MohairClient*>(client_conn);
+      ARROW_RETURN_NOT_OK(mohair_conn->SendDeactivation(*target_loc));
+    }
+
+    return Status::OK();
   }
 
 } // namespace: mohair::services

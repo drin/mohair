@@ -184,9 +184,9 @@ namespace mohair::services {
     */
 
     Status
-    DoAction  ( const ServerCallContext&  context
-               ,const Action&             action
-               ,unique_ptr<ResultStream>* result) override;
+    DoAction ( const ServerCallContext&  context
+              ,const Action&             action
+              ,unique_ptr<ResultStream>* result) override;
 
     // data flow functions
     /*

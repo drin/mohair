@@ -85,9 +85,9 @@ namespace mohair::services {
     MakeFlightInfo(fs::path arrow_fpath, bool is_feather);
 
     // >> Custom Flight API
-    Status DoServiceAction ( const ServerCallContext&  context
-                            ,const Action&             action
-                            ,unique_ptr<ResultStream>* result) override;
+    virtual Status DoServiceAction ( const ServerCallContext&  context
+                                    ,const Action&             action
+                                    ,unique_ptr<ResultStream>* result) override;
 
     // >> Custom engine API
     virtual Status DoPlanPushdown(

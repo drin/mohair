@@ -69,6 +69,8 @@ namespace mohair::services {
     DeactivationCallback(ClientAdapter* client, Location* loc)
       : client_conn(client), target_loc(loc) {}
 
+    DeactivationCallback(): DeactivationCallback(nullptr, nullptr) {}
+
     Status operator()() override;
   };
 
