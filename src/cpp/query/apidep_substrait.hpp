@@ -41,6 +41,7 @@
 
 //  >> Protobuf framework types
 using google::protobuf::TextFormat;
+using AnyMessage = google::protobuf::Any;
 
 //  >> Substrait types
 using substrait::Plan;

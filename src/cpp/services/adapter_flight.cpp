@@ -43,6 +43,13 @@ namespace mohair::services {
 
   // control flow functions
   Status
+  ServerAdapter::DoServiceAction( const ServerCallContext&  context
+                                 ,const Action&             action
+                                 ,unique_ptr<ResultStream>* result) {
+    return Status::NotImplemented("Action handler must be implemented by service");
+  }
+
+  Status
   ServerAdapter::DoShutdown(const ServerCallContext& context) {
     MohairDebugMsg("Received shutdown signal from [" << context.peer() << "]");
     if (cb_shutdown != nullptr) { ARROW_RETURN_NOT_OK((*cb_shutdown)()); }
@@ -51,10 +58,9 @@ namespace mohair::services {
   }
 
   Status
-  ServerAdapter::DoServiceAction( const ServerCallContext&  context
-                                 ,const Action&             action
-                                 ,unique_ptr<ResultStream>* result) {
-    return Status::NotImplemented("Action handler must be implemented by service");
+  ServerAdapter::DoUnknown( const ServerCallContext& context
+                           ,const string             action_type) {
+    return Status::NotImplemented("Unknown action: [", action_type, "]");
   }
 
 
@@ -64,12 +70,6 @@ namespace mohair::services {
                           ,unique_ptr<ResultStream>* result) {
     MohairDebugMsg("Delegating [" << action.type << "] to service");
     return DoServiceAction(context, action, result);
-  }
-
-  Status
-  ServerAdapter::DoUnknown( const ServerCallContext& context
-                           ,const string             action_type) {
-    return Status::NotImplemented("Unknown action: [", action_type, "]");
   }
 
 } // namespace: mohair::services

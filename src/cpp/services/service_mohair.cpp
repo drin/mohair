@@ -164,7 +164,7 @@ namespace mohair::services {
       ARROW_ASSIGN_OR_RAISE(data_table, mohair::ReadIPCStream(arrow_fpath));
     }
 
-    return MakeFlightInfo(arrow_fpath.filename(), data_table);
+    return MakeFlightInfo(arrow_fpath.filename().string(), data_table);
   }
 
   //  |> Default implementations for custom flight API
@@ -185,8 +185,8 @@ namespace mohair::services {
   }
 
   Status EngineService::DoViewChange( [[maybe_unused]] const ServerCallContext&  context
-                                         ,                 const shared_ptr<Buffer>  config_msg
-                                         ,[[maybe_unused]] unique_ptr<ResultStream>* result) {
+                                     ,                 const shared_ptr<Buffer>  config_msg
+                                     ,[[maybe_unused]] unique_ptr<ResultStream>* result) {
     MohairDebugMsg("Receiving view change");
     ServiceConfig updated_cfg;
 

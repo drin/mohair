@@ -295,10 +295,13 @@ namespace mohair {
       subplan_msg->CopyFrom(*(this->payload));
 
       // Set the `PlanAnchor` message and replace the super-plan root
-      auto subplan_planext = subplan_msg->mutable_advanced_extensions();
       auto subplan_oldroot = subplan_msg->mutable_relations(this->root_relndx)->mutable_root();
+      auto subplan_planext = subplan_msg->mutable_advanced_extensions();
 
-      subplan_planext->mutable_optimization()->PackFrom(*(anchor_msg));
+      // Pack the anchor message into an `Any` message as an "optimization"
+      AnyMessage* optimization_msg = subplan_planext->add_optimization();
+      optimization_msg->PackFrom(*(anchor_msg));
+
       subplan_oldroot->mutable_input()->CopyFrom(*subplan_rootrel);
 
       // Add a `SubstraitMessage` that wraps the `Plan` message
