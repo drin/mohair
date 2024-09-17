@@ -49,9 +49,10 @@ using mohair::cli::ValidateArgLocationUri;
 // Structs and Classes
 
 struct ServiceActions {
-  Location    service_loc;
-  Location    metasrv_loc;
-  bool        backend_isduckdb { true };
+  Location service_loc;
+  Location metasrv_loc;
+  bool     backend_isduckdb { true  };
+  bool     metasrv_isset    { false };
 
   unique_ptr<MohairClient>  metasrv_conn { nullptr };
   unique_ptr<ServiceConfig> service_cfg  { nullptr };
@@ -101,6 +102,17 @@ struct ServiceActions {
     return 0;
   }
 
+  int InitLocalServiceConfig() {
+    // Create a ServiceConfig structure and parse the protobuf message into it
+    service_cfg = std::make_unique<ServiceConfig>();
+    service_cfg->set_service_location(service_loc.ToString());
+
+    MohairDebugMsg("Initializing service with config:");
+    mohair::services::PrintConfig(service_cfg.get());
+
+    return 0;
+  }
+
   int RequestActivation() {
     // Activate our place in the topology
     auto result_response = metasrv_conn->SendActivation(service_loc);
@@ -117,16 +129,26 @@ struct ServiceActions {
     MohairDebugMsg("Starting mohair service [" << service_loc.ToString() << "]");
     int errcode_service { 0 };
 
+    // Prepare a callback; we do it this way to make it optional
+    // This is hacky and it's pretty annoying, but fix it later
+    DeactivationCallback fn_deactivate;
+
     // Connect a client to the topology service
-    errcode_service = ConnectToMetadataService();
-    MohairCheckErrCode(errcode_service, "Unable to connect to topology service");
+    if (metasrv_isset) {
+      errcode_service = ConnectToMetadataService();
+      MohairCheckErrCode(errcode_service, "Unable to connect to topology service");
 
-    // Make an activation request to the topology service and get our config
-    errcode_service = RequestActivation();
-    MohairCheckErrCode(errcode_service, "Unable to request activation");
+      // Make an activation request to the topology service and get our config
+      errcode_service = RequestActivation();
+      MohairCheckErrCode(errcode_service, "Unable to request activation");
 
-    // Create and start the service
-    DeactivationCallback fn_deactivate { metasrv_conn.get(), &service_loc };
+      // Since we connect to a metadata service, point our callback to it
+      fn_deactivate.client_conn = metasrv_conn.get();
+      fn_deactivate.target_loc  = &service_loc;
+    }
+    else {
+      errcode_service = InitLocalServiceConfig();
+    }
 
     #if USE_DUCKDB
       auto mohair_duckcse = std::make_unique<DuckDBService>(&fn_deactivate);
@@ -189,6 +211,8 @@ int main(int argc, char **argv) {
       case 'm': {
         errcode_cli = ParseArgLocationUri(optarg, &(client_actions.metasrv_loc));
         MohairCheckErrCode(errcode_cli, "Failed to parse service location");
+
+        client_actions.metasrv_isset = true;
         break;
       }
 
