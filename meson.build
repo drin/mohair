@@ -23,13 +23,13 @@ cpp_proto_substrait = cpp_srcdir / 'query' / 'substrait'
 cpp_proto_mohair    = cpp_srcdir / 'query' / 'mohair'
 
 # dir for adapters (execution engines)
-cpp_enginedir = cpp_srcdir / 'engines'
+cpp_enginedir  = cpp_srcdir / 'engines'
 
 # dir for flight services
 cpp_servicedir = cpp_srcdir / 'services'
 
 # dir for binary sources (1-1 with binaries)
-cpp_tooldir   = cpp_srcdir / 'toolbox'
+cpp_tooldir    = cpp_srcdir / 'toolbox'
 
 
 # ------------------------------
@@ -37,7 +37,6 @@ cpp_tooldir   = cpp_srcdir / 'toolbox'
 
 # use pkg-config to generate library build info
 module_pkgcfg = import('pkgconfig')
-
 
 # >> Determine the system we're building on
 buildsys_type = 'unknown'
@@ -68,17 +67,15 @@ endif
 # ------------------------------
 # Library dependencies
 
+default_includedir = get_option('prefix') / get_option('includedir')
+
 # >> System-dependent dependencies
 
 # Include directory for arrow headers
-arrow_incdir = ''
+arrow_incdir = default_includedir
 
-# NOTE: with brew installed dependencies, macosx can resolve like archlinux
-#       otherwise, macosx deps might need "manual" resolution (specific paths)
-if   buildsys_type == 'macosx'
-  arrow_incdir = '/opt/homebrew/include'
-elif buildsys_type == 'archlinux'
-endif
+# Include directory for substrait and mohair headers
+protocol_incdir = default_includedir / 'mohair-substrait'
 
 
 # >> Required dependencies
@@ -89,7 +86,15 @@ dep_acero  = dependency('arrow-substrait') # this is Acero + substrait
 dep_flight = dependency('arrow-flight')
 
 #   |> Protobuf (for substrait)
+dep_mohairsubstrait = dependency('mohair-substrait', static: true)
+
 dep_proto  = dependency('protobuf')
+dep_absl = dependency('absl'
+  ,modules: [
+      'absl::log_internal_check_op'
+     ,'absl::status'
+   ]
+)
 
 
 # >> Optional dependencies
@@ -97,6 +102,7 @@ dep_proto  = dependency('protobuf')
 dep_ompi   = dependency('ompi-cxx', required: get_option('mpi'))
 dep_faodel = dependency('faodel'  , required: get_option('faodel'))
 dep_tiledb = dependency('tiledb'  , required: get_option('tiledb'))
+
 dep_duckdb = dependency('duckdb'
   ,method: 'cmake'
   ,required: get_option('duckdb')
@@ -129,8 +135,9 @@ mohair_cfgfile = configure_file(
 
 
 # >> Grouped dependencies
-dep_service = [dep_arrow, dep_acero, dep_flight, dep_ompi, dep_faodel, dep_proto]
-dep_query   = [dep_arrow, dep_acero, dep_proto]
+dep_query   = [dep_arrow, dep_acero, dep_absl, dep_proto]
+# dep_query   = [dep_arrow, dep_acero, dep_mohairsubstrait]
+dep_service = dep_query + [dep_flight]
 
 #   |> add optional dependencies
 if dep_faodel.found()
@@ -154,19 +161,19 @@ endif
 # Composable lists of headers
 
 # >> For substrait definitions
-substrait_hdrlist = [
-   cpp_proto_mohair    / 'algebra.pb.h'
-  ,cpp_proto_mohair    / 'topology.pb.h'
-  ,cpp_proto_substrait / 'type.pb.h'
-  ,cpp_proto_substrait / 'function.pb.h'
-  ,cpp_proto_substrait / 'plan.pb.h'
-  ,cpp_proto_substrait / 'algebra.pb.h'
-  ,cpp_proto_substrait / 'capabilities.pb.h'
-  ,cpp_proto_substrait / 'parameterized_types.pb.h'
-  ,cpp_proto_substrait / 'type_expressions.pb.h'
-  ,cpp_proto_substrait / 'extended_expression.pb.h'
-  ,cpp_proto_substrait / 'extensions' / 'extensions.pb.h'
-]
+# substrait_hdrlist = [
+#    cpp_proto_mohair    / 'algebra.pb.h'
+#   ,cpp_proto_mohair    / 'topology.pb.h'
+#   ,cpp_proto_substrait / 'type.pb.h'
+#   ,cpp_proto_substrait / 'function.pb.h'
+#   ,cpp_proto_substrait / 'plan.pb.h'
+#   ,cpp_proto_substrait / 'algebra.pb.h'
+#   ,cpp_proto_substrait / 'capabilities.pb.h'
+#   ,cpp_proto_substrait / 'parameterized_types.pb.h'
+#   ,cpp_proto_substrait / 'type_expressions.pb.h'
+#   ,cpp_proto_substrait / 'extended_expression.pb.h'
+#   ,cpp_proto_substrait / 'extensions' / 'extensions.pb.h'
+# ]
 
 # >> For decomposable queries
 query_hdrlist = [
@@ -209,19 +216,19 @@ services_hdrlist = [
 # Composable lists of sources
 
 # >> For substrait implementations
-substrait_srclist = [
-   cpp_proto_mohair    / 'algebra.pb.cc'
-  ,cpp_proto_mohair    / 'topology.pb.cc'
-  ,cpp_proto_substrait / 'algebra.pb.cc'
-  ,cpp_proto_substrait / 'extensions' / 'extensions.pb.cc'
-  ,cpp_proto_substrait / 'type.pb.cc'
-  ,cpp_proto_substrait / 'function.pb.cc'
-  ,cpp_proto_substrait / 'type_expressions.pb.cc'
-  ,cpp_proto_substrait / 'parameterized_types.pb.cc'
-  ,cpp_proto_substrait / 'extended_expression.pb.cc'
-  ,cpp_proto_substrait / 'capabilities.pb.cc'
-  ,cpp_proto_substrait / 'plan.pb.cc'
-]
+# substrait_srclist = [
+#    cpp_proto_mohair    / 'algebra.pb.cc'
+#   ,cpp_proto_mohair    / 'topology.pb.cc'
+#   ,cpp_proto_substrait / 'algebra.pb.cc'
+#   ,cpp_proto_substrait / 'extensions' / 'extensions.pb.cc'
+#   ,cpp_proto_substrait / 'type.pb.cc'
+#   ,cpp_proto_substrait / 'function.pb.cc'
+#   ,cpp_proto_substrait / 'type_expressions.pb.cc'
+#   ,cpp_proto_substrait / 'parameterized_types.pb.cc'
+#   ,cpp_proto_substrait / 'extended_expression.pb.cc'
+#   ,cpp_proto_substrait / 'capabilities.pb.cc'
+#   ,cpp_proto_substrait / 'plan.pb.cc'
+# ]
 
 # >> For decomposable queries
 query_srclist = [
@@ -244,10 +251,12 @@ services_srclist = [
 # Composed header and source lists (organized by library/binary)
 
 # >> Library for mohair query processing
-libmohair_srclist = (substrait_srclist + query_srclist)
+# libmohair_srclist = (substrait_srclist + query_srclist)
+libmohair_srclist = query_srclist
 
 # >> Binary for mohair flight services
-mohair_srv_srclist = (substrait_srclist + query_srclist + services_srclist)
+# mohair_srv_srclist = (substrait_srclist + query_srclist + services_srclist)
+mohair_srv_srclist = (query_srclist + services_srclist)
 
 
 # ------------------------------
@@ -255,8 +264,9 @@ mohair_srv_srclist = (substrait_srclist + query_srclist + services_srclist)
 
 libmohair = library('mohair'
   ,libmohair_srclist
-  ,dependencies       : dep_query
-  ,include_directories: arrow_incdir
+  ,dependencies       : [dep_service, dep_mohairsubstrait]
+  ,include_directories: [protocol_incdir]
+  # ,link_with          : dep_mohairsubstrait
   ,install            : true
 )
 
@@ -267,8 +277,8 @@ module_pkgcfg.generate(libmohair)
 
 install_headers(query_hdrlist, subdir: 'mohair')
 libmohair_dep = declare_dependency(
-   include_directories: arrow_incdir
-  ,dependencies       : [dep_arrow, dep_duckdb]
+   include_directories: [protocol_incdir]
+  ,dependencies       : dep_service
   ,link_with          : libmohair
 )
 
@@ -285,16 +295,13 @@ bin_readarrow_srclist = [
 ]
 
 if dep_duckdb.found()
-  message('Adding duckdb source to read-arrow source list')
   bin_readarrow_srclist += [cpp_enginedir / 'duckdb.cpp']
-
-  message(bin_readarrow_srclist)
 endif
 
 bin_readarrow = executable('read-arrow'
   ,bin_readarrow_srclist
   ,dependencies       : [dep_arrow, dep_duckdb]
-  ,include_directories: arrow_incdir
+  ,include_directories: [protocol_incdir]
   ,install            : false
 )
 
@@ -307,7 +314,7 @@ bin_mohairquery_srclist = (
 bin_mohairquery = executable('mohair'
   ,bin_mohairquery_srclist
   ,dependencies       : [dep_query, dep_duckdb]
-  ,include_directories: arrow_incdir
+  ,include_directories: [protocol_incdir]
   ,install            : true
 )
 
@@ -321,8 +328,9 @@ bin_mohairclient_srclist = (
 )
 bin_mohairclient   = executable('mohair-client'
   ,bin_mohairclient_srclist
-  ,dependencies       : dep_service
-  ,include_directories: arrow_incdir
+  ,include_directories: [protocol_incdir]
+  ,dependencies       : [dep_service, dep_mohairsubstrait]
+  # ,link_with          : dep_mohairsubstrait
   ,install            : false
 )
 
@@ -340,8 +348,9 @@ csd_srv_srclist = (
 
 bin_srv_csd = executable('csd-service'
   ,csd_srv_srclist
-  ,dependencies       : dep_service
-  ,include_directories: arrow_incdir
+  ,include_directories: [protocol_incdir]
+  ,dependencies       : [dep_service, dep_mohairsubstrait]
+  # ,link_with          : dep_mohairsubstrait
   ,install            : false
 )
 
@@ -358,32 +367,7 @@ topo_srv_srclist = (
 bin_srv_topo = executable('topo-service'
   ,topo_srv_srclist
   ,dependencies       : dep_service
-  ,include_directories: arrow_incdir
+  ,include_directories: [protocol_incdir]
   ,install            : false
 )
 
-
-# ------------------------------
-# Feature-based executables
-
-# >> Faodel mohair service
-if dep_faodel.found()
-
-  # main source file and faodel-specific source files
-  faodel_srv_srclist = (
-      [
-         cpp_tooldir    / 'faodel-service.cpp'
-        ,cpp_enginedir  / 'faodel.cpp'
-        ,cpp_servicedir / 'service_faodel.cpp'
-      ]
-    + mohair_srv_srclist
-  )
-
-  bin_srv_faodel = executable('faodel-service'
-    ,faodel_srv_srclist
-    ,dependencies       : dep_service
-    ,include_directories: arrow_incdir
-    ,install            : false
-  )
-
-endif
