@@ -29,14 +29,14 @@
 #pragma once
 
 // >> Common internal deps
-#include "../mohair.hpp"
+#include "mohair.hpp"
 
 // >> Definitions for mohair protocol
 #include "mohair/algebra.pb.h"
 #include "mohair/topology.pb.h"
 
 // >> Third-party deps
-#include "apidep_substrait.hpp"
+#include "query/apidep_substrait.hpp"
 
 
 // ------------------------------

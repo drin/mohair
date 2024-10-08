@@ -21,11 +21,11 @@
 #pragma once
 
 // >> Internal deps and flight deps
-#include "service_mohair.hpp"
+#include "services/service_mohair.hpp"
 
 // >> Engine deps
 #if USE_DUCKDB
-  #include "../engines/adapter_duckdb.hpp"
+  #include "engines/adapter_duckdb.hpp"
 #endif
 
 

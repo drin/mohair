@@ -24,7 +24,7 @@
 
 // >> Engine-specific definitions
 #if USE_DUCKDB
-  #include "../services/service_duckdb.hpp"
+  #include "services/service_duckdb.hpp"
 
   using mohair::services::DuckDBService;
 #endif

@@ -20,7 +20,7 @@
 // Dependencies
 
 // >> Configuration-based macros
-#include "../mohair-config.hpp"
+#include "mohair-config.hpp"
 
 #include "service_duckdb.hpp"
 
