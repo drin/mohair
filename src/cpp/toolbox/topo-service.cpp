@@ -23,7 +23,7 @@
 #include "mohair_cli.hpp"
 
 // >> Topology-specific definitions
-#include "../services/service_topology.hpp"
+#include "services/service_topology.hpp"
 
 
 // ------------------------------

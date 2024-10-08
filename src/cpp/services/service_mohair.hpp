@@ -21,13 +21,13 @@
 #pragma once
 
 // >> Common internal deps
-#include "../mohair.hpp"
+#include "mohair.hpp"
 
 // >> Internal query processing deps
-#include "../query/plans.hpp"
+#include "query/plans.hpp"
 
 // >> Third-party deps
-#include "apidep_flight.hpp"
+#include "services/apidep_flight.hpp"
 
 
 // ------------------------------

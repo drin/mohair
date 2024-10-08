@@ -23,7 +23,7 @@
 #include <unordered_map>
 
 //  >> Internal libs
-#include "../mohair.hpp"
+#include "mohair.hpp"
 
 
 // ------------------------------

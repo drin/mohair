@@ -19,8 +19,8 @@
 // ------------------------------
 // Dependencies
 
-#include "service_topology.hpp"
-#include "../services/client_mohair.hpp"
+#include "services/service_topology.hpp"
+#include "services/client_mohair.hpp"
 
 
 // ------------------------------

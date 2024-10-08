@@ -19,7 +19,7 @@
 // ------------------------------
 // Dependencies
 
-#include "../headers/arrow_deps.hpp"
+#include "apidep_arrow.hpp"
 
 
 // ------------------------------

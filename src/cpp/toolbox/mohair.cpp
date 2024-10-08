@@ -19,8 +19,8 @@
 // ------------------------------
 // Dependencies
 
-#include "../mohair.hpp"
-#include "../query/plans.hpp"
+#include "mohair.hpp"
+#include "query/plans.hpp"
 
 #include <google/protobuf/text_format.h>
 
