@@ -17,7 +17,7 @@ libompi_cxx_dep = dependency('ompi-cxx', required: get_option('mpi'))
 libfaodel_dep   = dependency('faodel'  , required: get_option('faodel'))
 libtiledb_dep   = dependency('tiledb'  , required: get_option('tiledb'))
 
-libduckdb_dep = dependency('duckdb'
+libduckdb_dep = dependency('duckdb-skytether'
   ,method: 'cmake'
   ,required: get_option('duckdb')
 )
@@ -28,10 +28,10 @@ mohair_cfgdata = configuration_data({
   ,'VERSION_MINOR' : version_fields[1]
   ,'VERSION_PATCH' : version_fields[2]
   ,'BUILD_IS_DEBUG': get_option('buildtype') == 'debug' ? 1 : 0
-  ,'MPI'           : libompi_cxx_dep.found()
-  ,'FAODEL'        : libfaodel_dep.found()
-  ,'TILEDB'        : libtiledb_dep.found()
-  ,'DUCKDB'        : libduckdb_dep.found() ? 1 : 0
+  ,'MPI'           : libompi_cxx_dep.found() ? 1 : 0
+  ,'FAODEL'        : libfaodel_dep.found()   ? 1 : 0
+  ,'TILEDB'        : libtiledb_dep.found()   ? 1 : 0
+  ,'DUCKDB'        : libduckdb_dep.found()   ? 1 : 0
 })
 
 

@@ -22,7 +22,14 @@ libabsl_dep     = dependency('absl'
 )
 
 # >> Grouped dependencies
-query_group_dep   = [libarrow_dep, libarrow_substrait_dep, libabsl_dep, libprotobuf_dep]
+query_group_dep = [
+   libarrow_dep
+  ,libarrow_substrait_dep
+  ,libabsl_dep
+  ,libprotobuf_dep
+  ,libmohair_substrait_dep
+]
+
 service_group_dep = query_group_dep + [libarrow_flight_dep]
 
 # add optional dependencies to dependency groups
@@ -131,17 +138,17 @@ libskytether_mohair_inc = include_directories('.')
 # ------------------------------
 # Build artifacts (libraries)
 
-libskytether_mohair = library('mohair'
+libskytether_mohair = library('skytether-mohair'
   ,libskytether_mohair_sources
   ,include_directories: configuration_inc
-  ,dependencies       : [service_group_dep, libmohair_substrait_dep]
+  ,dependencies       : service_group_dep
   ,pic                : true
   ,install            : true
 )
 
 libskytether_mohair_dep = declare_dependency(
    include_directories: configuration_inc
-  ,dependencies       : [service_group_dep, libmohair_substrait_dep]
+  ,dependencies       : service_group_dep
   ,link_with          : libskytether_mohair
 )
 

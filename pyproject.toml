@@ -13,12 +13,14 @@ python = "^3.12"
 numpy = "^1.26.4"
 Cython = "^3.0.8"
 wheel = "^0.42.0"
-ibis-substrait = "^3.2.0"
+ibis-substrait = "^4.0.1"
 duckdb = "^0.10.0"
 click = "^8.1.7"
-pyarrow = "^15.0.0"
+pyarrow = "^17.0.0"
 datafusion = "^35.0.0"
 pkgconfig = "^1.5.5"
+pyarrow-hotfix = "^0.6"
+protobuf = "^5.28.2"
 
 [tool.poetry.dev-dependencies]
 
