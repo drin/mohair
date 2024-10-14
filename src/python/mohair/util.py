@@ -29,20 +29,17 @@ Convenience classes and functions expected to be reused across other modules.
 # Dependencies
 
 import sys
-import logging
 import argparse
-
 import pyarrow
 
 from mohair import CreateMohairLogger
-from mohair import default_loglevel
 
 
 # ------------------------------
 # Module variables
 
 # >> Logging
-logger = CreateMohairLogger(__name__, logger_level=default_loglevel)
+logger = CreateMohairLogger(__name__)
 
 
 # ------------------------------
@@ -108,6 +105,145 @@ def BinaryFromSchema(data_schema):
     stream_writer.close()
 
     return arrow_buffer.getvalue()
+
+
+# >> Skytether metadata encoders and decoders
+
+# Value Encoders
+
+def EncodeSliceWidth(slice_width: int)  -> bytes:
+    """ Convenience function to encode slice width in a `size_t` size. """
+    return slice_width.to_bytes(8)
+
+def EncodeSliceCount(slice_count: int)  -> bytes:
+    """ Convenience function to encode slice count in a `size_t` size. """
+    return slice_count.to_bytes(8)
+
+def EncodeStripeSize(stripe_size: int) -> bytes:
+    """ Convenience function to encode partition count in a `uint8_t` size. """
+    return stripe_size.to_bytes(1)
+
+
+# Value Decoders
+def DecodeSliceWidth(encoded_slicewidth: bytes) -> int:
+    """ Convenience function to decode slice width (unsigned) from a `size_t` size. """
+    return int.from_bytes(encoded_slicewidth)
+
+def DecodeSliceCount(encoded_slicecount: bytes)  -> int:
+    """
+    Convenience function to decode slice count (unsigned) from a `size_t` size.
+    """
+
+    return int.from_bytes(encoded_slicecount)
+
+def DecodeStripeSize(encoded_stripesize: bytes) -> int:
+    """
+    Convenience function to decode partition count (unsigned) from a `uint8_t` size.
+    """
+
+    return int.from_bytes(encoded_stripesize)
+
+# Convenience encoder/decoder functions
+def EncodeMetaKey(key_name: str) -> bytes:
+    """ Convenience function to encode a metadata key as utf-8. """
+    return key_name.encode('utf-8')
+
+
+# >> Skytether utility functions
+def DefaultPartitionMetadata() -> dict[bytes, bytes]:
+    return dict([
+        (EncodeMetaKey(metakey), fn_encode(0))
+        for metakey, fn_encode in [
+             ('slice_width', EncodeSliceWidth)
+            ,('slice_count', EncodeSliceCount)
+            ,('stripe_size', EncodeStripeSize)
+        ]
+    ])
+
+def BufferForRecordBatch(data_batch: pyarrow.RecordBatch) -> pyarrow.Buffer:
+    """ Serializes an Arrow RecordBatch, :data_batch:, using IPC format. """
+
+    ipc_buffer = pyarrow.BufferOutputStream()
+
+    batch_writer = pyarrow.RecordBatchStreamWriter(ipc_buffer, data_batch.schema)
+    batch_writer.write_batch(data_batch)
+    batch_writer.close()
+
+    return ipc_buffer.getvalue()
+
+
+def SizesForTableBatches(data_table: pyarrow.Table, batch_size: int, count_samples=7):
+    """
+    Returns a generator (single-pass list) of the sizes (when serialized) of record
+    batches of an Arrow Table, :data_table:, using the IPC stream format.
+    """
+
+    table_batches = data_table.to_batches(max_chunksize=batch_size)
+
+    # how many samples we serialize
+    if len(table_batches) < count_samples:
+        count_samples = len(table_batches)
+
+    return [
+        BufferForRecordBatch(table_batches[batch_ndx]).size
+        for batch_ndx in range(count_samples)
+    ]
+
+
+# shared_ptr<Table> table_data, int64_t target_bytesize, int64_t row_batchsize
+def RowCountForByteSize(data_table, target_byte_size, row_batch_size=20480, max_itr=7):
+    """
+    Returns an estimated row count (chunk size) for batches of :data_table: that will fit
+    within the target byte size :target_byte_size:.
+
+    Using a maximum of :max_itr: attempts, the :data_table: is batched using
+    :row_batch_size: and serialized to IPC. The ratio of the target byte size to the
+    actual IPC buffer size then used to adjust :row_batch_size: until a serialized batch
+    is smaller than the target byte size. Then, to accommodate variation between batches,
+    a sampling (:max_itr:) of serialized batches is used to further reduce the estimated
+    row count.
+    """
+
+    # get sizes of batches with initial parameters
+    batch_byte_sizes = SizesForTableBatches(
+        data_table, row_batch_size, count_samples=max_itr
+    )
+
+    # If there's no data or we failed to get sizes, return 0
+    if len(batch_byte_sizes) < 1: return 0
+
+    # conservative row count to return
+    min_rowcount = 0
+
+    # padding to accommodate margin of error across batches
+    padded_byte_size = target_byte_size - 500
+
+    # row_batchsize defaults to 20480, but should converge quickly over a few iterations
+    itr_ndx        = 0
+    for itr_ndx in range(max_itr):
+        # Adjust row_batch_size until we fit in the desired envelope
+        min_bytesize = batch_byte_sizes[0]
+        min_rowcount = (padded_byte_size * row_batch_size) / min_bytesize
+
+        if min_bytesize <= padded_byte_size: break
+
+        row_batch_size   = min_rowcount
+        batch_byte_sizes = SizesForTableBatches(
+            data_table, row_batch_size, count_samples=max_itr
+        )
+
+    # We're done if there was only 1 batch
+    if len(batch_byte_sizes) == 1: return min_rowcount
+
+    # Otherwise, return the smallest row count across sampling of batches
+    for sample_ndx in range(1, len(batch_byte_sizes), 1):
+        sample_bytesize = batch_byte_sizes[sample_ndx]
+        sample_rowcount = (padded_byte_size * row_batch_size) / sample_bytesize
+
+        if sample_rowcount < min_rowcount:
+            min_rowcount = sample_rowcount
+
+    return min_rowcount
 
 
 # ------------------------------

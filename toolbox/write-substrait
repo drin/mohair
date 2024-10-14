@@ -35,7 +35,7 @@ from pathlib import Path
 
 # >> Third-party
 import pyarrow
-import pandas
+# import pandas
 import ibis
 
 from ibis import udf
@@ -44,8 +44,9 @@ from ibis_substrait.compiler.core import stp as substrait # substrait.plan_pb2 m
 
 
 # >> Internal
-from mohair.util import ArgparseBuilder
-from mohair.query.relations import ( SkyDomain
+from mohair.util            import ArgparseBuilder
+from mohair.query.extension import SkyTable
+from mohair.query.types     import ( SkyDomain
                                     ,SkyPartition
                                     ,SkyPartitionMeta
                                     ,SkyPartitionSlice)
@@ -125,61 +126,11 @@ def WriteSubstraitToFile(substrait_msg: substrait.Plan) -> str:
     return str(substrait_fpath)
 
 
-def EncodeMetaKey(key_name: str) -> bytes:
-    """ Convenience function to encode a metadata key as utf-8. """
-    return key_name.encode('utf-8')
-
-def EncodePartitionCount(pcount: int)  -> bytes:
-    """ Convenience function to encode partition count in a `size_t` size. """
-    return pcount.to_bytes(8)
-
-def EncodeStripeSize(stripe_size: int) -> bytes:
-    """ Convenience function to encode partition count in a `uint8_t` size. """
-    return stripe_size.to_bytes(1)
-
-
-def SetPartitionData(sky_partition: SkyPartition, data_table: pyarrow.Table) -> SkyPartition:
-    """
-    Convenience function to set the data of :sky_partition:. This will overwrite data
-    currently held by :sky_partition: with hard-coded assumptions.
-    """
-
-    # clear data in the partition, just to be sure
-    sky_partition.slices = []
-
-    # cache some data for use in this function
-    partition_key = Path(sky_partition.domain.key) / sky_partition.meta.key
-
-    # Create 4 slices, assuming 20 rows in slices of max chunk size 5
-    for ndx, pslice in enumerate(data_table.to_batches(max_chunksize=5)):
-
-        # Each slice is treated as a table for simplicity
-        sky_partition.slices.append(
-            SkyPartitionSlice(
-                 slice_index=ndx
-                ,key=f'{partition_key};{ndx}'
-                ,data=pyarrow.Table.from_batches([pslice])
-            )
-        )
-
-    # our partition is 3 columns wide, has 4 slices
-    sky_partition.meta.slice_width = 3
-    sky_partition.meta.slice_count = ndx + 1
-
-    # set schema first, then update `schema_meta` and schema metadata
-    sky_partition.meta.schema = data_table.schema
-    sky_partition.meta.WithMetadata({
-         EncodeMetaKey('partition_count'): EncodePartitionCount(ndx + 1)
-        ,EncodeMetaKey('stripe_size')    : EncodeStripeSize(1)
-    })
-
-    return sky_partition
-
-
 def TStatAccumulate(data_table):
     squared_expr = data_table['expr_val'] * data_table['expr_val']
+
     return (
-        data_table.group_by(data_table['feature_name'])
+        data_table.group_by(data_table.feature_name)
                   .aggregate(
                         cell_count=data_table.count()
                        ,expr_total=(data_table['expr_val'].sum())
@@ -189,24 +140,23 @@ def TStatAccumulate(data_table):
 
 def TStatCombine(left_table, right_table):
     return (
-        left_table.join(right_table, ['feature_name'])
-          [
-               left_table['feature_name'].name('feature_name')
-              ,(left_table['cell_count'] + right_table['cell_count']).name('cell_count')
-              ,(left_table['expr_total'] + right_table['expr_total']).name('expr_total')
-              ,(left_table['expr_sumsq'] + right_table['expr_sumsq']).name('expr_sumsq')
-          ]
+        left_table.join(right_table, left_table.feature_name == right_table.feature_name)
+                  .select(
+                        left_table['feature_name'].name('feature_name')
+                       ,(left_table['cell_count'] + right_table['cell_count']).name('cell_count')
+                       ,(left_table['expr_total'] + right_table['expr_total']).name('expr_total')
+                       ,(left_table['expr_sumsq'] + right_table['expr_sumsq']).name('expr_sumsq')
+                   )
     )
 
 def TStatComplete(data_table):
-    expr_avg = data_table['expr_total'] / data_table['cell_count']
-    expr_var = (data_table['expr_sumsq'] / data_table['cell_count']) - (expr_avg * expr_avg)
-    return (
-        data_table[
-             data_table['feature_name']
-            ,expr_avg.name('expr_avg')
-            ,expr_var.name('expr_var')
-        ]
+    expr_avg = data_table.expr_total / data_table.cell_count
+    expr_var = (data_table.expr_sumsq / data_table.cell_count) - (expr_avg * expr_avg)
+
+    return data_table.select(
+         data_table.feature_name
+        ,expr_avg.name('expr_avg')
+        ,expr_var.name('expr_var')
     )
 
 
@@ -221,14 +171,13 @@ if __name__ == '__main__':
         for partition_key in parsed_args.partition_keys
     ]
 
-    # ibis_catalog = [(sky_partition.name(), None) for sky_partition in sky_partitions]
-
     # Populate schemas and optionally data
     for sky_partition in sky_partitions:
         partition_fpath = Path(parsed_args.input_dir) / sky_partition.name()
         with open(partition_fpath, 'rb') as partition_handle:
             partition_schema = SchemaFromBinary(partition_handle.read())
             partition_schema = (
+                # hard-coded way to change 3rd column's type to int32
                 partition_schema.set(
                      2
                     ,partition_schema.field(2)
@@ -236,35 +185,17 @@ if __name__ == '__main__':
                 )
             )
             print(partition_schema)
+            # NOTE: we don't need table data for writing a substrait plan
             # partition_data = TableFromBinary(partition_handle.read())
 
         sky_partition.SetSchema(partition_schema)
         # sky_partition.SetData(partition_data)
 
-
-    # "Connect" to pandas
-    # ibis_conn = ibis.pandas.connect(dict(ibis_catalog))
-    # ibis_conn = ibis.pandas.connect()
-
-    # TODO: create a query using the schemas in :sky_partitions:
-    tstat_query = TStatAccumulate(
-        # ibis_conn.table(
-        ibis.table(
-             name=sky_partitions[0].name()
-            ,schema=sky_partitions[0].schema()
-        )
-    )
-
+    # create a query using the schemas in :sky_partitions:
+    tstat_query = TStatAccumulate(SkyTable.FromPartition(sky_partitions[0]).to_expr())
     for sky_partition in sky_partitions[1:]:
-        partition_query = TStatAccumulate(
-            # ibis_conn.table(
-            ibis.table(
-                 name=sky_partition.name()
-                ,schema=sky_partition.schema()
-            )
-        )
-
-        tstat_query = TStatCombine(tstat_query, partition_query)
+        partition_query = TStatAccumulate(SkyTable.FromPartition(sky_partition).to_expr())
+        tstat_query     = TStatCombine(tstat_query, partition_query)
 
     # final projection
     tstat_query = TStatComplete(tstat_query)

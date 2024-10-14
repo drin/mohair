@@ -34,21 +34,21 @@ or modified message type instead of a core substrait message type.
 # Dependencies
 
 # >> Standard libs
-import typing
+from typing      import Any, Annotated, TypeVar
 from dataclasses import dataclass
 
+
 # >> Ibis
-from ibis.expr             import types, rules, schema as sch
-from ibis.expr.operations  import relations
-from ibis.backends.pyarrow import datatypes
+from ibis.common.patterns           import InstanceOf
+from ibis.expr.types                import Table
+from ibis.expr.operations.relations import UnboundTable
 
 # >> Ibis-substrait
+# NOTE: stalg is short for "substrait algebra"
 from ibis_substrait.compiler.translate import stalg
 from ibis_substrait.compiler.translate import translate
-from ibis_substrait.compiler.core      import SubstraitCompiler
 
-# >> Google
-from google.protobuf import any_pb2
+from ibis_substrait.compiler.core import SubstraitCompiler
 
 # >> Internal
 from mohair.query.operators    import SkyPartition
@@ -58,38 +58,40 @@ from mohair.mohair.algebra_pb2 import SkyRel, ExecutionStats
 # ------------------------------
 # Classes
 
-# NOTE: deriving from PhysicalTable gives a clean base
-# class SkyTable(relations.PhysicalTable):
-#     skyrel = rules.instance_of(SkyPartition)
-# 
-#     # NOTE: these properties/attributes are necessary to use `to_expr()` and interact with
-#     # it as any other ibis table
-#     @property
-#     def name(self):
-#         return self.skyrel.name()
-# 
-#     @property
-#     def schema(self):
-#         return datatypes.from_pyarrow_schema(self.skyrel.schema())
+# SkyPartitionType = TypeVar('SkyPartitionType')
+class SkyTable(UnboundTable):
+    """
+    A custom class that wraps a `SkyRel` in an ibis `Table` so that we can register a
+    handler with `SubstraitCompiler.translate` for a `SkyRel` relation.
 
-# NOTE: we extend from UnboundTable since schema and name are so useful anyways
-class SkyTable(relations.UnboundTable):
-    skyrel = rules.instance_of(SkyPartition)
+    We derive from `UnboundTable` since we call `unbind()` when generating substrait
+    anyways.
+    """
+
+    # data_partition: Annotated[SkyPartitionType, InstanceOf(SkyPartition)]
+    data_partition: SkyPartition
+
+    @classmethod
+    def FromPartition(cls, src_partition: SkyPartition) -> 'SkyTable':
+        return cls(
+             name=src_partition.name()
+            ,schema=src_partition.schema()
+            ,data_partition=src_partition
+        )
 
 
 # ------------------------------
 # Functions
 
-# this requires ibis 5.0+
-def arrow_schema_to_ibis(arrow_schema):
-    return datatypes.from_pyarrow_schema(arrow_schema)
-
 @translate.register(SkyTable)
 def _translate_mohair( op      : SkyTable
-                      ,expr    : types.TableExpr | None = None
-                      ,*args   : typing.Any
+                      ,expr    : Table | None = None
+                      ,*args   : Any
                       ,compiler: SubstraitCompiler | None = None
-                      ,**kwargs: typing.Any                     ) -> stalg.Rel:
+                      ,**kwargs: Any) -> stalg.Rel:
+    """
+    A custom translation function that is invoked when `op` is an instance of `SkyTable`.
+    """
 
     substrait_rel = stalg.Rel(
         extension_leaf=stalg.ExtensionLeafRel(
@@ -97,14 +99,15 @@ def _translate_mohair( op      : SkyTable
         )
     )
 
-    # NOTE: apparently messages have to be packed into an `any_pb2.Any`
+    # extension_leaf.detail is an Any message, so we use its Pack method on SkyRel
     substrait_rel.extension_leaf.detail.Pack(
         SkyRel(
-            domain=op.skyrel.domain.key
-           ,partition=op.skyrel.meta.key
-           ,slices=op.skyrel.slice_indices()
-           ,execstats=op.skyrel.exec_stats()
+            domain=op.data_partition.domain.key
+           ,partition=op.data_partition.meta.key
+           ,slices=op.data_partition.slice_indices()
+           ,execstats=op.data_partition.exec_stats()
         )
     )
 
     return substrait_rel
+
