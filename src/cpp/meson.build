@@ -134,20 +134,25 @@ libskytether_mohair_sources = (
 
 libskytether_mohair_inc = include_directories('.')
 
+lib_includedirs = [configuration_inc]
+if is_custom_libduckdb
+  lib_includedirs += libduckdb_inc
+endif
+
 
 # ------------------------------
 # Build artifacts (libraries)
 
 libskytether_mohair = library('skytether-mohair'
   ,libskytether_mohair_sources
-  ,include_directories: configuration_inc
+  ,include_directories: lib_includedirs
   ,dependencies       : service_group_dep
   ,pic                : true
   ,install            : true
 )
 
 libskytether_mohair_dep = declare_dependency(
-   include_directories: configuration_inc
+   include_directories: lib_includedirs
   ,dependencies       : service_group_dep
   ,link_with          : libskytether_mohair
 )
