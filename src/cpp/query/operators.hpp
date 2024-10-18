@@ -48,6 +48,7 @@ using substrait::MergeJoinRel;
 
 using substrait::ReadRel;
 
+using substrait::ExtensionLeafRel;
 using mohair::SkyRel;
 
 // >> Convenience aliases
@@ -82,9 +83,20 @@ namespace mohair {
     const string ToString() override;
   };
 
-  // TODO: figure out how this should bridge to skytether
+  /**
+   * This op wraps an "ExtensionLeafRel" which is an opaque type.
+   * Specifically, this op represents a leaf rel that holds a `mohair::SkyRel`.
+   */
   struct OpSkyRead : PipelineOp {
-    SkyRel  *plan_op;
+    ExtensionLeafRel*  plan_op;
+    SkyRel sky_rel;
+
+    OpSkyRead(ExtensionLeafRel* op, Rel* rel, SkyRel& unpacked_rel, string& tname)
+      : PipelineOp(rel, tname), plan_op(op) {
+      sky_rel.CopyFrom(unpacked_rel);
+    }
+
+    const string ToString() override;
   };
 
   // >> Complete definitions of query operators

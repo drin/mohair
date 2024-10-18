@@ -120,15 +120,15 @@ int main(int argc, char **argv) {
   }
 
   for (size_t split_ndx = 0; split_ndx < count_anchors; ++split_ndx) {
+    std::cout << "Start split:  " << std::to_string(split_ndx) << std::endl;
+
     auto plan_split = std::make_unique<PlanSplit>(
       *application_plan, *((*plan_anchors)[split_ndx])
     );
 
     auto subplan_msgs = substrait_msg->SubplansFromSplit(*plan_split);
     for (int subplan_ndx = 0; subplan_ndx < subplan_msgs.size(); ++subplan_ndx) {
-      std::cout << "Creating subplan [" << std::to_string(subplan_total) << "]"
-                << std::endl
-      ;
+      std::cout << "\tCreating subplan: " << std::to_string(subplan_total) << std::endl;
 
       string out_fname {
         "resources/subplans/" +       std::to_string(split_ndx)
@@ -136,13 +136,23 @@ int main(int argc, char **argv) {
                               + "." + std::to_string(subplan_total++)
                               + ".substrait"
       };
+      std::cout << "\tWriting to file [" << out_fname << "]" << std::endl;
 
-      SubstraitMessage& subplan_msg = *(subplan_msgs)[subplan_ndx];
+      SubstraitMessage& subplan_msg = *(subplan_msgs[subplan_ndx]);
       auto success = subplan_msg.SerializeToFile(out_fname.data());
 
-      if (not success) { return 12; }
+      if (not success) {
+        std::cerr << "\tError during serialization" << std::endl;
+        return 12;
+      }
+
+      std::cout << "\tFinished subplan: " << std::to_string(subplan_ndx) << std::endl;
     }
+
+    std::cout << "Finished split: " << std::to_string(split_ndx) << std::endl;
   }
+
+  std::cout << "Query processing complete" << std::endl;
 
   return 0;
 }

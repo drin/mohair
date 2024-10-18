@@ -29,18 +29,20 @@
 namespace mohair {
 
   // >> Implementations for each op type to return its string representation
-  const string OpErr::ToString()       { return u8"Err()";                      }
-  const string OpRead::ToString()      { return u8"Read(" + table_name + u8")"; }
-  const string OpProj::ToString()      { return u8"Π("    + table_name + u8")"; }
-  const string OpSel::ToString()       { return u8"σ("    + table_name + u8")"; }
-  const string OpLimit::ToString()     { return u8"Lim("  + table_name + u8")"; }
-  const string OpSort::ToString()      { return u8"Sort(" + table_name + u8")"; }
-  const string OpAggr::ToString()      { return u8"Aggr(" + table_name + u8")"; }
+  const string OpErr::ToString()       { return u8"Err()";                         }
+  const string OpRead::ToString()      { return u8"Read(" + table_name + u8")";    }
+  const string OpProj::ToString()      { return u8"Π("    + table_name + u8")";    }
+  const string OpSel::ToString()       { return u8"σ("    + table_name + u8")";    }
+  const string OpLimit::ToString()     { return u8"Lim("  + table_name + u8")";    }
+  const string OpSort::ToString()      { return u8"Sort(" + table_name + u8")";    }
+  const string OpAggr::ToString()      { return u8"Aggr(" + table_name + u8")";    }
 
-  const string OpCrossJoin::ToString() { return u8"×("    + table_name + u8")"; }
-  const string OpJoin::ToString()      { return u8"⋈("    + table_name + u8")"; }
-  const string OpHashJoin::ToString()  { return u8"⋈→("   + table_name + u8")"; }
-  const string OpMergeJoin::ToString() { return u8"⋈⊕("   + table_name + u8")"; }
+  const string OpCrossJoin::ToString() { return u8"×("    + table_name + u8")";    }
+  const string OpJoin::ToString()      { return u8"⋈("    + table_name + u8")";    }
+  const string OpHashJoin::ToString()  { return u8"⋈→("   + table_name + u8")";    }
+  const string OpMergeJoin::ToString() { return u8"⋈⊕("   + table_name + u8")";    }
+
+  const string OpSkyRead::ToString()   { return u8"SkyRead(" + table_name + u8")"; }
 
   // >> Implementations for each op type to return its PlanAnchor
   unique_ptr<PlanAnchor> PlanAnchorForRel(Rel *anchor_relmsg) {
@@ -283,8 +285,10 @@ namespace mohair {
       // all other cases can get a default name for now
       case ReadRel::ReadTypeCase::kVirtualTable:
           std::cerr << "Error: unexpected ReadRel type 'VirtualTable'" << std::endl;
+
       case ReadRel::ReadTypeCase::kExtensionTable:
           std::cerr << "Error: unexpected ReadRel type 'ExtensionTable'" << std::endl;
+
       default:
           return nullptr;
     }
@@ -292,19 +296,17 @@ namespace mohair {
     return std::make_unique<OpRead>(substrait_op, rel_msg, op_tname);
   }
 
-  /*
-  unique_ptr<QueryOp> FromSkyMsg(Rel *rel_msg, unique_ptr<SkyRel> substrait_op) {
-    // TODO: implementation
-    // TODO: validate inline construction of unique pointer
-    if (substrait_op == nullptr) {
-      auto sky_op = std::make_unique<OpSkyRead>();
-      return sky_op;
-    }
+  unique_ptr<QueryOp> FromSkyMsg(Rel* rel_msg, ExtensionLeafRel* substrait_op)  {
+    SkyRel sky_rel;
 
-    return OpVariant {};
-    // return OpVariant { CreateRelVariant<OpSkyRead>(std::move(substrait_op)) };
+    // If we're translating a message with a SkyRel, unpack it
+    if (substrait_op->has_detail()) { substrait_op->detail().UnpackTo(&sky_rel); }
+    else { std::cerr << "Found ExtensionLeafRel without data" << std::endl; }
+
+
+    string op_tname { sky_rel.domain() + "-" + sky_rel.partition() };
+    return std::make_unique<OpSkyRead>(substrait_op, rel_msg, sky_rel, op_tname);
   }
-  */
 
 
   /**
@@ -317,9 +319,11 @@ namespace mohair {
       case Rel::RelTypeCase::kProject: {
         return FromUnaryOpMsg<ProjectRel, OpProj>(rel_msg, rel_msg->mutable_project());
       }
+
       case Rel::RelTypeCase::kFilter: {
         return FromUnaryOpMsg<FilterRel, OpSel>(rel_msg, rel_msg->mutable_filter());
       }
+
       case Rel::RelTypeCase::kFetch: {
         return FromUnaryOpMsg<FetchRel, OpLimit>(rel_msg, rel_msg->mutable_fetch());
       }
@@ -328,12 +332,15 @@ namespace mohair {
       case Rel::RelTypeCase::kSort: {
         return FromUnaryOpMsg<SortRel, OpSort>(rel_msg, rel_msg->mutable_sort());
       }
+
       case Rel::RelTypeCase::kAggregate: {
         return FromUnaryOpMsg<AggregateRel, OpAggr>(rel_msg, rel_msg->mutable_aggregate());
       }
+
       case Rel::RelTypeCase::kJoin: {
         return FromBinaryOpMsg<JoinRel, OpJoin>(rel_msg, rel_msg->mutable_join());
       }
+
       case Rel::RelTypeCase::kCross: {
         return FromBinaryOpMsg<CrossRel, OpCrossJoin>(rel_msg, rel_msg->mutable_cross());
       }
@@ -344,6 +351,7 @@ namespace mohair {
           rel_msg, rel_msg->mutable_hash_join()
         );
       }
+
       case Rel::RelTypeCase::kMergeJoin: {
         return FromBinaryOpMsg<MergeJoinRel, OpMergeJoin>(
           rel_msg, rel_msg->mutable_merge_join()
@@ -354,20 +362,10 @@ namespace mohair {
       case Rel::RelTypeCase::kRead: {
         return FromReadMsg(rel_msg, rel_msg->mutable_read());
       }
-      case Rel::RelTypeCase::kExtensionLeaf:
-      /* TODO
-      {
-        substrait::ExtensionLeafRel *leaf_rel = rel_msg->mutable_extension_leaf();
-        if (leaf_rel->has_detail()) {
-          auto sky_rel = std::make_unique<SkyRel>();
-          leaf_rel->detail().UnpackTo(sky_rel.get());
 
-          return FromSkyMsg(rel_msg, sky_rel);
-        }
-
-        return FromSkyMsg(rel_msg, nullptr);
+      case Rel::RelTypeCase::kExtensionLeaf: {
+        return FromSkyMsg(rel_msg, rel_msg->mutable_extension_leaf());
       }
-      */
 
       // Catch all error
       default: {
