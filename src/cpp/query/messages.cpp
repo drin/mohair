@@ -118,7 +118,7 @@ namespace mohair {
     }
 
     if (not this->payload->SerializeToOstream(&file_stream)) {
-      std::cerr << "Unable to substrait message to file" << std::endl;
+      std::cerr << "Unable to serialize message to file stream" << std::endl;
       return false;
     }
 
