@@ -12,15 +12,40 @@ project('libskytether-mohair'
 version_str    = meson.project_version()
 version_fields = version_str.split('.')
 
+# An alternate installation directory
+libduckdb_customdir = '/usr' / 'local' / 'duckdb-skytether'
+
 # >> optional project dependencies
 libompi_cxx_dep = dependency('ompi-cxx', required: get_option('mpi'))
 libfaodel_dep   = dependency('faodel'  , required: get_option('faodel'))
 libtiledb_dep   = dependency('tiledb'  , required: get_option('tiledb'))
 
+#   |> search a few places for duckdb
+# search in the typical place first
 libduckdb_dep = dependency('duckdb-skytether'
   ,method: 'cmake'
-  ,required: get_option('duckdb')
+  ,required: false
 )
+
+# only fail (use `required` property) if we also can't find it in the alternate location
+is_custom_libduckdb = false
+if not libduckdb_dep.found()
+  cpp_compiler = meson.get_compiler('cpp')
+
+  libduckdb_libdir = libduckdb_customdir / 'lib'
+  libduckdb_incdir = libduckdb_customdir / 'include'
+
+  libduckdb_dep = cpp_compiler.find_library('duckdb'
+    ,dirs    : libduckdb_libdir
+    ,required: get_option('duckdb')
+  )
+
+  if libduckdb_dep.found()
+    is_custom_libduckdb = true
+    libduckdb_inc = include_directories(libduckdb_incdir)
+  endif
+endif
+
 
 mohair_cfgdata = configuration_data({
    'VERSION_STR'   : version_str
