@@ -297,15 +297,16 @@ namespace mohair {
   }
 
   unique_ptr<QueryOp> FromSkyMsg(Rel* rel_msg, ExtensionLeafRel* substrait_op)  {
-    SkyRel sky_rel;
+    auto sky_rel = std::make_unique<SkyRel>();
 
     // If we're translating a message with a SkyRel, unpack it
-    if (substrait_op->has_detail()) { substrait_op->detail().UnpackTo(&sky_rel); }
+    if (substrait_op->has_detail()) { substrait_op->detail().UnpackTo(sky_rel.get()); }
     else { std::cerr << "Found ExtensionLeafRel without data" << std::endl; }
 
-
-    string op_tname { sky_rel.domain() + "-" + sky_rel.partition() };
-    return std::make_unique<OpSkyRead>(substrait_op, rel_msg, sky_rel, op_tname);
+    string op_tname { sky_rel->domain() + "-" + sky_rel->partition() };
+    return std::make_unique<OpSkyRead>(
+      substrait_op, rel_msg, std::move(sky_rel), op_tname
+    );
   }
 
 
@@ -364,6 +365,7 @@ namespace mohair {
       }
 
       case Rel::RelTypeCase::kExtensionLeaf: {
+        std::cout << "Found ExtensionLeaf operator" << std::endl;
         return FromSkyMsg(rel_msg, rel_msg->mutable_extension_leaf());
       }
 

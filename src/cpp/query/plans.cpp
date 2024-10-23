@@ -270,22 +270,23 @@ namespace mohair {
   vector<unique_ptr<SubstraitMessage>>
   SubstraitMessage::SubplansFromSplit(PlanSplit& split) {
     // Get the anchor op and initialize some variables
-    QueryOp*         anchor_op     = split.anchor_op.plan_op;
+    QueryOp*         anchor_op     = split.anchor_op->plan_op;
     auto             anchor_msg    = PlanAnchorFrom(anchor_op);
     vector<QueryOp*> anchor_inputs = anchor_op->GetOpInputs();
 
-    // This is a debug macro
+    /* In case we need to validate the anchor message.
     MohairDebugMsg(
-         "Anchor op has ["
-      << std::to_string(anchor_inputs.size())
-      << "] inputs"
+         "PlanAnchor: "            << std::endl
+      << anchor_msg->DebugString() << std::endl
     );
+    */
 
     // Initialize the list of messages to return
     vector<unique_ptr<SubstraitMessage>> subplan_msgs;
     subplan_msgs.reserve(anchor_inputs.size());
 
     // Create a substrait message for each input to the anchor
+    MohairDebugMsg("Creating [" << std::to_string(anchor_inputs.size()) << "] subplans");
     for (size_t input_ndx = 0; input_ndx < anchor_inputs.size(); ++input_ndx) {
       QueryOp* input_op        = anchor_inputs[input_ndx];
       Rel*     subplan_rootrel = input_op->op_wrap;
