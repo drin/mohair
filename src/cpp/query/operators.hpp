@@ -33,28 +33,28 @@ using std::get;
 using std::get_if;
 
 // >> Substrait types
-using substrait::ProjectRel;
-using substrait::FilterRel;
-using substrait::FetchRel;
+using skytether::substrait::ProjectRel;
+using skytether::substrait::FilterRel;
+using skytether::substrait::FetchRel;
 
-using substrait::SortRel;
-using substrait::AggregateRel;
+using skytether::substrait::SortRel;
+using skytether::substrait::AggregateRel;
 
-using substrait::CrossRel;
-using substrait::JoinRel;
+using skytether::substrait::CrossRel;
+using skytether::substrait::JoinRel;
 
-using substrait::HashJoinRel;
-using substrait::MergeJoinRel;
+using skytether::substrait::HashJoinRel;
+using skytether::substrait::MergeJoinRel;
 
-using substrait::ReadRel;
+using skytether::substrait::ReadRel;
 
-using substrait::ExtensionLeafRel;
-using mohair::SkyRel;
+using skytether::substrait::ExtensionLeafRel;
+using skytether::mohair::SkyRel;
 
 // >> Convenience aliases
-using LocalFiles       = substrait::ReadRel::LocalFiles;
-using FileOrFiles      = substrait::ReadRel::LocalFiles::FileOrFiles;
-using ArrowReadOptions = substrait::ReadRel::LocalFiles::FileOrFiles::ArrowReadOptions;
+using LocalFiles       = skytether::substrait::ReadRel::LocalFiles;
+using FileOrFiles      = skytether::substrait::ReadRel::LocalFiles::FileOrFiles;
+using ArrowReadOptions = skytether::substrait::ReadRel::LocalFiles::FileOrFiles::ArrowReadOptions;
 
 
 // ------------------------------
@@ -89,12 +89,13 @@ namespace mohair {
    */
   struct OpSkyRead : PipelineOp {
     ExtensionLeafRel*  plan_op;
-    SkyRel sky_rel;
+    unique_ptr<SkyRel> sky_rel;
 
-    OpSkyRead(ExtensionLeafRel* op, Rel* rel, SkyRel& unpacked_rel, string& tname)
-      : PipelineOp(rel, tname), plan_op(op) {
-      sky_rel.CopyFrom(unpacked_rel);
-    }
+    OpSkyRead( ExtensionLeafRel*    op
+              ,Rel*                 rel
+              ,unique_ptr<SkyRel>&& unpacked_rel
+              ,string&              tname)
+      : PipelineOp(rel, tname), plan_op(op), sky_rel(std::move(unpacked_rel)) {}
 
     const string ToString() override;
   };

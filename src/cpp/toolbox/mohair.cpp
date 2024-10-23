@@ -54,6 +54,15 @@ int ValidateArgs(int argc, char **argv) {
   return 0;
 }
 
+void PrintPlans(vector<unique_ptr<AppPlan>>& plan_list) {
+  for (size_t plan_ndx = 0; plan_ndx < plan_list.size(); ++plan_ndx) {
+    std::cout << "\t[" << std::to_string(plan_ndx) << "]" << std::endl;
+
+    unique_ptr<AppPlan>& app_plan = plan_list[plan_ndx];
+    std::cout << app_plan->ViewPlan() << std::endl;
+  }
+}
+
 
 // ------------------------------
 // Main Logic
@@ -85,57 +94,41 @@ int main(int argc, char **argv) {
     return 10;
   }
 
-  std::cout << "Mohair Plan:"               << std::endl
-            << application_plan->ViewPlan() << std::endl
-  ;
+  std::cout << "Mohair Plan:" << std::endl;
+  std::cout << application_plan->ViewPlan() << std::endl;
 
   /* NOTE: this is just to peek at the result of walking the substrait plan */
   std::cout << "Breaker Leaves:" << std::endl;
-  std::vector<unique_ptr<AppPlan>>& plan_bleaves = application_plan->bleaf_ops;
-  for (size_t bleaf_ndx = 0; bleaf_ndx < plan_bleaves.size(); ++bleaf_ndx) {
-    std::cout << "\t[" << std::to_string(bleaf_ndx) << "]" << std::endl;
-
-    unique_ptr<AppPlan>& bleaf = plan_bleaves[bleaf_ndx];
-    std::cout << bleaf->ViewPlan() << std::endl;
-  }
+  PrintPlans(application_plan->bleaf_ops);
 
   std::cout << "Breaker Ops:" << std::endl;
-  std::vector<unique_ptr<AppPlan>>& plan_breakers = application_plan->break_ops;
-  for (size_t break_ndx = 0; break_ndx < plan_breakers.size(); ++break_ndx) {
-    std::cout << "\t[" << std::to_string(break_ndx) << "]" << std::endl;
+  PrintPlans(application_plan->break_ops);
 
-    unique_ptr<AppPlan>& breaker = plan_breakers[break_ndx];
-    std::cout << breaker->ViewPlan() << std::endl;
-  }
+  // >> split super-plan into sub-plans
+  int subplan_total = 1;
 
-  // prepare to iterate over internal plan breakers
-  int    subplan_total = 1;
-  size_t count_anchors = plan_breakers.size();
-  std::vector<unique_ptr<AppPlan>>* plan_anchors = &plan_breakers;
+  // default to internal breakers
+  size_t count_anchors = application_plan->break_ops.size();
+  vector<unique_ptr<AppPlan>>* plan_anchors = &(application_plan->break_ops);
 
-  // otherwise, iterate over leaf breaker ops (these will be simple subplans)
-  if (not plan_breakers.size()) {
-    count_anchors = plan_bleaves.size();
-    plan_anchors  = &plan_bleaves;
+  // fallback to leaf breakers (simple subplans)
+  if (application_plan->break_ops.empty()) {
+    count_anchors = application_plan->bleaf_ops.size();
+    plan_anchors  = &(application_plan->bleaf_ops);
   }
 
   for (size_t split_ndx = 0; split_ndx < count_anchors; ++split_ndx) {
-    std::cout << "Start split:  " << std::to_string(split_ndx) << std::endl;
+    PlanSplit plan_split { *application_plan, *((*plan_anchors)[split_ndx]) };
 
-    auto plan_split = std::make_unique<PlanSplit>(
-      *application_plan, *((*plan_anchors)[split_ndx])
-    );
-
-    auto subplan_msgs = substrait_msg->SubplansFromSplit(*plan_split);
+    auto subplan_msgs = substrait_msg->SubplansFromSplit(plan_split);
     for (int subplan_ndx = 0; subplan_ndx < subplan_msgs.size(); ++subplan_ndx) {
-      std::cout << "\tCreating subplan: " << std::to_string(subplan_total) << std::endl;
-
       string out_fname {
         "resources/subplans/" +       std::to_string(split_ndx)
                               + "." + std::to_string(subplan_ndx)
                               + "." + std::to_string(subplan_total++)
                               + ".substrait"
       };
+
       std::cout << "\tWriting to file [" << out_fname << "]" << std::endl;
 
       SubstraitMessage& subplan_msg = *(subplan_msgs[subplan_ndx]);
@@ -145,14 +138,8 @@ int main(int argc, char **argv) {
         std::cerr << "\tError during serialization" << std::endl;
         return 12;
       }
-
-      std::cout << "\tFinished subplan: " << std::to_string(subplan_ndx) << std::endl;
     }
-
-    std::cout << "Finished split: " << std::to_string(split_ndx) << std::endl;
   }
-
-  std::cout << "Query processing complete" << std::endl;
 
   return 0;
 }

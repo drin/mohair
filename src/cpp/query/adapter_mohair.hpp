@@ -32,8 +32,8 @@
 #include "mohair.hpp"
 
 // >> Definitions for mohair protocol
-#include "mohair/algebra.pb.h"
-#include "mohair/topology.pb.h"
+#include "skytether/mohair/algebra.pb.h"
+#include "skytether/mohair/topology.pb.h"
 
 // >> Third-party deps
 #include "query/apidep_substrait.hpp"
@@ -43,10 +43,10 @@
 // Type Aliases
 
 // >> Mohair query processing types
-using mohair::PlanAnchor;
-using mohair::ErrRel;
+using skytether::mohair::PlanAnchor;
+using skytether::mohair::ErrRel;
 
 // >> Mohair topology types
-using mohair::ServiceConfig;
-using mohair::DeviceClass;
+using skytether::mohair::ServiceConfig;
+using skytether::mohair::DeviceClass;
 

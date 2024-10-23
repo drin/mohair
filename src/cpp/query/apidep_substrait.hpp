@@ -31,9 +31,9 @@
 #include <google/protobuf/text_format.h>
 
 // >> Generated protobuf deps for substrait
-#include "substrait/plan.pb.h"
-#include "substrait/algebra.pb.h"
-#include "substrait/extensions/extensions.pb.h"
+#include "skytether/substrait/plan.pb.h"
+#include "skytether/substrait/algebra.pb.h"
+#include "skytether/substrait/extensions/extensions.pb.h"
 
 
 // ------------------------------
@@ -44,7 +44,7 @@ using google::protobuf::TextFormat;
 using AnyMessage = google::protobuf::Any;
 
 //  >> Substrait types
-using substrait::Plan;
-using substrait::PlanRel;
-using substrait::Rel;
+using skytether::substrait::Plan;
+using skytether::substrait::PlanRel;
+using skytether::substrait::Rel;
 
