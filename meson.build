@@ -4,7 +4,10 @@
 # >> project info
 project('libskytether-mohair'
   ,'cpp'
-  ,version         : '0.1.0'
+  ,version         : '0.5.0'
+  ,meson_version   : '1.6.0'
+  ,license         : 'Apache-2.0'
+  ,license_files   : 'LICENSE'
   ,default_options : ['warning_level=3','cpp_std=c++17']
 )
 
@@ -12,29 +15,32 @@ project('libskytether-mohair'
 version_str    = meson.project_version()
 version_fields = version_str.split('.')
 
-# An alternate installation directory
+
+# ------------------------------
+# Dependencies
+
+# >> for finding alternate installations
+cpp_compiler = meson.get_compiler('cpp')
+
+# alternate paths
 libduckdb_customdir = '/usr' / 'local' / 'duckdb-skytether'
 
-# >> optional project dependencies
-libompi_cxx_dep = dependency('ompi-cxx', required: get_option('mpi'))
-libfaodel_dep   = dependency('faodel'  , required: get_option('faodel'))
-libtiledb_dep   = dependency('tiledb'  , required: get_option('tiledb'))
+libduckdb_libdir = libduckdb_customdir / 'lib'
+libduckdb_incdir = libduckdb_customdir / 'include'
 
-#   |> search a few places for duckdb
-# search in the typical place first
-libduckdb_dep = dependency('duckdb-skytether'
-  ,method: 'cmake'
-  ,required: false
-)
-
-# only fail (use `required` property) if we also can't find it in the alternate location
+# flags so we know when to search for fallbacks
 is_custom_libduckdb = false
+
+
+# >> Backend dependency: tiledb
+libtiledb_dep = dependency('tiledb', required: get_option('tiledb'))
+
+# >> Backend dependency: duckdb
+# search typical location first (never required)
+libduckdb_dep = dependency('duckdb-skytether', method: 'cmake', required: false)
+
+# search alternate location last (fail if duckdb is enabled)
 if not libduckdb_dep.found()
-  cpp_compiler = meson.get_compiler('cpp')
-
-  libduckdb_libdir = libduckdb_customdir / 'lib'
-  libduckdb_incdir = libduckdb_customdir / 'include'
-
   libduckdb_dep = cpp_compiler.find_library('duckdb'
     ,dirs    : libduckdb_libdir
     ,required: get_option('duckdb')
@@ -47,14 +53,13 @@ if not libduckdb_dep.found()
 endif
 
 
+# >> configure build options based on libraries we found
 mohair_cfgdata = configuration_data({
    'VERSION_STR'   : version_str
   ,'VERSION_MAJOR' : version_fields[0]
   ,'VERSION_MINOR' : version_fields[1]
   ,'VERSION_PATCH' : version_fields[2]
   ,'BUILD_IS_DEBUG': get_option('buildtype') == 'debug' ? 1 : 0
-  ,'MPI'           : libompi_cxx_dep.found() ? 1 : 0
-  ,'FAODEL'        : libfaodel_dep.found()   ? 1 : 0
   ,'TILEDB'        : libtiledb_dep.found()   ? 1 : 0
   ,'DUCKDB'        : libduckdb_dep.found()   ? 1 : 0
 })
