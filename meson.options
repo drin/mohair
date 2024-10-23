@@ -1,15 +1,3 @@
-option('faodel'
-  ,type       : 'feature'
-  ,value      : 'disabled'
-  ,description: 'If enabled, adapters for faodel are built'
-)
-
-option('mpi'
-  ,type       : 'feature'
-  ,value      : 'disabled'
-  ,description: 'If enabled, adapters for MPI are built'
-)
-
 option('tiledb'
   ,type       : 'feature'
   ,value      : 'disabled'

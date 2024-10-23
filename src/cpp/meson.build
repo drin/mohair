@@ -6,13 +6,14 @@
 # Dependencies
 
 # >> Arrow
-libarrow_dep           = dependency('arrow')
-libarrow_substrait_dep = dependency('arrow-substrait')
-libarrow_flight_dep    = dependency('arrow-flight')
+libarrow_dep           = dependency('arrow'          , required: true)
+libarrow_substrait_dep = dependency('arrow-substrait', required: true)
+libarrow_flight_dep    = dependency('arrow-flight'   , required: true)
 
 # >> Substrait
 libmohair_substrait_dep = dependency('mohair-substrait', static: true)
 
+# >> Protobuf
 libprotobuf_dep = dependency('protobuf')
 libabsl_dep     = dependency('absl'
   ,modules: [
@@ -33,14 +34,6 @@ query_group_dep = [
 service_group_dep = query_group_dep + [libarrow_flight_dep]
 
 # add optional dependencies to dependency groups
-if libfaodel_dep.found()
-  service_group_dep += [libompi_cxx_dep, libfaodel_dep]
-
-elif libompi_cxx_dep.found()
-  service_group_dep += [libompi_cxx_dep]
-
-endif
-
 if libtiledb_dep.found()
   service_group_dep += [libtiledb_dep]
 endif
@@ -73,8 +66,6 @@ query_headers = [
 engine_headers = [
    engine_srcdir  / 'adapter_acero.hpp'
   ,engine_srcdir  / 'adapter_duckdb.hpp'
-   #,engine_srcdir  / 'adapter_faodel.hpp'
-   #,engine_srcdir  / 'adapter_mpi.hpp'
 ]
 
 service_headers = [
@@ -82,7 +73,6 @@ service_headers = [
   ,service_srcdir / 'service_mohair.hpp'
   ,service_srcdir / 'service_topology.hpp'
   ,service_srcdir / 'service_duckdb.hpp'
-  #,service_srcdir / 'service_faodel.hpp'
 ]
 
 
@@ -135,6 +125,7 @@ libskytether_mohair_sources = (
 libskytether_mohair_inc = include_directories('.')
 
 lib_includedirs = [configuration_inc]
+
 if is_custom_libduckdb
   lib_includedirs += libduckdb_inc
 endif
