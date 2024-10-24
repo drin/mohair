@@ -51,8 +51,9 @@ from ibis_substrait.compiler.translate import translate
 from ibis_substrait.compiler.core import SubstraitCompiler
 
 # >> Internal
-from mohair.query.operators    import SkyPartition
-from mohair.mohair.algebra_pb2 import SkyRel, ExecutionStats
+from mohair.query.operators import SkyPartition
+
+from mohair.skytether.mohair.algebra_pb2 import SkyRel, ExecutionStats
 
 
 # ------------------------------
@@ -83,6 +84,8 @@ class SkyTable(UnboundTable):
 # ------------------------------
 # Functions
 
+import pdb
+
 @translate.register(SkyTable)
 def _translate_mohair( op      : SkyTable
                       ,expr    : Table | None = None
@@ -99,15 +102,17 @@ def _translate_mohair( op      : SkyTable
         )
     )
 
+    #pdb.set_trace()
+
     # extension_leaf.detail is an Any message, so we use its Pack method on SkyRel
-    substrait_rel.extension_leaf.detail.Pack(
-        SkyRel(
-            domain=op.data_partition.domain.key
-           ,partition=op.data_partition.meta.key
-           ,slices=op.data_partition.slice_indices()
-           ,execstats=op.data_partition.exec_stats()
-        )
+    sky_rel = SkyRel(
+        domain=op.data_partition.domain.key
+       ,partition=op.data_partition.meta.key
+       ,slices=op.data_partition.slice_indices()
+       ,execstats=op.data_partition.exec_stats()
     )
+
+    substrait_rel.extension_leaf.detail.Pack(sky_rel)
 
     return substrait_rel
 

@@ -41,7 +41,7 @@ from pyarrow import Schema, Table, RecordBatch
 
 # >> Internal
 from mohair import CreateMohairLogger
-from mohair.mohair.algebra_pb2 import SkyRel, ExecutionStats
+from mohair.skytether.mohair.algebra_pb2 import SkyRel, ExecutionStats
 
 # convenience functions for metadata management
 from mohair.util import ( DefaultPartitionMetadata

@@ -41,15 +41,16 @@ from mohair import CreateMohairLogger
 
 #   |> Substrait definitions
 #       |> relation types for common, leaf, unary, and N-ary relations
-from mohair.substrait.algebra_pb2 import Rel, RelCommon
-from mohair.substrait.algebra_pb2 import ReadRel, ExtensionLeafRel
-from mohair.substrait.algebra_pb2 import (FilterRel,  FetchRel, AggregateRel, SortRel,
-                                          ProjectRel, ExtensionSingleRel)
-from mohair.substrait.algebra_pb2 import (JoinRel, SetRel, ExtensionMultiRel,
-                                          HashJoinRel, MergeJoinRel)
+from mohair.skytether.substrait.algebra_pb2 import Rel, RelCommon
+from mohair.skytether.substrait.algebra_pb2 import ReadRel, ExtensionLeafRel
+from mohair.skytether.substrait.algebra_pb2 import (FilterRel,  FetchRel, AggregateRel,
+                                                    SortRel, ProjectRel,
+                                                    ExtensionSingleRel)
+from mohair.skytether.substrait.algebra_pb2 import (JoinRel, SetRel, ExtensionMultiRel,
+                                                    HashJoinRel, MergeJoinRel)
 
 #       |> Mohair extensions
-from mohair.mohair.algebra_pb2 import SkyRel, QueryRel, PlanAnchor
+from mohair.skytether.mohair.algebra_pb2 import SkyRel, QueryRel, PlanAnchor
 
 #   |> Internal classes
 from mohair.query.types import MohairOp, PipelineOp, BreakerOp
