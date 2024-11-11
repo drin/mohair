@@ -49,6 +49,8 @@ using arrow::RecordBatchVector;
 
 // >> Support types for I/O
 using arrow::io::RandomAccessFile;
+using ArrowOutputStream = arrow::io::OutputStream;
+
 using arrow::ipc::RecordBatchStreamReader;
 using arrow::ipc::RecordBatchFileReader;
 

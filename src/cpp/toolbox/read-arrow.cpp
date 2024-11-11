@@ -46,28 +46,76 @@ namespace fs = std::filesystem;
 
 struct ToolInterface {
   fs::path arrow_fpath;
+  bool use_duckdb { false };
+  bool is_stream  { false };
 
-  int ExecuteFileScan() {
-    #if USE_DUCKDB
+  #if USE_DUCKDB
+    int ScanFileWithDuckDB() {
       unique_ptr<EngineDuckDB> duck_engine = mohair::adapters::DuckDBForMem();
 
       // Use new path, `scan_arrows_file`
       int  context_id     = duck_engine->ArrowScanOpFile(arrow_fpath);
       auto execute_status = duck_engine->ExecuteRelation(context_id);
       if (not execute_status.ok()) { return 4; }
+    }
+  #endif
 
-    #else
-      MohairDebugMsg("Unknown service backend");
-      return 0;
+  int ScanStreamFromFile() {
+    std::string arrow_file_uri { "file://" + arrow_fpath.string() };
+    auto result_data = mohair::ReadIPCStream(arrow_file_uri);
+    if (not result_data.ok()) {
+      mohair::PrintError("Error reading data stream from file", result_data.status());
+      return 6;
+    }
 
-    #endif
+    auto data_excerpt = (*result_data)->SelectColumns({ 0, 1, 2, 3, 4 });
+    if (not data_excerpt.ok()) {
+      mohair::PrintError("Error projecting table columns", data_excerpt.status());
+      return 9;
+    }
+
+    mohair::PrintTable(*data_excerpt, 0, 10);
+    return 0;
+  }
+
+  int ScanFile() {
+    std::string arrow_file_uri { "file://" + arrow_fpath.string() };
+    auto result_data = mohair::ReadIPCFile(arrow_file_uri);
+    if (not result_data.ok()) {
+      mohair::PrintError("Error reading data from file", result_data.status());
+      return 5;
+    }
+
+    auto data_excerpt = (*result_data)->SelectColumns({ 0, 1, 2, 3, 4 });
+    if (not data_excerpt.ok()) {
+      mohair::PrintError("Error projecting table columns", data_excerpt.status());
+      return 9;
+    }
+
+    mohair::PrintTable(*data_excerpt, 0, 10);
+    return 0;
   }
 
   int Start() {
-    if (not arrow_fpath.empty()) { return ExecuteFileScan(); }
+    if (arrow_fpath.empty()) {
+      MohairDebugMsg("No data source provided.");
+      return ERRCODE_CLIENT;
+    }
 
-    MohairDebugMsg("No data source provided.");
-    return ERRCODE_CLIENT;
+    if (use_duckdb) {
+      #if USE_DUCKDB
+        return ScanFileWithDuckDB();
+
+      #else
+        MohairDebugMsg("DuckDB backend unavailable");
+        return 0;
+
+      #endif
+    }
+
+    if (is_stream)  { return ScanStreamFromFile(); }
+
+    return ScanFile(); 
   }
 };
 
@@ -78,7 +126,10 @@ struct ToolInterface {
 int PrintHelp() {
     std::cout << "read-arrow"
               << " [-h]"
-              << " -f <path-to-arrow-IPC-file>"
+              << " [-f <read file as arrow file (default)>]"
+              << " [-s <read file as arrow stream>]"
+              << " [-d <read file through duckdb>]"
+              << " -p <path-to-file>"
               << std::endl
     ;
 
@@ -94,7 +145,7 @@ int main(int argc, char **argv) {
 
   // Parse each argument and internalize the provided option
   constexpr char  is_done_parsing = -1;
-  const     char* opt_template    = "f:h";
+  const     char* opt_template    = "hdsfp:";
 
   char parsed_opt;
   while ((parsed_opt = (char) getopt(argc, argv, opt_template)) != is_done_parsing) {
@@ -102,7 +153,17 @@ int main(int argc, char **argv) {
 
       case 'h': { return PrintHelp(); }
 
-      case 'f': {
+      case 's': {
+        my_cli.is_stream = true;
+        break;
+      }
+
+      case 'd': {
+        my_cli.use_duckdb = true;
+        break;
+      }
+
+      case 'p': {
         my_cli.arrow_fpath = fs::absolute(optarg).string();
         break;
       }

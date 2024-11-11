@@ -111,7 +111,7 @@ namespace mohair {
   }
 
   bool SubstraitMessage::SerializeToFile(const char *out_fpath) {
-    auto file_stream = OutputStreamForFile(out_fpath);
+    auto file_stream = mohair::OutputStreamForFile(out_fpath);
     if (!file_stream) {
       std::cerr << "Failed to open IO stream for serialization" << std::endl;
       return false;

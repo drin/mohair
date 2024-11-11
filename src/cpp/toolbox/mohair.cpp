@@ -35,14 +35,6 @@ using mohair::PlanSplit;
 using google::protobuf::TextFormat;
 
 
-// >> Function Aliases
-using mohair::InputStreamForFile;
-using mohair::OutputStreamForFile;
-using mohair::MohairPlanFrom;
-using mohair::AppPlanFromQueryOp;
-using mohair::DecomposePlan;
-
-
 // ------------------------------
 // Functions
 int ValidateArgs(int argc, char **argv) {
@@ -74,7 +66,7 @@ int main(int argc, char **argv) {
   }
 
   // Read the example substrait from a file
-  auto file_stream   = InputStreamForFile(argv[1]);
+  auto file_stream   = mohair::InputStreamForFile(argv[1]);
   auto substrait_msg = std::make_unique<SubstraitMessage>(file_stream);
   if (substrait_msg->payload == nullptr) {
     std::cerr << "Failed to read substrait plan from file" << std::endl;
@@ -84,11 +76,11 @@ int main(int argc, char **argv) {
   // Convert substrait to a plan we understand
   // NOTE: keep this alive, everything else references from it.
   std::cout << "Parsing Substrait..." << std::endl;
-  unique_ptr<QueryOp> mohair_root = MohairPlanFrom(*substrait_msg);
+  unique_ptr<QueryOp> mohair_root = mohair::MohairPlanFrom(*substrait_msg);
 
   // NOTE: each AppPlan instance is a unique_ptr
   std::cout << "Traversing Mohair plan..." << std::endl;
-  auto application_plan = AppPlanFromQueryOp(mohair_root.get());
+  auto application_plan = mohair::AppPlanFromQueryOp(mohair_root.get());
   if (application_plan == nullptr) {
     std::cerr << "Failed to parse substrait plan" << std::endl;
     return 10;

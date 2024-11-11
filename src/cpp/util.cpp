@@ -36,23 +36,28 @@ namespace mohair {
   // Anonymous namespace for internal functions
   namespace {
 
-    /** Given a file path, return an arrow::ReadableFile. */
-    Result<shared_ptr<RandomAccessFile>> HandleForIPCFile(const std::string &path_as_uri) {
-      std::cout << "Creating handle for arrow IPC-formatted file: "
-                << path_as_uri
-                << std::endl
-      ;
-
+    /** Given a file path, return an arrow::io::ReadableFile. */
+    Result<shared_ptr<RandomAccessFile>> ReadHandleForIPCFile(const std::string &path_as_uri) {
       std::string fpath;
 
       // get a `FileSystem` instance (local fs scheme is "file://")
-      ARROW_ASSIGN_OR_RAISE(
-         auto localfs
-        ,arrow::fs::FileSystemFromUri(path_as_uri, &fpath)
-      );
+      std::cout << "Creating read handle for file: " << path_as_uri << std::endl;
+      ARROW_ASSIGN_OR_RAISE(auto localfs, arrow::fs::FileSystemFromUri(path_as_uri, &fpath));
 
       // use the `FileSystem` instance to open a handle to the file
       return localfs->OpenInputFile(fpath);
+    }
+
+    /** Given a file path, return an arrow::io::OutputStream. */
+    Result<shared_ptr<ArrowOutputStream>> WriteHandleForIPCFile(const std::string &path_as_uri) {
+      std::string fpath;
+
+      // get a `FileSystem` instance (local fs scheme is "file://")
+      std::cout << "Creating write handle for file: " << path_as_uri << std::endl;
+      ARROW_ASSIGN_OR_RAISE(auto localfs, arrow::fs::FileSystemFromUri(path_as_uri, &fpath));
+
+      // use the `FileSystem` instance to open a handle to the file
+      return localfs->OpenOutputStream(fpath);
     }
 
     /** Given a file path, create a RecordBatchStreamReader. */
@@ -61,7 +66,7 @@ namespace mohair {
       std::cout << "Creating reader for IPC stream" << std::endl;
 
       // use the `FileSystem` instance to open a handle to the file
-      ARROW_ASSIGN_OR_RAISE(auto input_file_handle, HandleForIPCFile(path_as_uri));
+      ARROW_ASSIGN_OR_RAISE(auto input_file_handle, ReadHandleForIPCFile(path_as_uri));
 
       // read from the handle using `RecordBatchStreamReader`
       return RecordBatchStreamReader::Open(input_file_handle, IPCReadOpts::Defaults());
@@ -73,7 +78,7 @@ namespace mohair {
       std::cout << "Creating reader for IPC file" << std::endl;
 
       // use the `FileSystem` instance to open a handle to the file
-      ARROW_ASSIGN_OR_RAISE(auto input_file_handle, HandleForIPCFile(path_as_uri));
+      ARROW_ASSIGN_OR_RAISE(auto input_file_handle, ReadHandleForIPCFile(path_as_uri));
 
       // read from the handle using `RecordBatchStreamReader`
       return RecordBatchFileReader::Open(input_file_handle, IPCReadOpts::Defaults());
@@ -135,7 +140,7 @@ namespace mohair {
     MohairDebugMsg("Parsing file: " << fpath);
 
     // use the `FileSystem` instance to open a handle to the file
-    ARROW_ASSIGN_OR_RAISE(auto arrow_fhandle, HandleForIPCFile(fpath));
+    ARROW_ASSIGN_OR_RAISE(auto arrow_fhandle, ReadHandleForIPCFile(fpath));
 
     // get the size of the file handle (arrow::io::RandomAccessFile) and read it whole
     ARROW_ASSIGN_OR_RAISE(auto  arrow_fsize, arrow_fhandle->GetSize());
@@ -156,7 +161,7 @@ namespace mohair {
     // Declares and initializes `batch_reader`
     ARROW_ASSIGN_OR_RAISE(auto batch_reader, ReaderForIPCStream(fpath));
 
-    return arrow::Table::FromRecordBatchReader(batch_reader.get());
+    return Table::FromRecordBatchReader(batch_reader.get());
   }
 
   /** Given a file path to an Arrow IPC file, return a Table. */
@@ -176,7 +181,35 @@ namespace mohair {
       batches.emplace_back(batch);
     }
 
-    return arrow::Table::FromRecordBatches(ipc_file_reader->schema(), batches);
+    return Table::FromRecordBatches(ipc_file_reader->schema(), batches);
+  }
+
+  /** Given a file path and Table, write data as an Arrow IPC stream. */
+  Status WriteIPCStream(const std::string& path_as_uri, const Table& data_table) {
+    // use the `FileSystem` instance to open a handle to the file
+    ARROW_ASSIGN_OR_RAISE(auto output_file_handle, WriteHandleForIPCFile(path_as_uri));
+
+    MohairDebugMsg("Creating stream writer for file: " << path_as_uri);
+    ARROW_ASSIGN_OR_RAISE(
+       auto batch_writer
+      ,arrow::ipc::MakeStreamWriter(output_file_handle.get(), data_table.schema())
+    );
+
+    return batch_writer->WriteTable(data_table);
+  }
+
+  /** Given a file path and Table, write data as an Arrow IPC file. */
+  Status WriteIPCFile(const std::string& path_as_uri, const Table& data_table) {
+    // use the `FileSystem` instance to open a handle to the file
+    ARROW_ASSIGN_OR_RAISE(auto output_file_handle, WriteHandleForIPCFile(path_as_uri));
+
+    MohairDebugMsg("Creating stream writer for file: " << path_as_uri);
+    ARROW_ASSIGN_OR_RAISE(
+       auto batch_writer
+      ,arrow::ipc::MakeFileWriter(output_file_handle.get(), data_table.schema())
+    );
+
+    return batch_writer->WriteTable(data_table);
   }
 
 
