@@ -19,39 +19,12 @@ version_fields = version_str.split('.')
 # ------------------------------
 # Dependencies
 
-# >> for finding alternate installations
-cpp_compiler = meson.get_compiler('cpp')
-
-# alternate paths
-libduckdb_customdir = '/usr' / 'local' / 'duckdb-skytether'
-
-libduckdb_libdir = libduckdb_customdir / 'lib'
-libduckdb_incdir = libduckdb_customdir / 'include'
-
-# flags so we know when to search for fallbacks
-is_custom_libduckdb = false
-
-
 # >> Backend dependency: tiledb
 libtiledb_dep = dependency('tiledb', required: get_option('tiledb'))
 
 # >> Backend dependency: duckdb
 # search typical location first (never required)
-libduckdb_dep = dependency('duckdb-skytether', method: 'cmake', required: false)
-
-# search alternate location last (fail if duckdb is enabled)
-if not libduckdb_dep.found()
-  libduckdb_dep = cpp_compiler.find_library('duckdb'
-    ,dirs    : libduckdb_libdir
-    ,required: get_option('duckdb')
-  )
-
-  if libduckdb_dep.found()
-    is_custom_libduckdb = true
-    libduckdb_inc = include_directories(libduckdb_incdir)
-  endif
-endif
-
+libduckdb_dep = dependency('duckdb', method: 'cmake', required: get_option('duckdb'))
 
 # >> configure build options based on libraries we found
 mohair_cfgdata = configuration_data({
@@ -60,8 +33,8 @@ mohair_cfgdata = configuration_data({
   ,'VERSION_MINOR' : version_fields[1]
   ,'VERSION_PATCH' : version_fields[2]
   ,'BUILD_IS_DEBUG': get_option('buildtype') == 'debug' ? 1 : 0
-  ,'TILEDB'        : libtiledb_dep.found()   ? 1 : 0
-  ,'DUCKDB'        : libduckdb_dep.found()   ? 1 : 0
+  ,'TILEDB'        : libtiledb_dep.found()              ? 1 : 0
+  ,'DUCKDB'        : libduckdb_dep.found()              ? 1 : 0
 })
 
 
@@ -110,6 +83,18 @@ readarrow_bin = executable('read-arrow'
   ,readarrow_sources
   ,include_directories: [configuration_inc, libskytether_mohair_inc]
   ,dependencies       : libskytether_mohair_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
+  ,install            : true
+)
+
+# >> writer for Arrow files (useful for format conversion)
+writearrow_sources = [ cpp_tooldir  / 'write-arrow.cpp' ]
+
+writearrow_bin = executable('write-arrow'
+  ,writearrow_sources
+  ,include_directories: [configuration_inc, libskytether_mohair_inc]
+  ,dependencies       : libskytether_mohair_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,install            : true
 )
 
@@ -120,6 +105,7 @@ mohair_bin = executable('mohair'
   ,mohair_sources
   ,include_directories: [configuration_inc, libskytether_mohair_inc]
   ,dependencies       : libskytether_mohair_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,install            : true
 )
 
@@ -133,6 +119,7 @@ mohair_client_bin = executable('mohair-client'
   ,mohair_client_sources
   ,include_directories: [configuration_inc, libskytether_mohair_inc]
   ,dependencies       : libskytether_mohair_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,install            : true
 )
 
@@ -146,6 +133,7 @@ csd_service_bin = executable('csd-service'
   ,csd_service_sources
   ,include_directories: [configuration_inc, libskytether_mohair_inc]
   ,dependencies       : libskytether_mohair_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,install            : true
 )
 
@@ -159,6 +147,7 @@ topo_service_bin = executable('topo-service'
   ,topo_service_sources
   ,include_directories: [configuration_inc, libskytether_mohair_inc]
   ,dependencies       : libskytether_mohair_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,install            : true
 )
 
