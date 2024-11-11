@@ -62,6 +62,9 @@ namespace mohair {
   Result<shared_ptr<Table>> ReadIPCFile(const string& fpath);
   Result<shared_ptr<Table>> ReadIPCStream(const string& fpath);
 
+  Status WriteIPCStream(const string& fpath, const Table& data_table);
+  Status WriteIPCFile(const string& fpath, const Table& data_table);
+
   // >> Convenience Functions
   void PrintTable(shared_ptr<Table> table_data, int64_t offset, int64_t length);
   string JoinStr(vector<string> str_parts, const char* delim);
