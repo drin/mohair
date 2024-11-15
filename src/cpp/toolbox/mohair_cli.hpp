@@ -28,13 +28,6 @@
 
 
 // ------------------------------
-// Macros and Type Aliases
-
-// aliases to classes names
-using mohair::services::MohairClient;
-
-
-// ------------------------------
 // Functions
 
 // >> Convenience functions
@@ -45,7 +38,7 @@ namespace mohair::cli {
   vector<string> GetUriSchemeWhitelist();
 
   // CLI arg parsing prototypes
-  int ParseArgLocationUri(const char* arg_loc_uri, Location* out_srvloc);
+  int ParseArgLocationUri(const char* arg_loc_uri, mohair::services::Location* out_srvloc);
   int ParseArgPlatformClass(const char* arg_pclass, int* out_pclass);
 
   // CLI arg validation prototypes

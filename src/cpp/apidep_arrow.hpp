@@ -29,28 +29,36 @@
 // >> Arrow filesystem API
 #include <arrow/filesystem/api.h>
 
+// >> Arrow C-API (importing/exporting to C data interface)
+#include <arrow/c/bridge.h>
+
 
 // ------------------------------
 // Type aliases
 
-// >> Support types for control flow
-using arrow::Result;
-using arrow::Status;
+namespace mohair {
 
-// >> Support types for memory management
-using arrow::Buffer;
+  // >> Support types for control flow
+  using arrow::Result;
+  using arrow::Status;
 
-// >> Data types
-using arrow::Table;
-using arrow::Schema;
+  // >> Support types for memory management
+  using arrow::Buffer;
 
-// >> Convenience aliases for templated types
-using arrow::RecordBatchVector;
+  // >> Data types
+  using arrow::Schema;
+  using arrow::Table;
+  using arrow::RecordBatch;
 
-// >> Support types for I/O
-using arrow::io::RandomAccessFile;
-using ArrowOutputStream = arrow::io::OutputStream;
+  // >> Convenience aliases for templated types
+  using arrow::RecordBatchVector;
 
-using arrow::ipc::RecordBatchStreamReader;
-using arrow::ipc::RecordBatchFileReader;
+  // >> Support types for I/O
+  using arrow::io::RandomAccessFile;
+  using ArrowOutputStream = arrow::io::OutputStream;
 
+  using arrow::RecordBatchReader;
+  using arrow::ipc::RecordBatchStreamReader;
+  using arrow::ipc::RecordBatchFileReader;
+
+} // namespace: mohair

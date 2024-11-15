@@ -33,11 +33,15 @@
 // ------------------------------
 // Macros and Type Aliases
 
-// classes
+// >> Types
+using mohair::services::Location;
+using mohair::services::ResultStream;
+using mohair::services::FlightResult;
+
 using mohair::services::DeactivationCallback;
 using mohair::services::MohairClient;
 
-// functions
+// >> Functions
 using mohair::services::StartService;
 
 using mohair::cli::ParseArgLocationUri;

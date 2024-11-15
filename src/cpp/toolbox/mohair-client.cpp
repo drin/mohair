@@ -30,7 +30,16 @@
 // ------------------------------
 // Macros and Type Aliases
 
-// >> Structs
+// >> Types
+using mohair::Status;
+using mohair::Buffer;
+
+using mohair::services::Location;
+using mohair::services::ResultStream;
+using mohair::services::FlightStreamReader;
+
+using mohair::services::FlightStreamChunk;
+
 using mohair::services::MohairClient;
 
 // >> Functions

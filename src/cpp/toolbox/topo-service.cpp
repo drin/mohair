@@ -29,12 +29,14 @@
 // ------------------------------
 // Type Aliases
 
-// classes
+// >> Types
+using mohair::services::Location;
+
 using mohair::services::ServiceHierarchy;
 using mohair::services::MohairClient;
 using mohair::services::TopologyService;
 
-// functions
+// >> Functions
 using mohair::cli::ParseArgLocationUri;
 using mohair::cli::ValidateArgCount;
 using mohair::cli::ValidateArgLocationUri;
