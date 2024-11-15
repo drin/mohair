@@ -34,7 +34,9 @@ or modified message type instead of a core substrait message type.
 # Dependencies
 
 # >> Standard libs
-from typing      import Any, Annotated, TypeVar
+import sys
+
+from typing      import Any, Annotated, TypeAlias
 from dataclasses import dataclass
 
 
@@ -51,15 +53,31 @@ from ibis_substrait.compiler.translate import translate
 from ibis_substrait.compiler.core import SubstraitCompiler
 
 # >> Internal
-from mohair.query.operators import SkyPartition
+from mohair.query.types import SkyPartition
 
-from mohair.skytether.mohair.algebra_pb2 import SkyRel, ExecutionStats
+from mohair.skytether.mohair.algebra_pb2 import ( ExecutionStats
+                                                 ,SkyRel
+                                                 ,SkyPartitionRel
+                                                 ,SkySliceRel)
+
+
+# ------------------------------
+# Module Variables
+
+# >> Forward references (Type aliases)
+SkyTableType    : TypeAlias = 'SkyTable'
+SkyPartitionType: TypeAlias = 'SkyPartitionTable'
+SkySliceType    : TypeAlias = 'SkySliceTable'
+
+
+from ibis_substrait.compiler.mapping import IBIS_SUBSTRAIT_TYPE_MAPPING
+IBIS_SUBSTRAIT_TYPE_MAPPING['UInt16'] = 'u16'
+
 
 
 # ------------------------------
 # Classes
 
-# SkyPartitionType = TypeVar('SkyPartitionType')
 class SkyTable(UnboundTable):
     """
     A custom class that wraps a `SkyRel` in an ibis `Table` so that we can register a
@@ -69,32 +87,79 @@ class SkyTable(UnboundTable):
     anyways.
     """
 
-    # data_partition: Annotated[SkyPartitionType, InstanceOf(SkyPartition)]
     data_partition: SkyPartition
 
     @classmethod
-    def FromPartition(cls, src_partition: SkyPartition) -> 'SkyTable':
+    def FromPartition(cls, src_partition: SkyPartition) -> SkyTableType:
         return cls(
              name=src_partition.name()
             ,schema=src_partition.schema()
             ,data_partition=src_partition
         )
 
+# >> TODO: build out this custom IR type for directly naming partitions
+class SkyPartitionTable(SkyTable): pass
+
+class SkySliceTable(UnboundTable):
+    """
+    Ibis op representing a directly named skytether data slice. This may be used for a
+    skytether partition that is stored only using a data slice (no independent meta
+    slice).
+    """
+
+    data_partition: SkyPartition
+    slice_ndx     : int
+    slice_key     : str
+
+    @classmethod
+    def ForPartition(cls, src_partition: SkyPartition) -> SkySliceType:
+        key_name = f'{src_partition.domain.key}/{src_partition.meta.key}'
+
+        return cls(
+             name=src_partition.name()
+            ,schema=src_partition.schema()
+            ,data_partition=src_partition
+            ,slice_ndx=0
+            ,slice_key=key_name
+        )
+
+    @classmethod
+    def ForSlice(cls, src_partition: SkyPartition, slice_ndx: int) -> SkySliceType:
+        key_name = (
+              src_partition.domain.key
+            + f'/{src_partition.meta.key}'
+            + f'-{slice_ndx}'
+        )
+
+        return cls(
+             name=src_partition.name()
+            ,schema=src_partition.schema()
+            ,data_partition=src_partition
+            ,slice_ndx=slice_ndx
+            ,slice_key=key_name
+        )
+
 
 # ------------------------------
 # Functions
 
-import pdb
+# >> TODO: create a translation for this type
+#     elif type(op) is SkyPartitionTable:
+#         sky_rel = SkyPartitionRel(
+#             domain=op.data_partition.domain.key
+#            ,partition=op.data_partition.meta.key
+#            ,slices=op.data_partition.slice_indices()
+#            ,execstats=op.data_partition.exec_stats()
+#         )
 
+# >> Dispatch functions for custom translations
 @translate.register(SkyTable)
-def _translate_mohair( op      : SkyTable
+def _translate_skyrel( op      : SkyTable
                       ,expr    : Table | None = None
                       ,*args   : Any
                       ,compiler: SubstraitCompiler | None = None
                       ,**kwargs: Any) -> stalg.Rel:
-    """
-    A custom translation function that is invoked when `op` is an instance of `SkyTable`.
-    """
+    """ A translation function for `SkyTable` operator. """
 
     substrait_rel = stalg.Rel(
         extension_leaf=stalg.ExtensionLeafRel(
@@ -102,13 +167,10 @@ def _translate_mohair( op      : SkyTable
         )
     )
 
-    #pdb.set_trace()
-
     # extension_leaf.detail is an Any message, so we use its Pack method on SkyRel
     sky_rel = SkyRel(
         domain=op.data_partition.domain.key
        ,partition=op.data_partition.meta.key
-       ,slices=op.data_partition.slice_indices()
        ,execstats=op.data_partition.exec_stats()
     )
 
@@ -116,3 +178,28 @@ def _translate_mohair( op      : SkyTable
 
     return substrait_rel
 
+@translate.register(SkySliceTable)
+def _translate_skyslice( op      : SkySliceTable
+                        ,expr    : Table | None = None
+                        ,*args   : Any
+                        ,compiler: SubstraitCompiler | None = None
+                        ,**kwargs: Any) -> stalg.Rel:
+    """ A translation function for `SkySliceTable` operator. """
+
+    substrait_rel = stalg.Rel(
+        extension_leaf=stalg.ExtensionLeafRel(
+             common=stalg.RelCommon(direct=stalg.RelCommon.Direct())
+        )
+    )
+
+    slice_rel = SkySliceRel(
+        slice_key=op.slice_key
+       ,domain=op.data_partition.domain.key
+       ,partition=op.data_partition.meta.key
+       ,slice=op.slice_ndx
+       ,execstats=op.data_partition.exec_stats()
+    )
+
+    substrait_rel.extension_leaf.detail.Pack(slice_rel)
+
+    return substrait_rel
