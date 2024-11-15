@@ -32,50 +32,6 @@
 
 
 // ------------------------------
-// Type aliases for convenience
-
-// >> Types from standard lib
-using std::unique_ptr;
-using std::string;
-
-// >> Server/client types
-using arrow::flight::FlightClient;
-using arrow::flight::FlightServerBase;
-
-// >> Option types
-using arrow::flight::FlightCallOptions;
-using arrow::flight::FlightServerOptions;
-
-// >> Message-passing types
-using arrow::flight::FlightMessageReader;
-using arrow::flight::FlightMessageWriter;
-using arrow::flight::FlightMetadataWriter;
-
-using arrow::flight::FlightDataStream;
-using arrow::flight::SchemaResult;
-using arrow::flight::ResultStream;
-
-using arrow::flight::PollInfo;
-using arrow::flight::FlightInfo;
-
-using arrow::flight::FlightListing;
-using arrow::flight::SimpleFlightListing;
-
-using arrow::flight::Criteria;
-using arrow::flight::ServerCallContext;
-using arrow::flight::Action;
-using arrow::flight::ActionType;
-using arrow::flight::FlightDescriptor;
-using arrow::flight::FlightEndpoint;
-using arrow::flight::Ticket;
-using arrow::flight::Location;
-
-// >> Concrete types
-using arrow::flight::SimpleResultStream;
-using FlightResult = arrow::flight::Result;
-
-
-// ------------------------------
 // Macros
 
 // >> Mohair-supported action names
@@ -91,6 +47,58 @@ using FlightResult = arrow::flight::Result;
 #define ActionViewChange "view-change"
 #define ActionQuery      "mohair-query"
 
+
+// ------------------------------
+// Type aliases for convenience
+
+namespace mohair::services {
+
+  // >> Types from standard lib
+  using std::unique_ptr;
+  using std::string;
+
+  // >> Server/client types
+  using arrow::flight::FlightClient;
+  using arrow::flight::FlightServerBase;
+
+  // >> Option types
+  using arrow::flight::FlightCallOptions;
+  using arrow::flight::FlightServerOptions;
+
+  // >> Message-passing types
+  using arrow::flight::FlightMessageReader;
+  using arrow::flight::FlightMessageWriter;
+  using arrow::flight::FlightMetadataWriter;
+
+  using arrow::flight::ResultStream;
+  using arrow::flight::SchemaResult;
+  using arrow::flight::FlightDataStream;
+  using arrow::flight::FlightStreamReader;
+  using arrow::flight::FlightStreamChunk;
+
+  using arrow::flight::PollInfo;
+  using arrow::flight::FlightInfo;
+
+  using arrow::flight::FlightListing;
+  using arrow::flight::SimpleFlightListing;
+
+  using arrow::flight::Criteria;
+  using arrow::flight::ServerCallContext;
+  using arrow::flight::Action;
+  using arrow::flight::ActionType;
+  using arrow::flight::FlightDescriptor;
+  using arrow::flight::FlightEndpoint;
+  using arrow::flight::Ticket;
+  using arrow::flight::Location;
+
+  // >> Concrete types
+  using arrow::flight::SimpleResultStream;
+  using arrow::flight::RecordBatchStream;
+
+  using FlightResult = arrow::flight::Result;
+
+
+} // namespace: mohair
 
 
 // ------------------------------

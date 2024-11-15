@@ -23,6 +23,16 @@
 
 
 // ------------------------------
+// Macros and Type Aliases
+
+// aliases to classes names
+using mohair::Status;
+using mohair::Buffer;
+
+using mohair::services::Location;
+
+
+// ------------------------------
 // Functions
 
 // >> General support functions

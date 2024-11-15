@@ -40,6 +40,10 @@
 // >> Namespaces
 namespace fs = std::filesystem;
 
+// >> Types
+using mohair::Result;
+using mohair::Table;
+
 
 // ------------------------------
 // Structs and Classes

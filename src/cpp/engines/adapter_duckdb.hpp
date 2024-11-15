@@ -40,36 +40,42 @@ using std::unordered_map;
   // Dependencies
 
   #include "duckdb.hpp"
+  #include "duckdb/common/arrow/result_arrow_wrapper.hpp"
 
 
   // ------------------------------
   // Type aliases
 
-  // >> Low-level types
-  template <typename ptype>
-  using duck_sptr = duckdb::shared_ptr<ptype>;
+  namespace mohair {
 
-  template <typename ptype>
-  using duck_uptr = duckdb::unique_ptr<ptype>;
+    // >> Low-level types
+    template <typename ptype>
+    using duck_sptr = duckdb::shared_ptr<ptype>;
 
-  // >> Common types
-  using duckdb::DuckDB;
-  using duckdb::Connection;
+    template <typename ptype>
+    using duck_uptr = duckdb::unique_ptr<ptype>;
 
-  // >> Query result types
-  using duckdb::QueryResult;
-  using duckdb::DataChunk;
-  using duckdb::ErrorData;
+    // >> Common types
+    using duckdb::DuckDB;
+    using duckdb::Connection;
 
-  // >> Data types
-  using duckdb::idx_t;        // uint64_t
-  using duckdb::child_list_t; // template<T> vector<pair<string, T>>
+    // >> Query result types
+    using duckdb::QueryResult;
+    using duckdb::ErrorData;
+    using duckdb::DataChunk;
+    using duckdb::ResultArrowArrayStreamWrapper;
 
-  using duckdb::Value;
-  using duckdb::LogicalType;
+    // >> Data types
+    using duckdb::idx_t;        // uint64_t
+    using duckdb::child_list_t; // template<T> vector<pair<string, T>>
 
-  // >> Relation types
-  using duckdb::Relation;
+    using duckdb::Value;
+    using duckdb::LogicalType;
+
+    // >> Relation types
+    using duckdb::Relation;
+
+  } // namespace: mohair
 
 
   // ------------------------------
