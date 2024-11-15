@@ -45,7 +45,7 @@ from ibis_substrait.compiler.core import stp as substrait # substrait.plan_pb2 m
 
 # >> Internal
 from mohair.util            import ArgparseBuilder
-from mohair.query.extension import SkyTable
+from mohair.query.extension import SkyTable, SkyPartitionTable, SkySliceTable
 from mohair.query.types     import ( SkyDomain
                                     ,SkyPartition
                                     ,SkyPartitionMeta
@@ -127,13 +127,16 @@ def WriteSubstraitToFile(substrait_msg: substrait.Plan) -> str:
 
 
 def TStatAccumulate(data_table):
-    squared_expr = data_table['expr_val'] * data_table['expr_val']
+    squared_expr = (
+          data_table['expr_val'].cast('int32')
+        * data_table['expr_val'].cast('int32')
+    )
 
     return (
         data_table.group_by(data_table.feature_name)
                   .aggregate(
                         cell_count=data_table.count()
-                       ,expr_total=(data_table['expr_val'].sum())
+                       ,expr_total=(data_table['expr_val'].cast('int32').sum())
                        ,expr_sumsq=squared_expr.sum()
                    )
     )
@@ -161,10 +164,11 @@ def TStatComplete(data_table):
 
 
 # ------------------------------
-# Main logic
+# Create test data
 
-if __name__ == '__main__':
-    # Initialize domain and partitions
+def CreateTestPartitions():
+    """ Convenience function to initialize test domain and partitions. """
+
     sky_domain = SkyDomain(parsed_args.domain_key)
     sky_partitions = [
         sky_domain.PartitionFor(partition_key)
@@ -176,14 +180,16 @@ if __name__ == '__main__':
         partition_fpath = Path(parsed_args.input_dir) / sky_partition.name()
         with open(partition_fpath, 'rb') as partition_handle:
             partition_schema = SchemaFromBinary(partition_handle.read())
-            partition_schema = (
-                # hard-coded way to change 3rd column's type to int32
-                partition_schema.set(
-                     2
-                    ,partition_schema.field(2)
-                                     .with_type(pyarrow.int32())
-                )
-            )
+
+            # partition_schema = (
+            #     # hard-coded way to change 3rd column's type to int32
+            #     partition_schema.set(
+            #          2
+            #         ,partition_schema.field(2)
+            #                          .with_type(pyarrow.int32())
+            #     )
+            # )
+
             print(partition_schema)
             # NOTE: we don't need table data for writing a substrait plan
             # partition_data = TableFromBinary(partition_handle.read())
@@ -191,10 +197,22 @@ if __name__ == '__main__':
         sky_partition.SetSchema(partition_schema)
         # sky_partition.SetData(partition_data)
 
-    # create a query using the schemas in :sky_partitions:
-    tstat_query = TStatAccumulate(SkyTable.FromPartition(sky_partitions[0]).to_expr())
-    for sky_partition in sky_partitions[1:]:
-        partition_query = TStatAccumulate(SkyTable.FromPartition(sky_partition).to_expr())
+    return sky_partitions
+
+
+# ------------------------------
+# Main logic
+
+if __name__ == '__main__':
+    test_partitions = CreateTestPartitions()
+
+    # create a query using the schemas in :test_partitions:
+    test_partition = SkySliceTable.ForPartition(test_partitions[0])
+    tstat_query    = TStatAccumulate(test_partition.to_expr())
+
+    for sky_partition in test_partitions[1:]:
+        test_partition  = SkySliceTable.ForPartition(sky_partition)
+        partition_query = TStatAccumulate(test_partition.to_expr())
         tstat_query     = TStatCombine(tstat_query, partition_query)
 
     # final projection
