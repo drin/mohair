@@ -67,6 +67,7 @@ namespace mohair {
 
   // >> Convenience Functions
   void PrintTable(shared_ptr<Table> table_data, int64_t offset, int64_t length);
+  void PrintRecordBatch(shared_ptr<RecordBatch> batch_data, int64_t offset, int64_t length);
   string JoinStr(vector<string> str_parts, const char* delim);
 
   // >> Debugging Functions

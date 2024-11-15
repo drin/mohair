@@ -232,10 +232,10 @@ namespace mohair {
 
   //  >> Debugging Functions
 
-  /** Print an Arrow Table to stdout given an offset and length (row count). */
+  //! Print an Arrow Table to stdout given an offset and length (row count).
   void PrintTable(shared_ptr<Table> table_data, int64_t offset, int64_t length) {
     shared_ptr<Table> table_slice;
-    int64_t           row_count = table_data->num_rows();
+    int64_t           row_count { table_data->num_rows() };
 
     std::cout << "Table Excerpt ";
 
@@ -253,6 +253,31 @@ namespace mohair {
     std::cout << std::endl
               << "--------------" << std::endl
               << table_slice->ToString()
+              << std::endl
+    ;
+  }
+
+  //! Print an Arrow RecordBatch to stdout given an offset and length (row count).
+  void PrintRecordBatch(shared_ptr<RecordBatch> batch_data, int64_t offset, int64_t length) {
+    shared_ptr<RecordBatch> batch_slice;
+    int64_t                 row_count { batch_data->num_rows() };
+
+    std::cout << "RecordBatch Excerpt ";
+
+    if (length > 0) {
+      int64_t max_rowndx = length < row_count ? length : row_count;
+      batch_slice = batch_data->Slice(offset, max_rowndx);
+      std::cout << "(" << max_rowndx << " of " << row_count << ")";
+    }
+
+    else {
+      batch_slice = batch_data->Slice(offset);
+      std::cout << "(" << row_count << " of " << row_count << ")";
+    }
+
+    std::cout << std::endl
+              << "--------------" << std::endl
+              << batch_slice->ToString()
               << std::endl
     ;
   }
