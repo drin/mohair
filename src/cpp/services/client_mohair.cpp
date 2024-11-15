@@ -38,6 +38,36 @@ namespace mohair::services {
     return Status::OK();
   }
 
+  // >> Implementations for result handlers
+  Result<MohairTicket>
+  ExpectResultFromQuery(unique_ptr<ResultStream> query_results) {
+    ARROW_ASSIGN_OR_RAISE(
+       unique_ptr<FlightResult> query_result
+      ,query_results->Next()
+    );
+
+    if (not query_result or not query_result->body) {
+      return Status::Invalid("Expected ticket from query result; received nothing.");
+    }
+
+    auto query_ticket = MohairTicket::FromBuffer(query_result->body);
+
+    bool err_trailingdata { false };
+    ARROW_ASSIGN_OR_RAISE(query_result, query_results->Next());
+    while (query_result and query_result->body) {
+      MohairDebugMsg("\tUnexpected trailing results: " << query_result->body->ToString());
+      err_trailingdata = true;
+
+      ARROW_ASSIGN_OR_RAISE(query_result, query_results->Next());
+    }
+
+    if (err_trailingdata) {
+      return Status::Invalid("Received unexpected trailing results");
+    }
+
+    return query_ticket;
+  }
+
 } // namespace: mohair::services
 
 
@@ -73,6 +103,11 @@ namespace mohair::services {
   }
 
   // Engine-specific methods
+  Result<unique_ptr<FlightStreamReader>>
+  MohairClient::GetQueryResults(MohairTicket& query_ticket) {
+    return client->DoGet(rpc_opts, query_ticket);
+  }
+
   Result<unique_ptr<ResultStream>>
   MohairClient::SendPlanPushdown(shared_ptr<Buffer>& plan_msg) {
     Action rpc_action { ActionQuery, plan_msg };

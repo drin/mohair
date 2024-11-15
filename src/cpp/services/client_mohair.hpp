@@ -20,14 +20,25 @@
 // Dependencies
 #pragma once
 
-// >> Common internal deps
+// >> Internal deps
 #include "../mohair.hpp"
+#include "ticket_mohair.hpp"
 
-// >> Internal query processing deps
 #include "../query/plans.hpp"
 
 // >> Third-party deps
 #include "apidep_flight.hpp"
+
+
+// ------------------------------
+// Functions
+
+namespace mohair::services {
+
+  Result<MohairTicket>
+  ExpectResultFromQuery(unique_ptr<ResultStream> query_results);
+
+} // namespace: mohair::services
 
 
 // ------------------------------
@@ -38,7 +49,7 @@ namespace mohair::services {
   // >> Client definitions
 
   //! A client that communicates with a mohair services.
-  struct MohairClient: public ClientAdapter {
+  struct MohairClient : public ClientAdapter {
 
     // Destructors and Constructors
     virtual ~MohairClient() = default;
@@ -50,7 +61,8 @@ namespace mohair::services {
     Result<unique_ptr<ResultStream>> SendDeactivation(const Location& service_loc);
 
     // Engine-specific Methods
-    Result<unique_ptr<ResultStream>> SendPlanPushdown(shared_ptr<Buffer>& plan_msg);
+    Result<unique_ptr<FlightStreamReader>> GetQueryResults(MohairTicket& query_ticket);
+    Result<unique_ptr<ResultStream>>       SendPlanPushdown(shared_ptr<Buffer>& plan_msg);
     // TODO
     // Result<unique_ptr<ResultStream>> SendPlanResult(shared_ptr<Buffer>& plan_msg);
 

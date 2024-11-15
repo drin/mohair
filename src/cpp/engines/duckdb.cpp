@@ -20,6 +20,7 @@
 // Dependencies
 
 #include "adapter_duckdb.hpp"
+#include "../query/messages.hpp"
 
 
 // ------------------------------
@@ -91,6 +92,20 @@
       return Status::OK();
     }
 
+    //! Given a QueryResult, returns an ArrowArrayStream representing an
+    //  arrow::RecordBatchReader using the c data interface.
+    Result<shared_ptr<RecordBatchReader>>
+    ReaderForResult(duck_uptr<QueryResult> result_set) {
+      // TODO: parameterize this at some level
+      constexpr size_t result_batchsize { 2048 };
+
+      // ArrowArrayStream keeps a reference to the wrapper
+      auto stream_wrapper = new ResultArrowArrayStreamWrapper(std::move(result_set), result_batchsize);
+
+      // be sure to eventually call `release()` from the ArrowArrayStream*
+      return arrow::ImportRecordBatchReader(&(stream_wrapper->stream));
+    }
+
   } // namespace: mohair::adapters
 
 
@@ -160,15 +175,21 @@
     int EngineDuckDB::ExecContextForSubstrait(std::string plan_msg) {
       MohairDebugMsg("Creating execution context for query plan");
 
+      // for debug purposes
+      unique_ptr<Plan> plan_payload = mohair::SubstraitPlanFromString(plan_msg);
+      MohairDebugMsg("received payload:");
+      mohair::PrintSubstraitPlan(plan_payload.get());
+
       // Construct a QueryContext to keep everything alive
       auto scan_context = std::make_unique<QueryContext>();
+      scan_context->status = QueryStatus::Pending;
 
       // `from_substrait` takes a single binary blob as input
       duckdb::vector<Value> fn_args { Value::BLOB_RAW(plan_msg) };
 
       // Get a relation representing the execution of the substrait plan
       MohairDebugMsg("Creating table function from query plan");
-      scan_context->duck_rel = engine_conn.TableFunction("from_substrait", fn_args);
+      scan_context->duck_rel = engine_conn.TableFunction("execute_mohair", fn_args);
       MohairDebugMsg("Created table function");
 
       int prepared_ctxtid = ++context_id;
@@ -183,11 +204,15 @@
     Status EngineDuckDB::ExecuteRelation(int context_id) {
       // Execute the relation and move the result
       auto& rel_context = query_contexts[context_id];
-      rel_context->rel_result = std::move(rel_context->duck_rel->Execute());
 
-      // Peek into the result
-      auto& query_result = *(rel_context->rel_result);
-      RETURN_NOT_OK(PrintQueryResults(query_result));
+      rel_context->status = QueryStatus::Running;
+
+      ARROW_ASSIGN_OR_RAISE(
+         rel_context->rel_result
+        ,ReaderForResult(rel_context->duck_rel->Execute())
+      );
+
+      rel_context->status = QueryStatus::Complete;
 
       return Status::OK();
     }
@@ -201,9 +226,12 @@
 
 
     //! Given an ID for a query context, return the result of the previous execution
-    QueryResult& EngineDuckDB::GetResult(int context_id) {
-      auto& rel_context = query_contexts[context_id];
-      return *(rel_context->rel_result);
+    shared_ptr<RecordBatchReader> EngineDuckDB::GetResultSet(int context_id) {
+      const auto& map_entry = query_contexts.find(context_id);
+      if (map_entry == query_contexts.end()) { return nullptr; }
+
+      auto& rel_context = map_entry->second;
+      return rel_context->rel_result;
     }
 
   } // namespace: mohair::adapters
