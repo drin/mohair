@@ -74,6 +74,7 @@ engine_headers = [
 
 service_headers = [
    service_srcdir / 'apidep_flight.hpp'
+  ,service_srcdir / 'ticket_mohair.hpp'
   ,service_srcdir / 'service_mohair.hpp'
   ,service_srcdir / 'service_topology.hpp'
   ,service_srcdir / 'service_duckdb.hpp'
@@ -90,6 +91,7 @@ query_sources = [
 # >> For flight services
 service_sources = [
    service_srcdir / 'adapter_flight.cpp'
+  ,service_srcdir / 'ticket_mohair.cpp'
   ,service_srcdir / 'service_mohair.cpp'
   ,service_srcdir / 'service_topology.cpp'
   ,service_srcdir / 'service_duckdb.cpp'

@@ -24,6 +24,7 @@
 
 // >> Internal
 #include "mohair_cli.hpp"
+#include "../services/ticket_mohair.hpp"
 #include "../services/service_mohair.hpp"
 
 
@@ -41,6 +42,7 @@ using mohair::services::FlightStreamReader;
 using mohair::services::FlightStreamChunk;
 
 using mohair::services::MohairClient;
+using mohair::services::MohairTicket;
 
 // >> Functions
 using mohair::cli::ParseArgLocationUri;
@@ -64,30 +66,63 @@ struct ClientActions {
       ,request_payload(nullptr)
   {}
 
-  // Internal implementations
-  Status SendQuery(MohairClient& client_conn) {
-    // Send execution request and receive response
+
+  // >> "System Interface"
+
+  //! Submits a single query plan then validates the response is a single ticket
+  Status ExecutePlan(MohairClient& client_conn, MohairTicket* out_ticket) {
+    ARROW_ASSIGN_OR_RAISE(
+       unique_ptr<ResultStream> ticket_response
+      ,client_conn.SendPlanPushdown(request_payload)
+    );
+
+    ARROW_ASSIGN_OR_RAISE(
+       *out_ticket
+      ,mohair::services::ExpectResultFromQuery(std::move(ticket_response))
+    );
+
+    return Status::OK();
+  }
+
+  //! Submits a single ticket to request query results, then prints the results
+  Status GetResults(MohairClient& client_conn, MohairTicket& query_ticket) {
+    constexpr int count_peeksize = 5;
+
+    ARROW_ASSIGN_OR_RAISE(
+       unique_ptr<FlightStreamReader> result_reader
+      ,client_conn.GetQueryResults(query_ticket)
+    );
+
+    ARROW_ASSIGN_OR_RAISE(FlightStreamChunk result_chunk, result_reader->Next());
+    for (int peek_ndx = 0; result_chunk.data and peek_ndx < count_peeksize; ++peek_ndx) {
+      mohair::PrintRecordBatch(result_chunk.data, 0, 10);
+      ARROW_ASSIGN_OR_RAISE(FlightStreamChunk result_chunk, result_reader->Next());
+    }
+
+    return Status::OK();
+  }
+
+
+  // >> "Application Interface"
+
+  //! Executes a query by submitting the query plan then fetching the results.
+  Status ExecuteQuery(MohairClient& client_conn) {
     MohairDebugMsg("Sending query request");
-    if (request_payload == nullptr) {
-      return Status::Invalid("query plan must be provided");
-    }
+    if (request_payload == nullptr) { return Status::Invalid("Missing query plan"); }
 
-    ARROW_ASSIGN_OR_RAISE(auto query_results, client_conn.SendPlanPushdown(request_payload));
+    MohairTicket query_ticket;
 
-    // Iterate over responses (end-of-stream signaled by null result)
-    MohairDebugMsg("Receiving query response");
-    ARROW_ASSIGN_OR_RAISE(auto query_result, query_results->Next());
-
-    MohairDebugMsg("Iterating on query results");
-    while (query_result != nullptr) {
-      ARROW_ASSIGN_OR_RAISE(query_result, query_results->Next());
-    }
+    ARROW_RETURN_NOT_OK(ExecutePlan(client_conn, &query_ticket));
+    ARROW_RETURN_NOT_OK( GetResults(client_conn,  query_ticket));
 
     std::cout << "Query complete" << std::endl;
     return Status::OK();
   }
 
-  // Public entry point
+
+  // >> Public entry point
+
+  //! The entry point for the `ClientActions` struct to send all user requests.
   int SendRequests() {
     // Create and connect a FlightClient
     auto client_conn = MohairClient::ForLocation(service_loc);
@@ -95,7 +130,7 @@ struct ClientActions {
 
     // Handle each action depending on what actions were set
     if (request_payload != nullptr) {
-      auto status_query = SendQuery(*client_conn);
+      auto status_query = ExecuteQuery(*client_conn);
       if (not status_query.ok()) {
         mohair::PrintError("Unable to execute query plan", status_query);
         return ERRCODE_API_QUERY;

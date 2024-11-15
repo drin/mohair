@@ -64,10 +64,11 @@ namespace mohair::services {
 
     // write the query ID to the `ResultStream` as a usable ticket
     MohairDebugMsg("Preparing ticket for response data");
-    string query_ticket { std::to_string(context_id) };
-    auto ticket_buffer = Buffer::FromString(query_ticket);
+    MohairTicket query_ticket { context_id };
+
+    MohairDebugMsg("Responding with ticket: " << std::to_string(context_id));
     *result = std::make_unique<SimpleResultStream>(
-      vector<FlightResult> { FlightResult { ticket_buffer } }
+      vector<FlightResult> { FlightResult { query_ticket.ToBuffer() } }
     );
 
     // execute the query and return the result (or OK)
@@ -88,16 +89,19 @@ namespace mohair::services {
   Status
   DuckDBService::DoGet( [[maybe_unused]] const ServerCallContext&      context
                        ,                 const Ticket&                 request
-                       ,[[maybe_unused]] unique_ptr<FlightDataStream>* stream) {
-    int   query_id    = std::stoi(request.ticket);
-    auto& duck_result = engine->GetResult(query_id);
+                       ,[[maybe_unused]] unique_ptr<FlightDataStream>* result_stream) {
+    int query_id = std::stoi(request.ticket);
+    MohairDebugMsg("Get request for ticket: " << request.ticket);
 
-    // NOTE: this is just for debugging purposes until we convert
-    std::cout << "Accessed results:" << std::endl;
-    ARROW_RETURN_NOT_OK(mohair::adapters::PrintQueryResults(duck_result));
+    shared_ptr<RecordBatchReader> resultset_reader { engine->GetResultSet(query_id) };
+    if (resultset_reader == nullptr) {
+      stringstream err_msg;
+      err_msg << "Unknown ticket: " << request.ticket;
+      return Status::Invalid(err_msg.str());
+    }
 
-    // TODO: convert the results from duckdb to arrow
-    return Status::NotImplemented("TODO: query service");
+    *result_stream = std::make_unique<RecordBatchStream>(resultset_reader);
+    return Status::OK();
   }
 
 } // namespace: mohair::services

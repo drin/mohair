@@ -85,15 +85,21 @@ using std::unordered_map;
     //! Construct a duckdb::Value that is a struct of <ptr, size>
     Value ValueForIPCBuffer(Buffer& ipc_buffer);
 
-    //! Print query results received from DuckDB
-    void PrintChunk( DataChunk& src_chunk
-                    ,idx_t col_offset = 0, idx_t col_count = 15
-                    ,idx_t row_offset = 0, idx_t row_count = 10);
+    //! Construct an arrow::RecordBatchReader that wraps the QueryResult
+    Result<shared_ptr<RecordBatchReader>>
+    ReaderForResult(unique_ptr<QueryResult> result_set);
 
-    Status PrintQueryResults( QueryResult& result_set
-                             ,idx_t chunk_offset = 0, idx_t chunk_count =  3
-                             ,idx_t col_offset   = 0, idx_t col_count   = 15
-                             ,idx_t row_offset   = 0, idx_t row_count   = 10);
+    //! Print query results received from DuckDB
+    void
+    PrintChunk( DataChunk& src_chunk
+               ,idx_t col_offset = 0, idx_t col_count = 15
+               ,idx_t row_offset = 0, idx_t row_count = 10);
+
+    Status
+    PrintQueryResults( QueryResult& result_set
+                      ,idx_t chunk_offset = 0, idx_t chunk_count =  3
+                      ,idx_t col_offset   = 0, idx_t col_count   = 15
+                      ,idx_t row_offset   = 0, idx_t row_count   = 10);
 
   } // namespace: mohair::adapters
 
@@ -102,12 +108,18 @@ using std::unordered_map;
   // Classes
 
   namespace mohair::adapters {
+    enum QueryStatus {
+       Pending
+      ,Running
+      ,Complete
+    };
 
     struct QueryContext {
       // >> Attributes
-      duck_sptr<Relation>        duck_rel;
-      duck_uptr<QueryResult>     rel_result;
-      vector<shared_ptr<Buffer>> rel_mem;
+      QueryStatus                   status;
+      duck_sptr<Relation>           duck_rel;
+      shared_ptr<RecordBatchReader> rel_result;
+      vector<shared_ptr<Buffer>>    rel_mem;
 
       // >> Constructors
       QueryContext() = default;
@@ -115,8 +127,8 @@ using std::unordered_map;
 
     struct EngineDuckDB {
       // >> Attributes
-      Connection engine_conn;
-      int        context_id;
+      Connection       engine_conn;
+      int              context_id;
 
       // A stash of relations that we need to keep track of
       unordered_map<int, unique_ptr<QueryContext>> query_contexts;
@@ -129,9 +141,9 @@ using std::unordered_map;
       int ArrowScanOpFile(fs::path arrow_fpath);
       int ExecContextForSubstrait(string plan_msg);
 
-      Status       ExecuteRelation(int prepared_relid);
-      Relation&    GetRelation(int prepared_relid);
-      QueryResult& GetResult(int prepared_relid);
+      Status                        ExecuteRelation(int context_id);
+      Relation&                     GetRelation(int context_id);
+      shared_ptr<RecordBatchReader> GetResultSet(int context_id);
     };
 
     unique_ptr<EngineDuckDB> DuckDBForFile(fs::path db_fpath);

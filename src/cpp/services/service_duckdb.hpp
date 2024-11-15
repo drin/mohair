@@ -22,6 +22,7 @@
 
 // >> Internal deps and flight deps
 #include "services/service_mohair.hpp"
+#include "services/ticket_mohair.hpp"
 
 // >> Engine deps
 #if USE_DUCKDB
