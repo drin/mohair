@@ -22,10 +22,10 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
-from skytether.substrait import algebra_pb2 as skytether_dot_substrait_dot_algebra__pb2
-from skytether.substrait.extensions import extensions_pb2 as skytether_dot_substrait_dot_extensions_dot_extensions__pb2
-from skytether.substrait import plan_pb2 as skytether_dot_substrait_dot_plan__pb2
-from skytether.substrait import type_pb2 as skytether_dot_substrait_dot_type__pb2
+from mohair.skytether.substrait import algebra_pb2 as skytether_dot_substrait_dot_algebra__pb2
+from mohair.skytether.substrait.extensions import extensions_pb2 as skytether_dot_substrait_dot_extensions_dot_extensions__pb2
+from mohair.skytether.substrait import plan_pb2 as skytether_dot_substrait_dot_plan__pb2
+from mohair.skytether.substrait import type_pb2 as skytether_dot_substrait_dot_type__pb2
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n-skytether/substrait/extended_expression.proto\x12\x13skytether.substrait\x1a!skytether/substrait/algebra.proto\x1a/skytether/substrait/extensions/extensions.proto\x1a\x1eskytether/substrait/plan.proto\x1a\x1eskytether/substrait/type.proto\"\xcc\x01\n\x13\x45xpressionReference\x12\x41\n\nexpression\x18\x01 \x01(\x0b\x32\x1f.skytether.substrait.ExpressionH\x00R\nexpression\x12\x42\n\x07measure\x18\x02 \x01(\x0b\x32&.skytether.substrait.AggregateFunctionH\x00R\x07measure\x12!\n\x0coutput_names\x18\x03 \x03(\tR\x0boutputNamesB\x0b\n\texpr_type\"\xa7\x04\n\x12\x45xtendedExpression\x12\x36\n\x07version\x18\x07 \x01(\x0b\x32\x1c.skytether.substrait.VersionR\x07version\x12Y\n\x0e\x65xtension_uris\x18\x01 \x03(\x0b\x32\x32.skytether.substrait.extensions.SimpleExtensionURIR\rextensionUris\x12Z\n\nextensions\x18\x02 \x03(\x0b\x32:.skytether.substrait.extensions.SimpleExtensionDeclarationR\nextensions\x12M\n\rreferred_expr\x18\x03 \x03(\x0b\x32(.skytether.substrait.ExpressionReferenceR\x0creferredExpr\x12\x41\n\x0b\x62\x61se_schema\x18\x04 \x01(\x0b\x32 .skytether.substrait.NamedStructR\nbaseSchema\x12\x62\n\x13\x61\x64vanced_extensions\x18\x05 \x01(\x0b\x32\x31.skytether.substrait.extensions.AdvancedExtensionR\x12\x61\x64vancedExtensions\x12,\n\x12\x65xpected_type_urls\x18\x06 \x03(\tR\x10\x65xpectedTypeUrlsB\x9f\x01\n\x17\x63om.skytether.substraitB\x17\x45xtendedExpressionProtoP\x01\xa2\x02\x03SSX\xaa\x02\x13Skytether.Substrait\xca\x02\x13Skytether\\Substrait\xe2\x02\x1fSkytether\\Substrait\\GPBMetadata\xea\x02\x14Skytether::Substraitb\x06proto3')

@@ -23,10 +23,10 @@ _sym_db = _symbol_database.Default()
 
 
 from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
-from skytether.substrait import algebra_pb2 as skytether_dot_substrait_dot_algebra__pb2
+from mohair.skytether.substrait import algebra_pb2 as skytether_dot_substrait_dot_algebra__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1eskytether/mohair/algebra.proto\x12\x10skytether.mohair\x1a\x19google/protobuf/any.proto\x1a!skytether/substrait/algebra.proto\"F\n\x0e\x45xecutionStats\x12\x1a\n\x08\x65xecuted\x18\x01 \x01(\x08R\x08\x65xecuted\x12\x18\n\x07runtime\x18\x02 \x01(\x01R\x07runtime\"\x87\x01\n\x0fSkyPartitionRel\x12\x16\n\x06\x64omain\x18\x01 \x01(\tR\x06\x64omain\x12\x1c\n\tpartition\x18\x02 \x01(\tR\tpartition\x12>\n\texecstats\x18\x04 \x01(\x0b\x32 .skytether.mohair.ExecutionStatsR\texecstats\"\xb6\x01\n\x0bSkySliceRel\x12\x16\n\x06\x64omain\x18\x01 \x01(\tR\x06\x64omain\x12\x1c\n\tpartition\x18\x02 \x01(\tR\tpartition\x12\x14\n\x05slice\x18\x03 \x01(\rR\x05slice\x12\x1b\n\tslice_key\x18\x04 \x01(\tR\x08sliceKey\x12>\n\texecstats\x18\x05 \x01(\x0b\x32 .skytether.mohair.ExecutionStatsR\texecstats\"\x96\x01\n\x06SkyRel\x12\x16\n\x06\x64omain\x18\x01 \x01(\tR\x06\x64omain\x12\x1c\n\tpartition\x18\x02 \x01(\tR\tpartition\x12\x16\n\x06slices\x18\x03 \x03(\rR\x06slices\x12>\n\texecstats\x18\x04 \x01(\x0b\x32 .skytether.mohair.ExecutionStatsR\texecstats\"\x7f\n\x06\x45rrRel\x12\x17\n\x07\x65rr_msg\x18\x01 \x01(\tR\x06\x65rrMsg\x12;\n\x08\x65rr_code\x18\x02 \x01(\x0e\x32 .skytether.mohair.ErrRel.ErrTypeR\x07\x65rrCode\"\x1f\n\x07\x45rrType\x12\x14\n\x10INVALID_MSG_TYPE\x10\x00\" \n\x08QueryRel\x12\x14\n\x05query\x18\x01 \x01(\x0cR\x05query\"E\n\nPlanAnchor\x12\x37\n\nanchor_rel\x18\x01 \x01(\x0b\x32\x18.skytether.substrait.RelR\tanchorRelB\x85\x01\n\x14\x63om.skytether.mohairB\x0c\x41lgebraProtoP\x01\xa2\x02\x03SMX\xaa\x02\x10Skytether.Mohair\xca\x02\x10Skytether\\Mohair\xe2\x02\x1cSkytether\\Mohair\\GPBMetadata\xea\x02\x11Skytether::Mohairb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1eskytether/mohair/algebra.proto\x12\x10skytether.mohair\x1a\x19google/protobuf/any.proto\x1a!skytether/substrait/algebra.proto\"F\n\x0e\x45xecutionStats\x12\x1a\n\x08\x65xecuted\x18\x01 \x01(\x08R\x08\x65xecuted\x12\x18\n\x07runtime\x18\x02 \x01(\x01R\x07runtime\"~\n\x06SkyRel\x12\x16\n\x06\x64omain\x18\x01 \x01(\tR\x06\x64omain\x12\x1c\n\tpartition\x18\x02 \x01(\tR\tpartition\x12>\n\texecstats\x18\x03 \x01(\x0b\x32 .skytether.mohair.ExecutionStatsR\texecstats\"\x9f\x01\n\x0fSkyPartitionRel\x12\x16\n\x06\x64omain\x18\x01 \x01(\tR\x06\x64omain\x12\x1c\n\tpartition\x18\x02 \x01(\tR\tpartition\x12\x16\n\x06slices\x18\x03 \x03(\rR\x06slices\x12>\n\texecstats\x18\x04 \x01(\x0b\x32 .skytether.mohair.ExecutionStatsR\texecstats\"\xb6\x01\n\x0bSkySliceRel\x12\x1b\n\tslice_key\x18\x01 \x01(\tR\x08sliceKey\x12\x16\n\x06\x64omain\x18\x02 \x01(\tR\x06\x64omain\x12\x1c\n\tpartition\x18\x03 \x01(\tR\tpartition\x12\x14\n\x05slice\x18\x04 \x01(\rR\x05slice\x12>\n\texecstats\x18\x05 \x01(\x0b\x32 .skytether.mohair.ExecutionStatsR\texecstats\"\x7f\n\x06\x45rrRel\x12\x17\n\x07\x65rr_msg\x18\x01 \x01(\tR\x06\x65rrMsg\x12;\n\x08\x65rr_code\x18\x02 \x01(\x0e\x32 .skytether.mohair.ErrRel.ErrTypeR\x07\x65rrCode\"\x1f\n\x07\x45rrType\x12\x14\n\x10INVALID_MSG_TYPE\x10\x00\" \n\x08QueryRel\x12\x14\n\x05query\x18\x01 \x01(\x0cR\x05query\"E\n\nPlanAnchor\x12\x37\n\nanchor_rel\x18\x01 \x01(\x0b\x32\x18.skytether.substrait.RelR\tanchorRelB\x85\x01\n\x14\x63om.skytether.mohairB\x0c\x41lgebraProtoP\x01\xa2\x02\x03SMX\xaa\x02\x10Skytether.Mohair\xca\x02\x10Skytether\\Mohair\xe2\x02\x1cSkytether\\Mohair\\GPBMetadata\xea\x02\x11Skytether::Mohairb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -36,18 +36,18 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._serialized_options = b'\n\024com.skytether.mohairB\014AlgebraProtoP\001\242\002\003SMX\252\002\020Skytether.Mohair\312\002\020Skytether\\Mohair\342\002\034Skytether\\Mohair\\GPBMetadata\352\002\021Skytether::Mohair'
   _globals['_EXECUTIONSTATS']._serialized_start=114
   _globals['_EXECUTIONSTATS']._serialized_end=184
-  _globals['_SKYPARTITIONREL']._serialized_start=187
-  _globals['_SKYPARTITIONREL']._serialized_end=322
-  _globals['_SKYSLICEREL']._serialized_start=325
-  _globals['_SKYSLICEREL']._serialized_end=507
-  _globals['_SKYREL']._serialized_start=510
-  _globals['_SKYREL']._serialized_end=660
-  _globals['_ERRREL']._serialized_start=662
-  _globals['_ERRREL']._serialized_end=789
-  _globals['_ERRREL_ERRTYPE']._serialized_start=758
-  _globals['_ERRREL_ERRTYPE']._serialized_end=789
-  _globals['_QUERYREL']._serialized_start=791
-  _globals['_QUERYREL']._serialized_end=823
-  _globals['_PLANANCHOR']._serialized_start=825
-  _globals['_PLANANCHOR']._serialized_end=894
+  _globals['_SKYREL']._serialized_start=186
+  _globals['_SKYREL']._serialized_end=312
+  _globals['_SKYPARTITIONREL']._serialized_start=315
+  _globals['_SKYPARTITIONREL']._serialized_end=474
+  _globals['_SKYSLICEREL']._serialized_start=477
+  _globals['_SKYSLICEREL']._serialized_end=659
+  _globals['_ERRREL']._serialized_start=661
+  _globals['_ERRREL']._serialized_end=788
+  _globals['_ERRREL_ERRTYPE']._serialized_start=757
+  _globals['_ERRREL_ERRTYPE']._serialized_end=788
+  _globals['_QUERYREL']._serialized_start=790
+  _globals['_QUERYREL']._serialized_end=822
+  _globals['_PLANANCHOR']._serialized_start=824
+  _globals['_PLANANCHOR']._serialized_end=893
 # @@protoc_insertion_point(module_scope)
