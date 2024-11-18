@@ -48,6 +48,7 @@ struct ToolInterface {
   fs::path arrow_fpath;
   bool use_duckdb { false };
   bool is_stream  { false };
+  int  col_limit  { 5     };
 
   #if USE_DUCKDB
     int ScanFileWithDuckDB() {
@@ -60,6 +61,19 @@ struct ToolInterface {
     }
   #endif
 
+  vector<int> IndicesForSelection(int table_colcount) {
+    int sel_size = col_limit;
+    if (table_colcount < sel_size) { sel_size = table_colcount; }
+
+    vector<int> col_selection;
+    col_selection.reserve(sel_size);
+    for (int col_ndx = 0; col_ndx < sel_size; ++col_ndx) {
+      col_selection.push_back(col_ndx);
+    }
+
+    return col_selection;
+  }
+
   int ScanStreamFromFile() {
     std::string arrow_file_uri { "file://" + arrow_fpath.string() };
     auto result_data = mohair::ReadIPCStream(arrow_file_uri);
@@ -68,7 +82,8 @@ struct ToolInterface {
       return 6;
     }
 
-    auto data_excerpt = (*result_data)->SelectColumns({ 0, 1, 2, 3, 4 });
+    vector<int> col_selection = IndicesForSelection((*result_data)->num_columns());
+    auto data_excerpt = (*result_data)->SelectColumns(col_selection);
     if (not data_excerpt.ok()) {
       mohair::PrintError("Error projecting table columns", data_excerpt.status());
       return 9;
@@ -86,7 +101,8 @@ struct ToolInterface {
       return 5;
     }
 
-    auto data_excerpt = (*result_data)->SelectColumns({ 0, 1, 2, 3, 4 });
+    vector<int> col_selection = IndicesForSelection((*result_data)->num_columns());
+    auto data_excerpt = (*result_data)->SelectColumns(col_selection);
     if (not data_excerpt.ok()) {
       mohair::PrintError("Error projecting table columns", data_excerpt.status());
       return 9;
