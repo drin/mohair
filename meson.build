@@ -28,19 +28,36 @@ libtiledb_dep = dependency('tiledb', required: get_option('tiledb'))
 # search typical location first (never required)
 libduckdb_dep = dependency('duckdb', method: 'cmake', required: false)
 
-if not libduckdb_dep.found()
-  lib_prefixdir = get_option('cmake_prefix_path')[0]
+if not get_option('duckdb').disabled() and not libduckdb_dep.found()
+  is_duckdb_found = false
 
-  libduckdb_inc = include_directories(lib_prefixdir / 'include')
-  libduckdb     = cpp_compiler.find_library('duckdb'
-    ,dirs    : lib_prefixdir / 'lib'
-    ,required: get_option('duckdb')
-  )
+  # try to find duckdb using each provided cmake prefix path
+  foreach lib_prefixdir : get_option('cmake_prefix_path')
+    libduckdb = cpp_compiler.find_library('duckdb'
+      ,dirs    : lib_prefixdir / 'lib'
+      ,required: false
+    )
 
-  libduckdb_dep = declare_dependency(
-     dependencies       : [libduckdb]
-    ,include_directories: [libduckdb_inc]
-  )
+    # if we didn't find it in this path, go to the next one
+    if not libduckdb.found()
+      continue
+    endif
+
+    # we found it, so update our dependency and stop searching
+    libduckdb_inc = include_directories(lib_prefixdir / 'include')
+    libduckdb_dep = declare_dependency(
+       dependencies       : [libduckdb]
+      ,include_directories: [libduckdb_inc]
+    )
+
+    is_duckdb_found = true
+    break
+  endforeach
+
+  # check if the loop was able to find duckdb (and if we required it in the first place)
+  if not is_duckdb_found and get_option('duckdb').enabled()
+    error('Unable to find duckdb dependency with explicit fallback')
+  endif
 
 endif
 
