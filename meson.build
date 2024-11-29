@@ -4,7 +4,7 @@
 # >> project info
 project('libskytether-mohair'
   ,'cpp'
-  ,version         : '1.1.2'
+  ,version         : '1.1.3'
   ,meson_version   : '1.6.0'
   ,license         : 'Apache-2.0'
   ,license_files   : 'LICENSE'
@@ -29,7 +29,7 @@ libtiledb_dep = dependency('tiledb', required: get_option('tiledb'))
 libduckdb_dep = dependency('duckdb', method: 'cmake', required: false)
 
 if not libduckdb_dep.found()
-  lib_prefixdir = get_option('cmake_prefix_path')
+  lib_prefixdir = get_option('cmake_prefix_path')[0]
 
   libduckdb_inc = include_directories(lib_prefixdir / 'include')
   libduckdb     = cpp_compiler.find_library('duckdb'
