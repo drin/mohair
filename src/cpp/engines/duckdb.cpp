@@ -176,9 +176,9 @@
       MohairDebugMsg("Creating execution context for query plan");
 
       // for debug purposes
-      unique_ptr<Plan> plan_payload = mohair::SubstraitPlanFromString(plan_msg);
+      unique_ptr<Plan> plan_payload = mohair_substrait::SubstraitPlanFromString(plan_msg);
       MohairDebugMsg("received payload:");
-      mohair::PrintSubstraitPlan(plan_payload.get());
+      mohair_substrait::PrintSubstraitPlan(plan_payload.get());
 
       // Construct a QueryContext to keep everything alive
       auto scan_context = std::make_unique<QueryContext>();
