@@ -30,7 +30,7 @@ namespace mohair {
   // >> Conversion functions (into/out of mohair representation)
   unique_ptr<QueryOp> MohairPlanFrom(PlanMessage& plan_msg) {
     // walk the top level relations until we find the root (should only be one)
-    int root_ndx = FindPlanRoot(*(plan_msg.payload));
+    int root_ndx = mohair_substrait::FindPlanRoot(*(plan_msg.payload));
 
     // set the plan root if not already set
     if (plan_msg.root_relndx < 0) {
@@ -267,15 +267,15 @@ namespace mohair {
    * Step 3 will allow us to make merging of the pushback plan trivial (we will be able to
    * use operator equality).
    */
-  vector<unique_ptr<SubstraitMessage>>
-  SubplansFromSplit(SubstraitMessage* plan_msg, PlanSplit& split) {
+  vector<unique_ptr<PlanMessage>>
+  SubplansFromSplit(PlanMessage* plan_msg, PlanSplit& split) {
     // Get the anchor op and initialize some variables
     QueryOp*         anchor_op     = split.anchor_op->plan_op;
     auto             anchor_msg    = PlanAnchorFrom(anchor_op);
     vector<QueryOp*> anchor_inputs = anchor_op->GetOpInputs();
 
     // Initialize the list of messages to return
-    vector<unique_ptr<SubstraitMessage>> subplan_msgs;
+    vector<unique_ptr<PlanMessage>> subplan_msgs;
     subplan_msgs.reserve(anchor_inputs.size());
 
     // Create a substrait message for each input to the anchor
@@ -286,10 +286,10 @@ namespace mohair {
 
       // Create a copy of the original substrait message that we can modify
       auto subplan_msg = std::make_unique<Plan>();
-      subplan_msg->CopyFrom(*(this->payload));
+      subplan_msg->CopyFrom(*(plan_msg->payload));
 
       // Set the `PlanAnchor` message and replace the super-plan root
-      auto subplan_oldroot = subplan_msg->mutable_relations(this->root_relndx)->mutable_root();
+      auto subplan_oldroot = subplan_msg->mutable_relations(plan_msg->root_relndx)->mutable_root();
       auto subplan_planext = subplan_msg->mutable_advanced_extensions();
 
       // Pack the anchor message into an `Any` message as an "optimization"
@@ -300,7 +300,7 @@ namespace mohair {
 
       // Add a `SubstraitMessage` that wraps the `Plan` message
       subplan_msgs.push_back(
-        std::make_unique<SubstraitMessage>(std::move(subplan_msg), this->root_relndx)
+        std::make_unique<SubstraitMessage>(std::move(subplan_msg), plan_msg->root_relndx)
       );
     }
 

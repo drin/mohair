@@ -42,11 +42,18 @@
 // ------------------------------
 // Type Aliases
 
-// >> Mohair query processing types
-using skytether::mohair::PlanAnchor;
-using skytether::mohair::ErrRel;
+namespace mohair {
+  // >> Mohair query processing types
+  using skytether::mohair::PlanAnchor;
+  using skytether::mohair::ErrRel;
 
-// >> Mohair topology types
-using skytether::mohair::ServiceConfig;
-using skytether::mohair::DeviceClass;
+  // >> Mohair topology types
+  using skytether::mohair::ServiceConfig;
+  using skytether::mohair::DeviceClass;
+
+  // >> Types from mohair-substrait
+  using mohair_substrait::PlanMessage;
+  using mohair_substrait::SubstraitMessage;
+
+} // namespace: mohair
 
