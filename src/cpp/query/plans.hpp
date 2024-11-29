@@ -233,7 +233,7 @@ namespace mohair {
   unique_ptr<PlanSplit>
   DecomposePlan(AppPlan& plan, DecomposeAlg method = LongPipelineLeaf);
 
-  vector<unique_ptr<SubstraitMessage>>
-  SubplansFromSplit(SubstraitMessage* plan_msg, PlanSplit& split);
+  vector<unique_ptr<PlanMessage>>
+  SubplansFromSplit(PlanMessage* plan_msg, PlanSplit& split);
 
 } // namespace: mohair

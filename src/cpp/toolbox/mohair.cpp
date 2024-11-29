@@ -66,8 +66,7 @@ int main(int argc, char **argv) {
   }
 
   // Read the example substrait from a file
-  auto file_stream   = mohair_substrait::InputStreamForFile(argv[1]);
-  auto substrait_msg = std::make_unique<SubstraitMessage>(file_stream);
+  auto substrait_msg = SubstraitMessage::FromFile(argv[1]);
   if (substrait_msg->payload == nullptr) {
     std::cerr << "Failed to read substrait plan from file" << std::endl;
     return 2;
@@ -112,7 +111,7 @@ int main(int argc, char **argv) {
   for (size_t split_ndx = 0; split_ndx < count_anchors; ++split_ndx) {
     PlanSplit plan_split { *application_plan, *((*plan_anchors)[split_ndx]) };
 
-    auto subplan_msgs = substrait_msg->SubplansFromSplit(plan_split);
+    auto subplan_msgs = mohair::SubplansFromSplit(substrait_msg.get(), plan_split);
     for (int subplan_ndx = 0; subplan_ndx < subplan_msgs.size(); ++subplan_ndx) {
       string out_fname {
         "resources/subplans/" +       std::to_string(split_ndx)
@@ -123,7 +122,7 @@ int main(int argc, char **argv) {
 
       std::cout << "\tWriting to file [" << out_fname << "]" << std::endl;
 
-      SubstraitMessage& subplan_msg = *(subplan_msgs[subplan_ndx]);
+      SubstraitMessage& subplan_msg = dynamic_cast<SubstraitMessage&>(*(subplan_msgs[subplan_ndx]));
       auto success = subplan_msg.SerializeToFile(out_fname.data());
 
       if (not success) {

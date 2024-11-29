@@ -4,7 +4,7 @@
 # >> project info
 project('libskytether-mohair'
   ,'cpp'
-  ,version         : '1.1.3'
+  ,version         : '1.1.4'
   ,meson_version   : '1.6.0'
   ,license         : 'Apache-2.0'
   ,license_files   : 'LICENSE'

@@ -33,7 +33,10 @@
 // ------------------------------
 // Macros and Type Aliases
 
-// >> Types
+// >> Protocol types
+using mohair::ServiceConfig;
+
+// >> Service types
 using mohair::services::Location;
 using mohair::services::ResultStream;
 using mohair::services::FlightResult;
@@ -41,7 +44,7 @@ using mohair::services::FlightResult;
 using mohair::services::DeactivationCallback;
 using mohair::services::MohairClient;
 
-// >> Functions
+// >> Service functions
 using mohair::services::StartService;
 
 using mohair::cli::ParseArgLocationUri;
