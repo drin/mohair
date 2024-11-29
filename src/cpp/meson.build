@@ -62,7 +62,6 @@ service_srcdir = 'services'
 # >> Headers
 query_headers = [
    query_srcdir / 'apidep_substrait.hpp'
-  ,query_srcdir / 'messages.hpp'
   ,query_srcdir / 'operators.hpp'
   ,query_srcdir / 'plans.hpp'
 ]
@@ -83,8 +82,7 @@ service_headers = [
 
 # >> Sources
 query_sources = [
-   query_srcdir / 'messages.cpp'
-  ,query_srcdir / 'operators.cpp'
+   query_srcdir / 'operators.cpp'
   ,query_srcdir / 'plans.cpp'
 ]
 

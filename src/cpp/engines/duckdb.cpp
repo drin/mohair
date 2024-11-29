@@ -19,8 +19,8 @@
 // ------------------------------
 // Dependencies
 
+#include "query/plans.hpp"
 #include "adapter_duckdb.hpp"
-#include "../query/messages.hpp"
 
 
 // ------------------------------

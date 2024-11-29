@@ -23,8 +23,6 @@
 //  >> Internal libs
 #include "adapter_mohair.hpp"
 
-#include "messages.hpp"
-
 
 // ------------------------------
 // Type aliases
@@ -234,5 +232,8 @@ namespace mohair {
   // >> Functions for query plan processing
   unique_ptr<PlanSplit>
   DecomposePlan(AppPlan& plan, DecomposeAlg method = LongPipelineLeaf);
+
+  vector<unique_ptr<SubstraitMessage>>
+  SubplansFromSplit(SubstraitMessage* plan_msg, PlanSplit& split);
 
 } // namespace: mohair

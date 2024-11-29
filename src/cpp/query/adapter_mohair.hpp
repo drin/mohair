@@ -32,8 +32,8 @@
 #include "mohair.hpp"
 
 // >> Definitions for mohair protocol
-#include "skytether/mohair/algebra.pb.h"
-#include "skytether/mohair/topology.pb.h"
+// NOTE: this puts some things in ::mohair namespace
+#include "mohair-substrait/mohair_substrait.hpp"
 
 // >> Third-party deps
 #include "query/apidep_substrait.hpp"
