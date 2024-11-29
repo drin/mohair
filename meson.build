@@ -4,7 +4,7 @@
 # >> project info
 project('libskytether-mohair'
   ,'cpp'
-  ,version         : '1.1.0'
+  ,version         : '1.1.1'
   ,meson_version   : '1.6.0'
   ,license         : 'Apache-2.0'
   ,license_files   : 'LICENSE'
@@ -19,12 +19,30 @@ version_fields = version_str.split('.')
 # ------------------------------
 # Dependencies
 
+cpp_compiler = meson.get_compiler('cpp')
+
 # >> Backend dependency: tiledb
 libtiledb_dep = dependency('tiledb', required: get_option('tiledb'))
 
 # >> Backend dependency: duckdb
 # search typical location first (never required)
-libduckdb_dep = dependency('duckdb', method: 'cmake', required: get_option('duckdb'))
+libduckdb_dep = dependency('duckdb', method: 'cmake', required: false)
+
+if not libduckdb_dep.found()
+  lib_prefixdir = get_option('cmake_prefix_path')
+
+  libduckdb_inc = include_directories(lib_prefixdir / 'include')
+  libduckdb     = cpp_compiler.find_library('duckdb'
+    ,dirs    : lib_prefixdir / 'lib'
+    ,required: get_option('duckdb')
+  )
+
+  libduckdb_dep = declare_dependency(
+     dependencies       : [libduckdb]
+    ,include_directories: [libduckdb_inc]
+  )
+
+endif
 
 # >> configure build options based on libraries we found
 mohair_cfgdata = configuration_data({
