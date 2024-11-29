@@ -121,7 +121,7 @@ namespace mohair::services {
     // TODO receive the plan then execute it with Faodel.
     // faodel_if.ExecuteEngineAcero(faodel_pool, <key>, plan_msg);
     string plan_data = plan_msg->ToString();
-    auto substrait_plan = mohair::SubstraitPlanFromString(plan_data);
+    auto substrait_plan = mohair_substrait::SubstraitPlanFromString(plan_data);
     return Status::NotImplemented("TODO: query service");
   }
 

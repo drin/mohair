@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
   }
 
   // Read the example substrait from a file
-  auto file_stream   = mohair::InputStreamForFile(argv[1]);
+  auto file_stream   = mohair_substrait::InputStreamForFile(argv[1]);
   auto substrait_msg = std::make_unique<SubstraitMessage>(file_stream);
   if (substrait_msg->payload == nullptr) {
     std::cerr << "Failed to read substrait plan from file" << std::endl;
