@@ -5,45 +5,31 @@
 # ------------------------------
 # Dependencies
 
-# >> Arrow
-libarrow_dep           = dependency('arrow'          , required: true)
-libarrow_substrait_dep = dependency('arrow-substrait', required: true)
-libarrow_flight_dep    = dependency('arrow-flight'   , required: true)
-
-# >> Substrait
-libmohair_substrait_dep = dependency('mohair-substrait', static: true)
-
-# >> Protobuf
-libprotobuf_dep = dependency('protobuf')
-libabsl_dep     = dependency('absl'
-  ,modules: [
-      'absl::log_internal_check_op'
-     ,'absl::status'
-   ]
-)
-
-# >> Grouped dependencies
-arrow_group_dep = [
-   libarrow_dep
-  ,libarrow_flight_dep
+# >> Arrow and Flight (RPC via protobuf)
+dataservice_dep = [
+   dependency('arrow')
+  ,dependency('arrow-flight')
 ]
 
-substrait_group_dep = [
-   libabsl_dep
-  ,libprotobuf_dep
-  ,libmohair_substrait_dep
-  ,libarrow_substrait_dep
+# >> Protobuf, Substrait, and Mohair
+protocol_dep = [
+   dependency('absl_status'               , static: true)
+  ,dependency('absl_log_internal_check_op', static: true)
+  ,dependency('protobuf'                  , static: true)
+  ,dependency('mohair-substrait'          , static: false)
+  ,dependency('arrow-substrait'           , static: false)
 ]
 
-service_group_dep = arrow_group_dep + substrait_group_dep
+# >> Execution engines (many are optional)
+engine_deps = []
 
 # add optional dependencies to dependency groups
 if libtiledb_dep.found()
-  service_group_dep += [libtiledb_dep]
+  engine_deps += [libtiledb_dep]
 endif
 
 if libduckdb_dep.found()
-  service_group_dep += [libduckdb_dep]
+  engine_deps += [libduckdb_dep]
 endif
 
 
@@ -126,25 +112,33 @@ libskytether_mohair_sources = (
 # ------------------------------
 # Include directories
 
-libskytether_mohair_inc = include_directories('.')
+libskytether_mohair_inc += [include_directories('.')]
 
 
 # ------------------------------
-# Build artifacts (libraries)
+# Build targets
+
+# >> Library targets
 
 libskytether_mohair = library('skytether-mohair'
   ,libskytether_mohair_sources
-  ,include_directories: [configuration_inc, libskytether_mohair_inc]
-  ,dependencies       : service_group_dep
+  ,include_directories: [ libskytether_mohair_inc ]
+  ,dependencies       : [ dataservice_dep, protocol_dep, engine_deps ]
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,pic                : true
   ,install            : true
 )
 
+
+# ------------------------------
+# Declared dependencies
+
 libskytether_mohair_dep = declare_dependency(
-   include_directories: [configuration_inc, libskytether_mohair_inc]
-  ,dependencies       : service_group_dep
+   include_directories: [ libskytether_mohair_inc ]
+  ,dependencies       : [ dataservice_dep, protocol_dep, engine_deps ]
   ,link_with          : libskytether_mohair
 )
+
 
 # ------------------------------
 # Installation
@@ -155,3 +149,10 @@ install_headers(
   ,preserve_path: true
 )
 
+
+# ------------------------------
+# Package configurations
+
+# use pkg-config to generate library build info
+module_pkgcfg = import('pkgconfig')
+module_pkgcfg.generate(libskytether_mohair, subdirs: 'skytether-mohair')
