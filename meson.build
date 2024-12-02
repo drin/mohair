@@ -91,96 +91,81 @@ mohair_cfgfile = configure_file(
   ,install_dir  : get_option('includedir') / 'skytether-mohair'
 )
 
-# >> Invoke from subdirectories
 
-# NOTE: this seems to be necessary if we generate a config file
-configuration_inc = include_directories('.')
+# ------------------------------
+# Build targets
+
+# >> Include targets
+
+libskytether_mohair_inc = [include_directories('.')]
+
+
+# >> Invoke from subdirectories
 
 # creates target libskytether_mohair
 subdir(cpp_srcdir)
 
 
-# ------------------------------
-# Package configurations
+# >> Executable targets (binaries)
 
-# use pkg-config to generate library build info
-module_pkgcfg = import('pkgconfig')
-module_pkgcfg.generate(libskytether_mohair, subdirs: 'skytether-mohair')
-
-
-# ------------------------------
-# Build artifacts (binaries)
-
-# >> simple reader for Arrow files
-readarrow_sources = [ cpp_tooldir  / 'read-arrow.cpp' ]
-
+# simple reader for Arrow files
 readarrow_bin = executable('read-arrow'
-  ,readarrow_sources
-  ,include_directories: [configuration_inc, libskytether_mohair_inc]
+  ,[ cpp_tooldir  / 'read-arrow.cpp' ]
+  ,include_directories: [ libskytether_mohair_inc ]
   ,dependencies       : libskytether_mohair_dep
   ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,install            : true
 )
 
-# >> writer for Arrow files (useful for format conversion)
-writearrow_sources = [ cpp_tooldir  / 'write-arrow.cpp' ]
-
+# writer for Arrow files (useful for format conversion)
 writearrow_bin = executable('write-arrow'
-  ,writearrow_sources
-  ,include_directories: [configuration_inc, libskytether_mohair_inc]
+  ,[ cpp_tooldir  / 'write-arrow.cpp' ]
+  ,include_directories: [ libskytether_mohair_inc ]
   ,dependencies       : libskytether_mohair_dep
   ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,install            : true
 )
 
-# >> target binary for prototyping query processing
-mohair_sources = [ cpp_tooldir / 'mohair.cpp' ]
-
+# sandbox for prototyping query processing
 mohair_bin = executable('mohair'
-  ,mohair_sources
-  ,include_directories: [configuration_inc, libskytether_mohair_inc]
+  ,[ cpp_tooldir / 'mohair.cpp' ]
+  ,include_directories: [ libskytether_mohair_inc ]
   ,dependencies       : libskytether_mohair_dep
   ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,install            : true
 )
 
-# >> minimal client for communicating with mohair services
-mohair_client_sources = [
-   cpp_tooldir / 'mohair-client.cpp'
-  ,cpp_tooldir / 'mohair_cli.cpp'
-]
-
+# minimal client for communicating with mohair services
 mohair_client_bin = executable('mohair-client'
-  ,mohair_client_sources
-  ,include_directories: [configuration_inc, libskytether_mohair_inc]
+  ,[
+      cpp_tooldir / 'mohair-client.cpp'
+     ,cpp_tooldir / 'mohair_cli.cpp'
+   ]
+  ,include_directories: [ libskytether_mohair_inc ]
   ,dependencies       : libskytether_mohair_dep
   ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,install            : true
 )
 
-# >> service for CS device
-csd_service_sources = [
-   cpp_tooldir / 'csd-service.cpp'
-  ,cpp_tooldir / 'mohair_cli.cpp'
-]
-
+# service for CS device
 csd_service_bin = executable('csd-service'
-  ,csd_service_sources
-  ,include_directories: [configuration_inc, libskytether_mohair_inc]
+  ,[
+      cpp_tooldir / 'csd-service.cpp'
+     ,cpp_tooldir / 'mohair_cli.cpp'
+   ]
+  ,include_directories: [ libskytether_mohair_inc ]
   ,dependencies       : libskytether_mohair_dep
   ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,install            : true
 )
 
-# >> simple metadata service for prototyping mohair services
-topo_service_sources = [
-   cpp_tooldir / 'topo-service.cpp'
-  ,cpp_tooldir / 'mohair_cli.cpp'
-]
-
+# simple metadata service for prototyping mohair services
 topo_service_bin = executable('topo-service'
-  ,topo_service_sources
-  ,include_directories: [configuration_inc, libskytether_mohair_inc]
+  ,[
+      cpp_tooldir / 'topo-service.cpp'
+     ,cpp_tooldir / 'mohair_cli.cpp'
+   ]
+  ,include_directories: [ libskytether_mohair_inc ]
   ,dependencies       : libskytether_mohair_dep
   ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,install            : true
