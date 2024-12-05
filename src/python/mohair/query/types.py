@@ -62,6 +62,7 @@ logger = CreateMohairLogger(__name__)
 # >> Forward references (Type aliases)
 OpTypeAlias       : TypeAlias = 'MohairOp'
 PlanTypeAlias     : TypeAlias = 'MohairPlan'
+DomainTypeAlias   : TypeAlias = 'SkyDomain'
 PartitionTypeAlias: TypeAlias = 'SkyPartition'
 MetaTypeAlias     : TypeAlias = 'SkyPartitionMeta'
 
@@ -161,10 +162,31 @@ class LogicalExecPlan(MohairPlan):
 class SkyDomain:
     """ A convenience class for managing domains. """
 
-    key: str = 'public'
+    key       : str = 'public'
+    partitions: dict[str, PartitionTypeAlias] = field(default_factory=dict)
 
-    def PartitionFor(self, partition_key: str) -> PartitionTypeAlias:
-        return SkyPartition(domain=self, meta=SkyPartitionMeta(key=partition_key))
+    @classmethod
+    def WithName(cls, domain_key: str) -> DomainTypeAlias:
+        return cls(domain_key)
+
+    def WithPartitions(self, partition_keys: list[str]) -> DomainTypeAlias:
+        for partition_key in partition_keys: self.PartitionForKey(partition_key)
+
+        return self
+
+    def PartitionForKey(self, partition_key: str) -> PartitionTypeAlias:
+        if partition_key not in self.partitions:
+            print(f'Adding partition: {partition_key}')
+            sky_partition = SkyPartition.FromKeyInDomain(domain=self, pkey=partition_key)
+            self.partitions[partition_key] = sky_partition
+
+            return sky_partition
+
+        else:
+            print(f'Partition already in catalog: {partition_key}')
+
+        return self.partitions[partition_key]
+
 
 @dataclass
 class SkyPartitionMeta:
@@ -285,6 +307,10 @@ class SkyPartition:
     stats : ExecutionStats          = None
 
     @classmethod
+    def FromKeyInDomain(cls, domain: SkyDomain, pkey: str) -> PartitionTypeAlias:
+        return cls(domain=domain, meta=SkyPartitionMeta(key=pkey))
+
+    @classmethod
     def FromOp(cls, query_op: SkyRel) -> PartitionTypeAlias:
         return cls(
              domain=SkyDomain(query_op.domain)
@@ -329,7 +355,7 @@ class SkyPartition:
 
         return self
 
-    def SetData(self, data_table: Table) -> PartitionTypeAlias:
+    def SetPartitionData(self, data_table: Table) -> PartitionTypeAlias:
         """
         Sets the data for this partition to the given `pyarrow.Table` (:data_table:).
         """
@@ -358,7 +384,7 @@ class SkyPartition:
 
         return self
 
-    def SetData(self, slice_ndx: int, slice_data: Table) -> PartitionTypeAlias:
+    def SetSliceData(self, slice_ndx: int, slice_data: Table) -> PartitionTypeAlias:
         """
         Sets the data for this slice to the given `pyarrow.Table` (:data_table:); each
         slice is treated as a table for simplicity.
