@@ -563,5 +563,33 @@ class ArgparseBuilder(object):
 
         return self
 
+    def add_skytether_onlyschema_arg(self, required=False, help_str=''):
+        self._arg_parser.add_argument(
+             '--schema-only'
+            ,dest='schema_only'
+            ,type=bool
+            ,required=required
+            ,help=(
+                  help_str
+               or 'Flag that specifies to only read the schema from an input partition'
+             )
+        )
+
+        return self
+
+    def add_workload_arg(self, required=False, help_str=''):
+        self._arg_parser.add_argument(
+             '--use-workload'
+            ,dest='workload_name'
+            ,type=str
+            ,required=required
+            ,help=(
+                  help_str
+               or 'Name of a workload query to use'
+             )
+        )
+
+        return self
+
     def parse_args(self):
         return self._arg_parser.parse_known_args()
