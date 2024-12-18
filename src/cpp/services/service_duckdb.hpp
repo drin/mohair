@@ -21,11 +21,11 @@
 #pragma once
 
 // >> Internal deps and flight deps
-#include "services/service_mohair.hpp"
-#include "services/ticket_mohair.hpp"
+#include "services/types.hpp"
+#include "services/service_skytether.hpp"
 
 // >> Engine deps
-#if USE_DUCKDB
+#if SKYTETHER_USE_DUCKDB
   #include "engines/adapter_duckdb.hpp"
 #endif
 
@@ -33,12 +33,12 @@
 // ------------------------------
 // Classes
 
-#if USE_DUCKDB
-  namespace mohair::services {
+#if SKYTETHER_USE_DUCKDB
+  namespace skytether::services {
 
     struct DuckDBService : public EngineService {
       // >> Attributes
-      unique_ptr<mohair::adapters::EngineDuckDB> engine;
+      unique_ptr<skytether::adapters::EngineDuckDB> engine;
 
       // >> Deconstructors and Constructors
       virtual ~DuckDBService() = default;
@@ -67,6 +67,6 @@
 
     };
 
-  } // namespace: mohair::services
+  } // namespace: skytether::services
 
-#endif // essentially an include guard that uses USE_DUCKDB
+#endif // essentially an include guard that uses SKYTETHER_USE_DUCKDB

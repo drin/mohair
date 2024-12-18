@@ -26,7 +26,7 @@
 // ------------------------------
 // Classes and Functions
 
-namespace mohair {
+namespace skytether {
 
   // >> Implementations for each op type to return its string representation
   const string OpErr::ToString()       { return u8"Err()";                         }
@@ -42,101 +42,103 @@ namespace mohair {
   const string OpHashJoin::ToString()  { return u8"⋈→("   + table_name + u8")";    }
   const string OpMergeJoin::ToString() { return u8"⋈⊕("   + table_name + u8")";    }
 
-  const string OpSkyRead::ToString()   { return u8"SkyRead(" + table_name + u8")"; }
+  const string OpSkyRead::ToString()       { return u8"SkyRead("          + table_name + u8")"; }
+  const string OpPartitionRead::ToString() { return u8"SkyPartitionRead(" + table_name + u8")"; }
+  const string OpSliceRead::ToString()     { return u8"SkySliceRead("     + table_name + u8")"; }
 
-  // >> Implementations for each op type to return its PlanAnchor
-  unique_ptr<PlanAnchor> PlanAnchorForRel(Rel *anchor_relmsg) {
-    // wrap Rel in a new PlanAnchor message
-    auto anchor_msg = std::make_unique<PlanAnchor>();
-    anchor_msg->set_allocated_anchor_rel(anchor_relmsg);
+  // >> Implementations for each op type to return its SuperPlan
+  unique_ptr<SuperPlan> SuperPlanForRel(Rel *super_mergerel_msg) {
+    // wrap Rel in a new SuperPlan message
+    auto superplan_msg = std::make_unique<SuperPlan>();
+    superplan_msg->set_allocated_merge_rel(super_mergerel_msg);
 
     // Then return the constructed message
-    return anchor_msg;
+    return superplan_msg;
   }
 
-  unique_ptr<PlanAnchor> OpProj::ToPlanAnchor() {
+  unique_ptr<SuperPlan> OpProj::ToSuperPlanRef() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_project()->clear_input();
 
-    // Then return the PlanAnchor message
-    return PlanAnchorForRel(simplified_rel.release());
+    // Then return the SuperPlan message
+    return SuperPlanForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpSel::ToPlanAnchor() {
+  unique_ptr<SuperPlan> OpSel::ToSuperPlanRef() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_filter()->clear_input();
 
-    // Then return the PlanAnchor message
-    return PlanAnchorForRel(simplified_rel.release());
+    // Then return the SuperPlan message
+    return SuperPlanForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpLimit::ToPlanAnchor() {
+  unique_ptr<SuperPlan> OpLimit::ToSuperPlanRef() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_fetch()->clear_input();
 
-    // Then return the PlanAnchor message
-    return PlanAnchorForRel(simplified_rel.release());
+    // Then return the SuperPlan message
+    return SuperPlanForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpSort::ToPlanAnchor() {
+  unique_ptr<SuperPlan> OpSort::ToSuperPlanRef() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_sort()->clear_input();
 
-    // Then return the PlanAnchor message
-    return PlanAnchorForRel(simplified_rel.release());
+    // Then return the SuperPlan message
+    return SuperPlanForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpAggr::ToPlanAnchor() {
+  unique_ptr<SuperPlan> OpAggr::ToSuperPlanRef() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_aggregate()->clear_input();
 
-    // Then return the PlanAnchor message
-    return PlanAnchorForRel(simplified_rel.release());
+    // Then return the SuperPlan message
+    return SuperPlanForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpCrossJoin::ToPlanAnchor() {
+  unique_ptr<SuperPlan> OpCrossJoin::ToSuperPlanRef() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_cross()->clear_left();
     simplified_rel->mutable_cross()->clear_right();
 
-    // Then return the PlanAnchor message
-    return PlanAnchorForRel(simplified_rel.release());
+    // Then return the SuperPlan message
+    return SuperPlanForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpJoin::ToPlanAnchor() {
+  unique_ptr<SuperPlan> OpJoin::ToSuperPlanRef() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_join()->clear_left();
     simplified_rel->mutable_join()->clear_right();
 
-    // Then return the PlanAnchor message
-    return PlanAnchorForRel(simplified_rel.release());
+    // Then return the SuperPlan message
+    return SuperPlanForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpHashJoin::ToPlanAnchor() {
+  unique_ptr<SuperPlan> OpHashJoin::ToSuperPlanRef() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_hash_join()->clear_left();
     simplified_rel->mutable_hash_join()->clear_right();
 
-    // Then return the PlanAnchor message
-    return PlanAnchorForRel(simplified_rel.release());
+    // Then return the SuperPlan message
+    return SuperPlanForRel(simplified_rel.release());
   }
 
-  unique_ptr<PlanAnchor> OpMergeJoin::ToPlanAnchor() {
+  unique_ptr<SuperPlan> OpMergeJoin::ToSuperPlanRef() {
     // copy the Rel message and simplify its content (we don't need its full tree)
     auto simplified_rel = std::make_unique<Rel>(*(this->op_wrap));
     simplified_rel->mutable_merge_join()->clear_left();
     simplified_rel->mutable_merge_join()->clear_right();
 
-    // Then return the PlanAnchor message
-    return PlanAnchorForRel(simplified_rel.release());
+    // Then return the SuperPlan message
+    return SuperPlanForRel(simplified_rel.release());
   }
 
   // >> End of plan_anchor() implementations
@@ -179,14 +181,14 @@ namespace mohair {
 
   // >> End of op_inputs() implementations
 
-  // >> Specific translation functions (from Substrait to Mohair)
-  template <typename UnaryRelMsg, typename MohairRel>
+  // >> Specific translation functions (from Substrait to Skytether)
+  template <typename UnaryRelMsg, typename SkytetherRel>
   unique_ptr<QueryOp> FromUnaryOpMsg(Rel *rel_msg, UnaryRelMsg *substrait_op) {
     // recurse on input relation
-    unique_ptr<QueryOp> op_input = MohairFrom(substrait_op->mutable_input());
+    unique_ptr<QueryOp> op_input = SkytetherFrom(substrait_op->mutable_input());
 
     // Initialize op and set its inputs
-    auto unary_op = std::make_unique<MohairRel>(
+    auto unary_op = std::make_unique<SkytetherRel>(
       substrait_op, rel_msg, op_input->table_name
     );
     get<0>(unary_op->op_inputs) = std::move(op_input);
@@ -194,15 +196,15 @@ namespace mohair {
     return unary_op;
   }
 
-  template <typename BinaryRelMsg, typename MohairRel>
+  template <typename BinaryRelMsg, typename SkytetherRel>
   unique_ptr<QueryOp> FromBinaryOpMsg(Rel *rel_msg, BinaryRelMsg *substrait_op) {
     // recurse on input relations
-    unique_ptr<QueryOp> left_input  = MohairFrom(substrait_op->mutable_left() );
-    unique_ptr<QueryOp> right_input = MohairFrom(substrait_op->mutable_right());
+    unique_ptr<QueryOp> left_input  = SkytetherFrom(substrait_op->mutable_left() );
+    unique_ptr<QueryOp> right_input = SkytetherFrom(substrait_op->mutable_right());
 
     // prep params for the operator
     string op_tname { left_input->table_name + "." + right_input->table_name  };
-    auto binary_op = std::make_unique<MohairRel>(
+    auto binary_op = std::make_unique<SkytetherRel>(
        substrait_op, rel_msg, op_tname
     );
 
@@ -261,20 +263,20 @@ namespace mohair {
       case ReadRel::ReadTypeCase::kLocalFiles: {
         auto& src_files = substrait_op->local_files();
 
-        // For mohair, we only ever expect to receive single URI paths
+        // For skytether, we only ever expect to receive single URI paths
         if (src_files.items_size() > 1) {
-          std::cerr << "Error: mohair should only specify 1 File per ReadRel" << std::endl;
+          std::cerr << "Error: skytether should only specify 1 File per ReadRel" << std::endl;
           return nullptr;
         }
 
         auto& src_file = src_files.items(0);
         if (not src_file.has_uri_path()) {
-          std::cerr << "Error: mohair should only specify URI path" << std::endl;
+          std::cerr << "Error: skytether should only specify URI path" << std::endl;
           return nullptr;
         }
 
         if (not src_file.has_arrow()) {
-          std::cerr << "Error: currently, mohair only supports Arrow files" << std::endl;
+          std::cerr << "Error: currently, skytether only supports Arrow files" << std::endl;
           return nullptr;
         }
 
@@ -296,12 +298,9 @@ namespace mohair {
     return std::make_unique<OpRead>(substrait_op, rel_msg, op_tname);
   }
 
-  unique_ptr<QueryOp> FromSkyMsg(Rel* rel_msg, ExtensionLeafRel* substrait_op)  {
+  unique_ptr<QueryOp> FromSkyRelMsg(Rel* rel_msg, ExtensionLeafRel* substrait_op)  {
     auto sky_rel = std::make_unique<SkyRel>();
-
-    // If we're translating a message with a SkyRel, unpack it
-    if (substrait_op->has_detail()) { substrait_op->detail().UnpackTo(sky_rel.get()); }
-    else { std::cerr << "Found ExtensionLeafRel without data" << std::endl; }
+    substrait_op->detail().UnpackTo(sky_rel.get());
 
     string op_tname { sky_rel->domain() + "-" + sky_rel->partition() };
     return std::make_unique<OpSkyRead>(
@@ -309,12 +308,56 @@ namespace mohair {
     );
   }
 
+  unique_ptr<QueryOp> FromSkyPartitionRelMsg(Rel* rel_msg, ExtensionLeafRel* substrait_op)  {
+    auto partition_rel = std::make_unique<SkyPartitionRel>();
+    substrait_op->detail().UnpackTo(partition_rel.get());
+
+    string op_tname { partition_rel->domain() + "-" + partition_rel->partition() };
+    return std::make_unique<OpPartitionRead>(
+      substrait_op, rel_msg, std::move(partition_rel), op_tname
+    );
+  }
+
+  unique_ptr<QueryOp> FromSkySliceRelMsg(Rel* rel_msg, ExtensionLeafRel* substrait_op)  {
+    auto slice_rel = std::make_unique<SkySliceRel>();
+    substrait_op->detail().UnpackTo(slice_rel.get());
+
+    string op_tname { slice_rel->domain() + "-" + slice_rel->partition() };
+    return std::make_unique<OpSliceRead>(
+      substrait_op, rel_msg, std::move(slice_rel), op_tname
+    );
+  }
+
+  unique_ptr<QueryOp> FromExtensionLeafMsg(Rel* rel_msg, ExtensionLeafRel* substrait_op)  {
+    if (substrait_op->has_detail()) {
+
+      if (substrait_op->detail().Is<SkyRel>()) {
+        return FromSkyRelMsg(rel_msg, substrait_op);
+      }
+
+      else if (substrait_op->detail().Is<SkyPartitionRel>()) {
+        return FromSkyPartitionRelMsg(rel_msg, substrait_op);
+      }
+
+      else if (substrait_op->detail().Is<SkySliceRel>()) {
+        return FromSkySliceRelMsg(rel_msg, substrait_op);
+      }
+
+      else { std::cerr << "Unknown msg type in ExtensionLeafRel" << std::endl; }
+
+    }
+
+    else { std::cerr << "Found ExtensionLeafRel without data" << std::endl; }
+
+    return nullptr;
+  }
+
 
   /**
-   * A function to convert a substrait `Rel` message to a Mohair `QueryOp` derived
+   * A function to convert a substrait `Rel` message to a Skytether `QueryOp` derived
    * class.
    */
-  unique_ptr<QueryOp> MohairFrom(Rel *rel_msg) {
+  unique_ptr<QueryOp> SkytetherFrom(Rel *rel_msg) {
     switch(rel_msg->rel_type_case()) {
       // Translate pipeline-able operators
       case Rel::RelTypeCase::kProject: {
@@ -366,7 +409,7 @@ namespace mohair {
 
       case Rel::RelTypeCase::kExtensionLeaf: {
         std::cout << "Found ExtensionLeaf operator" << std::endl;
-        return FromSkyMsg(rel_msg, rel_msg->mutable_extension_leaf());
+        return FromExtensionLeafMsg(rel_msg, rel_msg->mutable_extension_leaf());
       }
 
       // Catch all error
@@ -378,9 +421,10 @@ namespace mohair {
     }
   }
 
-  // >> Translation from Mohair to Substrait
-  unique_ptr<PlanAnchor> PlanAnchorFrom(QueryOp* mohair_op) {
-    return mohair_op->ToPlanAnchor();
+  // >> Translation from Skytether to Substrait
+  unique_ptr<SuperPlan> SuperPlanFrom(QueryOp* mohair_op) {
+    // TODO: rename functions
+    return mohair_op->ToSuperPlanRef();
   }
 
 
@@ -407,4 +451,4 @@ namespace mohair {
     }
   }
 
-} // namespace: mohair
+} // namespace: skytether

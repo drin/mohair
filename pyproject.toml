@@ -5,7 +5,8 @@ description = "query processing for decomposable queries"
 authors = ["Aldrin M <octalene.dev@pm.me>"]
 license = "Apache License 2.0"
 packages = [
-    { include = "mohair", from = "src/python" }
+     { include = "mohair"  , from = "src/python" }
+    ,{ include = "skyproto", from = "src/python" }
 ]
 
 [tool.poetry.dependencies]
@@ -20,7 +21,7 @@ pyarrow-hotfix = "^0.6"
 protobuf = "==5.28.3"
 substrait = "==0.20.0"
 ibis-substrait = "==4.0.0"
-pyarrow = "^17.0.0"
+pyarrow = "^18.0.0"
 
 [tool.poetry.dev-dependencies]
 

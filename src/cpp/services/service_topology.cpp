@@ -20,13 +20,13 @@
 // Dependencies
 
 #include "services/service_topology.hpp"
-#include "services/client_mohair.hpp"
+#include "services/client_skytether.hpp"
 
 
 // ------------------------------
 // Functions and Callables
 
-namespace mohair::services {
+namespace skytether::services {
 
   // ----------
   // Simple struct to make it easier to modularize config parsing
@@ -158,20 +158,20 @@ namespace mohair::services {
 
         // Make sure the ServiceConfig doesn't yet exist
         if (service_map->cs_devices.find(downstream_loc) != service_map->cs_devices.end()) {
-          MohairDebugMsg("[Error] Parsed duplicate location");
+          SkytetherDebugMsg("[Error] Parsed duplicate location");
           return Status::Invalid("Downstream location already exists");
         }
 
         // Add it to the list of top-level locations if there's no active ServiceConfig
         else if (parsed_service == nullptr) {
-          if (be_verbose) { MohairDebugMsg("Parsed top-level entry"); }
+          if (be_verbose) { SkytetherDebugMsg("Parsed top-level entry"); }
           service_map->cs_servers.push_back(downstream_loc);
         }
 
         // Otherwise, create it then add to the service map
         else {
           if (be_verbose) {
-            MohairDebugMsg("Parsed entry for [" << service_loc.ToString() << "]");
+            SkytetherDebugMsg("Parsed entry for [" << service_loc.ToString() << "]");
           }
 
           service_map->upstream_locs[downstream_loc] = service_loc;
@@ -244,34 +244,34 @@ namespace mohair::services {
     std::cout << print_stream.str() << std::endl;
   }
 
-} // namespace: mohair::services
+} // namespace: skytether::services
 
 
 // ------------------------------
 // Classes
 
 // >> Hash functor implementations
-namespace mohair::services {
+namespace skytether::services {
 
-  std::size_t HashFunctorMohairTicket::operator()(const Ticket& mohair_ticket) const {
-    // A mohair ticket may be a service location or a query identifier
-    static std::hash<string> HashMohairTicketId;
+  std::size_t HashFunctorSkytetherTicket::operator()(const Ticket& skyticket) const {
+    // A skytether ticket may be a service location or a query identifier
+    static std::hash<string> HashSkytetherTicketId;
 
-    return HashMohairTicketId(mohair_ticket.ticket);
+    return HashSkytetherTicketId(skyticket.ticket);
   }
 
-  std::size_t HashFunctorMohairLocation::operator()(const Location& mohair_location) const {
+  std::size_t HashFunctorSkytetherLocation::operator()(const Location& skyloc) const {
     // A location is essentially a URI
-    static std::hash<string> HashMohairLocation;
+    static std::hash<string> HashSkytetherLocation;
 
-    return HashMohairLocation(mohair_location.ToString());
+    return HashSkytetherLocation(skyloc.ToString());
   }
 
-} // namespace: mohair::services
+} // namespace: skytether::services
 
 
 // >> TopologyService implementations
-namespace mohair::services {
+namespace skytether::services {
 
   // |> Helper functions
   Result<FlightEndpoint>
@@ -284,7 +284,7 @@ namespace mohair::services {
   TopologyService::DoActivateService( [[maybe_unused]] const ServerCallContext&  context
                                      ,                 const shared_ptr<Buffer>  serialized_loc
                                      ,[[maybe_unused]] unique_ptr<ResultStream>* response_stream) {
-    MohairDebugMsg("Handling request: [register-service]");
+    SkytetherDebugMsg("Handling request: [register-service]");
 
     // Deserialize the location URI and parse it into a `Location`
     string location_uri = serialized_loc->ToString();
@@ -302,7 +302,7 @@ namespace mohair::services {
     }
 
     // Activate the configuration and send it in the response
-    MohairDebugMsg("Registering location [" << service_loc.ToString() << "]");
+    SkytetherDebugMsg("Registering location [" << service_loc.ToString() << "]");
     config_entry->second->set_is_active(true);
 
     string response_payload;
@@ -322,14 +322,12 @@ namespace mohair::services {
       Location& upstream_loc = upstream_entry->second;
       auto&     upstream_cfg = service_map->cs_devices[upstream_loc];
 
-      MohairDebugMsg("Connecting to service [" << upstream_loc.ToString() << "]");
-      auto mohair_conn = MohairClient::ForLocation(upstream_loc);
-      if (mohair_conn == nullptr) {
-        return Status::Invalid("Unable to connect to service");
-      }
+      SkytetherDebugMsg("Connecting to service [" << upstream_loc.ToString() << "]");
+      auto skyconn = SkytetherClient::ForLocation(upstream_loc);
+      if (skyconn == nullptr) { return Status::Invalid("Unable to connect to service"); }
 
-      MohairDebugMsg("Sending view change");
-      mohair_conn->SendViewUpdate(*upstream_cfg);
+      SkytetherDebugMsg("Sending view change");
+      skyconn->SendViewUpdate(*upstream_cfg);
     }
 
     return Status::OK();
@@ -339,7 +337,7 @@ namespace mohair::services {
   TopologyService::DoDeactivateService( [[maybe_unused]] const ServerCallContext&  context
                                        ,                 const shared_ptr<Buffer>  serialized_loc
                                        ,[[maybe_unused]] unique_ptr<ResultStream>* response_stream) {
-    MohairDebugMsg("Handling request: [" << ActionDeactivate << "]");
+    SkytetherDebugMsg("Handling request: [" << ActionDeactivate << "]");
 
     // Deserialize location URI and parse it into a `Location`
     string location_uri = serialized_loc->ToString();
@@ -356,7 +354,7 @@ namespace mohair::services {
       return Status::Invalid("Location already inactive");
     }
 
-    MohairDebugMsg("De-activating location [" << service_loc.ToString() << "]");
+    SkytetherDebugMsg("De-activating location [" << service_loc.ToString() << "]");
     config_entry->second->set_is_active(false);
 
     // If there is an upstream service, send it a view change
@@ -365,13 +363,13 @@ namespace mohair::services {
       Location& upstream_loc = upstream_entry->second;
       auto&     upstream_cfg = service_map->cs_devices[upstream_loc];
 
-      auto client_conn = MohairClient::ForLocation(upstream_loc);
+      auto client_conn = SkytetherClient::ForLocation(upstream_loc);
       if (client_conn == nullptr) {
         return Status::Invalid("Unable to connect to service");
       }
 
       client_conn->SendViewUpdate(*upstream_cfg);
-      MohairDebugMsg("Sent view change to [" << upstream_loc.ToString() << "]");
+      SkytetherDebugMsg("Sent view change to [" << upstream_loc.ToString() << "]");
     }
 
     return Status::OK();
@@ -408,4 +406,4 @@ namespace mohair::services {
     return Status::OK();
   }
 
-} // namespace: mohair::services
+} // namespace: skytether::services

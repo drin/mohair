@@ -55,10 +55,10 @@ from ibis_substrait.compiler.core import SubstraitCompiler
 # >> Internal
 from mohair.query.types import SkyPartition
 
-from mohair.skytether.mohair.algebra_pb2 import ( ExecutionStats
-                                                 ,SkyRel
-                                                 ,SkyPartitionRel
-                                                 ,SkySliceRel)
+from skyproto.mohair.algebra_pb2 import ( ExecutionStats
+                                         ,SkyRel
+                                         ,SkyPartitionRel
+                                         ,SkySliceRel)
 
 
 # ------------------------------

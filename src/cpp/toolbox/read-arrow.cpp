@@ -24,13 +24,13 @@
 #include <filesystem>
 
 // >> Internal
-#include "../mohair.hpp"
+#include "skytether.hpp"
 
 //  service-specific includes
-#if USE_DUCKDB
+#if SKYTETHER_USE_DUCKDB
   #include "../engines/adapter_duckdb.hpp"
 
-  using mohair::adapters::EngineDuckDB;
+  using skytether::adapters::EngineDuckDB;
 #endif
 
 
@@ -39,6 +39,9 @@
 
 // >> Namespaces
 namespace fs = std::filesystem;
+
+using std::vector;
+using std::unique_ptr;
 
 
 // ------------------------------
@@ -50,9 +53,9 @@ struct ToolInterface {
   bool is_stream  { false };
   int  col_limit  { 5     };
 
-  #if USE_DUCKDB
+  #if SKYTETHER_USE_DUCKDB
     int ScanFileWithDuckDB() {
-      unique_ptr<EngineDuckDB> duck_engine = mohair::adapters::DuckDBForMem();
+      unique_ptr<EngineDuckDB> duck_engine = skytether::adapters::DuckDBForMem();
 
       // Use new path, `scan_arrows_file`
       int  context_id     = duck_engine->ArrowScanOpFile(arrow_fpath);
@@ -76,54 +79,54 @@ struct ToolInterface {
 
   int ScanStreamFromFile() {
     std::string arrow_file_uri { "file://" + arrow_fpath.string() };
-    auto result_data = mohair::ReadIPCStream(arrow_file_uri);
+    auto result_data = skytether::ReadIPCStream(arrow_file_uri);
     if (not result_data.ok()) {
-      mohair::PrintError("Error reading data stream from file", result_data.status());
+      skytether::PrintError("Error reading data stream from file", result_data.status());
       return 6;
     }
 
     vector<int> col_selection = IndicesForSelection((*result_data)->num_columns());
     auto data_excerpt = (*result_data)->SelectColumns(col_selection);
     if (not data_excerpt.ok()) {
-      mohair::PrintError("Error projecting table columns", data_excerpt.status());
+      skytether::PrintError("Error projecting table columns", data_excerpt.status());
       return 9;
     }
 
-    mohair::PrintTable(*data_excerpt, 0, 10);
+    skytether::PrintTable(*data_excerpt, 0, 10);
     return 0;
   }
 
   int ScanFile() {
     std::string arrow_file_uri { "file://" + arrow_fpath.string() };
-    auto result_data = mohair::ReadIPCFile(arrow_file_uri);
+    auto result_data = skytether::ReadIPCFile(arrow_file_uri);
     if (not result_data.ok()) {
-      mohair::PrintError("Error reading data from file", result_data.status());
+      skytether::PrintError("Error reading data from file", result_data.status());
       return 5;
     }
 
     vector<int> col_selection = IndicesForSelection((*result_data)->num_columns());
     auto data_excerpt = (*result_data)->SelectColumns(col_selection);
     if (not data_excerpt.ok()) {
-      mohair::PrintError("Error projecting table columns", data_excerpt.status());
+      skytether::PrintError("Error projecting table columns", data_excerpt.status());
       return 9;
     }
 
-    mohair::PrintTable(*data_excerpt, 0, 10);
+    skytether::PrintTable(*data_excerpt, 0, 10);
     return 0;
   }
 
   int Start() {
     if (arrow_fpath.empty()) {
-      MohairDebugMsg("No data source provided.");
+      SkytetherDebugMsg("No data source provided.");
       return ERRCODE_CLIENT;
     }
 
     if (use_duckdb) {
-      #if USE_DUCKDB
+      #if SKYTETHER_USE_DUCKDB
         return ScanFileWithDuckDB();
 
       #else
-        MohairDebugMsg("DuckDB backend unavailable");
+        SkytetherDebugMsg("DuckDB backend unavailable");
         return 0;
 
       #endif

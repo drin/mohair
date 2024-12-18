@@ -20,17 +20,17 @@
 // Dependencies
 
 #include "query/plans.hpp"
-#include "adapter_duckdb.hpp"
+#include "engines/adapter_duckdb.hpp"
 
 
 // ------------------------------
 // Only define if DuckDB is enabled
-#if USE_DUCKDB
+#if SKYTETHER_USE_DUCKDB
 
   // ------------------------------
   // Functions
 
-  namespace mohair::adapters {
+  namespace skytether::adapters {
 
     Value ValueForIPCBuffer(Buffer& ipc_buffer) {
       // Place values into a child_list_t<type>
@@ -106,13 +106,13 @@
       return arrow::ImportRecordBatchReader(&(stream_wrapper->stream));
     }
 
-  } // namespace: mohair::adapters
+  } // namespace: skytether::adapters
 
 
   // ------------------------------
   // Class Implementations
 
-  namespace mohair::adapters {
+  namespace skytether::adapters {
 
     unique_ptr<EngineDuckDB> DuckDBForMem() {
       std::cout << "Initializing in-memory DuckDB" << std::endl;
@@ -133,7 +133,7 @@
     //! Create a duckdb scan operator from an IPC buffer (extracted from an arrow file)
     int EngineDuckDB::ArrowScanOpIPC(shared_ptr<Buffer> ipc_buffer) {
       // Construct a QueryContext to keep the IPC buffer alive
-      auto scan_context = std::make_unique<QueryContext>();
+      auto scan_context = std::make_unique<DuckContext>();
       scan_context->rel_mem.push_back(ipc_buffer);
 
       // `scan_arrow_ipc` takes IPC buffers as a list of structs
@@ -154,7 +154,7 @@
     //! Create a duckdb scan operator from an arrow file
     int EngineDuckDB::ArrowScanOpFile(fs::path arrow_fpath) {
       // Construct a QueryContext to keep everything alive
-      auto scan_context = std::make_unique<QueryContext>();
+      auto scan_context = std::make_unique<DuckContext>();
 
       // `scan_arrows_file` takes a vector of file paths as input
       duckdb::vector<Value> fn_args {
@@ -173,29 +173,29 @@
 
     //! Create a duckdb query plan from a substrait plan message
     int EngineDuckDB::ExecContextForSubstrait(std::string plan_msg) {
-      MohairDebugMsg("Creating execution context for query plan");
+      SkytetherDebugMsg("Creating execution context for query plan");
 
       // for debug purposes
-      unique_ptr<Plan> plan_payload = mohair_substrait::SubstraitPlanFromString(plan_msg);
-      MohairDebugMsg("received payload:");
-      mohair_substrait::PrintSubstraitPlan(plan_payload.get());
+      unique_ptr<Plan> plan_payload = mohair::SubstraitPlanFromString(plan_msg);
+      SkytetherDebugMsg("received payload:");
+      mohair::PrintSubstraitPlan(plan_payload.get());
 
       // Construct a QueryContext to keep everything alive
-      auto scan_context = std::make_unique<QueryContext>();
+      auto scan_context = std::make_unique<DuckContext>();
       scan_context->status = QueryStatus::Pending;
 
       // `from_substrait` takes a single binary blob as input
       duckdb::vector<Value> fn_args { Value::BLOB_RAW(plan_msg) };
 
       // Get a relation representing the execution of the substrait plan
-      MohairDebugMsg("Creating table function from query plan");
+      SkytetherDebugMsg("Creating table function from query plan");
       scan_context->duck_rel = engine_conn.TableFunction("execute_mohair", fn_args);
-      MohairDebugMsg("Created table function");
+      SkytetherDebugMsg("Created table function");
 
       int prepared_ctxtid = ++context_id;
       query_contexts[prepared_ctxtid] = std::move(scan_context);
 
-      MohairDebugMsg("Returning context id");
+      SkytetherDebugMsg("Returning context id");
       return prepared_ctxtid;
     }
 
@@ -207,6 +207,7 @@
 
       rel_context->status = QueryStatus::Running;
 
+      std::cout << "Constructing a reader for query result" << std::endl;
       ARROW_ASSIGN_OR_RAISE(
          rel_context->rel_result
         ,ReaderForResult(rel_context->duck_rel->Execute())
@@ -230,10 +231,12 @@
       const auto& map_entry = query_contexts.find(context_id);
       if (map_entry == query_contexts.end()) { return nullptr; }
 
+      std::cout << "Returning result reader" << std::endl;
+
       auto& rel_context = map_entry->second;
       return rel_context->rel_result;
     }
 
-  } // namespace: mohair::adapters
+  } // namespace: skytether::adapters
 
 #endif

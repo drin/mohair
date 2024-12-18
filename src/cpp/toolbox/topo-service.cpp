@@ -20,7 +20,7 @@
 // Dependencies
 
 // >> Internal
-#include "mohair_cli.hpp"
+#include "skytether_cli.hpp"
 
 // >> Topology-specific definitions
 #include "services/service_topology.hpp"
@@ -30,19 +30,19 @@
 // Type Aliases
 
 // >> Types
-using mohair::services::Location;
+using skytether::services::Location;
 
-using mohair::services::ServiceHierarchy;
-using mohair::services::MohairClient;
-using mohair::services::TopologyService;
+using skytether::services::ServiceHierarchy;
+using skytether::services::SkytetherClient;
+using skytether::services::TopologyService;
 
 // >> Functions
-using mohair::cli::ParseArgLocationUri;
-using mohair::cli::ValidateArgCount;
-using mohair::cli::ValidateArgLocationUri;
+using skytether::cli::ParseArgLocationUri;
+using skytether::cli::ValidateArgCount;
+using skytether::cli::ValidateArgLocationUri;
 
-using mohair::services::TopologyFromConfig;
-using mohair::services::StartService;
+using skytether::services::TopologyFromConfig;
+using skytether::services::StartService;
 
 
 // ------------------------------
@@ -62,12 +62,12 @@ int ValidateArgs(int argc, [[maybe_unused]] char **argv) {
 
   // Error if we have an invalid amount of arguments
   errcode_validation = ValidateArgCount(argc, argc_min, argc_max);
-  MohairCheckErrCode(errcode_validation, "Usage: topo-service [<Location URI>]");
+  SkytetherCheckErrCode(errcode_validation, "Usage: topo-service [<Location URI>]");
 
   // Error if we have an invalid Uri scheme
   if (argc == 2) {
     errcode_validation = ValidateArgLocationUri(argv[argndx_loc]);
-    MohairCheckErrCode(errcode_validation, "Invalid scheme for location URI");
+    SkytetherCheckErrCode(errcode_validation, "Invalid scheme for location URI");
   }
 
   return errcode_validation;
@@ -96,7 +96,7 @@ struct ServiceActions {
     // Parse input (topology config)
     auto result_topology = TopologyFromConfig(config_fpath, should_verbose);
     if (not result_topology.ok()) {
-      mohair::PrintError("Failed to parse topology config", result_topology.status());
+      skytether::PrintError("Failed to parse topology config", result_topology.status());
       return ERRCODE_API_CONFIG;
     }
     auto topology = std::move(result_topology).ValueOrDie();
@@ -104,7 +104,7 @@ struct ServiceActions {
     // Debugging options
     if (should_print_topo) {
       std::cout << std::endl << "Topology:" << std::endl;
-      mohair::services::PrintTopology(topology.get());
+      skytether::services::PrintTopology(topology.get());
     }
 
     if (should_verbose) {
@@ -121,7 +121,7 @@ struct ServiceActions {
     auto topo_service = std::make_unique<TopologyService>(std::move(topology));
     auto status_start = StartService(*topo_service, service_loc);
     if (not status_start.ok()) {
-      mohair::PrintError("Unable to start topo-service", status_start);
+      skytether::PrintError("Unable to start topo-service", status_start);
       return ERRCODE_START_SRV;
     }
 
@@ -165,7 +165,7 @@ int main(int argc, char **argv) {
 
       case 'l': {
         errcode_cli = ParseArgLocationUri(optarg, &(client_actions.service_loc));
-        MohairCheckErrCode(errcode_cli, "Failed to parse service location");
+        SkytetherCheckErrCode(errcode_cli, "Failed to parse service location");
         break;
       }
 

@@ -29,11 +29,10 @@
 #pragma once
 
 // >> Common internal deps
-#include "mohair.hpp"
+#include "skytether.hpp"
 
 // >> Definitions for mohair protocol
-// NOTE: this puts some things in ::mohair namespace
-#include "mohair-substrait/mohair_substrait.hpp"
+#include "mohair.hpp"
 
 // >> Third-party deps
 #include "query/apidep_substrait.hpp"
@@ -42,18 +41,20 @@
 // ------------------------------
 // Type Aliases
 
-namespace mohair {
+namespace skytether {
+
   // >> Mohair query processing types
-  using skytether::mohair::PlanAnchor;
-  using skytether::mohair::ErrRel;
+  using skyproto::mohair::SuperPlan;
+  using skyproto::mohair::SubPlan;
+  using skyproto::mohair::ErrRel;
 
   // >> Mohair topology types
-  using skytether::mohair::ServiceConfig;
-  using skytether::mohair::DeviceClass;
+  using skyproto::mohair::ServiceConfig;
+  using skyproto::mohair::DeviceClass;
 
-  // >> Types from mohair-substrait
-  using mohair_substrait::PlanMessage;
-  using mohair_substrait::SubstraitMessage;
+  // >> Types from mohair
+  using mohair::PlanMessage;
+  using mohair::SubstraitMessage;
 
-} // namespace: mohair
+} // namespace: skytether
 

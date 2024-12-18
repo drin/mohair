@@ -24,7 +24,7 @@
 #include <unordered_map>
 
 // >> Internal
-#include "service_mohair.hpp"
+#include "services/service_skytether.hpp"
 
 
 // ------------------------------
@@ -37,7 +37,7 @@ using std::unordered_map;
 // ------------------------------
 // Functions
 
-namespace mohair::services {
+namespace skytether::services {
 
   // >> type forwards
   struct ServiceHierarchy;
@@ -51,32 +51,32 @@ namespace mohair::services {
 
   void PrintTopology(ServiceHierarchy* service_map);
 
-} // namespace: mohair::services
+} // namespace: skytether::services
 
 
 // ------------------------------
 // Classes
 
 // >> Support classes
-namespace mohair::services {
+namespace skytether::services {
 
   // >> Hash functor definitions
-  struct HashFunctorMohairTicket {
-    std::size_t operator()(const Ticket& mohair_ticket) const;
+  struct HashFunctorSkytetherTicket {
+    std::size_t operator()(const Ticket& skyticket) const;
   };
 
-  struct HashFunctorMohairLocation {
-    std::size_t operator()(const Location& mohair_location) const;
+  struct HashFunctorSkytetherLocation {
+    std::size_t operator()(const Location& skyloc) const;
   };
 
   // >> Aliases for templated types
   using service_topology = unordered_map< Location
                                          ,unique_ptr<ServiceConfig>
-                                         ,HashFunctorMohairLocation>;
+                                         ,HashFunctorSkytetherLocation>;
 
   using upstream_map = unordered_map< Location
                                      ,Location
-                                     ,HashFunctorMohairLocation>;
+                                     ,HashFunctorSkytetherLocation>;
 
   struct ServiceHierarchy {
     vector<Location> cs_servers;
@@ -84,11 +84,11 @@ namespace mohair::services {
     upstream_map     upstream_locs;
   };
 
-} // namespace: mohair::services
+} // namespace: skytether::services
 
 
 // >> Service definitions
-namespace mohair::services {
+namespace skytether::services {
 
   struct TopologyService : public ServerAdapter {
 
@@ -127,4 +127,4 @@ namespace mohair::services {
 
   };
 
-} // namespace: mohair::services
+} // namespace: skytether::services

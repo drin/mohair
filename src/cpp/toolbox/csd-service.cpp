@@ -20,36 +20,39 @@
 // Dependencies
 
 // >> Internal
-#include "mohair_cli.hpp"
+#include "skytether_cli.hpp"
 
 // >> Engine-specific definitions
-#if USE_DUCKDB
+#if SKYTETHER_USE_DUCKDB
   #include "services/service_duckdb.hpp"
 
-  using mohair::services::DuckDBService;
+  using skytether::services::DuckDBService;
 #endif
 
 
 // ------------------------------
 // Macros and Type Aliases
 
+// >> Standard types
+using std::unique_ptr;
+
 // >> Protocol types
-using mohair::ServiceConfig;
+using skytether::ServiceConfig;
 
 // >> Service types
-using mohair::services::Location;
-using mohair::services::ResultStream;
-using mohair::services::FlightResult;
+using skytether::services::Location;
+using skytether::services::ResultStream;
+using skytether::services::FlightResult;
 
-using mohair::services::DeactivationCallback;
-using mohair::services::MohairClient;
+using skytether::services::DeactivationCallback;
+using skytether::services::SkytetherClient;
 
 // >> Service functions
-using mohair::services::StartService;
+using skytether::services::StartService;
 
-using mohair::cli::ParseArgLocationUri;
-using mohair::cli::ValidateArgCount;
-using mohair::cli::ValidateArgLocationUri;
+using skytether::cli::ParseArgLocationUri;
+using skytether::cli::ValidateArgCount;
+using skytether::cli::ValidateArgLocationUri;
 
 
 // ------------------------------
@@ -61,14 +64,14 @@ struct ServiceActions {
   bool     backend_isduckdb { true  };
   bool     metasrv_isset    { false };
 
-  unique_ptr<MohairClient>  metasrv_conn { nullptr };
-  unique_ptr<ServiceConfig> service_cfg  { nullptr };
+  unique_ptr<SkytetherClient> metasrv_conn { nullptr };
+  unique_ptr<ServiceConfig>   service_cfg  { nullptr };
 
   ServiceActions(): service_loc(), metasrv_loc() {}
 
   // Convenience methods
   int ConnectToMetadataService() {
-    metasrv_conn = MohairClient::ForLocation(metasrv_loc);
+    metasrv_conn = SkytetherClient::ForLocation(metasrv_loc);
     if (metasrv_conn == nullptr) {
       std::cerr << "Unable to connect to service" << std::endl;
       return ERRCODE_CONN_CLIENT;
@@ -82,7 +85,7 @@ struct ServiceActions {
     // (should only have 1)
     auto result_cfgmsg = result_stream->Next();
     if (not result_cfgmsg.ok()) {
-      mohair::PrintError("Failed to get result from stream", result_cfgmsg.status());
+      skytether::PrintError("Failed to get result from stream", result_cfgmsg.status());
       return ERRCODE_API_REGISTER;
     }
     unique_ptr<FlightResult> config_msg = std::move(result_cfgmsg).ValueOrDie();
@@ -103,8 +106,8 @@ struct ServiceActions {
       return ERRCODE_API_REGISTER;
     }
 
-    MohairDebugMsg("Initializing service with config:");
-    mohair::services::PrintConfig(service_cfg.get());
+    SkytetherDebugMsg("Initializing service with config:");
+    skytether::services::PrintConfig(service_cfg.get());
 
     return 0;
   }
@@ -114,8 +117,8 @@ struct ServiceActions {
     service_cfg = std::make_unique<ServiceConfig>();
     service_cfg->set_service_location(service_loc.ToString());
 
-    MohairDebugMsg("Initializing service with config:");
-    mohair::services::PrintConfig(service_cfg.get());
+    SkytetherDebugMsg("Initializing service with config:");
+    skytether::services::PrintConfig(service_cfg.get());
 
     return 0;
   }
@@ -124,7 +127,7 @@ struct ServiceActions {
     // Activate our place in the topology
     auto result_response = metasrv_conn->SendActivation(service_loc);
     if (not result_response.ok()) {
-      mohair::PrintError("Error during service registration", result_response.status());
+      skytether::PrintError("Error during service registration", result_response.status());
       return ERRCODE_API_REGISTER;
     }
 
@@ -133,7 +136,7 @@ struct ServiceActions {
 
   // Public entry point
   int Start() {
-    MohairDebugMsg("Starting mohair service [" << service_loc.ToString() << "]");
+    SkytetherDebugMsg("Starting skytether service [" << service_loc.ToString() << "]");
     int errcode_service { 0 };
 
     // Prepare a callback; we do it this way to make it optional
@@ -143,11 +146,11 @@ struct ServiceActions {
     // Connect a client to the topology service
     if (metasrv_isset) {
       errcode_service = ConnectToMetadataService();
-      MohairCheckErrCode(errcode_service, "Unable to connect to topology service");
+      SkytetherCheckErrCode(errcode_service, "Unable to connect to topology service");
 
       // Make an activation request to the topology service and get our config
       errcode_service = RequestActivation();
-      MohairCheckErrCode(errcode_service, "Unable to request activation");
+      SkytetherCheckErrCode(errcode_service, "Unable to request activation");
 
       // Since we connect to a metadata service, point our callback to it
       fn_deactivate.client_conn = metasrv_conn.get();
@@ -157,18 +160,18 @@ struct ServiceActions {
       errcode_service = InitLocalServiceConfig();
     }
 
-    #if USE_DUCKDB
-      auto mohair_duckcse = std::make_unique<DuckDBService>(&fn_deactivate);
-      auto status_start   = StartService(*mohair_duckcse, *service_cfg);
+    #if SKYTETHER_USE_DUCKDB
+      auto skytether_duckcse = std::make_unique<DuckDBService>(&fn_deactivate);
+      auto status_start   = StartService(*skytether_duckcse, *service_cfg);
       if (not status_start.ok()) {
-        mohair::PrintError("Unable to start csd-service", status_start);
+        skytether::PrintError("Unable to start csd-service", status_start);
         return ERRCODE_START_SRV;
       }
 
       return 0;
 
     #else
-      MohairDebugMsg("No known cs-engine is enabled.");
+      SkytetherDebugMsg("No known cs-engine is enabled.");
       return ERRCODE_NO_ENGINE;
 
     #endif
@@ -211,13 +214,13 @@ int main(int argc, char **argv) {
 
       case 'l': {
         errcode_cli = ParseArgLocationUri(optarg, &(client_actions.service_loc));
-        MohairCheckErrCode(errcode_cli, "Failed to parse service location");
+        SkytetherCheckErrCode(errcode_cli, "Failed to parse service location");
         break;
       }
 
       case 'm': {
         errcode_cli = ParseArgLocationUri(optarg, &(client_actions.metasrv_loc));
-        MohairCheckErrCode(errcode_cli, "Failed to parse service location");
+        SkytetherCheckErrCode(errcode_cli, "Failed to parse service location");
 
         client_actions.metasrv_isset = true;
         break;

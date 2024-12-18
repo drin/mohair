@@ -1,0 +1,57 @@
+# ------------------------------
+# Executable targets (binaries)
+
+# simple reader for Arrow files
+readarrow_bin = executable('read-arrow'
+  ,'read-arrow.cpp'
+  ,include_directories: [ libskytether_inc ]
+  ,dependencies       : libskytether_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
+  ,install            : true
+)
+
+# writer for Arrow files (useful for format conversion)
+writearrow_bin = executable('write-arrow'
+  ,'write-arrow.cpp'
+  ,include_directories: [ libskytether_inc ]
+  ,dependencies       : libskytether_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
+  ,install            : true
+)
+
+# sandbox for prototyping query processing
+mohair_bin = executable('mohair'
+  ,'mohair.cpp'
+  ,include_directories: [ libskytether_inc ]
+  ,dependencies       : libskytether_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
+  ,install            : true
+)
+
+# minimal client for communicating with skytether services
+skytether_client_bin = executable('skytether-client'
+  ,['skytether-client.cpp', 'skytether_cli.cpp']
+  ,include_directories: [ libskytether_inc ]
+  ,dependencies       : libskytether_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
+  ,install            : true
+)
+
+# service for CS device
+csd_service_bin = executable('csd-service'
+  ,['csd-service.cpp', 'skytether_cli.cpp']
+  ,include_directories: [ libskytether_inc ]
+  ,dependencies       : libskytether_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
+  ,install            : true
+)
+
+# simple metadata service for prototyping skytether services
+topo_service_bin = executable('topo-service'
+  ,['topo-service.cpp', 'skytether_cli.cpp']
+  ,include_directories: [ libskytether_inc ]
+  ,dependencies       : libskytether_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
+  ,install            : true
+)
+

@@ -19,20 +19,28 @@
 // ------------------------------
 // Dependencies
 
-#include "mohair.hpp"
+#include "skytether.hpp"
 #include "query/plans.hpp"
 
 #include <google/protobuf/text_format.h>
 
 
+// >> Namespace Aliases
+namespace fs = std::filesystem;
+
+
 // >> Type Aliases
-using mohair::QueryOp;
-using mohair::AppPlan;
-using mohair::DecomposeAlg;
-using mohair::SubstraitMessage;
-using mohair::PlanSplit;
+using skytether::QueryOp;
+using skytether::AppPlan;
+using skytether::DecomposeAlg;
+using skytether::SubstraitMessage;
+using skytether::PlanSplit;
 
 using google::protobuf::TextFormat;
+
+using std::string;
+using std::unique_ptr;
+using std::vector;
 
 
 // ------------------------------
@@ -65,8 +73,12 @@ int main(int argc, char **argv) {
     return validate_status;
   }
 
+  // Process CLI arg a bit
+  string substrait_fpath { argv[1] };
+  string substrait_fname { fs::path(substrait_fpath).stem() };
+
   // Read the example substrait from a file
-  auto substrait_msg = SubstraitMessage::FromFile(argv[1]);
+  auto substrait_msg = SubstraitMessage::FromFile(substrait_fpath);
   if (substrait_msg->payload == nullptr) {
     std::cerr << "Failed to read substrait plan from file" << std::endl;
     return 2;
@@ -75,17 +87,17 @@ int main(int argc, char **argv) {
   // Convert substrait to a plan we understand
   // NOTE: keep this alive, everything else references from it.
   std::cout << "Parsing Substrait..." << std::endl;
-  unique_ptr<QueryOp> mohair_root = mohair::MohairPlanFrom(*substrait_msg);
+  unique_ptr<QueryOp> skytether_root = skytether::SkytetherPlanFrom(*substrait_msg);
 
   // NOTE: each AppPlan instance is a unique_ptr
-  std::cout << "Traversing Mohair plan..." << std::endl;
-  auto application_plan = mohair::AppPlanFromQueryOp(mohair_root.get());
+  std::cout << "Traversing Skytether plan..." << std::endl;
+  auto application_plan = skytether::AppPlanFromQueryOp(skytether_root.get());
   if (application_plan == nullptr) {
     std::cerr << "Failed to parse substrait plan" << std::endl;
     return 10;
   }
 
-  std::cout << "Mohair Plan:" << std::endl;
+  std::cout << "Skytether Plan:" << std::endl;
   std::cout << application_plan->ViewPlan() << std::endl;
 
   /* NOTE: this is just to peek at the result of walking the substrait plan */
@@ -111,10 +123,11 @@ int main(int argc, char **argv) {
   for (size_t split_ndx = 0; split_ndx < count_anchors; ++split_ndx) {
     PlanSplit plan_split { *application_plan, *((*plan_anchors)[split_ndx]) };
 
-    auto subplan_msgs = mohair::SubplansFromSplit(substrait_msg.get(), plan_split);
-    for (int subplan_ndx = 0; subplan_ndx < subplan_msgs.size(); ++subplan_ndx) {
+    auto subplan_msgs = skytether::SubplansFromSplit(substrait_msg.get(), plan_split);
+    for (size_t subplan_ndx = 0; subplan_ndx < subplan_msgs.size(); ++subplan_ndx) {
       string out_fname {
-        "resources/subplans/" +       std::to_string(split_ndx)
+        "resources/subplans/" +       substrait_fname
+                              + "." + std::to_string(split_ndx)
                               + "." + std::to_string(subplan_ndx)
                               + "." + std::to_string(subplan_total++)
                               + ".substrait"

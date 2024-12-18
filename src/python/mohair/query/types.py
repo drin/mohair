@@ -41,7 +41,7 @@ from pyarrow import Schema, Table, RecordBatch
 
 # >> Internal
 from mohair import CreateMohairLogger
-from mohair.skytether.mohair.algebra_pb2 import SkyRel, ExecutionStats
+from skyproto.mohair.algebra_pb2 import SkyRel, ExecutionStats
 
 # convenience functions for metadata management
 from mohair.util import ( DefaultPartitionMetadata
@@ -324,7 +324,7 @@ class SkyPartition:
 
     def __post_init__(self):
         if self.stats is None:
-            self.stats = ExecutionStats(executed=False)
+            self.stats = ExecutionStats()
 
     def __hash__(self):
         return hash(self.domain.key) + hash(self.meta.key)

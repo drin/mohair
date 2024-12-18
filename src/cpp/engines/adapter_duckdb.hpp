@@ -20,33 +20,30 @@
 // Dependencies
 #pragma once
 
-#include <unordered_map>
+//  >> Common internal libs
+#include "skytether.hpp"
 
-//  >> Internal libs
-#include "mohair.hpp"
+
+#if SKYTETHER_USE_DUCKDB
+
+  #include "duckdb.hpp"
+  #include "duckdb/common/arrow/result_arrow_wrapper.hpp"
+
+  #include <unordered_map>
+
+#endif
 
 
 // ------------------------------
 // Type aliases
 
-using std::unordered_map;
+namespace skytether {
 
+  // >> standard types
+  using std::unordered_map;
 
-// ------------------------------
-// Only define if DuckDB is enabled
-#if USE_DUCKDB
-
-  // ------------------------------
-  // Dependencies
-
-  #include "duckdb.hpp"
-  #include "duckdb/common/arrow/result_arrow_wrapper.hpp"
-
-
-  // ------------------------------
-  // Type aliases
-
-  namespace mohair {
+  // >> engine types
+  #if SKYTETHER_USE_DUCKDB
 
     // >> Low-level types
     template <typename ptype>
@@ -75,13 +72,18 @@ using std::unordered_map;
     // >> Relation types
     using duckdb::Relation;
 
-  } // namespace: mohair
+  #endif
+
+} // namespace: skytether
 
 
-  // ------------------------------
-  // Functions
+// ------------------------------
+// Functions
 
-  namespace mohair::adapters {
+namespace skytether::adapters {
+
+  #if SKYTETHER_USE_DUCKDB
+
     //! Construct a duckdb::Value that is a struct of <ptr, size>
     Value ValueForIPCBuffer(Buffer& ipc_buffer);
 
@@ -101,28 +103,34 @@ using std::unordered_map;
                       ,idx_t col_offset   = 0, idx_t col_count   = 15
                       ,idx_t row_offset   = 0, idx_t row_count   = 10);
 
-  } // namespace: mohair::adapters
+  #endif
+
+} // namespace: skytether::adapters
 
 
-  // ------------------------------
-  // Classes
+// ------------------------------
+// Classes
 
-  namespace mohair::adapters {
-    enum QueryStatus {
-       Pending
-      ,Running
-      ,Complete
-    };
+namespace skytether::adapters {
 
-    struct QueryContext {
-      // >> Attributes
-      QueryStatus                   status;
-      duck_sptr<Relation>           duck_rel;
-      shared_ptr<RecordBatchReader> rel_result;
-      vector<shared_ptr<Buffer>>    rel_mem;
+  enum QueryStatus {
+     Pending
+    ,Running
+    ,Complete
+  };
 
-      // >> Constructors
-      QueryContext() = default;
+  struct QueryContext {
+    QueryStatus                   status { QueryStatus::Pending };
+    shared_ptr<RecordBatchReader> rel_result;
+    vector<shared_ptr<Buffer>>    rel_mem;
+  };
+
+  // >> DuckDB-specific
+
+  #if SKYTETHER_USE_DUCKDB
+
+    struct DuckContext : public QueryContext {
+      duck_sptr<Relation> duck_rel;
     };
 
     struct EngineDuckDB {
@@ -131,7 +139,7 @@ using std::unordered_map;
       int              context_id;
 
       // A stash of relations that we need to keep track of
-      unordered_map<int, unique_ptr<QueryContext>> query_contexts;
+      unordered_map<int, unique_ptr<DuckContext>> query_contexts;
 
       // >> Constructors
       EngineDuckDB(DuckDB db): engine_conn(db), context_id(0) {}
@@ -149,6 +157,7 @@ using std::unordered_map;
     unique_ptr<EngineDuckDB> DuckDBForFile(fs::path db_fpath);
     unique_ptr<EngineDuckDB> DuckDBForMem();
 
-  } // namespace: mohair::adapters
+  #endif
 
-#endif
+} // namespace: skytether::adapters
+

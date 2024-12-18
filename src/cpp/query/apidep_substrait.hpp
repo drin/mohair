@@ -31,20 +31,23 @@
 #include <google/protobuf/text_format.h>
 
 // >> Generated protobuf deps for substrait
-#include "skytether/substrait/plan.pb.h"
-#include "skytether/substrait/algebra.pb.h"
-#include "skytether/substrait/extensions/extensions.pb.h"
+#include "skyproto/substrait/plan.pb.h"
+#include "skyproto/substrait/algebra.pb.h"
+#include "skyproto/substrait/extensions/extensions.pb.h"
 
 
 // ------------------------------
 // Type Aliases
 
-//  >> Protobuf framework types
-using google::protobuf::TextFormat;
-using AnyMessage = google::protobuf::Any;
+namespace skytether {
 
-//  >> Substrait types
-using skytether::substrait::Plan;
-using skytether::substrait::PlanRel;
-using skytether::substrait::Rel;
+  //  >> Protobuf framework types
+  using google::protobuf::TextFormat;
+  using AnyMessage = google::protobuf::Any;
 
+  //  >> Substrait types
+  using skyproto::substrait::Plan;
+  using skyproto::substrait::PlanRel;
+  using skyproto::substrait::Rel;
+
+} // namespace: skytether

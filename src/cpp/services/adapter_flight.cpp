@@ -19,29 +19,35 @@
 // ------------------------------
 // Dependencies
 
-#include "../mohair_macros.hpp"
-#include "apidep_flight.hpp"
+#include "skytether_macros.hpp"
+#include "services/types.hpp"
 
 
 // ------------------------------
 // Adapter Classes
 
-namespace mohair::services {
+namespace skytether::services {
+
+  // >> Function implementations for SkytetherTicket
+  shared_ptr<Buffer> SkytetherTicket::ToBuffer() {
+    if (ticket_data == nullptr) { ticket_data = Buffer::FromString(ticket); }
+    return ticket_data;
+  }
+
+  SkytetherTicket SkytetherTicket::FromBuffer(shared_ptr<Buffer> body) {
+    return SkytetherTicket { body->ToString() };
+  }
+
 
   // >> Function implementations for ClientAdapter
-
-  // constructors
-
-  // methods
   Result<unique_ptr<ResultStream>>
   ClientAdapter::SendSignalShutdown() {
     Action rpc_action { ActionShutdown, nullptr };
     return client->DoAction(rpc_opts, rpc_action);
   }
 
-  // >> Method implementations for ServerAdapter
 
-  // control flow functions
+  // >> Method implementations for ServerAdapter
   Status
   ServerAdapter::DoServiceAction( const ServerCallContext&  context
                                  ,const Action&             action
@@ -51,7 +57,7 @@ namespace mohair::services {
 
   Status
   ServerAdapter::DoShutdown(const ServerCallContext& context) {
-    MohairDebugMsg("Received shutdown signal from [" << context.peer() << "]");
+    SkytetherDebugMsg("Received shutdown signal from [" << context.peer() << "]");
     if (cb_shutdown != nullptr) { ARROW_RETURN_NOT_OK((*cb_shutdown)()); }
 
     return Shutdown();
@@ -68,8 +74,7 @@ namespace mohair::services {
   ServerAdapter::DoAction( const ServerCallContext&  context
                           ,const Action&             action
                           ,unique_ptr<ResultStream>* result) {
-    MohairDebugMsg("Delegating [" << action.type << "] to service");
     return DoServiceAction(context, action, result);
   }
 
-} // namespace: mohair::services
+} // namespace: skytether::services

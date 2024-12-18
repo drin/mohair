@@ -31,7 +31,7 @@
 // ------------------------------
 // Base classes for query operators
 
-namespace mohair {
+namespace skytether {
 
   // Top-most base class
   struct QueryOp {
@@ -43,11 +43,11 @@ namespace mohair {
     QueryOp(Rel *rel)               : op_wrap(rel), table_name("")    {}
     QueryOp(Rel *rel, string &tname): op_wrap(rel), table_name(tname) {}
 
-    virtual const string           ToString()     { return table_name;       }
-    virtual const string           ViewStr()      { return this->ToString(); }
-    virtual bool                   IsBreaker()    { return false;            }
-    virtual vector<QueryOp *>      GetOpInputs()  { return {};               }
-    virtual unique_ptr<PlanAnchor> ToPlanAnchor() { return nullptr;          }
+    virtual const string          ToString()       { return table_name;       }
+    virtual const string          ViewStr()        { return this->ToString(); }
+    virtual bool                  IsBreaker()      { return false;            }
+    virtual vector<QueryOp *>     GetOpInputs()    { return {};               }
+    virtual unique_ptr<SuperPlan> ToSuperPlanRef() { return nullptr;          }
   };
 
   // Classes for distinguishing pipeline-able operators from pipeline breakers
@@ -65,13 +65,13 @@ namespace mohair {
     bool         IsBreaker() override { return true; }
   };
 
-} // namespace: mohair
+} // namespace: skytether
 
 
 // ------------------------------
 // Base classes for query planning and processing
 
-namespace mohair {
+namespace skytether {
 
   /**
    * A simple class, representing a query plan, that wraps a QueryOp (root operator).
@@ -186,13 +186,13 @@ namespace mohair {
   struct EnginePlan : QueryPlan {};
 
 
-} // namespace: mohair
+} // namespace: skytether
 
 
 // ------------------------------
 // Classes for query processing
 
-namespace mohair {
+namespace skytether {
 
   /**
    * A class that points to a super-plan and an anchor operator.
@@ -202,10 +202,10 @@ namespace mohair {
    */
   struct PlanSplit {
     AppPlan* query_plan;
-    AppPlan* anchor_op;
+    AppPlan* mergerel_op;
 
-    PlanSplit(AppPlan& qplan, AppPlan& anchor): query_plan(&qplan), anchor_op(&anchor) {}
-    PlanSplit(AppPlan* qplan, AppPlan* anchor): query_plan(qplan) , anchor_op(anchor)  {}
+    PlanSplit(AppPlan& qplan, AppPlan& anchor): query_plan(&qplan), mergerel_op(&anchor) {}
+    PlanSplit(AppPlan* qplan, AppPlan* anchor): query_plan(qplan) , mergerel_op(anchor)  {}
   };
 
   enum DecomposeAlg {
@@ -215,19 +215,19 @@ namespace mohair {
     ,WideJoinHead     // Internal join operation with largest plan width
   };
 
-} // namespace: mohair
+} // namespace: skytether
 
 
 // ------------------------------
 // Static functions that provide convenient interfaces
 
-namespace mohair {
+namespace skytether {
 
   // >> Translation Functions
-  unique_ptr<QueryOp>    MohairFrom(Rel *rel_msg);
-  unique_ptr<QueryOp>    MohairPlanFrom(PlanMessage& substrait_plan);
-  unique_ptr<PlanAnchor> PlanAnchorFrom(QueryOp* mohair_op);
-  Rel&                   SubstraitRelFrom(QueryOp* mohair_op);
+  unique_ptr<QueryOp>   SkytetherFrom(Rel *rel_msg);
+  unique_ptr<QueryOp>   SkytetherPlanFrom(PlanMessage& substrait_plan);
+  unique_ptr<SuperPlan> SuperPlanFrom(QueryOp* mohair_op);
+  Rel&                  SubstraitRelFrom(QueryOp* mohair_op);
 
   // >> Functions for query plan processing
   unique_ptr<PlanSplit>
@@ -236,4 +236,4 @@ namespace mohair {
   vector<unique_ptr<PlanMessage>>
   SubplansFromSplit(PlanMessage* plan_msg, PlanSplit& split);
 
-} // namespace: mohair
+} // namespace: skytether
