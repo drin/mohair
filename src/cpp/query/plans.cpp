@@ -25,12 +25,12 @@
 // ------------------------------
 // Functions
 
-namespace mohair {
+namespace skytether {
 
   // >> Conversion functions (into/out of mohair representation)
-  unique_ptr<QueryOp> MohairPlanFrom(PlanMessage& plan_msg) {
+  unique_ptr<QueryOp> SkytetherPlanFrom(PlanMessage& plan_msg) {
     // walk the top level relations until we find the root (should only be one)
-    int root_ndx = mohair_substrait::FindPlanRoot(*(plan_msg.payload));
+    int root_ndx = mohair::FindPlanRoot(*(plan_msg.payload));
 
     // set the plan root if not already set
     if (plan_msg.root_relndx < 0) {
@@ -39,7 +39,7 @@ namespace mohair {
     }
 
     // build our internal representation from the top level `Rel`
-    return MohairFrom(plan_msg.root_relation->mutable_root()->mutable_input());
+    return SkytetherFrom(plan_msg.root_relation->mutable_root()->mutable_input());
   }
 
 
@@ -118,13 +118,13 @@ namespace mohair {
     }
   }
 
-} // namespace: mohair
+} // namespace: skytether
 
 
 // ------------------------------
 // Classes
 
-namespace mohair {
+namespace skytether {
 
   // >> Helper functions
 
@@ -248,11 +248,11 @@ namespace mohair {
     return plan_str.str();
   }
 
-} // namespace: mohair
+} // namespace: skytether
 
 
 // >> Implementations for SubstraitMessage that require dependencies from plans.hpp
-namespace mohair {
+namespace skytether {
 
   /**
    * A method that creates a substrait message for each subplan derived from a PlanSplit.
@@ -270,8 +270,8 @@ namespace mohair {
   vector<unique_ptr<PlanMessage>>
   SubplansFromSplit(PlanMessage* plan_msg, PlanSplit& split) {
     // Get the anchor op and initialize some variables
-    QueryOp*         anchor_op     = split.anchor_op->plan_op;
-    auto             anchor_msg    = PlanAnchorFrom(anchor_op);
+    QueryOp*         anchor_op     = split.mergerel_op->plan_op;
+    auto             superplan_msg = SuperPlanFrom(anchor_op);
     vector<QueryOp*> anchor_inputs = anchor_op->GetOpInputs();
 
     // Initialize the list of messages to return
@@ -279,7 +279,7 @@ namespace mohair {
     subplan_msgs.reserve(anchor_inputs.size());
 
     // Create a substrait message for each input to the anchor
-    MohairDebugMsg("Creating [" << std::to_string(anchor_inputs.size()) << "] subplans");
+    SkytetherDebugMsg("Creating [" << std::to_string(anchor_inputs.size()) << "] subplans");
     for (size_t input_ndx = 0; input_ndx < anchor_inputs.size(); ++input_ndx) {
       QueryOp* input_op        = anchor_inputs[input_ndx];
       Rel*     subplan_rootrel = input_op->op_wrap;
@@ -288,13 +288,13 @@ namespace mohair {
       auto subplan_msg = std::make_unique<Plan>();
       subplan_msg->CopyFrom(*(plan_msg->payload));
 
-      // Set the `PlanAnchor` message and replace the super-plan root
+      // Set the `SuperPlan` message and replace the super-plan root
       auto subplan_oldroot = subplan_msg->mutable_relations(plan_msg->root_relndx)->mutable_root();
       auto subplan_planext = subplan_msg->mutable_advanced_extensions();
 
       // Pack the anchor message into an `Any` message as an "optimization"
       AnyMessage* optimization_msg = subplan_planext->add_optimization();
-      optimization_msg->PackFrom(*(anchor_msg));
+      optimization_msg->PackFrom(*(superplan_msg));
 
       subplan_oldroot->mutable_input()->CopyFrom(*subplan_rootrel);
 
@@ -307,4 +307,4 @@ namespace mohair {
     return subplan_msgs;
   }
 
-} // namespace: mohair
+} // namespace: skytether

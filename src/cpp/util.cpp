@@ -19,7 +19,7 @@
 // ------------------------------
 // Dependencies
 
-#include "mohair.hpp"
+#include "skytether.hpp"
 
 
 // ------------------------------
@@ -31,7 +31,7 @@ using IPCReadOpts = arrow::ipc::IpcReadOptions;
 // ------------------------------
 // Functions
 
-namespace mohair {
+namespace skytether {
 
   // Anonymous namespace for internal functions
   namespace {
@@ -84,7 +84,7 @@ namespace mohair {
       return RecordBatchFileReader::Open(input_file_handle, IPCReadOpts::Defaults());
     }
 
-  } // anonymous namespace: mohair::<anonymous>
+  } // anonymous namespace: skytether::<anonymous>
 
   //  >> Reader functions
 
@@ -124,10 +124,10 @@ namespace mohair {
 
 
   Result<shared_ptr<Buffer>> BufferFromFile(const char* fpath) {
-    MohairDebugMsg("Reading file: '" << fpath << "'");
+    SkytetherDebugMsg("Reading file: '" << fpath << "'");
 
     string file_data;
-    if (not mohair::FileToString(fpath, file_data)) {
+    if (not skytether::FileToString(fpath, file_data)) {
       return Status::Invalid("Failed to parse file data into string");
     }
 
@@ -137,7 +137,7 @@ namespace mohair {
 
   /** Given a file path to an Arrow IPC stream, return the data as a buffer. */
   Result<shared_ptr<Buffer>> BufferFromIPCStream(const std::string& fpath) {
-    MohairDebugMsg("Parsing file: " << fpath);
+    SkytetherDebugMsg("Parsing file: " << fpath);
 
     // use the `FileSystem` instance to open a handle to the file
     ARROW_ASSIGN_OR_RAISE(auto arrow_fhandle, ReadHandleForIPCFile(fpath));
@@ -150,13 +150,13 @@ namespace mohair {
       return Status::Invalid("Read IPC stream file into memory but it is not CPU-accessible");
     }
 
-    MohairDebugMsg("Returning IPC buffer");
+    SkytetherDebugMsg("Returning IPC buffer");
     return arrow_buffer;
   }
 
   /** Given a file path to an Arrow IPC stream, return a Table. */
   Result<shared_ptr<Table>> ReadIPCStream(const std::string& fpath) {
-    MohairDebugMsg("Parsing file: " << fpath);
+    SkytetherDebugMsg("Parsing file: " << fpath);
 
     // Declares and initializes `batch_reader`
     ARROW_ASSIGN_OR_RAISE(auto batch_reader, ReaderForIPCStream(fpath));
@@ -166,7 +166,7 @@ namespace mohair {
 
   /** Given a file path to an Arrow IPC file, return a Table. */
   Result<shared_ptr<Table>> ReadIPCFile(const std::string& fpath) {
-    MohairDebugMsg("Reading file: " << fpath.data());
+    SkytetherDebugMsg("Reading file: " << fpath.data());
 
     // Declares and initializes `ipc_file_reader`
     ARROW_ASSIGN_OR_RAISE(auto ipc_file_reader, ReaderForIPCFile(fpath));
@@ -189,7 +189,7 @@ namespace mohair {
     // use the `FileSystem` instance to open a handle to the file
     ARROW_ASSIGN_OR_RAISE(auto output_file_handle, WriteHandleForIPCFile(path_as_uri));
 
-    MohairDebugMsg("Creating stream writer for file: " << path_as_uri);
+    SkytetherDebugMsg("Creating stream writer for file: " << path_as_uri);
     ARROW_ASSIGN_OR_RAISE(
        auto batch_writer
       ,arrow::ipc::MakeStreamWriter(output_file_handle.get(), data_table.schema())
@@ -203,7 +203,7 @@ namespace mohair {
     // use the `FileSystem` instance to open a handle to the file
     ARROW_ASSIGN_OR_RAISE(auto output_file_handle, WriteHandleForIPCFile(path_as_uri));
 
-    MohairDebugMsg("Creating stream writer for file: " << path_as_uri);
+    SkytetherDebugMsg("Creating stream writer for file: " << path_as_uri);
     ARROW_ASSIGN_OR_RAISE(
        auto batch_writer
       ,arrow::ipc::MakeFileWriter(output_file_handle.get(), data_table.schema())
@@ -290,4 +290,4 @@ namespace mohair {
       ;
   }
 
-} // namespace: mohair
+} // namespace: skytether

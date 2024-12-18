@@ -27,40 +27,46 @@
 // ------------------------------
 // Type Aliases
 
-// >> Standard types
-using std::tuple;
-using std::get;
-using std::get_if;
+namespace skytether {
 
-// >> Substrait types
-using skytether::substrait::ProjectRel;
-using skytether::substrait::FilterRel;
-using skytether::substrait::FetchRel;
+  // >> Standard types
+  using std::tuple;
+  using std::get;
+  using std::get_if;
 
-using skytether::substrait::SortRel;
-using skytether::substrait::AggregateRel;
+  // >> Substrait types
+  using skyproto::substrait::ProjectRel;
+  using skyproto::substrait::FilterRel;
+  using skyproto::substrait::FetchRel;
 
-using skytether::substrait::CrossRel;
-using skytether::substrait::JoinRel;
+  using skyproto::substrait::SortRel;
+  using skyproto::substrait::AggregateRel;
 
-using skytether::substrait::HashJoinRel;
-using skytether::substrait::MergeJoinRel;
+  using skyproto::substrait::CrossRel;
+  using skyproto::substrait::JoinRel;
 
-using skytether::substrait::ReadRel;
+  using skyproto::substrait::HashJoinRel;
+  using skyproto::substrait::MergeJoinRel;
 
-using skytether::substrait::ExtensionLeafRel;
-using skytether::mohair::SkyRel;
+  using skyproto::substrait::ReadRel;
 
-// >> Convenience aliases
-using LocalFiles       = skytether::substrait::ReadRel::LocalFiles;
-using FileOrFiles      = skytether::substrait::ReadRel::LocalFiles::FileOrFiles;
-using ArrowReadOptions = skytether::substrait::ReadRel::LocalFiles::FileOrFiles::ArrowReadOptions;
+  using skyproto::substrait::ExtensionLeafRel;
+  using skyproto::mohair::SkyRel;
+  using skyproto::mohair::SkyPartitionRel;
+  using skyproto::mohair::SkySliceRel;
+
+  // >> Convenience aliases
+  using LocalFiles       = skyproto::substrait::ReadRel::LocalFiles;
+  using FileOrFiles      = skyproto::substrait::ReadRel::LocalFiles::FileOrFiles;
+  using ArrowReadOptions = skyproto::substrait::ReadRel::LocalFiles::FileOrFiles::ArrowReadOptions;
+
+} // namespace: skytether
 
 
 // ------------------------------
 // Classes and Methods
 
-namespace mohair {
+namespace skytether {
 
   // ------------------------------
   // Operators
@@ -83,10 +89,7 @@ namespace mohair {
     const string ToString() override;
   };
 
-  /**
-   * This op wraps an "ExtensionLeafRel" which is an opaque type.
-   * Specifically, this op represents a leaf rel that holds a `mohair::SkyRel`.
-   */
+  //! An operator that represents an extension operator holding a `mohair::SkyRel`.
   struct OpSkyRead : PipelineOp {
     ExtensionLeafRel*  plan_op;
     unique_ptr<SkyRel> sky_rel;
@@ -95,6 +98,32 @@ namespace mohair {
               ,Rel*                 rel
               ,unique_ptr<SkyRel>&& unpacked_rel
               ,string&              tname)
+      : PipelineOp(rel, tname), plan_op(op), sky_rel(std::move(unpacked_rel)) {}
+
+    const string ToString() override;
+  };
+
+  struct OpPartitionRead : PipelineOp {
+    ExtensionLeafRel*  plan_op;
+    unique_ptr<SkyPartitionRel> sky_rel;
+
+    OpPartitionRead( ExtensionLeafRel*             op
+                    ,Rel*                          rel
+                    ,unique_ptr<SkyPartitionRel>&& unpacked_rel
+                    ,string&                       tname)
+      : PipelineOp(rel, tname), plan_op(op), sky_rel(std::move(unpacked_rel)) {}
+
+    const string ToString() override;
+  };
+
+  struct OpSliceRead : PipelineOp {
+    ExtensionLeafRel*  plan_op;
+    unique_ptr<SkySliceRel> sky_rel;
+
+    OpSliceRead( ExtensionLeafRel*         op
+                ,Rel*                      rel
+                ,unique_ptr<SkySliceRel>&& unpacked_rel
+                ,string&                   tname)
       : PipelineOp(rel, tname), plan_op(op), sky_rel(std::move(unpacked_rel)) {}
 
     const string ToString() override;
@@ -113,7 +142,7 @@ namespace mohair {
 
     const string           ToString()     override;
     std::vector<QueryOp *> GetOpInputs()  override;
-    unique_ptr<PlanAnchor> ToPlanAnchor() override;
+    unique_ptr<SuperPlan>  ToSuperPlanRef() override;
   };
 
   struct OpSel : PipelineOp {
@@ -127,7 +156,7 @@ namespace mohair {
 
     const string           ToString()     override;
     std::vector<QueryOp *> GetOpInputs()  override;
-    unique_ptr<PlanAnchor> ToPlanAnchor() override;
+    unique_ptr<SuperPlan>  ToSuperPlanRef() override;
   };
 
   struct OpLimit : PipelineOp {
@@ -141,7 +170,7 @@ namespace mohair {
 
     const string           ToString()     override;
     std::vector<QueryOp *> GetOpInputs()  override;
-    unique_ptr<PlanAnchor> ToPlanAnchor() override;
+    unique_ptr<SuperPlan>  ToSuperPlanRef() override;
   };
 
 
@@ -157,7 +186,7 @@ namespace mohair {
 
     const string           ToString()     override;
     std::vector<QueryOp *> GetOpInputs()  override;
-    unique_ptr<PlanAnchor> ToPlanAnchor() override;
+    unique_ptr<SuperPlan>  ToSuperPlanRef() override;
   };
 
   struct OpAggr : BreakerOp {
@@ -171,7 +200,7 @@ namespace mohair {
 
     const string           ToString()     override;
     std::vector<QueryOp *> GetOpInputs()  override;
-    unique_ptr<PlanAnchor> ToPlanAnchor() override;
+    unique_ptr<SuperPlan>  ToSuperPlanRef() override;
   };
 
   struct OpCrossJoin : BreakerOp {
@@ -185,7 +214,7 @@ namespace mohair {
 
     const string           ToString()     override;
     std::vector<QueryOp *> GetOpInputs()  override;
-    unique_ptr<PlanAnchor> ToPlanAnchor() override;
+    unique_ptr<SuperPlan>  ToSuperPlanRef() override;
   };
 
   struct OpJoin : BreakerOp {
@@ -199,7 +228,7 @@ namespace mohair {
 
     const string           ToString()     override;
     std::vector<QueryOp *> GetOpInputs()  override;
-    unique_ptr<PlanAnchor> ToPlanAnchor() override;
+    unique_ptr<SuperPlan>  ToSuperPlanRef() override;
   };
 
   struct OpHashJoin : BreakerOp {
@@ -213,7 +242,7 @@ namespace mohair {
 
     const string           ToString()     override;
     std::vector<QueryOp *> GetOpInputs()  override;
-    unique_ptr<PlanAnchor> ToPlanAnchor() override;
+    unique_ptr<SuperPlan>  ToSuperPlanRef() override;
   };
 
   struct OpMergeJoin : BreakerOp {
@@ -227,7 +256,7 @@ namespace mohair {
 
     const string           ToString()     override;
     std::vector<QueryOp *> GetOpInputs()  override;
-    unique_ptr<PlanAnchor> ToPlanAnchor() override;
+    unique_ptr<SuperPlan>  ToSuperPlanRef() override;
   };
 
   /* TODO: needs variadic op_inputs
@@ -241,4 +270,4 @@ namespace mohair {
   // >> Convenience functions
   string SourceNameForRead(ReadRel *substrait_op);
 
-} // namespace: mohair
+} // namespace: skytether

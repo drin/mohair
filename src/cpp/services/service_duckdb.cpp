@@ -20,7 +20,7 @@
 // Dependencies
 
 // >> Configuration-based macros
-#include "mohair-config.hpp"
+#include "skytether-config.hpp"
 
 #include "service_duckdb.hpp"
 
@@ -29,17 +29,17 @@
 // Classes and Methods
 
 // >> DuckDBService implementations
-namespace mohair::services {
+namespace skytether::services {
 
   // Constructors
   DuckDBService::DuckDBService(ShutdownCallback* cb_custom)
     : EngineService(cb_custom) {
-    engine = mohair::adapters::DuckDBForMem();
+    engine = skytether::adapters::DuckDBForMem();
   }
 
   DuckDBService::DuckDBService(ShutdownCallback* cb_custom, fs::path db_fpath)
     : EngineService(cb_custom) {
-    engine = mohair::adapters::DuckDBForFile(db_fpath);
+    engine = skytether::adapters::DuckDBForFile(db_fpath);
   }
 
   DuckDBService::DuckDBService()
@@ -54,25 +54,25 @@ namespace mohair::services {
                                 ,                 const shared_ptr<Buffer>  plan_msg
                                 ,                 unique_ptr<ResultStream>* result) {
     // convert message to string type
-    MohairDebugMsg("Received query request");
+    SkytetherDebugMsg("Received query request");
     string plan_data = plan_msg->ToString();
 
     // convert substrait plan to duckdb plan
-    MohairDebugMsg("Passing query plan to query engine");
+    SkytetherDebugMsg("Passing query plan to query engine");
     int context_id = engine->ExecContextForSubstrait(plan_data);
     if (not context_id) { return Status::Invalid("Failed to translate substrait"); }
 
     // write the query ID to the `ResultStream` as a usable ticket
-    MohairDebugMsg("Preparing ticket for response data");
-    MohairTicket query_ticket { context_id };
+    SkytetherDebugMsg("Preparing ticket for response data");
+    SkytetherTicket query_ticket { context_id };
 
-    MohairDebugMsg("Responding with ticket: " << std::to_string(context_id));
+    SkytetherDebugMsg("Responding with ticket: " << std::to_string(context_id));
     *result = std::make_unique<SimpleResultStream>(
       vector<FlightResult> { FlightResult { query_ticket.ToBuffer() } }
     );
 
     // execute the query and return the result (or OK)
-    MohairDebugMsg("Executing query plan");
+    SkytetherDebugMsg("Executing query plan");
     ARROW_RETURN_NOT_OK(engine->ExecuteRelation(context_id));
     return Status::OK();
   }
@@ -91,7 +91,7 @@ namespace mohair::services {
                        ,                 const Ticket&                 request
                        ,[[maybe_unused]] unique_ptr<FlightDataStream>* result_stream) {
     int query_id = std::stoi(request.ticket);
-    MohairDebugMsg("Get request for ticket: " << request.ticket);
+    SkytetherDebugMsg("Get request for ticket: " << request.ticket);
 
     shared_ptr<RecordBatchReader> resultset_reader { engine->GetResultSet(query_id) };
     if (resultset_reader == nullptr) {
@@ -104,5 +104,5 @@ namespace mohair::services {
     return Status::OK();
   }
 
-} // namespace: mohair::services
+} // namespace: skytether::services
 

@@ -24,13 +24,13 @@
 #include <filesystem>
 
 // >> Internal
-#include "../mohair.hpp"
+#include "skytether.hpp"
 
 //  service-specific includes
-#if USE_DUCKDB
+#if SKYTETHER_USE_DUCKDB
   #include "../engines/adapter_duckdb.hpp"
 
-  using mohair::adapters::EngineDuckDB;
+  using skytether::adapters::EngineDuckDB;
 #endif
 
 
@@ -41,9 +41,11 @@
 namespace fs = std::filesystem;
 
 // >> Types
-using mohair::Result;
-using mohair::Table;
+using skytether::Result;
+using skytether::Table;
 
+using std::string;
+using std::shared_ptr;
 
 // ------------------------------
 // Structs and Classes
@@ -62,10 +64,10 @@ struct ToolInterface {
     string arrow_file_uri { "file://" + fs::absolute(source_name).string() };
 
     if (is_stream_source) {
-      ARROW_ASSIGN_OR_RAISE(source_table, mohair::ReadIPCStream(arrow_file_uri));
+      ARROW_ASSIGN_OR_RAISE(source_table, skytether::ReadIPCStream(arrow_file_uri));
     }
     else {
-      ARROW_ASSIGN_OR_RAISE(source_table, mohair::ReadIPCFile(arrow_file_uri));
+      ARROW_ASSIGN_OR_RAISE(source_table, skytether::ReadIPCFile(arrow_file_uri));
     }
 
     return source_table;
@@ -73,9 +75,9 @@ struct ToolInterface {
 
   int WriteStreamFile(shared_ptr<Table> data_table) {
     string arrow_file_uri { "file://" + arrow_fpath.string() };
-    auto status_data = mohair::WriteIPCStream(arrow_file_uri, *data_table);
+    auto status_data = skytether::WriteIPCStream(arrow_file_uri, *data_table);
     if (not status_data.ok()) {
-      mohair::PrintError("Error writing arrow stream file", status_data);
+      skytether::PrintError("Error writing arrow stream file", status_data);
       return 6;
     }
 
@@ -84,9 +86,9 @@ struct ToolInterface {
 
   int WriteFile(shared_ptr<Table> data_table) {
     string arrow_file_uri { "file://" + arrow_fpath.string() };
-    auto status_data = mohair::WriteIPCFile(arrow_file_uri, *data_table);
+    auto status_data = skytether::WriteIPCFile(arrow_file_uri, *data_table);
     if (not status_data.ok()) {
-      mohair::PrintError("Error writing arrow file", status_data);
+      skytether::PrintError("Error writing arrow file", status_data);
       return 5;
     }
 
@@ -95,17 +97,17 @@ struct ToolInterface {
 
   int Start() {
     if (arrow_fpath.empty()) {
-      MohairDebugMsg("Missing path to output file.");
+      SkytetherDebugMsg("Missing path to output file.");
       return ERRCODE_CLIENT;
     }
 
     if (is_duckdb_source) {
-      #if USE_DUCKDB
-        MohairDebugMsg("Writing data from DuckDB not yet supported.");
+      #if SKYTETHER_USE_DUCKDB
+        SkytetherDebugMsg("Writing data from DuckDB not yet supported.");
         return 7;
 
       #else
-        MohairDebugMsg("DuckDB backend unavailable");
+        SkytetherDebugMsg("DuckDB backend unavailable");
         return 0;
 
       #endif
@@ -113,7 +115,7 @@ struct ToolInterface {
 
     auto result_srctable = ReadDataFromFile();
     if (not result_srctable.ok()) {
-      mohair::PrintError("Error reading data from file", result_srctable.status());
+      skytether::PrintError("Error reading data from file", result_srctable.status());
       return 8;
     }
 
