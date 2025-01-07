@@ -20,30 +20,7 @@
 // Dependencies
 #pragma once
 
-//  >> Internal libs
-#include "skytether.hpp"
-
 //  >> Acero deps
 #include <arrow/engine/api.h>
 #include <arrow/acero/api.h>
 
-
-// ------------------------------
-// Type aliases
-
-namespace skytether {
-
-  //  >> Acero-substrait types
-  using arrow::engine::PlanInfo;
-
-  using arrow::engine::NamedTableProvider;
-  using arrow::engine::ConversionOptions;
-  using arrow::engine::ExtensionIdRegistry;
-  using arrow::engine::ExtensionSet;
-
-  //  >> Acero types
-  using arrow::acero::Declaration;
-  using arrow::acero::TableSourceNodeOptions;
-  using arrow::acero::QueryOptions;
-
-} // namespace: skytether

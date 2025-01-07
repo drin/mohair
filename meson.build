@@ -5,7 +5,7 @@
 project('libskytether'
   ,'cpp'
   ,version         : '1.1.4'
-  ,meson_version   : '1.6.0'
+  ,meson_version   : '>=1.6.0'
   ,license         : 'Apache-2.0'
   ,license_files   : 'LICENSE'
   ,default_options : ['warning_level=3','cpp_std=c++17']
@@ -97,9 +97,7 @@ mohair_cfgfile = configure_file(
 
 # >> Include targets
 
-libskytether_inc = [
-  include_directories('.')
-]
+config_inc = [ include_directories('.') ]
 
 
 # >> Invoke from subdirectories

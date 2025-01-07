@@ -26,8 +26,16 @@
 
 // >> Engine deps
 #if SKYTETHER_USE_DUCKDB
-  #include "engines/adapter_duckdb.hpp"
+  #include "skytether/engines.hpp"
+  #include "skytether/engines/duckdb/apidep_duckdb.hpp"
+  #include "skytether/engines/duckdb/adapter_duckdb.hpp"
 #endif
+
+
+// ------------------------------
+// Type aliases
+
+using skytether::engines::EngineDuckDB;
 
 
 // ------------------------------
@@ -38,7 +46,7 @@
 
     struct DuckDBService : public EngineService {
       // >> Attributes
-      unique_ptr<skytether::adapters::EngineDuckDB> engine;
+      unique_ptr<EngineDuckDB> engine;
 
       // >> Deconstructors and Constructors
       virtual ~DuckDBService() = default;

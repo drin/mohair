@@ -19,29 +19,29 @@
 // ------------------------------
 // Overview
 //
-// Mohair is a protocol that extends substrait in order to propagate query plans
-// (represented using substrait) between query engines. Each query engine that uses the
-// mohair protocol should cooperate on query processing and execution.
+// Substrait is a specification of how to represent a query plan. Mohair is a protocol
+// that extends substrait in order to propagate query plans between distributed query
+// engines for cooperative query decomposition. Each query engine that uses the mohair
+// protocol should cooperate on query processing and execution.
 
 
 // ------------------------------
 // Dependencies
 #pragma once
 
-// >> Common internal deps
-#include "skytether.hpp"
-
 // >> Definitions for mohair protocol
-#include "mohair.hpp"
-
-// >> Third-party deps
-#include "query/apidep_substrait.hpp"
+#include "mohair/api.hpp"
+#include "skyproto/substrait/type.pb.h"
 
 
 // ------------------------------
 // Type Aliases
 
 namespace skytether {
+
+  //  >> Protobuf framework types
+  using google::protobuf::TextFormat;
+  using AnyMessage = google::protobuf::Any;
 
   // >> Mohair query processing types
   using skyproto::mohair::SuperPlan;
@@ -55,6 +55,13 @@ namespace skytether {
   // >> Types from mohair
   using mohair::PlanMessage;
   using mohair::SubstraitMessage;
+
+  using mohair::SystemPlan;
+
+  // TODO: see if these should be aliased in mohair
+  using SubstraitType       = skyproto::substrait::Type;
+  using SubstraitExpression = skyproto::substrait::Expression;
+  using SubstraitSortField  = skyproto::substrait::SortField;
 
 } // namespace: skytether
 

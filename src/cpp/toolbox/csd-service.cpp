@@ -162,7 +162,7 @@ struct ServiceActions {
 
     #if SKYTETHER_USE_DUCKDB
       auto skytether_duckcse = std::make_unique<DuckDBService>(&fn_deactivate);
-      auto status_start   = StartService(*skytether_duckcse, *service_cfg);
+      auto status_start      = StartService(*skytether_duckcse, *service_cfg);
       if (not status_start.ok()) {
         skytether::PrintError("Unable to start csd-service", status_start);
         return ERRCODE_START_SRV;

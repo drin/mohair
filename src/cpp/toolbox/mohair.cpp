@@ -20,27 +20,26 @@
 // Dependencies
 
 #include "skytether.hpp"
-#include "query/plans.hpp"
+#include "mohair/api.hpp"
 
 #include <google/protobuf/text_format.h>
 
 
+// ------------------------------
+// Aliases
+
 // >> Namespace Aliases
 namespace fs = std::filesystem;
 
-
 // >> Type Aliases
-using skytether::QueryOp;
-using skytether::AppPlan;
-using skytether::DecomposeAlg;
-using skytether::SubstraitMessage;
-using skytether::PlanSplit;
-
-using google::protobuf::TextFormat;
-
 using std::string;
 using std::unique_ptr;
 using std::vector;
+
+using mohair::SubstraitMessage;
+using mohair::SystemPlan;
+using mohair::PipelineStage;
+using mohair::PlanSplit;
 
 
 // ------------------------------
@@ -52,15 +51,6 @@ int ValidateArgs(int argc, char **argv) {
   }
 
   return 0;
-}
-
-void PrintPlans(vector<unique_ptr<AppPlan>>& plan_list) {
-  for (size_t plan_ndx = 0; plan_ndx < plan_list.size(); ++plan_ndx) {
-    std::cout << "\t[" << std::to_string(plan_ndx) << "]" << std::endl;
-
-    unique_ptr<AppPlan>& app_plan = plan_list[plan_ndx];
-    std::cout << app_plan->ViewPlan() << std::endl;
-  }
 }
 
 
@@ -87,56 +77,37 @@ int main(int argc, char **argv) {
   // Convert substrait to a plan we understand
   // NOTE: keep this alive, everything else references from it.
   std::cout << "Parsing Substrait..." << std::endl;
-  unique_ptr<QueryOp> skytether_root = skytether::SkytetherPlanFrom(*substrait_msg);
+  unique_ptr<SystemPlan> sys_plan { mohair::SystemPlanFrom(std::move(substrait_msg)) };
 
-  // NOTE: each AppPlan instance is a unique_ptr
-  std::cout << "Traversing Skytether plan..." << std::endl;
-  auto application_plan = skytether::AppPlanFromQueryOp(skytether_root.get());
-  if (application_plan == nullptr) {
-    std::cerr << "Failed to parse substrait plan" << std::endl;
+  if (sys_plan == nullptr) {
+    std::cerr << "Failed to construct system plan" << std::endl;
     return 10;
   }
 
-  std::cout << "Skytether Plan:" << std::endl;
-  std::cout << application_plan->ViewPlan() << std::endl;
-
-  /* NOTE: this is just to peek at the result of walking the substrait plan */
-  std::cout << "Breaker Leaves:" << std::endl;
-  PrintPlans(application_plan->bleaf_ops);
-
-  std::cout << "Breaker Ops:" << std::endl;
-  PrintPlans(application_plan->break_ops);
+  sys_plan->PrintPipelines();
 
   // >> split super-plan into sub-plans
-  int subplan_total = 1;
+  int    msg_count = 1;
+  size_t count_splits { sys_plan->pipeline_stages.size() };
 
-  // default to internal breakers
-  size_t count_anchors = application_plan->break_ops.size();
-  vector<unique_ptr<AppPlan>>* plan_anchors = &(application_plan->break_ops);
+  for (size_t stage_ndx = 0; stage_ndx < count_splits; ++stage_ndx) {
+    PipelineStage* plan_stage  { sys_plan->pipeline_stages[stage_ndx].get() };
+    PlanSplit      stage_split { plan_stage };
 
-  // fallback to leaf breakers (simple subplans)
-  if (application_plan->break_ops.empty()) {
-    count_anchors = application_plan->bleaf_ops.size();
-    plan_anchors  = &(application_plan->bleaf_ops);
-  }
-
-  for (size_t split_ndx = 0; split_ndx < count_anchors; ++split_ndx) {
-    PlanSplit plan_split { *application_plan, *((*plan_anchors)[split_ndx]) };
-
-    auto subplan_msgs = skytether::SubplansFromSplit(substrait_msg.get(), plan_split);
-    for (size_t subplan_ndx = 0; subplan_ndx < subplan_msgs.size(); ++subplan_ndx) {
+    const auto& subplan_msgs = stage_split.SubplansFor(sys_plan->plan_msg.get());
+    for (size_t msg_ndx = 0; msg_ndx < subplan_msgs.size(); ++msg_ndx) {
       string out_fname {
         "resources/subplans/" +       substrait_fname
-                              + "." + std::to_string(split_ndx)
-                              + "." + std::to_string(subplan_ndx)
-                              + "." + std::to_string(subplan_total++)
+                              + "." + std::to_string(stage_ndx)
+                              + "." + std::to_string(msg_ndx)
+                              + "." + std::to_string(msg_count++)
                               + ".substrait"
       };
 
       std::cout << "\tWriting to file [" << out_fname << "]" << std::endl;
 
-      SubstraitMessage& subplan_msg = dynamic_cast<SubstraitMessage&>(*(subplan_msgs[subplan_ndx]));
-      auto success = subplan_msg.SerializeToFile(out_fname.data());
+      SubstraitMessage& msg = dynamic_cast<SubstraitMessage&>(*(subplan_msgs[msg_ndx]));
+      auto success = msg.SerializeToFile(out_fname.data());
 
       if (not success) {
         std::cerr << "\tError during serialization" << std::endl;
