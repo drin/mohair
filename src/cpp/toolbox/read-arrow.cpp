@@ -28,9 +28,11 @@
 
 //  service-specific includes
 #if SKYTETHER_USE_DUCKDB
-  #include "../engines/adapter_duckdb.hpp"
+  #include "skytether/engines.hpp"
+  #include "skytether/engines/duckdb/apidep_duckdb.hpp"
+  #include "skytether/engines/duckdb/adapter_duckdb.hpp"
 
-  using skytether::adapters::EngineDuckDB;
+  using skytether::engines::EngineDuckDB;
 #endif
 
 
@@ -55,11 +57,11 @@ struct ToolInterface {
 
   #if SKYTETHER_USE_DUCKDB
     int ScanFileWithDuckDB() {
-      unique_ptr<EngineDuckDB> duck_engine = skytether::adapters::DuckDBForMem();
+      unique_ptr<EngineDuckDB> duck_engine = skytether::engines::DuckDBForMem();
 
       // Use new path, `scan_arrows_file`
       int  context_id     = duck_engine->ArrowScanOpFile(arrow_fpath);
-      auto execute_status = duck_engine->ExecuteRelation(context_id);
+      auto execute_status = duck_engine->ExecuteFromContext(context_id);
       if (not execute_status.ok()) { return 4; }
     }
   #endif

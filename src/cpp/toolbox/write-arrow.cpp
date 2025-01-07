@@ -28,9 +28,11 @@
 
 //  service-specific includes
 #if SKYTETHER_USE_DUCKDB
-  #include "../engines/adapter_duckdb.hpp"
+  #include "skytether/engines.hpp"
+  #include "skytether/engines/duckdb/apidep_duckdb.hpp"
+  #include "skytether/engines/duckdb/adapter_duckdb.hpp"
 
-  using skytether::adapters::EngineDuckDB;
+  using skytether::engines::EngineDuckDB;
 #endif
 
 
@@ -46,6 +48,7 @@ using skytether::Table;
 
 using std::string;
 using std::shared_ptr;
+
 
 // ------------------------------
 // Structs and Classes

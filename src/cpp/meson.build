@@ -44,16 +44,11 @@ libskytether_headers = [
 ]
 
 # >> Sources
-libskytether_sources = [
-   'util.cpp'
-]
+libskytether_sources = [ 'util.cpp' ]
 
 
 # >> From subdirectories
-# NOTE: the build files in subdirs only add headers and sources; if they ever do more they
-# should be moved as appropriate
-subdir('query')
-subdir('engines')
+subdir('skytether')
 subdir('services')
 
 
@@ -61,8 +56,9 @@ subdir('services')
 # Build targets
 
 # >> Include targets
-libskytether_inc += [
-  include_directories('.')
+libskytether_inc = [
+   config_inc
+  ,include_directories('.')
 ]
 
 

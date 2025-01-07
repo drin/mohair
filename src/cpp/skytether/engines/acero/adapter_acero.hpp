@@ -17,37 +17,30 @@
 
 
 // ------------------------------
-// Overview
-//
-// Substrait is a specification of how to represent a query plan. This implementation uses
-// protobuf definitions provided by substrait.
-
-
-// ------------------------------
 // Dependencies
 #pragma once
 
-// >> Protobuf deps for interacting with framework
-#include <google/protobuf/text_format.h>
-
-// >> Generated protobuf deps for substrait
-#include "skyproto/substrait/plan.pb.h"
-#include "skyproto/substrait/algebra.pb.h"
-#include "skyproto/substrait/extensions/extensions.pb.h"
+//  >> Internal libs
+#include "skytether.hpp"
+#include "skytether/engines/acero/apidep_acero.hpp"
 
 
 // ------------------------------
-// Type Aliases
+// Type aliases
 
 namespace skytether {
 
-  //  >> Protobuf framework types
-  using google::protobuf::TextFormat;
-  using AnyMessage = google::protobuf::Any;
+  //  >> Acero-substrait types
+  using arrow::engine::PlanInfo;
 
-  //  >> Substrait types
-  using skyproto::substrait::Plan;
-  using skyproto::substrait::PlanRel;
-  using skyproto::substrait::Rel;
+  using arrow::engine::NamedTableProvider;
+  using arrow::engine::ConversionOptions;
+  using arrow::engine::ExtensionIdRegistry;
+  using arrow::engine::ExtensionSet;
+
+  //  >> Acero types
+  using arrow::acero::Declaration;
+  using arrow::acero::TableSourceNodeOptions;
+  using arrow::acero::QueryOptions;
 
 } // namespace: skytether

@@ -22,17 +22,15 @@
 
 
 // >> Internal deps
-
-// Configuration-based macros
-#include "skytether-config.hpp"
-
+#include "skytether-config.hpp" // Configuration-based macros
 #include "skytether_macros.hpp" // Common macro definitions
 #include "skytether_codes.hpp"  // Common status codes for functions
 
-// >> API dependencies
 
+// >> API dependencies
 #include "skytether/apidep_standard.hpp" // standard library
 #include "skytether/apidep_arrow.hpp"    // arrow library
+#include "skytether/apidep_mohair.hpp"   // mohair library
 
 
 // ------------------------------

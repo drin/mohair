@@ -33,6 +33,7 @@
 // >> Memory and data type support
 #include <memory>
 #include <string>
+#include <unordered_map>
 
 // >> Function support
 #include <functional>

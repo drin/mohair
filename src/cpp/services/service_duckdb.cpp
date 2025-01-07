@@ -34,12 +34,12 @@ namespace skytether::services {
   // Constructors
   DuckDBService::DuckDBService(ShutdownCallback* cb_custom)
     : EngineService(cb_custom) {
-    engine = skytether::adapters::DuckDBForMem();
+    engine = skytether::engines::DuckDBForMem();
   }
 
   DuckDBService::DuckDBService(ShutdownCallback* cb_custom, fs::path db_fpath)
     : EngineService(cb_custom) {
-    engine = skytether::adapters::DuckDBForFile(db_fpath);
+    engine = skytether::engines::DuckDBForFile(db_fpath);
   }
 
   DuckDBService::DuckDBService()
@@ -51,16 +51,28 @@ namespace skytether::services {
   // Custom Flight API
   Status
   DuckDBService::DoPlanPushdown( [[maybe_unused]] const ServerCallContext&  context
-                                ,                 const shared_ptr<Buffer>  plan_msg
+                                ,                 const shared_ptr<Buffer>  plan_data
                                 ,                 unique_ptr<ResultStream>* result) {
-    // convert message to string type
     SkytetherDebugMsg("Received query request");
-    string plan_data = plan_msg->ToString();
+
+    // internalize query plan
+    unique_ptr<SystemPlan> sys_plan {
+      mohair::SystemPlanFrom(
+        mohair::SubstraitMessage::FromString(plan_data->ToString())
+      )
+    };
 
     // convert substrait plan to duckdb plan
     SkytetherDebugMsg("Passing query plan to query engine");
-    int context_id = engine->ExecContextForSubstrait(plan_data);
-    if (not context_id) { return Status::Invalid("Failed to translate substrait"); }
+    // TODO: make more convenient
+    int32_t context_id = engine->context_map.RegisterContext(
+      std::make_unique<engines::DuckContext>(engine->TranslatePlan(*sys_plan))
+    );
+
+    if (context_id < 0) {
+      // TODO: or our UUID variable hit overflow
+      return Status::Invalid("Failed to translate substrait");
+    }
 
     // write the query ID to the `ResultStream` as a usable ticket
     SkytetherDebugMsg("Preparing ticket for response data");
@@ -73,13 +85,13 @@ namespace skytether::services {
 
     // execute the query and return the result (or OK)
     SkytetherDebugMsg("Executing query plan");
-    ARROW_RETURN_NOT_OK(engine->ExecuteRelation(context_id));
+    ARROW_RETURN_NOT_OK(engine->ExecuteFromContext(context_id));
     return Status::OK();
   }
 
   Status
   DuckDBService::DoPlanExecution( [[maybe_unused]] const ServerCallContext&  context
-                                 ,[[maybe_unused]] const shared_ptr<Buffer>  plan_msg
+                                 ,[[maybe_unused]] const shared_ptr<Buffer>  plan_data
                                  ,[[maybe_unused]] unique_ptr<ResultStream>* result) {
     return Status::NotImplemented("TODO: query service");
   }
@@ -93,7 +105,10 @@ namespace skytether::services {
     int query_id = std::stoi(request.ticket);
     SkytetherDebugMsg("Get request for ticket: " << request.ticket);
 
-    shared_ptr<RecordBatchReader> resultset_reader { engine->GetResultSet(query_id) };
+    shared_ptr<RecordBatchReader> resultset_reader {
+      engine->ResultSetForContext(query_id)
+    };
+
     if (resultset_reader == nullptr) {
       stringstream err_msg;
       err_msg << "Unknown ticket: " << request.ticket;

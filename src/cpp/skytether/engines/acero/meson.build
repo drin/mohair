@@ -1,16 +1,16 @@
+
 # ------------------------------
 # Headers and Sources
 
 # >> Headers
 libskytether_headers += files(
    'apidep_acero.hpp'
-  ,'adapter_duckdb.hpp'
+  ,'adapter_acero.hpp'
 )
 
 
 # >> Sources
 libskytether_sources += files(
-   'acero.cpp'
-  ,'duckdb.cpp'
+   'engine_acero.cpp'
 )
 

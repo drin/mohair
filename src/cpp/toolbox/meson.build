@@ -19,15 +19,6 @@ writearrow_bin = executable('write-arrow'
   ,install            : true
 )
 
-# sandbox for prototyping query processing
-mohair_bin = executable('mohair'
-  ,'mohair.cpp'
-  ,include_directories: [ libskytether_inc ]
-  ,dependencies       : libskytether_dep
-  ,install_rpath      : get_option('prefix') / get_option('libdir')
-  ,install            : true
-)
-
 # minimal client for communicating with skytether services
 skytether_client_bin = executable('skytether-client'
   ,['skytether-client.cpp', 'skytether_cli.cpp']
@@ -55,3 +46,23 @@ topo_service_bin = executable('topo-service'
   ,install            : true
 )
 
+
+# ------------------------------
+# Sandboxes for prototyping
+
+# for query processing
+mohair_bin = executable('mohair'
+  ,'mohair.cpp'
+  ,include_directories: [ libskytether_inc ]
+  ,dependencies       : libskytether_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
+  ,install            : true
+)
+
+# for duckdb internals
+duck_bin = executable('duckdb-sandbox'
+  ,'duckdb-sandbox.cpp'
+  ,include_directories: [ libskytether_inc ]
+  ,dependencies       : libduckdb_dep
+  ,install            : false
+)
