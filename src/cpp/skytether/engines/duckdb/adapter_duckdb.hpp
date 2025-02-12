@@ -74,10 +74,20 @@
     using duckdb::Connection;
 
     // Data types
+    using DuckDecimal = duckdb::DecimalType;
+
+    using duckdb::LogicalType;
+    using duckdb::LogicalTypeId;
+    using duckdb::Value;
+    using duckdb::BaseStatistics;
+
     using duckdb::idx_t;                 // uint64_t
     using duckdb::child_list_t;          // template<T> vector<pair<string, T>>
     using duckdb::named_parameter_map_t; // template<T> unordered_map<string, value>
-    using duckdb::Value;
+
+    // Enum types
+    using duckdb::LogicalOperatorType;
+    using duckdb::OnCreateConflict;
 
     // Query result types
     using duckdb::QueryResult;
@@ -98,6 +108,8 @@
     using duckdb::CrossProductRelation;
     using duckdb::JoinRelation;
 
+    using duckdb::CreateViewRelation;
+
     // Operator types
     using duckdb::LogicalOperator;
 
@@ -105,6 +117,7 @@
     using duckdb::ParsedExpression;
     using duckdb::FunctionExpression;
     using duckdb::PositionalReferenceExpression;
+    using duckdb::StarExpression;
 
   } // namespace: skytether::engines
 
@@ -164,53 +177,88 @@ namespace skytether::engines {
     };
 
     struct DuckContext : public QueryContext {
-      duck_sptr<DuckRel> duck_rel;
+      // NOTE: this is a shared ptr because TableFunctions return as a shared ptr
+      duck_sptr<DuckRel> duck_plan;
 
-      DuckContext(duck_sptr<DuckRel>&& rel)
-        : QueryContext(), duck_rel(std::move(rel)) {}
+      DuckContext(): QueryContext() {}
 
-      DuckContext(duck_sptr<DuckRel>&& rel, shared_ptr<Buffer> ctx_data)
-        : DuckContext(std::move(rel)) {
+      DuckContext(duck_sptr<DuckRel>&& plan_root)
+        : QueryContext(), duck_plan(std::move(plan_root)) {}
+
+      DuckContext(duck_sptr<DuckRel>&& plan_root, shared_ptr<Buffer> ctx_data)
+        : DuckContext(std::move(plan_root)) {
         this->rel_mem.push_back(std::move(ctx_data));
       }
-    };
 
-    struct DuckPlan : public EnginePlan {
-      duck_uptr<DuckRel> root_rel;
-
-      DuckPlan(duck_uptr<DuckRel>&& rel): root_rel(std::move(rel)) {}
+      static DuckContext* Emplace(ContextMap& ctx_map);
+      static DuckContext* Emplace(ContextMap& ctx_map, unique_ptr<DuckContext>&& new_ctx);
     };
 
     struct EngineDuckDB : public QueryEngine {
       // >> Attributes
       Connection engine_conn;
+      string     engine_id;
 
       // >> Constructors
-      EngineDuckDB(DuckDB db): engine_conn(db) {}
+      EngineDuckDB(DuckDB db, const string& id): engine_conn(db), engine_id(id) {}
 
-      // >> Methods
-      Status ExecuteFromContext(int32_t context_id) override;
+      // >> Methods for distributed interaction (cooperative decomposition)
 
-      DuckRel* GetRelation(int32_t context_id);
-
-      int32_t ArrowScanOpIPC(shared_ptr<Buffer> ipc_buffer);
-      int32_t ArrowScanOpFile(fs::path arrow_fpath);
-      int32_t ExecContextForSubstrait(string plan_msg);
-
-      //! Translates substrait `RelRoot` operator (root operator of a plan) to DuckDB
+      //! Translates the given `SystemPlan` to a DuckDB internal plan
       duck_uptr<DuckRel> TranslatePlan(SystemPlan& sys_plan);
+
+      unique_ptr<ExtensionLeafRel>
+      TranslateResultProjection( ProjectionRelation& result_proj
+                                ,size_t              ctx_id
+                                ,const string&       srv_loc
+                                ,const string&       result_name);
+
+      //! Constructs a simple pushback plan from the given projection operator
+      unique_ptr<PlanMessage>
+      PushbackForExecPlan( ProjectionRelation& result_proj
+                          ,Plan*               src_plan
+                          ,size_t              ctx_id
+                          ,const string&       srv_loc
+                          ,const string&       result_name);
+
+      //! Translates the given `SystemPlan` then returns a Pushback plan
+      std::tuple<unique_ptr<PlanMessage>, size_t, string>
+      ProcessForExecution(SystemPlan& sys_plan, const string& srv_loc);
+
+
+      // >> Methods for local interaction
+
+      // These create a QueryContext but return the context ID
+      size_t ContextForArrowScanOp(shared_ptr<Buffer> ipc_buffer);
+      size_t ContextForArrowScanOp(fs::path arrow_fpath);
+      size_t ContextForArrowScanOp(const string& plan_data);
+
+      // These do things with a context ID
+      DuckContext* GetDuckContext(size_t ctx_id);
+
+      Status ExecuteContext(size_t context_id) override;
+      Status ExecuteContext(size_t context_id, const string& view_name) override;
+
+      Status CreateView(const string& name, RecordBatchVector batches) override;
+      Result<shared_ptr<RecordBatchReader>> ScanResults(const string& view_name) override;
+
+      DuckRel* GetRelation(size_t context_id);
     };
 
-    unique_ptr<EngineDuckDB> DuckDBForFile(fs::path db_fpath);
-    unique_ptr<EngineDuckDB> DuckDBForMem();
+    unique_ptr<EngineDuckDB> DuckDBForFile(const string& engine_id, fs::path db_fpath);
+    unique_ptr<EngineDuckDB> DuckDBForMem(const string& engine_id);
 
     //! Construct a DuckDB engine plan from the given `sys_plan`
-    unique_ptr<EnginePlan>
+    duck_uptr<DuckRel>
     FromSystemPlan(EngineDuckDB& engine, SystemPlan& sys_plan);
 
     //! Entry path to translating an expression
     duck_uptr<ParsedExpression>
     TranslateExpr(TranslatorState& tl_state, const SubstraitExpression& sexpr);
+
+    //! Entry path to translating a data type
+    unique_ptr<SubstraitType>
+    FromDuckType(const LogicalType& type, bool not_null);
 
   #endif
 

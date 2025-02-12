@@ -49,6 +49,20 @@ namespace skytether::engines {
       return name;
     }
 
+    //! Write batches to an IPC stream
+    Result<shared_ptr<Buffer>> SerializeRecordBatches(RecordBatchVector batches) {
+      SkytetherDebugMsg("Creating IPC buffer");
+      ARROW_ASSIGN_OR_RAISE(auto ipc_stream, BufferOutputStream::Create());
+
+      SkytetherDebugMsg("Writing batches to buffer");
+      ARROW_RETURN_NOT_OK(
+        WriteRecordBatchStream(batches, IpcWriteOptions::Defaults(), ipc_stream.get())
+      );
+
+      SkytetherDebugMsg("Returning finished IPC buffer");
+      return ipc_stream->Finish();
+    }
+
 } // namespace: skytether::engines
 
 
@@ -58,17 +72,17 @@ namespace skytether::engines {
 namespace skytether::engines {
 
   // >> Static variable initializations
-  int32_t ContextMap::next_uuid = 0;
+  size_t ContextMap::next_uuid = 0;
 
   // >> Method implementations for ContextMap
-  int32_t ContextMap::RegisterContext(unique_ptr<QueryContext>&& new_context) {
-    int32_t ctx_uuid   = ContextMap::next_uuid++;
-    contexts[ctx_uuid] = std::move(new_context);
+  QueryContext* ContextMap::RegisterContext(unique_ptr<QueryContext>&& ctx) {
+    size_t ctx_id = ctx->uuid;
 
-    return ctx_uuid;
+    contexts[ctx_id] = std::move(ctx);
+    return contexts[ctx_id].get();
   }
 
-  QueryContext* ContextMap::GetContext(int32_t context_uuid) {
+  QueryContext* ContextMap::GetContext(size_t context_uuid) {
     const auto& map_entry = contexts.find(context_uuid);
     if (map_entry == contexts.end()) { return nullptr; }
 
@@ -79,7 +93,7 @@ namespace skytether::engines {
   // >> Method implementations for QueryEngine
 
   //! Given an ID for a query context, return the result of the previous execution
-  ResultReader QueryEngine::ResultSetForContext(int32_t context_id) {
+  ResultReader QueryEngine::ResultSetForContext(size_t context_id) {
     QueryContext* ctx { context_map.GetContext(context_id) };
 
     if (ctx) { return ctx->result; }
@@ -87,8 +101,10 @@ namespace skytether::engines {
   }
 
   //! Logic for execution must be implemented in engine-specific derived classes
-  Status QueryEngine::ExecuteFromContext([[maybe_unused]] int32_t context_id) {
+  /* TODO: made this pure virtual; see if we can just delete it
+  Status QueryEngine::ExecuteContext([[maybe_unused]] size_t context_id) {
     throw NotImplementedError();
   }
+  */
 
 } // namespace: skytether::engines

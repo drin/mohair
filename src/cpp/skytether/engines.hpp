@@ -34,7 +34,7 @@ namespace skytether::engines {
   // >> Templated types
   using FunctionAnchorMap = std::unordered_map<uint64_t, string>;
   using EngineFunctionMap = std::unordered_map<string  , string>;
-  using QueryContextMap   = std::unordered_map<int32_t , unique_ptr<QueryContext>>;
+  using QueryContextMap   = std::unordered_map<size_t, unique_ptr<QueryContext>>;
 
   using ResultReader = shared_ptr<RecordBatchReader>;
 
@@ -53,6 +53,9 @@ namespace skytether::engines {
 
   //! Return the duckdb function name for the given substrait function name
   string RemapFunctionName(const EngineFunctionMap& fn_map, const string& fn_name);
+
+  //! Write batches to an IPC stream
+  Result<shared_ptr<Buffer>> SerializeRecordBatches(RecordBatchVector batches);
 
 } // namespace: skytether::engines
 
@@ -76,30 +79,31 @@ namespace skytether::engines {
   //! The state of a query plan's execution
   enum QueryStatus { Pending, Running, Complete };
 
-  //! Necessary state to manage execution of a query plan
-  struct QueryContext {
-    QueryStatus                   status;
-    shared_ptr<RecordBatchReader> result;
-    vector<shared_ptr<Buffer>>    rel_mem;
-
-    virtual ~QueryContext() {}
-
-    QueryContext(): status(QueryStatus::Pending) {}
-  };
-
   //! A convenience class wrapping a mapping of UUIDs to query contexts
+  struct QueryContext;
   struct ContextMap {
-    static int32_t next_uuid;
+    static size_t next_uuid;
 
     QueryContextMap contexts;
 
-    int32_t       RegisterContext(unique_ptr<QueryContext>&& new_context);
-    QueryContext* GetContext(int32_t context_uuid);
+    //! Adds a `QueryContext` to this instance's QueryContextMap.
+    //  This is designed to allow derived classes of QueryContext to be inserted
+    QueryContext* RegisterContext(unique_ptr<QueryContext>&& ctx);
+    QueryContext* GetContext(size_t context_uuid);
   };
 
-  //! An engine-specific query plan to be optimized and executed.
-  struct EnginePlan {
-    virtual ~EnginePlan() {}
+  //! Necessary state to manage execution of a query plan
+  struct QueryContext {
+    size_t                        uuid;
+    atomic<QueryStatus>           status;
+    shared_ptr<RecordBatchReader> result;
+    vector<shared_ptr<Buffer>>    rel_mem;
+    mutex                         status_mtx;
+    condition_variable            status_cv;
+
+    virtual ~QueryContext() {}
+
+    QueryContext(): uuid(++ContextMap::next_uuid), status(QueryStatus::Pending) {}
   };
 
   struct QueryEngine {
@@ -107,8 +111,14 @@ namespace skytether::engines {
 
     virtual ~QueryEngine() {}
 
-    virtual ResultReader ResultSetForContext(int32_t context_id);
-    virtual Status       ExecuteFromContext(int32_t context_id);
+    virtual ResultReader ResultSetForContext(size_t context_id);
+    virtual Status       ExecuteContext(size_t context_id) = 0;
+    virtual Status       ExecuteContext(size_t context_id, const string& view_name) = 0;
+
+    virtual Status CreateView(const string& view_name, RecordBatchVector batches) = 0;
+
+    virtual Result<shared_ptr<RecordBatchReader>>
+    ScanResults(const string& view_name) = 0;
   };
 
 
@@ -120,7 +130,7 @@ namespace skytether::engines {
 
   struct QueryOp {
     virtual ~QueryOp() {}
-    virtual unique_ptr<SuperPlan> ToSuperPlanRef() { return nullptr;          }
+    virtual unique_ptr<SuperPlan> ToSuperPlanRef() { return nullptr; }
   };
 
 } // namespace: skytether::engines
