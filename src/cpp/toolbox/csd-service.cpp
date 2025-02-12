@@ -106,7 +106,7 @@ struct ServiceActions {
       return ERRCODE_API_REGISTER;
     }
 
-    SkytetherDebugMsg("Initializing service with config:");
+    SkytetherDebugMsg("Initializing connected service with config:");
     skytether::services::PrintConfig(service_cfg.get());
 
     return 0;
@@ -117,7 +117,7 @@ struct ServiceActions {
     service_cfg = std::make_unique<ServiceConfig>();
     service_cfg->set_service_location(service_loc.ToString());
 
-    SkytetherDebugMsg("Initializing service with config:");
+    SkytetherDebugMsg("Initializing local-only service with config:");
     skytether::services::PrintConfig(service_cfg.get());
 
     return 0;
@@ -161,8 +161,17 @@ struct ServiceActions {
     }
 
     #if SKYTETHER_USE_DUCKDB
-      auto skytether_duckcse = std::make_unique<DuckDBService>(&fn_deactivate);
-      auto status_start      = StartService(*skytether_duckcse, *service_cfg);
+      auto skytether_service = std::make_unique<DuckDBService>(
+        std::move(service_cfg), &fn_deactivate
+      );
+
+      auto status_connect = skytether_service->ConnectToTopology();
+      if (not status_connect.ok()) {
+        skytether::PrintError("Unable to connect to downstream services", status_connect);
+        return ERRCODE_START_SRV;
+      }
+
+      auto status_start = StartService(*skytether_service, service_loc);
       if (not status_start.ok()) {
         skytether::PrintError("Unable to start csd-service", status_start);
         return ERRCODE_START_SRV;

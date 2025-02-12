@@ -44,22 +44,34 @@ namespace skytether {
   using AnyMessage = google::protobuf::Any;
 
   // >> Mohair query processing types
-  using skyproto::mohair::SuperPlan;
-  using skyproto::mohair::SubPlan;
-  using skyproto::mohair::ErrRel;
+  using mohair::Plan;
+  using mohair::SuperPlan;
+  using mohair::SubPlan;
+
+  using mohair::PlanRel;
+  using mohair::RelRoot;
+
+  using mohair::Rel;
+  using mohair::RelCommon;
+  using mohair::ErrRel;
+  using mohair::ExtensionLeafRel;
+  using mohair::SkyResultRel;
 
   // >> Mohair topology types
-  using skyproto::mohair::ServiceConfig;
-  using skyproto::mohair::DeviceClass;
+  using mohair::ServiceConfig;
+  using mohair::DeviceClass;
 
   // >> Types from mohair
   using mohair::PlanMessage;
-  using mohair::SubstraitMessage;
 
   using mohair::SystemPlan;
+  using mohair::PlanSplit;
+  using mohair::DecomposeAlg;
+
+  using mohair::SubstraitSchema;
+  using mohair::SubstraitType;
 
   // TODO: see if these should be aliased in mohair
-  using SubstraitType       = skyproto::substrait::Type;
   using SubstraitExpression = skyproto::substrait::Expression;
   using SubstraitSortField  = skyproto::substrait::SortField;
 

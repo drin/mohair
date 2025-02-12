@@ -57,11 +57,11 @@ struct ToolInterface {
 
   #if SKYTETHER_USE_DUCKDB
     int ScanFileWithDuckDB() {
-      unique_ptr<EngineDuckDB> duck_engine = skytether::engines::DuckDBForMem();
+      unique_ptr<EngineDuckDB> duck_engine = skytether::engines::DuckDBForMem("local");
 
       // Use new path, `scan_arrows_file`
-      int  context_id     = duck_engine->ArrowScanOpFile(arrow_fpath);
-      auto execute_status = duck_engine->ExecuteFromContext(context_id);
+      int  context_id     = duck_engine->ContextForArrowScanOp(arrow_fpath);
+      auto execute_status = duck_engine->ExecuteContext(context_id);
       if (not execute_status.ok()) { return 4; }
     }
   #endif

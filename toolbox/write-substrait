@@ -45,26 +45,13 @@ from ibis_substrait.compiler.core import stp as substrait # substrait.plan_pb2 m
 # >> Internal
 from mohair.util            import ArgparseBuilder
 from mohair.query.extension import SkyPartitionTable, SkySliceTable
-from mohair.query.types     import ( SkyDomain
-                                    ,SkyPartition
-                                    ,SkyPartitionMeta
-                                    ,SkyPartitionSlice)
+from mohair.query.types     import SkyCatalog, SkyPartition, SkyDomain
 
 # >> Functions
-from mohair.util import TableFromBinary, SchemaFromBinary
+from mohair.util import SchemaFromBinary
 
 # >> The workloads we support
 from workloads.statistics import BaseSummaryStats
-
-
-# ------------------------------
-# Module variables
-SAMPLE_FPATH  = Path('resources') / 'sample-data.tsv'
-SAMPLE_SCHEMA = pyarrow.schema([
-     pyarrow.field('gene_id'   , pyarrow.string())
-    ,pyarrow.field('cell_id'   , pyarrow.string())
-    ,pyarrow.field('expression', pyarrow.float32())
-])
 
 
 # ------------------------------
@@ -75,7 +62,6 @@ if __name__ == '__main__':
                        .add_skytether_domain_arg(required=True)
                        .add_skytether_partition_arg(required=True)
                        .add_workload_arg(required=True)
-                       .add_skytether_onlyschema_arg(required=False)
                        .add_input_dir_arg(
                             required=True
                            ,help_str='Path to directory containing source domain'
@@ -94,28 +80,22 @@ if __name__ == '__main__':
 # Support functions
 
 # >> Functions for handling inputs
-def DomainForSource(data_srcdir: str, data_dkey: str, data_pkeys: list[str]) -> SkyDomain:
+def CatalogForSource(src_dirpath: str, dkey: str, pkeys: list[str]) -> SkyCatalog:
     """ Convenience function to parse source data into a skytether domain. """
 
-    print(f'Creating domain {data_dkey} with partitions: {data_pkeys}')
-    domain = SkyDomain.WithName(data_dkey).WithPartitions(data_pkeys)
-    print(domain.partitions)
+    print(f'Initializing catalog with domain {dkey}')
+    catalog = SkyCatalog.WithDomain(dkey)
 
-    # Populate schemas and optionally data
-    for pname, partition in domain.partitions.items():
-        partition_fpath = Path(data_srcdir) / data_dkey / pname
+    # Populate partitions and their schemas
+    for partition_key in pkeys:
+        print(f'\tRegistering partition: {partition_key}')
+        partition_fpath = Path(src_dirpath) / dkey / partition_key
 
         with open(partition_fpath, 'rb') as partition_handle:
-            if parsed_args.schema_only:
-                partition.SetSchema(SchemaFromBinary(partition_handle.read()))
+            sky_partition = catalog.RegisterPartition(partition_key)
+            sky_partition.SetSchema(SchemaFromBinary(partition_handle.read()))
 
-            else:
-                partition_data = TableFromBinary(partition_handle.read())
-
-                partition.SetSchema(partition_data.schema)
-                partition.SetPartitionData(partition_data)
-
-    return domain
+    return catalog
 
 # >> Functions for handling outputs
 def WriteSubstraitToFile(msg_fpath: Path, substrait_msg: substrait.Plan) -> str:
@@ -127,11 +107,10 @@ def WriteSubstraitToFile(msg_fpath: Path, substrait_msg: substrait.Plan) -> str:
     return str(msg_fpath)
 
 # >> Functions for generating query plans
-def ConstructWorkload(workload_name, sky_domain):
-
+def ConstructWorkload(workload_name, sky_catalog):
     if workload_name == 'SummaryStats':
-        print(sky_domain.partitions.values())
-        src_partitions = iter(sky_domain.partitions.values())
+        print(sky_catalog.GetPartitions().values())
+        src_partitions = iter(sky_catalog.GetPartitions().values())
 
         src_partition = next(src_partitions)
         slice_rel     = SkySliceTable.ForPartition(src_partition).to_expr()
@@ -159,14 +138,14 @@ if __name__ == '__main__':
         sys.exit(f'Output file already exists: "{substrait_fpath}"')
 
     # Construct a skytether domain from the source data
-    source_domain = DomainForSource(
+    src_catalog = CatalogForSource(
          parsed_args.input_dir
         ,parsed_args.domain_key
         ,parsed_args.partition_keys
     )
 
     # Construct a query from the skytether domain
-    workload_query = ConstructWorkload(parsed_args.workload_name, source_domain)
+    workload_query = ConstructWorkload(parsed_args.workload_name, src_catalog)
 
     print(workload_query)
 

@@ -48,6 +48,9 @@ using skytether::services::FlightStreamChunk;
 using skytether::services::SkytetherClient;
 using skytether::services::SkytetherTicket;
 
+using mohair::PlanMessage;
+using mohair::Plan;
+
 // >> Functions
 using skytether::cli::ParseArgLocationUri;
 
@@ -56,68 +59,36 @@ using skytether::cli::ParseArgLocationUri;
 // Structs and Classes
 
 struct ClientActions {
-  bool should_shutdown;
-  bool should_dereg;
+  bool should_shutdown { false };
+  bool should_dereg    { false };
 
-  Location           service_loc;
-  Location           target_loc;
-  shared_ptr<Buffer> request_payload;
-
-  ClientActions()
-    :  should_shutdown(false)
-      ,should_dereg(false)
-      ,service_loc()
-      ,request_payload(nullptr)
-  {}
-
-
-  // >> "System Interface"
-
-  //! Submits a single query plan then validates the response is a single ticket
-  Status ExecutePlan(SkytetherClient& client_conn, SkytetherTicket* out_ticket) {
-    ARROW_ASSIGN_OR_RAISE(
-       unique_ptr<ResultStream> ticket_response
-      ,client_conn.SendPlanPushdown(request_payload)
-    );
-
-    ARROW_ASSIGN_OR_RAISE(
-       *out_ticket
-      ,skytether::services::ExpectResultFromQuery(std::move(ticket_response))
-    );
-
-    return Status::OK();
-  }
-
-  //! Submits a single ticket to request query results, then prints the results
-  Status GetResults(SkytetherClient& client_conn, SkytetherTicket& query_ticket) {
-    constexpr int count_peeksize = 5;
-
-    ARROW_ASSIGN_OR_RAISE(
-       unique_ptr<FlightStreamReader> result_reader
-      ,client_conn.GetQueryResults(query_ticket)
-    );
-
-    ARROW_ASSIGN_OR_RAISE(FlightStreamChunk result_chunk, result_reader->Next());
-    for (int peek_ndx = 0; result_chunk.data and peek_ndx < count_peeksize; ++peek_ndx) {
-      skytether::PrintRecordBatch(result_chunk.data, 0, 10);
-      ARROW_ASSIGN_OR_RAISE(FlightStreamChunk result_chunk, result_reader->Next());
-    }
-
-    return Status::OK();
-  }
+  Location                service_loc;
+  Location                target_loc;
+  unique_ptr<PlanMessage> query_plan;
 
 
   // >> "Application Interface"
-
   //! Executes a query by submitting the query plan then fetching the results.
   Status ExecuteQuery(SkytetherClient& client_conn) {
     SkytetherDebugMsg("Sending query request");
-    if (request_payload == nullptr) { return Status::Invalid("Missing query plan"); }
+    ARROW_ASSIGN_OR_RAISE(
+       unique_ptr<Plan> pushback_plan
+      ,client_conn.DelegatePlan(*query_plan)
+    );
 
-    SkytetherTicket query_ticket;
+    // TODO: hardcoded for now
+    mohair::SkyResultRel result_rel;
+    pushback_plan->relations(0).root()
+                               .input()
+                               .extension_leaf()
+                               .detail()
+                               .UnpackTo(&result_rel);
 
-    ARROW_RETURN_NOT_OK(ExecutePlan(client_conn, &query_ticket));
-    ARROW_RETURN_NOT_OK( GetResults(client_conn,  query_ticket));
+    SkytetherDebugMsg("Result name: " << result_rel.result_name());
+
+    // TODO: for now, going to retrieve from a different process
+    // SkytetherTicket query_ticket { result_rel.context_id() };
+    // ARROW_RETURN_NOT_OK(RequestResultSet(client_conn, query_ticket));
 
     std::cout << "Query complete" << std::endl;
     return Status::OK();
@@ -133,7 +104,7 @@ struct ClientActions {
     if (client_conn == nullptr) { return ERRCODE_CONN_CLIENT; }
 
     // Handle each action depending on what actions were set
-    if (request_payload != nullptr) {
+    if (query_plan != nullptr) {
       auto status_query = ExecuteQuery(*client_conn);
       if (not status_query.ok()) {
         skytether::PrintError("Unable to execute query plan", status_query);
@@ -208,12 +179,11 @@ int main(int argc, char **argv) {
       }
 
       case 'q': {
-        auto result_buffer = skytether::BufferFromFile(optarg);
-        if (not result_buffer.ok()) {
-          skytether::PrintError("Unable to read plan file", result_buffer.status());
+        client_actions.query_plan = PlanMessage::FromFile(optarg);
+        if (client_actions.query_plan == nullptr) {
+          std::cerr << "Failed to parse plan file" << std::endl;
           return ERRCODE_FILE_PARSE;
         }
-        client_actions.request_payload = result_buffer.ValueOrDie();
         break;
       }
 
