@@ -37,11 +37,18 @@ from dataclasses import dataclass, field
 from typing import Any, TypeAlias
 
 # >> Arrow
+import pyarrow
+
+from pyarrow import types
 from pyarrow import Schema, Table, RecordBatch
+
+# >> Ibis-substrait (for translating a pyarrow.Schema to a substrait NamedStruct
+from ibis.expr.schema                  import Schema as IbisSchema
+from ibis_substrait.compiler.translate import translate
 
 # >> Internal
 from mohair import CreateMohairLogger
-from skyproto.mohair.algebra_pb2 import SkyRel, ExecutionStats
+# from skyproto.mohair.algebra_pb2 import SkyRel, ExecutionStats
 
 # convenience functions for metadata management
 from mohair.util import ( DefaultPartitionMetadata
@@ -60,11 +67,12 @@ from mohair.util import RowCountForByteSize
 logger = CreateMohairLogger(__name__)
 
 # >> Forward references (Type aliases)
-OpTypeAlias       : TypeAlias = 'MohairOp'
-PlanTypeAlias     : TypeAlias = 'MohairPlan'
-DomainTypeAlias   : TypeAlias = 'SkyDomain'
-PartitionTypeAlias: TypeAlias = 'SkyPartition'
-MetaTypeAlias     : TypeAlias = 'SkyPartitionMeta'
+type MohairOp     = 'MohairOp'
+type MohairPlan   = 'MohairPlan'
+type SkyDomain    = 'SkyDomain'
+type SkyPartition = 'SkyPartition'
+
+type PartitionMap = dict[str, SkyPartition]
 
 
 # ------------------------------
@@ -79,7 +87,7 @@ class MohairOp:
     """
 
     plan_op   : Any
-    op_inputs : tuple[OpTypeAlias, ...]
+    op_inputs : tuple[MohairOp, ...]
     table_name: str = ''
 
     def __str__(self):
@@ -122,8 +130,8 @@ class MohairPlan:
     plan_height   : int = 0
     breaker_count : int = 0
     breaker_height: int = 0
-    breaker_leaves: list[PlanTypeAlias] = field(default_factory=list)
-    breaker_list  : list[PlanTypeAlias] = field(default_factory=list)
+    breaker_leaves: list[MohairPlan] = field(default_factory=list)
+    breaker_list  : list[MohairPlan] = field(default_factory=list)
 
     def __hash__(self):
         plan_hash = hash(self.plan_root)
@@ -158,60 +166,43 @@ class LogicalExecPlan(MohairPlan):
 # ------------------------------
 # Skytether classes
 
-@dataclass
-class SkyDomain:
-    """ A convenience class for managing domains. """
 
-    key       : str = 'public'
-    partitions: dict[str, PartitionTypeAlias] = field(default_factory=dict)
-
-    @classmethod
-    def WithName(cls, domain_key: str) -> DomainTypeAlias:
-        return cls(domain_key)
-
-    def WithPartitions(self, partition_keys: list[str]) -> DomainTypeAlias:
-        for partition_key in partition_keys: self.PartitionForKey(partition_key)
-
-        return self
-
-    def PartitionForKey(self, partition_key: str) -> PartitionTypeAlias:
-        if partition_key not in self.partitions:
-            print(f'Adding partition: {partition_key}')
-            sky_partition = SkyPartition.FromKeyInDomain(domain=self, pkey=partition_key)
-            self.partitions[partition_key] = sky_partition
-
-            return sky_partition
-
-        else:
-            print(f'Partition already in catalog: {partition_key}')
-
-        return self.partitions[partition_key]
-
+# ------------------------------
+# Support functions for Mohair types
 
 @dataclass
-class SkyPartitionMeta:
-    """ A data class for partition metadata. """
+class SkyPartition:
+    """ A data class for a skytether partition. """
 
-    slice_width: int                = 0
-    slice_count: int                = 0
-    stripe_size: int                = 0
-    key        : str                = None
+    domain     : str
+    partition  : str
+
     schema_meta: dict[bytes, bytes] = None
     schema     : Schema             = None
 
+    slice_width: int = 0
+    slice_count: int = 0
+    stripe_size: int = 0
+
+    @classmethod
+    def InDomainWithKey(cls, dkey: str, pkey: str):
+        return cls(dkey, pkey)
+
+    def __hash__(self) -> int:
+        return hash(self.Name())
 
     def __str__(self) -> str:
-        str_val = ''
+        return (
+            f'Slice Width: {self.slice_width}\n'
+            f'Slice Count: {self.slice_count}\n'
+            f'Stripe Size: {self.stripe_size}\n'
+            f'{self.schema}'
+        )
 
-        str_val += f'Slice Width: {self.slice_width}\n'
-        str_val += f'Slice Count: {self.slice_count}\n'
-        str_val += f'Stripe Size: {self.stripe_size}\n'
+    def Name(self):
+        return f'{self.domain}/{self.partition}'
 
-        str_val += str(self.schema)
-
-        return str_val
-
-    def WithMetadata(self, new_meta: dict[bytes, bytes]) -> MetaTypeAlias:
+    def WithMetadata(self, new_meta: dict[bytes, bytes]) -> SkyPartition:
         """ Convenience method to set metadata and update schema. """
 
         # replace metadata
@@ -222,23 +213,25 @@ class SkyPartitionMeta:
 
         return self
 
-    def SetSchema(self, pschema: Schema) -> MetaTypeAlias:
+    def SetSchema(self, pschema: Schema) -> SkyPartition:
         self.schema      = pschema
         self.schema_meta = pschema.metadata or DefaultPartitionMetadata()
 
-    def SetSkytetherMeta(self, slice_width=0, slice_count=0, stripe_size=1) -> MetaTypeAlias:
+        return self
+
+    def SetSkytetherMeta(self, sl_width=0, sl_count=0, st_size=1) -> SkyPartition:
         """ Convenience method to set metadata and update schema.  """
 
         # Cache metadata
-        self.slice_width = slice_width
-        self.slice_count = slice_count
-        self.stripe_size = stripe_size
+        self.slice_width = sl_width
+        self.slice_count = sl_count
+        self.stripe_size = st_size
 
         # replace metadata
         self.schema_meta = {
-             EncodeMetaKey('slice_width'): EncodeSliceWidth(slice_width)
-            ,EncodeMetaKey('slice_count'): EncodeSliceCount(slice_count)
-            ,EncodeMetaKey('stripe_size'): EncodeStripeSize(stripe_size)
+             EncodeMetaKey('slice_width'): EncodeSliceWidth(sl_width)
+            ,EncodeMetaKey('slice_count'): EncodeSliceCount(sl_count)
+            ,EncodeMetaKey('stripe_size'): EncodeStripeSize(st_size)
         }
 
         # return schema with new metadata
@@ -246,7 +239,7 @@ class SkyPartitionMeta:
 
         return self
 
-    def SetSliceWidth(self, new_slicewidth: int) -> MetaTypeAlias:
+    def SetSliceWidth(self, new_slicewidth: int) -> SkyPartition:
         metakey_slicewidth = EncodeMetaKey('slice_width')
         metaval_slicewidth = EncodeSliceWidth(new_slicewidth)
 
@@ -256,7 +249,7 @@ class SkyPartitionMeta:
 
         return self
 
-    def SetSliceCount(self, new_slicecount: int) -> MetaTypeAlias:
+    def SetSliceCount(self, new_slicecount: int) -> SkyPartition:
         metakey_slicecount = EncodeMetaKey('slice_count')
         metaval_slicecount = EncodeSliceCount(new_slicecount)
 
@@ -266,7 +259,7 @@ class SkyPartitionMeta:
 
         return self
 
-    def SetStripeSize(self, new_stripesize: int) -> MetaTypeAlias:
+    def SetStripeSize(self, new_stripesize: int) -> SkyPartition:
         metakey_stripesize = EncodeMetaKey('stripe_size')
         metaval_stripesize = EncodeStripeSize(new_stripesize)
 
@@ -276,129 +269,86 @@ class SkyPartitionMeta:
 
         return self
 
-
 @dataclass
-class SkyPartitionSlice:
-    """ A data class that couples a slice's index, key name, and table data. """
+class SkyDomain:
+    """ A convenience class for managing a domain. """
 
-    slice_index: int   = 0
-    key        : str   = None
-    data       : Table = None
-
-    def num_rows(self)    -> int: return self.data.num_rows
-    def num_columns(self) -> int: return self.data.num_columns
-
-    def AsBatch(self) -> RecordBatch:
-        return self.data.to_batches()[0]
-
-
-@dataclass
-class SkyPartition:
-    """
-    A data class that couples the parts of a partition (domain, metadata, slice).
-
-    This is used to compile substrait using ibis (or some producer) or to extract
-    information from a substrait operator (SkyRel).
-    """
-
-    domain: SkyDomain               = None
-    meta  : SkyPartitionMeta        = None
-    slices: list[SkyPartitionSlice] = field(default_factory=list)
-    stats : ExecutionStats          = None
+    key       : str          = None
+    partitions: PartitionMap = None
 
     @classmethod
-    def FromKeyInDomain(cls, domain: SkyDomain, pkey: str) -> PartitionTypeAlias:
-        return cls(domain=domain, meta=SkyPartitionMeta(key=pkey))
+    def WithKey(cls, domain_key: str, data: dict[str, SkyPartition]={}) -> SkyDomain:
+        return cls(domain_key, data)
+
+    def GetPartition(self, partition_key: str) -> SkyPartition:
+        return self.partitions.get(partition_key)
+
+    def RegisterPartition(self, pkey: str) -> SkyPartition:
+        if not pkey in self.partitions:
+            self.partitions[pkey] = SkyPartition.InDomainWithKey(self.key, pkey)
+
+        return self.partitions[pkey]
+
+
+@dataclass
+class SkyCatalog:
+    """ A convenience class for managing a catalog of domains. """
+
+    partitions   : dict[str, PartitionMap] = field(default_factory=dict)
+    active_domain: SkyDomain               = None
 
     @classmethod
-    def FromOp(cls, query_op: SkyRel) -> PartitionTypeAlias:
-        return cls(
-             domain=SkyDomain(query_op.domain)
-            ,meta=SkyPartitionMeta(key=query_op.partition)
-            ,slices=[
-                 SkyPartitionSlice(slice_index=slice_ndx)
-                 for slice_ndx in query_op.slices
-             ]
-            ,stats=query_op.execstats
-        )
+    def WithDomain(cls, domain_key: str) -> 'SkyCatalog':
+        new_catalog = cls()
+        new_catalog.RegisterDomain(domain_key, set_active=True)
 
-    def __post_init__(self):
-        if self.stats is None:
-            self.stats = ExecutionStats()
+        return new_catalog
 
-    def __hash__(self):
-        return hash(self.domain.key) + hash(self.meta.key)
-
-    def key(self):
-        return self.meta.key
-
-    def name(self, domain_delim='/'):
-        return f'{self.domain.key}{domain_delim}{self.meta.key}'
-
-    def schema(self):
-        return self.meta.schema
-
-    def slice_indices(self) -> list[int]:
+    def GetDomains(self) -> list[SkyDomain]:
         return [
-            partition_slice.slice_index
-            for partition_slice in self.slices
-            if partition_slice is not None
+            SkyDomain.WithKey(dkey, self.partitions[dkey]) 
+            for dkey in self.partitions.keys()
         ]
 
-    def exec_stats(self) -> ExecutionStats:
-        return self.stats
+    def GetDomain(self, domain_key: str=None) -> SkyDomain:
+        return SkyDomain.WithKey(domain_key, self.partitions[domain_key])
 
-    def SetSchema(self, pschema: Schema) -> 'SkyPartition':
-        """ Updates the schema of this partition. """
+    def GetPartitions(self, domain_key: str=None) -> PartitionMap:
+        if domain_key is None: return self.active_domain.partitions
 
-        self.meta.SetSchema(pschema)
+        return self.partitions.get(domain_key)
 
-        return self
+    def GetPartition(self, partition_key: str, domain_key: str=None) -> SkyPartition:
+        if domain_key is None: return self.active_domain.GetPartition(partition_key)
 
-    def SetPartitionData(self, data_table: Table) -> PartitionTypeAlias:
-        """
-        Sets the data for this partition to the given `pyarrow.Table` (:data_table:).
-        """
+        return self.partitions.get(domain_key, {}).get(partition_key)
 
-        # initialize (or clear) partition data
-        self.slices = []
+    def SetActiveDomain(self, domain_key: str) -> SkyDomain:
+        self.active_domain = self.GetDomain(domain_key)
 
-        # Some variables to find N rows to produce 1 MiB record batches
-        max_slice_bytesize = 1024 * 1024
-        slice_row_count    = RowCountForByteSize(data_table, max_slice_bytesize)
+        return self.active_domain
 
-        if slice_row_count == 0:
-            sys.exit(f'Failed to determine row count for partition {self.name()}')
+    def RegisterDomain(self, domain_key: str, set_active: bool=False) -> SkyDomain:
+        # Add new domain
+        if not domain_key in self.partitions:
+            self.partitions[domain_key] = {}
 
-        # Create a partition slices for each recordbatch
-        for ndx, pslice in enumerate(data_table.to_batches(max_chunksize=slice_row_count)):
+        if set_active: return self.SetActiveDomain(domain_key)
+        return self.GetDomain(domain_key)
 
-            # Each slice is treated as a table for simplicity
-            self.slices.append(
-                SkyPartitionSlice(
-                     slice_index=ndx
-                    ,key=self.name()
-                    ,data=Table.from_batches([pslice])
-                )
-            )
+    def RegisterPartition(self, pkey: str, dkey: str=None) -> SkyPartition:
+        # Use active domain
+        if dkey is None:
+            return self.active_domain.RegisterPartition(pkey)
 
-        return self
+        # Domain mismatch
+        if not dkey in self.partitions: return None
 
-    def SetSliceData(self, slice_ndx: int, slice_data: Table) -> PartitionTypeAlias:
-        """
-        Sets the data for this slice to the given `pyarrow.Table` (:data_table:); each
-        slice is treated as a table for simplicity.
-        """
+        # Register the partition
+        domain_partitions = self.partitions[dkey]
 
-        # Overwrite the existing slice
-        if slice_ndx < self.meta.slice_count:
-            self.slices[slice_ndx] = SkyPartitionSlice(slice_ndx, self.name(), slice_data)
+        if pkey not in domain_partitions:
+            domain_partitions[pkey] = SkyPartition.InDomainWithKey(dkey, pkey)
 
-        # Otherwise, append to our list of slices
-        else:
-            self.slices.append(
-                SkyPartitionSlice(self.meta.slice_count, self.name(), slice_data)
-            )
-            self.meta.slice_count += 1
+        return domain_partitions[pkey]
 
-        return self

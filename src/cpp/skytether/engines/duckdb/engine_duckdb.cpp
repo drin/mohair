@@ -30,21 +30,21 @@
   namespace skytether::engines {
     
     //! Instantiate a wrapper around an in-memory DuckDB database
-    unique_ptr<EngineDuckDB> DuckDBForMem() {
+    unique_ptr<EngineDuckDB> DuckDBForMem(const string& engine_id) {
       DuckDB mem_db;
-      return std::make_unique<EngineDuckDB>(mem_db);
+      return std::make_unique<EngineDuckDB>(mem_db, engine_id);
     }
 
     //! Instantiate a wrapper around a file-backed DuckDB database
-    unique_ptr<EngineDuckDB> DuckDBForFile(fs::path db_fpath) {
+    unique_ptr<EngineDuckDB> DuckDBForFile(const string& engine_id, fs::path db_fpath) {
       DuckDB disk_db(db_fpath);
-      return std::make_unique<EngineDuckDB>(disk_db);
+      return std::make_unique<EngineDuckDB>(disk_db, engine_id);
     }
 
     //! Entry point into translating a `SystemPlan` into an `EnginePlan` for DuckDB
-    unique_ptr<EnginePlan>
+    duck_uptr<DuckRel>
     FromSystemPlan(EngineDuckDB& engine, SystemPlan& sys_plan) {
-      return std::make_unique<DuckPlan>(engine.TranslatePlan(sys_plan));
+      return engine.TranslatePlan(sys_plan);
     }
 
     //! Prints `col_count` columns of the given chunk starting at `col_offset`
@@ -119,6 +119,7 @@
       // TODO: parameterize
       constexpr size_t result_batchsize { 2048 };
 
+      SkytetherDebugMsg("Creating reader");
       // ArrowArrayStream keeps a reference to the wrapper
       auto stream_wrapper = new ResultArrowArrayStreamWrapper(
         std::move(result_set), result_batchsize
@@ -129,8 +130,8 @@
     }
 
     //! Convenience function to get a DuckContext from `ctx_map`
-    DuckContext* GetDuckContext(ContextMap& ctx_map, int32_t ctx_id) {
-      return dynamic_cast<DuckContext*>(ctx_map.GetContext(ctx_id));
+    DuckContext* EngineDuckDB::GetDuckContext(size_t ctx_id) {
+      return dynamic_cast<DuckContext*>(context_map.GetContext(ctx_id));
     }
 
   } // namespace: skytether::engines
@@ -163,69 +164,188 @@
         ,{"extract"    , "date_part"}
       };
 
+    // >> DuckContext
+    DuckContext*
+    DuckContext::Emplace(ContextMap& ctx_map) {
+      auto new_ctx = std::make_unique<DuckContext>();
+      return static_cast<DuckContext*>(ctx_map.RegisterContext(std::move(new_ctx)));
+    }
+
+    DuckContext*
+    DuckContext::Emplace(ContextMap& ctx_map, unique_ptr<DuckContext>&& new_ctx) {
+      return static_cast<DuckContext*>(ctx_map.RegisterContext(std::move(new_ctx)));
+    }
+
     // >> EngineDuckDB
     //! Create a duckdb scan operator from an IPC buffer (extracted from an arrow file)
-    int32_t EngineDuckDB::ArrowScanOpIPC(shared_ptr<Buffer> ipc_buffer) {
+    size_t EngineDuckDB::ContextForArrowScanOp(shared_ptr<Buffer> ipc_buffer) {
       // `scan_arrow_ipc` takes IPC buffers as a list of structs
       duckdb::vector<Value> fn_args {
         Value::LIST({ ValueForIPCBuffer(*ipc_buffer) })
       };
 
       // Construct a QueryContext to keep the IPC buffer alive
-      auto scan_context = std::make_unique<DuckContext>(
-         engine_conn.TableFunction("scan_arrow_ipc", fn_args)
-        ,ipc_buffer
+      DuckContext* scan_context = DuckContext::Emplace(
+         context_map
+        ,std::make_unique<DuckContext>(
+            engine_conn.TableFunction("scan_arrow_ipc", fn_args)
+           ,ipc_buffer
+         )
       );
 
-      return context_map.RegisterContext(std::move(scan_context));
+      return scan_context->uuid;
     }
 
     //! Create a duckdb scan operator from an arrow file
-    int32_t EngineDuckDB::ArrowScanOpFile(fs::path arrow_fpath) {
+    size_t EngineDuckDB::ContextForArrowScanOp(fs::path arrow_fpath) {
       // `scan_arrows_file` takes a vector of file paths as input
       duckdb::vector<Value> fn_args {
         Value::LIST({ Value { arrow_fpath } })
       };
 
       // Construct a QueryContext to keep everything alive
-      auto scan_context = std::make_unique<DuckContext>(
-        engine_conn.TableFunction("scan_arrows_file", fn_args)
+      DuckContext* scan_context = DuckContext::Emplace(context_map
+        ,std::make_unique<DuckContext>(
+           engine_conn.TableFunction("scan_arrows_file", fn_args)
+         )
       );
 
-      return context_map.RegisterContext(std::move(scan_context));
+      return scan_context->uuid;
     }
 
-    //! Create a duckdb query plan from a substrait plan message
-    int32_t EngineDuckDB::ExecContextForSubstrait(std::string plan_msg) {
+    size_t EngineDuckDB::ContextForArrowScanOp(const string& plan_msg) {
       SkytetherDebugMsg("Creating execution context for query plan");
 
       // for debug purposes
       unique_ptr<mohair::Plan> plan_payload = mohair::SubstraitPlanFromString(plan_msg);
+      /*
       SkytetherDebugMsg("received payload:");
       mohair::PrintSubstraitPlan(plan_payload.get());
+      */
 
       // `from_substrait` takes a single binary blob as input
       duckdb::vector<Value> fn_args { Value::BLOB_RAW(plan_msg) };
 
       // Get a relation representing the execution of the substrait plan
       // Construct a QueryContext to keep everything alive
-      auto scan_context = std::make_unique<DuckContext>(
-        engine_conn.TableFunction("execute_mohair", fn_args)
+      DuckContext* scan_context = DuckContext::Emplace(context_map
+        ,std::make_unique<DuckContext>(
+           engine_conn.TableFunction("execute_mohair", fn_args)
+         )
       );
 
-      return context_map.RegisterContext(std::move(scan_context));
+      return scan_context->uuid;
+    }
+
+    unique_ptr<PlanMessage>
+    EngineDuckDB::PushbackForExecPlan( ProjectionRelation& result_proj
+                                      ,Plan*               src_plan
+                                      ,size_t              ctx_id
+                                      ,const string&       srv_loc
+                                      ,const string&       result_name) {
+      // Construct the pushback plan
+      // TODO: make copying the plan more efficient
+      auto  pushback_msg = std::make_unique<PlanMessage>(std::make_unique<Plan>());
+      Plan* pushback     = pushback_msg->payload.get();
+
+      pushback->CopyFrom(*src_plan);
+
+      // PlanRel* plan_rel = pushback_msg->payload->add_relations();
+      auto plan_rels = pushback->mutable_relations();
+      auto rel_itr = plan_rels->begin();
+      for (; rel_itr != plan_rels->end() and not rel_itr->has_root(); ++rel_itr) {}
+
+      PlanRel* plan_rel = &(*rel_itr);
+
+      // TODO: For now, we are only sending a SkyResultRel as the pushback
+      plan_rel->mutable_root()->mutable_input()->set_allocated_extension_leaf(
+          TranslateResultProjection(result_proj, ctx_id, srv_loc, result_name).release()
+      );
+
+      // Substrait version?
+      pushback_msg->payload->mutable_version()->set_major_number(0);
+      pushback_msg->payload->mutable_version()->set_major_number(53);
+      pushback_msg->payload->mutable_version()->set_major_number(0);
+
+      pushback_msg->payload->mutable_version()->set_allocated_producer(
+        new string { "Skytether" }
+      );
+
+      return pushback_msg;
+    }
+
+    //! Create a duckdb query plan from a substrait plan message
+    std::tuple<unique_ptr<PlanMessage>, size_t, string>
+    EngineDuckDB::ProcessForExecution(SystemPlan& sys_plan, const string& srv_loc) {
+      SkytetherDebugMsg("Creating execution context for query plan");
+
+      // Emplaces a DuckContext in context_map and gives us a reference
+      DuckContext* ctx = DuckContext::Emplace(context_map
+        ,std::make_unique<DuckContext>(this->TranslatePlan(sys_plan))
+      );
+
+      string result_name { engine_id + "_materialized_" + std::to_string(ctx->uuid) };
+
+      SkytetherDebugMsg("Creating pushback plan for response");
+      return std::make_tuple(
+         this->PushbackForExecPlan(
+            dynamic_cast<ProjectionRelation&>(*(ctx->duck_plan))
+           ,sys_plan.plan_msg->payload.get()
+           ,ctx->uuid
+           ,srv_loc
+           ,result_name
+         )
+        ,ctx->uuid
+        ,result_name
+      );
+    }
+
+    //! Given a query context ID and a name, create a view from that query
+    Status
+    EngineDuckDB::ExecuteContext(size_t context_id, const string& view_name) {
+      // Execute the relation and move the result
+      DuckContext* ctx = GetDuckContext(context_id);
+
+      SkytetherDebugMsg("Pushdown plan:");
+      ctx->duck_plan->Print();
+
+      auto rel_createview = duckdb::make_shared_ptr<CreateViewRelation>(
+           ctx->duck_plan
+          ,view_name
+          ,/*replace=*/  true
+          ,/*temporary=*/false
+      );
+
+      ctx->status = QueryStatus::Running;
+      rel_createview->Execute();
+      {
+        lock_guard<mutex> status_lock(ctx->status_mtx);
+        ctx->status = QueryStatus::Complete;
+      }
+      ctx->status_cv.notify_all();
+
+      SkytetherDebugMsg("Peeking at view");
+      auto peek_results = engine_conn.Query(
+        "SELECT * FROM " + view_name + " LIMIT 10"
+      );
+      peek_results->Print();
+
+      return Status::OK();
     }
 
     //! Given an ID for a query context, execute that query
     Status
-    EngineDuckDB::ExecuteFromContext(int32_t context_id) {
+    EngineDuckDB::ExecuteContext(size_t context_id) {
       // Execute the relation and move the result
-      DuckContext* ctx = GetDuckContext(context_map, context_id);
+      DuckContext* ctx = GetDuckContext(context_id);
 
       ctx->status = QueryStatus::Running;
 
       std::cout << "Constructing a reader for query result" << std::endl;
-      ARROW_ASSIGN_OR_RAISE(ctx->result, ReaderForResult(ctx->duck_rel->Execute()));
+      ARROW_ASSIGN_OR_RAISE(
+         ctx->result
+        ,ReaderForResult(ctx->duck_plan->Execute())
+      );
 
       ctx->status = QueryStatus::Complete;
 
@@ -233,11 +353,70 @@
     }
 
     //! Given an ID for a query context, return the previously stored relation
-    DuckRel* EngineDuckDB::GetRelation(int32_t context_id) {
-      DuckContext* ctx = GetDuckContext(context_map, context_id);
+    DuckRel* EngineDuckDB::GetRelation(size_t context_id) {
+      DuckContext* ctx = GetDuckContext(context_id);
 
-      if (ctx) { return ctx->duck_rel.get(); }
+      if (ctx) { return ctx->duck_plan.get(); }
       return nullptr;
+    }
+
+    Status EngineDuckDB::CreateView(const string& view_name, RecordBatchVector batches) {
+      SkytetherDebugMsg("Serializing [" << batches.size() << "] batches");
+      ARROW_ASSIGN_OR_RAISE(auto ipc_buffer, SerializeRecordBatches(std::move(batches)));
+
+      child_list_t<Value> struct_vals {
+         { "ptr" , Value::UBIGINT((uintptr_t) ipc_buffer->mutable_data()) }
+        ,{ "size", Value::UBIGINT((uint64_t)  ipc_buffer->size())         }
+      };
+
+      duckdb::vector<Value> scan_args {
+        Value::LIST({ Value::STRUCT(struct_vals) })
+      };
+
+      // NOTE: in newer version of DuckDB
+      // ,OnCreateConflict::REPLACE_ON_CONFLICT
+
+      try {
+        constexpr bool     is_temporary { true };
+        duck_sptr<DuckRel> materialize_plan = (
+          engine_conn.TableFunction("scan_arrow_ipc", scan_args)
+                     ->CreateRel(INVALID_SCHEMA, view_name, is_temporary)
+        );
+
+        auto exec_results = materialize_plan->Execute();
+
+        SkytetherDebugMsg("Materialization results");
+        exec_results->Print();
+      }
+      catch (const std::exception& duck_err) {
+        std::cerr << "DuckDB exception:"               << std::endl
+                  << string { "\t" } + duck_err.what() << std::endl
+        ;
+        return Status::Invalid("DuckDB exception");
+      }
+
+      return Status::OK();
+    }
+
+    //! Given a query context ID and a name, create a view from that query
+    Result<shared_ptr<RecordBatchReader>>
+    EngineDuckDB::ScanResults(const string& view_name) {
+      SkytetherDebugMsg("Creating scan of result view");
+      duckdb::vector<duck_uptr<ParsedExpression>> proj_exprs;
+      proj_exprs.emplace_back(duckdb::make_uniq<StarExpression>());
+
+      duckdb::vector<string> proj_aliases;
+
+      duck_sptr<DuckRel> proj_rel = (
+        duckdb::make_shared_ptr<ProjectionRelation>(
+           engine_conn.View(view_name)
+          ,std::move(proj_exprs)
+          ,std::move(proj_aliases)
+        )
+      );
+
+      SkytetherDebugMsg("Returning result reader");
+      return ReaderForResult(proj_rel->Execute());
     }
 
   } // namespace: skytether::engines

@@ -14,6 +14,7 @@ libskytether_sources += files(
    'engine_duckdb.cpp'
   ,'translate_operators.cpp'
   ,'translate_expressions.cpp'
+  ,'translate_types.cpp'
   ,'custom_extensions.cpp'
   ,'custom_extensions_generated.cpp'
 )

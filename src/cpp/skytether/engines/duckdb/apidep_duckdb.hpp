@@ -57,6 +57,7 @@
   #include "duckdb/common/types/value.hpp"
   #include "duckdb/common/arrow/result_arrow_wrapper.hpp"
   #include "duckdb/common/enums/set_operation_type.hpp"
+  #include "duckdb/common/enums/on_create_conflict.hpp"
 
   // >> Internal types for internal APIs
   #include "duckdb/main/client_data.hpp"
@@ -67,6 +68,7 @@
   #include "duckdb/main/relation/filter_relation.hpp"
   #include "duckdb/main/relation/projection_relation.hpp"
   #include "duckdb/main/relation/limit_relation.hpp"
+  #include "duckdb/main/relation/create_view_relation.hpp"
   
   #include "duckdb/main/relation/join_relation.hpp"
   #include "duckdb/main/relation/cross_product_relation.hpp"

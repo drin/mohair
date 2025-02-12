@@ -42,6 +42,12 @@
 
 #include "skytether/engines/duckdb/adapter_duckdb.hpp"
 
+// TODO: clean up this relationship
+#include "services/types.hpp"
+#include "services/service_skytether.hpp"
+
+#include <arrow/io/memory.h>
+
 
 // ------------------------------
 // Macros and Type Aliases
@@ -50,9 +56,16 @@ namespace skytether::engines {
 
   // >> Templated types
 
+  // >> Protobuf types
+  using RepeatedString = mohair::RepeatedPtrField<string>;
+
   // >> Substrait types
   using NamedTable = mohair::ReadRel::NamedTable;
   using LocalFiles = mohair::ReadRel::LocalFiles;
+
+  // >> Flight client types
+  using  services::SkytetherClient;
+  using  services::Location;
 
 } // namespace: skytether::engines
 
@@ -76,7 +89,7 @@ namespace skytether::engines {
     return table_alias;
   }
 
-  static duckdb::SetOperationType
+  duckdb::SetOperationType
   TranslateSetOperationType(mohair::SetRel::SetOp setop) {
     switch (setop) {
       case mohair::SetRel::SET_OP_UNION_ALL: {
@@ -101,7 +114,7 @@ namespace skytether::engines {
   }
 
 
-  static duckdb::JoinType
+  duckdb::JoinType
   TranslateJoinType(const mohair::JoinRel& sjoin) {
     switch (sjoin.type()) {
       case mohair::JoinRel::JOIN_TYPE_INNER:       return duckdb::JoinType::INNER;
@@ -113,6 +126,40 @@ namespace skytether::engines {
 
       default:
         throw duckdb::InternalException("Unsupported join type");
+    }
+  }
+
+  void
+  PrintJoinType(const duckdb::JoinType jtype) {
+    switch (jtype) {
+      case duckdb::JoinType::INNER:
+        SkytetherDebugMsg("Inner");
+        break;
+
+      case duckdb::JoinType::LEFT:
+        SkytetherDebugMsg("Left");
+        break;
+
+      case duckdb::JoinType::RIGHT:
+        SkytetherDebugMsg("Right");
+        break;
+
+      case duckdb::JoinType::SINGLE:
+        SkytetherDebugMsg("Left single");
+        break;
+
+      case duckdb::JoinType::SEMI:
+        SkytetherDebugMsg("Left semi");
+        break;
+
+      case duckdb::JoinType::OUTER:
+        SkytetherDebugMsg("Outer");
+        break;
+
+
+      default:
+        SkytetherDebugMsg("Unknown");
+        break;
     }
   }
 
@@ -159,17 +206,27 @@ namespace skytether::engines {
 
   duck_sptr<DuckRel>
   TranslateJoinOp(TranslatorState& tl_state, const mohair::JoinRel& sjoin) {
-    duckdb::JoinType djointype = TranslateJoinType(sjoin);
+    duckdb::JoinType            djointype      = TranslateJoinType(sjoin);
     duck_uptr<ParsedExpression> join_condition = TranslateExpr(
       tl_state, sjoin.expression()
     );
 
-    return duckdb::make_shared_ptr<JoinRelation>(
-       TranslateOp(tl_state, sjoin.left() )->Alias("left")
-      ,TranslateOp(tl_state, sjoin.right())->Alias("right")
-      ,std::move(join_condition)
-      ,djointype
-    );
+    try {
+      return duckdb::make_shared_ptr<JoinRelation>(
+         TranslateOp(tl_state, sjoin.left() )->Alias("left")
+        ,TranslateOp(tl_state, sjoin.right())->Alias("right")
+        ,std::move(join_condition)
+        ,djointype
+      );
+    }
+    catch (const std::exception& duck_err) {
+      std::cerr << "DuckDB exception:"               << std::endl
+                << string { "\t" } + duck_err.what() << std::endl
+      ;
+      return nullptr;
+    }
+
+    return nullptr;
   }
 
   duck_sptr<DuckRel>
@@ -210,11 +267,21 @@ namespace skytether::engines {
       mock_aliases.push_back("expr_" + duckdb::to_string(i));
     }
 
-    return duckdb::make_shared_ptr<ProjectionRelation>(
-       TranslateOp(tl_state, sproj.input())
-      ,std::move(expressions)
-      ,std::move(mock_aliases)
-    );
+    try {
+      return duckdb::make_shared_ptr<ProjectionRelation>(
+         TranslateOp(tl_state, sproj.input())
+        ,std::move(expressions)
+        ,std::move(mock_aliases)
+      );
+    }
+    catch (const std::exception& duck_err) {
+      std::cerr << "DuckDB exception:"               << std::endl
+                << string { "\t" } + duck_err.what() << std::endl
+      ;
+      return nullptr;
+    }
+
+    return nullptr;
   }
 
 
@@ -251,11 +318,21 @@ namespace skytether::engines {
       );
     }
 
-    return duckdb::make_shared_ptr<AggregateRelation>(
-       TranslateOp(tl_state, saggr.input())
-      ,std::move(expressions)
-      ,std::move(groups)
-    );
+    try {
+      return duckdb::make_shared_ptr<AggregateRelation>(
+         TranslateOp(tl_state, saggr.input())
+        ,std::move(expressions)
+        ,std::move(groups)
+      );
+    }
+    catch (const std::exception& duck_err) {
+      std::cerr << "DuckDB exception:"               << std::endl
+                << string { "\t" } + duck_err.what() << std::endl
+      ;
+      return nullptr;
+    }
+
+    return nullptr;
   }
 
 
@@ -451,6 +528,8 @@ namespace skytether::engines {
     string table_name { sky_rel.domain() + "/" + sky_rel.partition() };
 
     // In this case, we iterate over slices() to get slice indices
+    // TODO: this now needs to use the `slice_selection` field
+    /*
     if (not sky_rel.slices().empty()) {
       for (int slice_id = 0; slice_id < sky_rel.slices_size(); ++slice_id) {
         slice_names.emplace_back(
@@ -458,13 +537,12 @@ namespace skytether::engines {
         );
       }
     }
+    */
 
     // In this case, we generate slice indices up to the last index
     // NOTE: hardcoded for now due to lazyness
-    else {
-      for (uint32_t slice_ndx = 0; slice_ndx < 10; ++slice_ndx) {
-        slice_names.emplace_back(table_name + "-" + duckdb::to_string(slice_ndx));
-      }
+    for (uint32_t slice_ndx = 0; slice_ndx < 10; ++slice_ndx) {
+      slice_names.emplace_back(table_name + "-" + duckdb::to_string(slice_ndx));
     }
 
     // We expect the arrow files to contain arrow stream formatted data
@@ -488,8 +566,33 @@ namespace skytether::engines {
     );
   }
 
+  //! A SkySliceRel is assumed to be a filesystem lookup against a single slice ("as-is").
   duck_sptr<DuckRel>
-  TranslateExtensionLeafOp(TranslatorState& tl_state, const mohair::ExtensionLeafRel& leaf_rel) {
+  TranslateSkyResultRel(TranslatorState& tl_state, const mohair::SkyResultRel& sky_rel) {
+    SkytetherDebugMsg("Peek at view [" << sky_rel.result_name() << "]:");
+    auto peek_results = tl_state.conn->Query(
+      "SELECT * FROM " + sky_rel.result_name() + " LIMIT 10"
+    );
+    peek_results->Print();
+
+    duckdb::vector<string>                      proj_aliases;
+    duckdb::vector<duck_uptr<ParsedExpression>> proj_exprs;
+    proj_exprs.emplace_back(duckdb::make_uniq<StarExpression>());
+
+    duck_sptr<DuckRel> proj_rel = (
+      duckdb::make_shared_ptr<ProjectionRelation>(
+         tl_state.conn->View(sky_rel.result_name())
+        ,std::move(proj_exprs)
+        ,std::move(proj_aliases)
+      )
+    );
+
+    // return tl_state.conn->View(sky_rel.result_name());
+    return proj_rel;
+  }
+
+  duck_sptr<DuckRel>
+  TranslateExtensionLeafOp(TranslatorState& tl_state, const ExtensionLeafRel& leaf_rel) {
     duck_sptr<DuckRel> translated_rel { nullptr };
 
     if (not leaf_rel.has_detail()) {
@@ -519,17 +622,34 @@ namespace skytether::engines {
       translated_rel = TranslateSkySliceRel(tl_state, sky_rel);
     }
 
-    // If a translator was matched and it succeeded, return the translated sub-plan
-    if (translated_rel != nullptr) { return translated_rel; }
+    else if (extension_msg.Is<mohair::SkyResultRel>()) { 
+      mohair::SkyResultRel sky_rel;
+      extension_msg.UnpackTo(&sky_rel);
 
-    // Otherwise, throw an exception
-    std::cerr << "Unsupported extension type: " << extension_msg.descriptor()->name() << std::endl;
-    throw duckdb::InternalException("Unsupported extension type");
+      SkytetherDebugMsg("Translating SkyResultRel");
+      translated_rel = TranslateSkyResultRel(tl_state, sky_rel);
+      SkytetherDebugMsg("Completed translation of SkyResultRel");
+    }
+
+    // If a translator was matched and it succeeded, return the translated sub-plan
+    if (translated_rel == nullptr) {
+      SkytetherDebugMsg(
+        "Unsupported extension type: " << extension_msg.descriptor()->name()
+      );
+      throw duckdb::InternalException("Unsupported extension type");
+    }
+
+    SkytetherDebugMsg("Returning translated ExtensionRel");
+    translated_rel->Print();
+
+    return translated_rel;
   }
 
   //! Translate Substrait Operations to DuckDB Relations
   using SRelType = mohair::Rel::RelTypeCase;
   duck_sptr<DuckRel> TranslateOp(TranslatorState& tl_state, const mohair::Rel& sop) {
+    SkytetherDebugMsg("Translating operator: " << sop.rel_type_case());
+
     switch (sop.rel_type_case()) {
       case SRelType::kJoin:          return TranslateJoinOp         (tl_state, sop.join());
       case SRelType::kCross:         return TranslateCrossProductOp (tl_state, sop.cross());
@@ -541,6 +661,11 @@ namespace skytether::engines {
       case SRelType::kSort:          return TranslateSortOp         (tl_state, sop.sort());
       case SRelType::kSet:           return TranslateSetOp          (tl_state, sop.set());
       case SRelType::kExtensionLeaf: return TranslateExtensionLeafOp(tl_state, sop.extension_leaf());
+      case SRelType::kReference: {
+        std::cerr << "Unexpectedly found ReferenceRel." << std::endl;
+        // break;
+      }
+
       default:
         throw duckdb::InternalException(
           "Unsupported relation type " + duckdb::to_string(sop.rel_type_case())
@@ -549,29 +674,202 @@ namespace skytether::engines {
   }
 
   //! Translates substrait `RelRoot` operator (root operator of a plan) to DuckDB
-  duck_uptr<DuckRel>
-  EngineDuckDB::TranslatePlan(SystemPlan& sys_plan) {
-    const mohair::RelRoot& root_rel { sys_plan.RootRelation() };
+  duck_uptr<DuckRel> EngineDuckDB::TranslatePlan(SystemPlan& sys_plan) {
+    SkytetherDebugMsg("Preparing for plan translation");
+    const RelRoot&   root_rel   { sys_plan.RootRelation()                };
+    const RelCommon& rel_common { mohair::GetRelCommon(root_rel.input()) };
 
-    duckdb::vector<string>                      aliases;
+    // Get the final names of the root operator in the following order of priority:
+    //  1. Alias names attached to the plan root
+    //  2. Alias names attached to the operator itself
+    //  3. Alias names associated with the operator's result schema
+    const RepeatedString* result_names;
+    if (not root_rel.names().empty()) {
+      result_names = &(root_rel.names());
+    }
+
+    else if (not rel_common.hint().output_names().empty()) {
+      result_names = &(rel_common.hint().output_names());
+    }
+
+    else {
+      result_names = &(rel_common.hint().output_schema().names());
+    }
+
+
+    duckdb::vector<string> aliases;
     duckdb::vector<duck_uptr<ParsedExpression>> expressions;
 
-    // not sure why expressions starts at index 1
-    for (int col_ndx = 0; col_ndx < root_rel.names_size(); ++col_ndx) {
-      aliases.push_back(root_rel.names(col_ndx));
+    aliases.reserve(result_names->size());
+    expressions.reserve(result_names->size());
+
+    for (int col_ndx = 0; col_ndx < result_names->size(); ++col_ndx) {
+      aliases.push_back(result_names->Get(col_ndx));
       expressions.push_back(
-        duckdb::make_uniq<PositionalReferenceExpression>(col_ndx + 1)
+        duckdb::make_uniq<PositionalReferenceExpression>(1 + col_ndx)
       );
     }
+
+    SkytetherDebugMsg("Final Projection aliases:");
+    for (int col_ndx = 0; col_ndx < result_names->size(); ++col_ndx) {
+      SkytetherDebugMsg(
+        "\t[" << std::to_string(col_ndx) << "]: " << aliases[col_ndx]
+      );
+    }
+
+    SkytetherDebugMsg("Final Projection expressions:");
+    for (int col_ndx = 0; col_ndx < result_names->size(); ++col_ndx) {
+      SkytetherDebugMsg(
+        "\t[" << std::to_string(col_ndx) << "]: " << expressions[col_ndx]->ToString()
+      );
+    }
+
 
     // Initialize a simple object to pass shared state
     TranslatorState tl_state { &engine_conn, &(sys_plan.fn_anchors) };
 
-    return duckdb::make_uniq<ProjectionRelation>(
-       TranslateOp(tl_state, root_rel.input())
-      ,std::move(expressions)
-      ,aliases
-    );
+    SkytetherDebugMsg("Translating plan");
+    duck_uptr<DuckRel> translated_plan;
+    try {
+      translated_plan = duckdb::make_uniq<ProjectionRelation>(
+         TranslateOp(tl_state, root_rel.input())
+        ,std::move(expressions)
+        ,aliases
+      );
+    }
+    catch (const std::exception& duck_err) {
+      std::cerr << "DuckDB exception:"               << std::endl
+                << string { "\t" } + duck_err.what() << std::endl
+      ;
+      return nullptr;
+    }
+    SkytetherDebugMsg("Completed translation:");
+
+    if (translated_plan == nullptr) {
+      throw duckdb::InternalException("Failed to translate plan");
+    }
+
+
+    translated_plan->Print();
+
+    return translated_plan;
   }
+
+  unique_ptr<ExtensionLeafRel>
+  EngineDuckDB::TranslateResultProjection( ProjectionRelation& result_proj
+                                          ,size_t              ctx_id
+                                          ,const string&       srv_loc
+                                          ,const string&       result_name) {
+    SkytetherDebugMsg("Translating projection for result");
+    SkyResultRel result_rel;
+    result_rel.set_context_id(ctx_id);
+    result_rel.set_result_name(result_name);
+    result_rel.set_service_location(srv_loc);
+
+    // Populate `SkyResultRel`
+    SkytetherDebugMsg("Creating SkyResultRel");
+    SubstraitSchema*       result_schema   = result_rel.mutable_schema();
+    SubstraitType::Struct* result_coltypes = result_schema->mutable_struct_();
+
+    // TODO: figure out how to pass nullability correctly
+    for (auto& duck_col : result_proj.Columns()) {
+      *(result_schema->add_names())   = duck_col.Name();
+      *(result_coltypes->add_types()) = *(FromDuckType(duck_col.Type(), true));
+    }
+
+    // Populate `ExtensionLeafRel`
+    SkytetherDebugMsg("Creating Extension operator for SkyResultRel");
+    auto leaf_rel = std::make_unique<ExtensionLeafRel>();
+    leaf_rel->mutable_detail()->PackFrom(result_rel);
+
+    RelCommon::Hint* leafrel_hint = leaf_rel->mutable_common()->mutable_hint();
+    for (const auto& proj_expr : result_proj.expressions) {
+      string* alias = leafrel_hint->add_output_names();
+      *alias        = proj_expr->alias;
+    }
+
+    return leaf_rel;
+  }
+
+  /*
+  // >> Translation back to substrait
+  RelRoot* TranslateDuckRoot(LogicalOperator* duck_op) {
+    unique_ptr<RelRoot> root_rel { std::make_unique<RelRoot>() };
+
+    // This is a weird scenario where a projection is put on top of a top-k but
+    // the actual aliases are on the projection below the top-k still.
+    bool weird_scenario = (
+         duck_op->type              == LogicalOperatorType::LOGICAL_PROJECTION
+      && duck_op->children[0]->type == LogicalOperatorType::LOGICAL_TOP_N
+    );
+
+    LogicalOperator* tmp_op = duck_op;
+    if (weird_scenario) { tmp_op = tmp_op->children[0].get(); }
+
+    // Recurse through ops until the first projection; then grab output aliases
+    while (tmp_op->type != LogicalOperatorType::LOGICAL_PROJECTION) {
+      if (IsSetOperation(*tmp_op)) {
+        // Take the projection from the first child of the set operation
+        D_ASSERT(tmp_op->children.size() == 2);
+        tmp_op = tmp_op->children[1].get();
+        continue;
+      }
+
+      if (tmp_op->children.size() != 1) {
+        throw InternalException(
+          "Expected only unary operators before reaching a projection."
+          "Found [%d] with [%d] children.",
+          tmp_op->type, tmp_op->children.size()
+        );
+      }
+
+      tmp_op = tmp_op->children[0].get();
+    }
+
+    root_rel->set_allocated_input(TranslateDuckOp(duck_op));
+    auto& dproj = tmp_op->Cast<LogicalProjection>();
+    if (!weird_scenario) {
+      for (auto &expression : dproj.expressions) {
+        root_rel->add_names(expression->GetName());
+
+        auto depth_names = DepthFirstNames(expression->return_type);
+        for (auto &name : depth_names) { root_rel->add_names(name); }
+      }
+    }
+
+    else {
+      for (auto &expression : duck_op->expressions) {
+        auto &b_expr = expression->Cast<BoundReferenceExpression>();
+        root_rel->add_names(dproj.expressions[b_expr.index]->GetName());
+
+        auto depth_names = DepthFirstNames(expression->return_type);
+        for (auto &name : depth_names) { root_rel->add_names(name); }
+      }
+    }
+
+    return root_rel;
+  }
+
+  void TranslatePushback(LogicalOperator* duck_op) {
+    plan.add_relations()->set_allocated_root(TranslateDuckRoot(duck_op));
+
+    if (strict && !errors.empty()) {
+      throw InvalidInputException(
+          "Strict Mode is set to true, and the following warnings/errors happened. \n"
+        + errors
+      );
+    }
+
+    auto version = plan.mutable_version();
+    version->set_major_number(0);
+    version->set_minor_number(53);
+    version->set_patch_number(0);
+
+
+    auto* producer_name = new string();
+    *producer_name = "DuckDB";
+    version->set_allocated_producer(producer_name);
+  }
+  */
 
 } // namespace: skytether::engines
