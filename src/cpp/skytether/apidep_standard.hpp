@@ -47,6 +47,11 @@
 #include <fstream>
 #include <filesystem>
 
+// >> Concurrency
+#include <atomic>
+#include <mutex>
+#include <condition_variable>
+
 
 // ------------------------------
 // Type aliases
@@ -68,6 +73,13 @@ namespace skytether {
   // >> I/O type aliases
   using std::stringstream;
   using std::fstream;
+
+  // >> Safety type aliases
+  using std::atomic;
+  using std::mutex;
+  using std::condition_variable;
+  using std::unique_lock;
+  using std::lock_guard;
 
 } // namespace: skytether
 

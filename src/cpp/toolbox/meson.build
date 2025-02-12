@@ -50,19 +50,19 @@ topo_service_bin = executable('topo-service'
 # ------------------------------
 # Sandboxes for prototyping
 
-# for query processing
-mohair_bin = executable('mohair'
-  ,'mohair.cpp'
-  ,include_directories: [ libskytether_inc ]
-  ,dependencies       : libskytether_dep
-  ,install_rpath      : get_option('prefix') / get_option('libdir')
-  ,install            : true
-)
-
 # for duckdb internals
 duck_bin = executable('duckdb-sandbox'
   ,'duckdb-sandbox.cpp'
   ,include_directories: [ libskytether_inc ]
   ,dependencies       : libduckdb_dep
+  ,install            : false
+)
+
+# for a duckdb-enabled skytether client
+duck_bin = executable('duckdb-mohair'
+  ,['duckdb-mohair.cpp', 'skytether_cli.cpp']
+  ,include_directories: [ libskytether_inc ]
+  ,dependencies       : libskytether_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,install            : false
 )

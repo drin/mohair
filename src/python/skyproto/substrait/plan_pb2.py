@@ -26,7 +26,7 @@ from skyproto.substrait import algebra_pb2 as skyproto_dot_substrait_dot_algebra
 from skyproto.substrait.extensions import extensions_pb2 as skyproto_dot_substrait_dot_extensions_dot_extensions__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dskyproto/substrait/plan.proto\x12\x12skyproto.substrait\x1a skyproto/substrait/algebra.proto\x1a.skyproto/substrait/extensions/extensions.proto\"u\n\x07PlanRel\x12+\n\x03rel\x18\x01 \x01(\x0b\x32\x17.skyproto.substrait.RelH\x00R\x03rel\x12\x31\n\x04root\x18\x02 \x01(\x0b\x32\x1b.skyproto.substrait.RelRootH\x00R\x04rootB\n\n\x08rel_type\"\xbe\x03\n\x04Plan\x12\x35\n\x07version\x18\x06 \x01(\x0b\x32\x1b.skyproto.substrait.VersionR\x07version\x12X\n\x0e\x65xtension_uris\x18\x01 \x03(\x0b\x32\x31.skyproto.substrait.extensions.SimpleExtensionURIR\rextensionUris\x12Y\n\nextensions\x18\x02 \x03(\x0b\x32\x39.skyproto.substrait.extensions.SimpleExtensionDeclarationR\nextensions\x12\x39\n\trelations\x18\x03 \x03(\x0b\x32\x1b.skyproto.substrait.PlanRelR\trelations\x12\x61\n\x13\x61\x64vanced_extensions\x18\x04 \x01(\x0b\x32\x30.skyproto.substrait.extensions.AdvancedExtensionR\x12\x61\x64vancedExtensions\x12,\n\x12\x65xpected_type_urls\x18\x05 \x03(\tR\x10\x65xpectedTypeUrls\"D\n\x0bPlanVersion\x12\x35\n\x07version\x18\x06 \x01(\x0b\x32\x1b.skyproto.substrait.VersionR\x07version\"\xa9\x01\n\x07Version\x12!\n\x0cmajor_number\x18\x01 \x01(\rR\x0bmajorNumber\x12!\n\x0cminor_number\x18\x02 \x01(\rR\x0bminorNumber\x12!\n\x0cpatch_number\x18\x03 \x01(\rR\x0bpatchNumber\x12\x19\n\x08git_hash\x18\x04 \x01(\tR\x07gitHash\x12\x1a\n\x08producer\x18\x05 \x01(\tR\x08producerB\x8c\x01\n\x16\x63om.skyproto.substraitB\tPlanProtoP\x01\xa2\x02\x03SSX\xaa\x02\x12Skyproto.Substrait\xca\x02\x12Skyproto\\Substrait\xe2\x02\x1eSkyproto\\Substrait\\GPBMetadata\xea\x02\x13Skyproto::Substraitb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dskyproto/substrait/plan.proto\x12\x12skyproto.substrait\x1a skyproto/substrait/algebra.proto\x1a.skyproto/substrait/extensions/extensions.proto\"\x9c\x01\n\x07PlanRel\x12+\n\x03rel\x18\x01 \x01(\x0b\x32\x17.skyproto.substrait.RelH\x00R\x03rel\x12\x31\n\x04root\x18\x02 \x01(\x0b\x32\x1b.skyproto.substrait.RelRootH\x00R\x04root\x12%\n\x0esubtree_anchor\x18\x03 \x01(\rR\rsubtreeAnchorB\n\n\x08rel_type\"\xbe\x03\n\x04Plan\x12\x35\n\x07version\x18\x06 \x01(\x0b\x32\x1b.skyproto.substrait.VersionR\x07version\x12X\n\x0e\x65xtension_uris\x18\x01 \x03(\x0b\x32\x31.skyproto.substrait.extensions.SimpleExtensionURIR\rextensionUris\x12Y\n\nextensions\x18\x02 \x03(\x0b\x32\x39.skyproto.substrait.extensions.SimpleExtensionDeclarationR\nextensions\x12\x39\n\trelations\x18\x03 \x03(\x0b\x32\x1b.skyproto.substrait.PlanRelR\trelations\x12\x61\n\x13\x61\x64vanced_extensions\x18\x04 \x01(\x0b\x32\x30.skyproto.substrait.extensions.AdvancedExtensionR\x12\x61\x64vancedExtensions\x12,\n\x12\x65xpected_type_urls\x18\x05 \x03(\tR\x10\x65xpectedTypeUrls\"D\n\x0bPlanVersion\x12\x35\n\x07version\x18\x06 \x01(\x0b\x32\x1b.skyproto.substrait.VersionR\x07version\"\xa9\x01\n\x07Version\x12!\n\x0cmajor_number\x18\x01 \x01(\rR\x0bmajorNumber\x12!\n\x0cminor_number\x18\x02 \x01(\rR\x0bminorNumber\x12!\n\x0cpatch_number\x18\x03 \x01(\rR\x0bpatchNumber\x12\x19\n\x08git_hash\x18\x04 \x01(\tR\x07gitHash\x12\x1a\n\x08producer\x18\x05 \x01(\tR\x08producerB\x8c\x01\n\x16\x63om.skyproto.substraitB\tPlanProtoP\x01\xa2\x02\x03SSX\xaa\x02\x12Skyproto.Substrait\xca\x02\x12Skyproto\\Substrait\xe2\x02\x1eSkyproto\\Substrait\\GPBMetadata\xea\x02\x13Skyproto::Substraitb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -34,12 +34,12 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'skyproto.substrait.plan_pb2
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\026com.skyproto.substraitB\tPlanProtoP\001\242\002\003SSX\252\002\022Skyproto.Substrait\312\002\022Skyproto\\Substrait\342\002\036Skyproto\\Substrait\\GPBMetadata\352\002\023Skyproto::Substrait'
-  _globals['_PLANREL']._serialized_start=135
-  _globals['_PLANREL']._serialized_end=252
-  _globals['_PLAN']._serialized_start=255
-  _globals['_PLAN']._serialized_end=701
-  _globals['_PLANVERSION']._serialized_start=703
-  _globals['_PLANVERSION']._serialized_end=771
-  _globals['_VERSION']._serialized_start=774
-  _globals['_VERSION']._serialized_end=943
+  _globals['_PLANREL']._serialized_start=136
+  _globals['_PLANREL']._serialized_end=292
+  _globals['_PLAN']._serialized_start=295
+  _globals['_PLAN']._serialized_end=741
+  _globals['_PLANVERSION']._serialized_start=743
+  _globals['_PLANVERSION']._serialized_end=811
+  _globals['_VERSION']._serialized_start=814
+  _globals['_VERSION']._serialized_end=983
 # @@protoc_insertion_point(module_scope)

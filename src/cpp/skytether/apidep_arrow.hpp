@@ -24,6 +24,7 @@
 #include <arrow/api.h>
 
 // >> Arrow serialization API
+#include <arrow/io/api.h>
 #include <arrow/ipc/api.h>
 
 // >> Arrow filesystem API
@@ -54,8 +55,12 @@ namespace skytether {
   using arrow::RecordBatchVector;
 
   // >> Support types for I/O
-  using arrow::io::RandomAccessFile;
   using ArrowOutputStream = arrow::io::OutputStream;
+  using arrow::io::RandomAccessFile;
+  using arrow::io::BufferOutputStream;
+
+  using arrow::ipc::IpcWriteOptions;
+  using arrow::ipc::WriteRecordBatchStream;
 
   using arrow::RecordBatchReader;
   using arrow::ipc::RecordBatchStreamReader;

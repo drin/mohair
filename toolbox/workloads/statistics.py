@@ -44,15 +44,15 @@ class BaseSummaryStats:
     @classmethod
     def Accumulate(cls, data_table):
         squared_expr = (
-              data_table['expr_val'].cast('int32')
-            * data_table['expr_val'].cast('int32')
+              data_table['expr_val'].cast('int64')
+            * data_table['expr_val'].cast('int64')
         )
 
         return (
             data_table.group_by(data_table.feature_name)
                       .aggregate(
                             cell_count=data_table.count()
-                           ,expr_total=(data_table['expr_val'].cast('int32').sum())
+                           ,expr_total=(data_table['expr_val'].cast('int64').sum())
                            ,expr_sumsq=squared_expr.sum()
                        )
         )

@@ -285,8 +285,8 @@ namespace skytether {
 
   /** Simple function to print a string literal and an arrow status. */
   void PrintError(const char *msg, const Status& arrow_status) {
-      std::cerr << msg                             << std::endl
-                << "\t" << arrow_status.ToString() << std::endl
+      std::cerr << msg                              << std::endl
+                << ":\t" << arrow_status.ToString() << std::endl
       ;
   }
 
