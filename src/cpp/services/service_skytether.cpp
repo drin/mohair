@@ -36,7 +36,7 @@ namespace skytether::services {
 
     string downstream_prefix { prefix + "\t" };
     const auto& downstream_cfgs = service_cfg->downstream_services();
-    for (size_t cfg_ndx = 0; cfg_ndx < downstream_cfgs.size(); ++cfg_ndx) {
+    for (int cfg_ndx = 0; cfg_ndx < downstream_cfgs.size(); ++cfg_ndx) {
       const auto& downstream_cfg = downstream_cfgs[cfg_ndx];
 
       if (not downstream_cfg.is_active()) { continue; }
@@ -65,13 +65,11 @@ namespace skytether::services {
 
     // Then recurse on each downstream config
     string downstream_prefix { empty_prefix + "\t" };
-    const auto& downstream_cfgs = service_cfg->downstream_services();
-    for (size_t cfg_ndx = 0; cfg_ndx < downstream_cfgs.size(); ++cfg_ndx) {
-      const auto& downstream_cfg = downstream_cfgs[cfg_ndx];
-
-      if (not downstream_cfg.is_active()) { continue; }
-
-      SerializeConfig(print_stream, downstream_prefix, &downstream_cfg);
+    auto   downstream_srvs   = service_cfg->mutable_downstream_services();
+    for (auto cfg_itr = downstream_srvs->begin(); cfg_itr < downstream_srvs->end(); ++cfg_itr) {
+      if (cfg_itr->is_active()) {
+        SerializeConfig(print_stream, downstream_prefix, &(*cfg_itr));
+      }
     }
 
     std::cout << print_stream.str() << std::endl;
@@ -87,6 +85,24 @@ namespace skytether::services {
 
     *srv_loc = std::move(result_tcploc).ValueOrDie();
     return 0;
+  }
+
+  //! Submits a single ticket to request query results, then prints the results
+  Result<RecordBatchVector>
+  RequestResultSet(SkytetherClient& client_conn, SkytetherTicket& query_ticket) {
+    ARROW_ASSIGN_OR_RAISE(
+       unique_ptr<FlightStreamReader> result_reader
+      ,client_conn.GetQueryResults(query_ticket)
+    );
+
+    RecordBatchVector result_batches;
+    ARROW_ASSIGN_OR_RAISE(FlightStreamChunk result_chunk, result_reader->Next());
+    while (result_chunk.data != nullptr) {
+      result_batches.push_back(std::move(result_chunk.data));
+      ARROW_ASSIGN_OR_RAISE(FlightStreamChunk result_chunk, result_reader->Next());
+    }
+
+    return result_batches;
   }
 
   // Functions to start a service
@@ -106,33 +122,37 @@ namespace skytether::services {
     return Status::OK();
   }
 
-  Status StartService(ServerAdapter& skytether_service, const ServiceConfig& service_cfg) {
-    auto result_bindloc = Location::Parse(service_cfg.service_location());
-    if (not result_bindloc.ok()) {
-      return Status::Invalid("Error parsing location from config");
-    }
-
-    SkytetherDebugMsg("Initializing options...");
-    auto bind_loc = std::move(result_bindloc).ValueOrDie();
-    FlightServerOptions server_opts { bind_loc };
-
-    SkytetherDebugMsg("Initializing service...");
-    ARROW_RETURN_NOT_OK(skytether_service.Init(server_opts));
-
-    SkytetherDebugMsg("Setting SIGTERM handler...");
-    ARROW_RETURN_NOT_OK(skytether_service.SetShutdownOnSignals({SIGTERM}));
-
-    SkytetherDebugMsg("Starting service [" << skytether_service.location().ToString() << "]");
-    ARROW_RETURN_NOT_OK(skytether_service.Serve());
-
-    return Status::OK();
-  }
-
 } // namespace: skytether::services
 
 
 // >> EngineService implementations
 namespace skytether::services {
+
+  //! Connects to downstream services listed in this instance's `ServiceConfig`
+  Status
+  EngineService::ConnectToTopology() {
+    auto downstream_srvs = service_cfg->mutable_downstream_services();
+    std::cout << "downstream_srvs: " << downstream_srvs->size() << std::endl;
+
+    if (downstream_srvs == nullptr) { return Status::Invalid("No downstream services"); }
+    else if (downstream_srvs->empty()) { return Status::OK(); }
+
+    size_t count_services = service_cfg->downstream_services_size();
+    service_conns.reserve(count_services);
+
+    for (size_t srv_ndx = 0; srv_ndx < count_services; ++srv_ndx) {
+      ServiceConfig* downstream_srv = service_cfg->mutable_downstream_services(srv_ndx);
+
+      ARROW_ASSIGN_OR_RAISE(
+          auto result_loc
+        ,Location::Parse(downstream_srv->service_location())
+      );
+
+      service_conns.push_back(SkytetherClient::ForLocation(result_loc));
+    }
+
+    return Status::OK();
+  }
 
   Result<FlightInfo>
   EngineService::MakeFlightInfo(string partition_key, shared_ptr<Table> data_table) {
@@ -195,19 +215,20 @@ namespace skytether::services {
       return Status::Invalid("Unable to parse service config for view change");
     }
 
-    if (updated_cfg.service_location() == service_cfg.service_location()) {
-      service_cfg = std::move(updated_cfg);
+    if (updated_cfg.service_location() == service_cfg->service_location()) {
+      service_cfg->CopyFrom(updated_cfg);
 
       SkytetherDebugMsg("New config:");
-      PrintConfig(&service_cfg);
+      PrintConfig(service_cfg.get());
 
+      ARROW_RETURN_NOT_OK(this->ConnectToTopology());
       return Status::OK();
     }
 
     stringstream err_msg;
     err_msg << "Cannot accept update for a different location."
             << std::endl
-            << "\tExpected [" << service_cfg.service_location() << "]"
+            << "\tExpected [" << service_cfg->service_location() << "]"
             << std::endl
             << "\tReceived [" << updated_cfg.service_location() << "]"
             << std::endl

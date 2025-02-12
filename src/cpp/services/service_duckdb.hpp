@@ -36,6 +36,8 @@
 // Type aliases
 
 using skytether::engines::EngineDuckDB;
+using skytether::engines::DuckContext;
+using skytether::engines::QueryStatus;
 
 
 // ------------------------------
@@ -48,15 +50,16 @@ using skytether::engines::EngineDuckDB;
       // >> Attributes
       unique_ptr<EngineDuckDB> engine;
 
-      // >> Deconstructors and Constructors
+      // >> Constructors and Deconstructors
+      DuckDBService( unique_ptr<ServiceConfig>&& cfg
+                    ,ShutdownCallback*           cb_custom
+                    ,fs::path                    db_fpath);
+
+      DuckDBService(unique_ptr<ServiceConfig>&& cfg, ShutdownCallback* cb_custom);
+      DuckDBService(unique_ptr<ServiceConfig>&& cfg, fs::path db_fpath);
+      DuckDBService(unique_ptr<ServiceConfig>&& cfg);
+
       virtual ~DuckDBService() = default;
-
-      DuckDBService(ShutdownCallback* cb_custom);
-      DuckDBService(ShutdownCallback* cb_custom, fs::path db_fpath);
-
-      DuckDBService();
-      DuckDBService(fs::path db_fpath);
-
 
       // >> Custom Flight API
       Status DoPlanPushdown  ( const ServerCallContext&  context
@@ -73,6 +76,9 @@ using skytether::engines::EngineDuckDB;
                    ,const Ticket&                 request
                    ,unique_ptr<FlightDataStream>* stream) override;
 
+      // >> Support methods
+      Status DecomposePlan(SystemPlan& sys_plan, unique_ptr<PlanSplit> decomposer);
+      Status CoopDecomp(unique_ptr<SystemPlan>& sys_plan);
     };
 
   } // namespace: skytether::services

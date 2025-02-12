@@ -61,11 +61,28 @@ namespace skytether::services {
     shared_ptr<Buffer> ticket_data;
 
     SkytetherTicket()                 : Ticket()                          {}
-    SkytetherTicket(int    ticket_id ): Ticket(std::to_string(ticket_id)) {}
+    SkytetherTicket(size_t ticket_id ): Ticket(std::to_string(ticket_id)) {}
     SkytetherTicket(string ticket_str): Ticket(std::move(ticket_str))     {}
 
     shared_ptr<Buffer>  ToBuffer();
     static SkytetherTicket FromBuffer(shared_ptr<Buffer> body);
+  };
+
+  struct PushbackResult : public FlightResult {
+    unique_ptr<Plan> pushback_plan;
+
+    PushbackResult(): FlightResult() {}
+    PushbackResult(shared_ptr<Buffer> body): FlightResult(std::move(body)) {
+      this->pushback_plan = mohair::SubstraitPlanFromString(body->ToString());
+    }
+
+    PushbackResult(unique_ptr<Plan>&& pushback): pushback_plan(std::move(pushback)) {
+      string serialized_plan;
+
+      if (this->pushback_plan->SerializeToString(&serialized_plan)) {
+        this->body = Buffer::FromString(serialized_plan);
+      }
+    }
   };
 
   //! An adapter for the FlightClient interface.
@@ -79,6 +96,8 @@ namespace skytether::services {
 
     // >> Methods
     Result<unique_ptr<ResultStream>> SendSignalShutdown();
+
+    Status Close();
   };
 
   //! An adapter for some insulation from the FlightServerBase interface. 
