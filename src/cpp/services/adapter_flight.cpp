@@ -46,6 +46,8 @@ namespace skytether::services {
     return client->DoAction(rpc_opts, rpc_action);
   }
 
+  Status ClientAdapter::Close() { return client->Close(); }
+
 
   // >> Method implementations for ServerAdapter
   Status

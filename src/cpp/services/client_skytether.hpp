@@ -22,8 +22,6 @@
 
 // >> Common internal deps
 #include "skytether.hpp"
-// #include "query/plans.hpp"
-
 #include "services/types.hpp"
 
 
@@ -32,8 +30,14 @@
 
 namespace skytether::services {
 
+  // >> Result handler functions
+
   Result<SkytetherTicket>
   ExpectResultFromQuery(unique_ptr<ResultStream> query_results);
+
+  Result<unique_ptr<Plan>>
+  ExpectPushbackFromQuery(unique_ptr<ResultStream> query_results);
+
 
 } // namespace: skytether::services
 
@@ -59,12 +63,13 @@ namespace skytether::services {
 
     // Engine-specific Methods
     Result<unique_ptr<FlightStreamReader>> GetQueryResults(SkytetherTicket& query_ticket);
-    Result<unique_ptr<ResultStream>>       SendPlanPushdown(shared_ptr<Buffer>& plan_msg);
-    // TODO
-    // Result<unique_ptr<ResultStream>> SendPlanResult(shared_ptr<Buffer>& plan_msg);
+    Result<unique_ptr<ResultStream>>       SendPlanPushdown(shared_ptr<Buffer> plan_msg);
 
     // >> Static functions
     static unique_ptr<SkytetherClient> ForLocation(const Location& conn_location);
+
+    // >> Convenient public interface
+    Result<unique_ptr<Plan>> DelegatePlan(PlanMessage& plan_data);
   };
 
 

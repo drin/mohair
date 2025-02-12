@@ -22,9 +22,8 @@
 
 // >> Common internal deps
 #include "skytether.hpp"
-// #include "skytether/query/plans.hpp"
-
 #include "services/types.hpp"
+#include "services/client_skytether.hpp"
 
 
 // ------------------------------
@@ -39,6 +38,10 @@ namespace skytether::services {
   // Internal functions to help initialize a service
   int  SetDefaultLocation(Location *srv_loc);
 
+  //! Submits a single ticket to request query results, then prints the results
+  Result<RecordBatchVector>
+  RequestResultSet(SkytetherClient& client_conn, SkytetherTicket& query_ticket);
+
 } // namespace: skytether::services
 
 
@@ -47,7 +50,6 @@ namespace skytether::services {
 
   // Functions to start a service
   Status StartService(ServerAdapter& skytether_service, const Location& bind_loc);
-  Status StartService(ServerAdapter& skytether_service, const ServiceConfig& service_cfg);
 
 } // namespace: skytether::services
 
@@ -66,15 +68,22 @@ namespace skytether::services {
     static const string hkey_queryticket;
 
     // >> Instance Attributes
-    ServiceConfig service_cfg;
+    unique_ptr<ServiceConfig>           service_cfg;
+    vector<unique_ptr<SkytetherClient>> service_conns;
 
-    // >> Deconstructors and Constructors
+    // >> Constructors and Deconstructors
+    EngineService(unique_ptr<ServiceConfig>&& cfg, ShutdownCallback* cb_custom)
+      : ServerAdapter(cb_custom), service_cfg(std::move(cfg)) {}
+
+    EngineService(unique_ptr<ServiceConfig>&& cfg)
+      : EngineService(std::move(cfg), nullptr) {}
+
     virtual ~EngineService() = default;
 
-    EngineService(ShutdownCallback* cb_custom): ServerAdapter(cb_custom) {}
-    EngineService()                           : ServerAdapter()          {}
 
     // >> Convenience functions
+    virtual Status ConnectToTopology();
+
     virtual Result<FlightInfo>
     MakeFlightInfo(string partition_key, shared_ptr<Table> data_table);
 

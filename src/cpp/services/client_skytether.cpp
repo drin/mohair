@@ -26,8 +26,74 @@
 // Functions
 
 namespace skytether::services {
+  // >> Reusable function kernels
+  Status
+  ErrorForEmptyResult(FlightResult* query_result) {
+    if (not query_result or not query_result->body) {
+      return Status::Invalid("Received empty result.");
+    }
 
-  // >> Implementation for shutdown callback that sends deactivation request
+    return Status::OK();
+  }
+
+  Status
+  ErrorForTrailingData(ResultStream& query_results) {
+    bool err_trailingdata { false };
+
+    ARROW_ASSIGN_OR_RAISE(unique_ptr<FlightResult> query_result, query_results.Next());
+    while (query_result and query_result->body) {
+      SkytetherDebugMsg("\tUnexpected trailing results: " << query_result->body->ToString());
+      err_trailingdata = true;
+
+      ARROW_ASSIGN_OR_RAISE(query_result, query_results.Next());
+    }
+
+    if (err_trailingdata) {
+      return Status::Invalid("Received unexpected trailing results");
+    }
+
+    return Status::OK();
+  }
+
+
+  // >> Implementations for individual actions
+
+  //! Parse a single SkytetherTicket from `query_results`
+  Result<SkytetherTicket>
+  ExpectResultFromQuery(unique_ptr<ResultStream> query_results) {
+    ARROW_ASSIGN_OR_RAISE(unique_ptr<FlightResult> query_result, query_results->Next());
+
+    ARROW_RETURN_NOT_OK(ErrorForEmptyResult(query_result.get()));
+    ARROW_RETURN_NOT_OK(ErrorForTrailingData(*query_results));
+
+    return SkytetherTicket::FromBuffer(query_result->body);
+  }
+
+  //! Parse a single Plan from `query_results`, representing the pushback plan
+  Result<unique_ptr<Plan>>
+  ExpectPushbackFromQuery(unique_ptr<ResultStream> query_results) {
+    SkytetherDebugMsg("Reading responses");
+    ARROW_ASSIGN_OR_RAISE(unique_ptr<FlightResult> query_result, query_results->Next());
+
+    SkytetherDebugMsg("Validating responses");
+    ARROW_RETURN_NOT_OK(ErrorForEmptyResult(query_result.get()));
+    ARROW_RETURN_NOT_OK(ErrorForTrailingData(*query_results));
+
+    SkytetherDebugMsg("Deserializing pushback plan data");
+    return mohair::SubstraitPlanFromString(query_result->body->ToString());
+  }
+
+} // namespace: skytether::services
+
+
+// ------------------------------
+// Class Implementations
+
+namespace skytether::services {
+
+  // >> Method implementations for shutdown callbacks
+
+  //! Callback that sends deactivation request to metadata server
   Status DeactivationCallback::operator()() {
     if (client_conn != nullptr and target_loc != nullptr) {
       SkytetherDebugMsg("Sending deactivation request");
@@ -38,43 +104,6 @@ namespace skytether::services {
     return Status::OK();
   }
 
-  // >> Implementations for result handlers
-  Result<SkytetherTicket>
-  ExpectResultFromQuery(unique_ptr<ResultStream> query_results) {
-    ARROW_ASSIGN_OR_RAISE(
-       unique_ptr<FlightResult> query_result
-      ,query_results->Next()
-    );
-
-    if (not query_result or not query_result->body) {
-      return Status::Invalid("Expected ticket from query result; received nothing.");
-    }
-
-    auto query_ticket = SkytetherTicket::FromBuffer(query_result->body);
-
-    bool err_trailingdata { false };
-    ARROW_ASSIGN_OR_RAISE(query_result, query_results->Next());
-    while (query_result and query_result->body) {
-      SkytetherDebugMsg("\tUnexpected trailing results: " << query_result->body->ToString());
-      err_trailingdata = true;
-
-      ARROW_ASSIGN_OR_RAISE(query_result, query_results->Next());
-    }
-
-    if (err_trailingdata) {
-      return Status::Invalid("Received unexpected trailing results");
-    }
-
-    return query_ticket;
-  }
-
-} // namespace: skytether::services
-
-
-// ------------------------------
-// Class Implementations
-
-namespace skytether::services {
 
   // >> Method implementations for SkytetherClient
 
@@ -109,18 +138,10 @@ namespace skytether::services {
   }
 
   Result<unique_ptr<ResultStream>>
-  SkytetherClient::SendPlanPushdown(shared_ptr<Buffer>& plan_msg) {
+  SkytetherClient::SendPlanPushdown(shared_ptr<Buffer> plan_msg) {
     Action rpc_action { ActionQuery, plan_msg };
     return client->DoAction(rpc_opts, rpc_action);
   }
-
-  /* TODO
-  Result<unique_ptr<ResultStream>>
-  SkytetherClient::SendPlanResult(shared_ptr<Buffer>& plan_msg) {
-    Action rpc_action { ActionQuery, plan_msg };
-    return client->DoAction(rpc_opts, rpc_action);
-  }
-  */
 
   unique_ptr<SkytetherClient>
   SkytetherClient::ForLocation(const Location& conn_location) {
@@ -136,6 +157,22 @@ namespace skytether::services {
 
     // Construct a skytether client that wraps the connected FlightClient
     return std::make_unique<SkytetherClient>(std::move(result_client).ValueOrDie());
+  }
+
+
+  //! Submits a single query plan then validates the response is a `Plan`
+  Result<unique_ptr<Plan>>
+  SkytetherClient::DelegatePlan(PlanMessage& pushdown_msg) {
+    unique_ptr<ResultStream> response;
+
+    ARROW_ASSIGN_OR_RAISE(
+       response
+      ,SendPlanPushdown(
+         Buffer::FromString(pushdown_msg.Serialize())
+       )
+    );
+
+    return ExpectPushbackFromQuery(std::move(response));
   }
 
 } // namespace: skytether::services
