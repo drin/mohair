@@ -214,7 +214,7 @@ namespace skytether::engines {
                                 ,const string&       result_name);
 
       //! Constructs a simple pushback plan from the given projection operator
-      unique_ptr<PlanMessage>
+      unique_ptr<Plan>
       PushbackForExecPlan( ProjectionRelation& result_proj
                           ,Plan*               src_plan
                           ,size_t              ctx_id
@@ -222,7 +222,7 @@ namespace skytether::engines {
                           ,const string&       result_name);
 
       //! Translates the given `SystemPlan` then returns a Pushback plan
-      std::tuple<unique_ptr<PlanMessage>, size_t, string>
+      std::tuple<unique_ptr<Plan>, size_t, string>
       ProcessForExecution(SystemPlan& sys_plan, const string& srv_loc);
 
 
@@ -239,7 +239,7 @@ namespace skytether::engines {
       Status ExecuteContext(size_t context_id) override;
       Status ExecuteContext(size_t context_id, const string& view_name) override;
 
-      Status CreateView(const string& name, RecordBatchVector batches) override;
+      Status MaterializeResults(const string& name, RecordBatchVector batches) override;
       Result<shared_ptr<RecordBatchReader>> ScanResults(const string& view_name) override;
 
       DuckRel* GetRelation(size_t context_id);

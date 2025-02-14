@@ -84,7 +84,10 @@ struct ClientActions {
                                .detail()
                                .UnpackTo(&result_rel);
 
-    SkytetherDebugMsg("Result name: " << result_rel.result_name());
+    SkytetherDebugMsg(
+         "Result name: " << result_rel.result_name()
+      << " (ID: " << std::to_string(result_rel.context_id()) << ")"
+    );
 
     // TODO: for now, going to retrieve from a different process
     // SkytetherTicket query_ticket { result_rel.context_id() };

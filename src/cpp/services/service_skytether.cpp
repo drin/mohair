@@ -90,6 +90,11 @@ namespace skytether::services {
   //! Submits a single ticket to request query results, then prints the results
   Result<RecordBatchVector>
   RequestResultSet(SkytetherClient& client_conn, SkytetherTicket& query_ticket) {
+    SkytetherDebugMsg(
+         "Context: [(" << query_ticket.Id()
+      << ") " << query_ticket.Name() << "]"
+    );
+
     ARROW_ASSIGN_OR_RAISE(
        unique_ptr<FlightStreamReader> result_reader
       ,client_conn.GetQueryResults(query_ticket)
