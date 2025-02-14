@@ -58,14 +58,26 @@ namespace skytether::services {
 
   //! An adapter for insulating control flow and data flow
   struct SkytetherTicket : public arrow::flight::Ticket {
-    shared_ptr<Buffer> ticket_data;
+    unique_ptr<SkyResultRel> plan_result;
+    shared_ptr<Buffer>       tserialized;
 
-    SkytetherTicket()                 : Ticket()                          {}
-    SkytetherTicket(size_t ticket_id ): Ticket(std::to_string(ticket_id)) {}
-    SkytetherTicket(string ticket_str): Ticket(std::move(ticket_str))     {}
+    SkytetherTicket()            : Ticket()      {}
+    SkytetherTicket(string tdata): Ticket(tdata) {
+      plan_result = std::make_unique<SkyResultRel>();
+      plan_result->ParseFromString(tdata);
+    }
 
-    shared_ptr<Buffer>  ToBuffer();
+    SkytetherTicket(string tdata, unique_ptr<SkyResultRel>&& tmsg)
+      : Ticket(tdata), plan_result(std::move(tmsg)) {}
+
+    size_t        Id();
+    const string& Name();
+
+    shared_ptr<Buffer> ToBuffer();
+
     static SkytetherTicket FromBuffer(shared_ptr<Buffer> body);
+    static SkytetherTicket FromRel(const Rel& result_rel);
+    static SkytetherTicket ForContext(size_t ctx_id, string ctx_name);
   };
 
   struct PushbackResult : public FlightResult {
