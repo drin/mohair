@@ -194,6 +194,7 @@ CustomTableLookup( shared_ptr<ClientContext>& context
 // Structs and Classes
 
 struct ClientActions {
+  size_t            result_id;
   string            result_name;
   Location          service_loc;
   size_t            buffer_size;
@@ -203,19 +204,24 @@ struct ClientActions {
 
   //! Executes a query by submitting the query plan then fetching the results.
   Status GetQueryResults(SkytetherClient& client_conn) {
-    SkytetherDebugMsg("Requesting results for [" << result_name << "]");
-    SkytetherTicket query_ticket { result_name };
+    SkytetherDebugMsg(
+         "Requesting results for ["
+      << std::to_string(result_id) << " >> '"
+      << result_name
+      << "']"
+    );
+    SkytetherTicket query_ticket = SkytetherTicket::ForContext(result_id, result_name);
 
     SkytetherDebugMsg("Requesting results");
-    ARROW_ASSIGN_OR_RAISE(
-       std::unique_ptr<FlightStreamReader> result_reader
-      ,client_conn.GetQueryResults(query_ticket)
-    );
+    ARROW_ASSIGN_OR_RAISE(result_batches, RequestResultSet(client_conn, query_ticket));
 
-    ARROW_ASSIGN_OR_RAISE(FlightStreamChunk result_chunk, result_reader->Next());
-    while (result_chunk.data) {
-      result_batches.push_back(std::move(result_chunk.data));
-      ARROW_ASSIGN_OR_RAISE(FlightStreamChunk result_chunk, result_reader->Next());
+    SkytetherDebugMsg(
+         "Received results in ["
+      << std::to_string(result_batches.size())
+      << "] batches"
+    );
+    if (not result_batches.empty()) {
+      skytether::PrintRecordBatch(result_batches[0], 0, 0);
     }
 
     return Status::OK();
@@ -251,7 +257,7 @@ int main(int argc, char **argv) {
   // >> For pulling results
   // Parse each argument and internalize the provided option
   constexpr char  is_done_parsing = -1;
-  const     char* opt_template    = "l:i:h";
+  const     char* opt_template    = "l:i:n:h";
   char            parsed_opt;
   int             errcode_cli;
 
@@ -264,6 +270,10 @@ int main(int argc, char **argv) {
         break;
       }
       case 'i': {
+        client_actions.result_id = std::stoull(string { optarg });
+        break;
+      }
+      case 'n': {
         client_actions.result_name = string { optarg };
         break;
       }
@@ -274,6 +284,11 @@ int main(int argc, char **argv) {
   int requests_status = client_actions.SendRequests();
   if (requests_status != 0) { return requests_status; }
 
+  if (client_actions.result_batches.empty()) {
+    SkytetherDebugMsg("Received empty result set");
+    return -1;
+  }
+
   // >> Convert results into a format we can hand to duckdb
   auto result_bufstream = arrow::io::BufferOutputStream::Create();
   if (not result_bufstream.ok()) {
@@ -281,7 +296,7 @@ int main(int argc, char **argv) {
     return ERRCODE_CLIENT;
   }
 
-  std::shared_ptr<arrow::io::BufferOutputStream> result_stream { std::move(result_bufstream).ValueOrDie() };
+  std::shared_ptr<arrow::io::BufferOutputStream> result_stream { result_bufstream.ValueOrDie() };
   auto status_serialize = arrow::ipc::WriteRecordBatchStream(
      client_actions.result_batches
     ,arrow::ipc::IpcWriteOptions::Defaults()

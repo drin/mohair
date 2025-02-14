@@ -29,13 +29,40 @@
 namespace skytether::services {
 
   // >> Function implementations for SkytetherTicket
+  size_t        SkytetherTicket::Id()   { return plan_result->context_id();  }
+  const string& SkytetherTicket::Name() { return plan_result->result_name(); }
+
   shared_ptr<Buffer> SkytetherTicket::ToBuffer() {
-    if (ticket_data == nullptr) { ticket_data = Buffer::FromString(ticket); }
-    return ticket_data;
+    if (tserialized == nullptr) { tserialized = Buffer::FromString(ticket); }
+    return tserialized;
   }
 
   SkytetherTicket SkytetherTicket::FromBuffer(shared_ptr<Buffer> body) {
-    return SkytetherTicket { body->ToString() };
+    string ticket_data = body->ToString();
+    auto   sky_result  = std::make_unique<SkyResultRel>();
+
+    sky_result->ParseFromString(ticket_data);
+    return SkytetherTicket { ticket_data, std::move(sky_result) };
+  }
+
+  SkytetherTicket SkytetherTicket::FromRel(const Rel& result_rel) {
+    string ticket_data;
+    auto   sky_result = std::make_unique<SkyResultRel>();
+
+    result_rel.extension_leaf().detail().UnpackTo(sky_result.get());
+    sky_result->SerializeToString(&ticket_data);
+
+    return SkytetherTicket { ticket_data, std::move(sky_result) };
+  }
+
+  SkytetherTicket SkytetherTicket::ForContext(size_t ctx_id, string ctx_name) {
+    auto   sky_result = std::make_unique<SkyResultRel>();
+    *(sky_result->mutable_result_name()) = ctx_name;
+    sky_result->set_context_id(ctx_id);
+
+    string ticket_data;
+    sky_result->SerializeToString(&ticket_data);
+    return SkytetherTicket { ticket_data, std::move(sky_result) };
   }
 
 
