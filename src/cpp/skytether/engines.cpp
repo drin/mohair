@@ -51,13 +51,11 @@ namespace skytether::engines {
 
     //! Write batches to an IPC stream
     Result<shared_ptr<Buffer>> SerializeRecordBatches(RecordBatchVector batches) {
-      SkytetherDebugMsg("Creating IPC buffer");
-      ARROW_ASSIGN_OR_RAISE(auto ipc_stream, BufferOutputStream::Create());
+      const auto& ipc_opts = IpcWriteOptions::Defaults();
 
-      SkytetherDebugMsg("Writing batches to buffer");
-      ARROW_RETURN_NOT_OK(
-        WriteRecordBatchStream(batches, IpcWriteOptions::Defaults(), ipc_stream.get())
-      );
+      SkytetherDebugMsg("Serializing batches to IPC buffer");
+      ARROW_ASSIGN_OR_RAISE(auto ipc_stream, BufferOutputStream::Create());
+      ARROW_RETURN_NOT_OK(WriteRecordBatchStream(batches, ipc_opts, ipc_stream.get()));
 
       SkytetherDebugMsg("Returning finished IPC buffer");
       return ipc_stream->Finish();

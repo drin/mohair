@@ -115,7 +115,7 @@ namespace skytether::engines {
     virtual Status       ExecuteContext(size_t context_id) = 0;
     virtual Status       ExecuteContext(size_t context_id, const string& view_name) = 0;
 
-    virtual Status CreateView(const string& view_name, RecordBatchVector batches) = 0;
+    virtual Status MaterializeResults(const string& view_name, RecordBatchVector batches) = 0;
 
     virtual Result<shared_ptr<RecordBatchReader>>
     ScanResults(const string& view_name) = 0;
