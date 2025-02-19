@@ -327,7 +327,7 @@ namespace skytether::services {
       if (skyconn == nullptr) { return Status::Invalid("Unable to connect to service"); }
 
       SkytetherDebugMsg("Sending view change");
-      skyconn->SendViewUpdate(*upstream_cfg);
+      ARROW_RETURN_NOT_OK(skyconn->SendViewUpdate(*upstream_cfg));
     }
 
     return Status::OK();
@@ -368,9 +368,77 @@ namespace skytether::services {
         return Status::Invalid("Unable to connect to service");
       }
 
-      client_conn->SendViewUpdate(*upstream_cfg);
+      ARROW_RETURN_NOT_OK(client_conn->SendViewUpdate(*upstream_cfg));
       SkytetherDebugMsg("Sent view change to [" << upstream_loc.ToString() << "]");
     }
+
+    return Status::OK();
+  }
+
+  Status
+  TopologyService::DoDisableDecomposition( [[maybe_unused]] const ServerCallContext&  context
+                                          ,                 const shared_ptr<Buffer>  serialized_loc
+                                          ,[[maybe_unused]] unique_ptr<ResultStream>* response_stream) {
+    SkytetherDebugMsg("Handling request: [" << ActionDisableDecomp << "]");
+
+    // Deserialize location URI and parse it into a `Location`
+    string location_uri = serialized_loc->ToString();
+    ARROW_ASSIGN_OR_RAISE(auto service_loc, Location::Parse(location_uri));
+    
+    // Verify we are updating a previously registered location
+    const auto& config_entry = service_map->cs_devices.find(service_loc);
+    if (config_entry == service_map->cs_devices.end()) {
+      std::cerr << "Error: Request update config of an unknown location" << std::endl;
+      return Status::Invalid("Location was never registered");
+    }
+    else if (not config_entry->second->is_active()) {
+      std::cerr << "Error: Location is inactive" << std::endl;
+      return Status::Invalid("Location already inactive");
+    }
+
+    // Localize the updated configuration
+    config_entry->second->set_decompose_alg(DecomposeAlg::None);
+
+    // Send the update to the service
+    auto client_conn = SkytetherClient::ForLocation(service_loc);
+    if (client_conn == nullptr) { return Status::Invalid("Unable to connect to service"); }
+
+    ARROW_RETURN_NOT_OK(client_conn->SendViewUpdate(*(config_entry->second)));
+    SkytetherDebugMsg("Sent updated configuration to [" << service_loc.ToString() << "]");
+
+    return Status::OK();
+  }
+
+  Status
+  TopologyService::DoEnableDecomposition( [[maybe_unused]] const ServerCallContext&  context
+                                         ,                 const shared_ptr<Buffer>  serialized_loc
+                                         ,[[maybe_unused]] unique_ptr<ResultStream>* response_stream) {
+    SkytetherDebugMsg("Handling request: [" << ActionEnableDecomp << "]");
+
+    // Deserialize location URI and parse it into a `Location`
+    string location_uri = serialized_loc->ToString();
+    ARROW_ASSIGN_OR_RAISE(auto service_loc, Location::Parse(location_uri));
+    
+    // Verify we are updating a previously registered location
+    const auto& config_entry = service_map->cs_devices.find(service_loc);
+    if (config_entry == service_map->cs_devices.end()) {
+      std::cerr << "Error: Request update config of an unknown location" << std::endl;
+      return Status::Invalid("Location was never registered");
+    }
+    else if (not config_entry->second->is_active()) {
+      std::cerr << "Error: Location is inactive" << std::endl;
+      return Status::Invalid("Location already inactive");
+    }
+
+    // Localize the updated configuration
+    config_entry->second->set_decompose_alg(DecomposeAlg::WideJoinHead);
+
+    // Send the update to the service
+    auto client_conn = SkytetherClient::ForLocation(service_loc);
+    if (client_conn == nullptr) { return Status::Invalid("Unable to connect to service"); }
+
+    ARROW_RETURN_NOT_OK(client_conn->SendViewUpdate(*(config_entry->second)));
+    SkytetherDebugMsg("Sent updated configuration to [" << service_loc.ToString() << "]");
 
     return Status::OK();
   }
@@ -387,6 +455,14 @@ namespace skytether::services {
 
     else if (action.type == ActionDeactivate) {
       return DoDeactivateService(context, action.body, result);
+    }
+
+    else if (action.type == ActionDisableDecomp) {
+      return DoDisableDecomposition(context, action.body, result);
+    }
+
+    else if (action.type == ActionEnableDecomp) {
+      return DoEnableDecomposition(context, action.body, result);
     }
 
     else if (action.type == ActionShutdown) {

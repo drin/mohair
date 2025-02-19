@@ -121,6 +121,18 @@ namespace skytether::services {
       ,unique_ptr<ResultStream>* response_stream
     );
 
+    virtual Status DoDisableDecomposition(
+       const ServerCallContext&  context
+      ,const shared_ptr<Buffer>  serialized_loc
+      ,unique_ptr<ResultStream>* response_stream
+    );
+
+    virtual Status DoEnableDecomposition(
+       const ServerCallContext&  context
+      ,const shared_ptr<Buffer>  serialized_loc
+      ,unique_ptr<ResultStream>* response_stream
+    );
+
     // Standard Flight API
     Status ListActions ( const ServerCallContext& context
                         ,vector<ActionType>*      actions) override;

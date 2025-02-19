@@ -668,31 +668,34 @@ namespace skytether::engines {
                                           ,size_t              ctx_id
                                           ,const string&       srv_loc
                                           ,const string&       result_name) {
+
+    SkytetherDebugMsg("Creating SkyResultRel to describe pushback");
+
+    // First, initialize SkyResultRel to pack into the ExtensionLeafRel
     SkyResultRel result_rel;
     result_rel.set_context_id(ctx_id);
     result_rel.set_result_name(result_name);
     result_rel.set_service_location(srv_loc);
 
     // Populate `SkyResultRel`
-    SkytetherDebugMsg("Creating SkyResultRel");
+    // TODO: somehow propagate nullability
     SubstraitSchema*       result_schema   = result_rel.mutable_schema();
     SubstraitType::Struct* result_coltypes = result_schema->mutable_struct_();
-
-    // TODO: figure out how to pass nullability correctly
     for (auto& duck_col : result_proj.Columns()) {
       *(result_schema->add_names())   = duck_col.Name();
       *(result_coltypes->add_types()) = *(FromDuckType(duck_col.Type(), true));
     }
 
-    // Populate `ExtensionLeafRel`
-    SkytetherDebugMsg("Creating Extension operator for SkyResultRel");
+    // Second, initialize `ExtensionLeafRel`
     auto leaf_rel = std::make_unique<ExtensionLeafRel>();
     leaf_rel->mutable_detail()->PackFrom(result_rel);
 
+    // also, initialize its output aliases and schema
     RelCommon::Hint* leafrel_hint = leaf_rel->mutable_common()->mutable_hint();
+    leafrel_hint->mutable_output_schema()->CopyFrom(*result_schema);
+
     for (const auto& proj_expr : result_proj.expressions) {
-      string* alias = leafrel_hint->add_output_names();
-      *alias        = proj_expr->alias;
+      *(leafrel_hint->add_output_names()) = proj_expr->alias;
     }
 
     return leaf_rel;

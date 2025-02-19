@@ -89,6 +89,8 @@
     using duckdb::LogicalOperatorType;
     using duckdb::OnCreateConflict;
 
+    using duckdb::ExplainType;
+
     // Query result types
     using duckdb::QueryResult;
     using duckdb::ErrorData;

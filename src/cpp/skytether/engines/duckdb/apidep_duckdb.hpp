@@ -85,6 +85,8 @@
   #include "duckdb/planner/expression.hpp"
   #include "duckdb/parser/expression/list.hpp"
   #include "duckdb/parser/expression/comparison_expression.hpp"
+
+  #include "duckdb/parser/statement/explain_statement.hpp"
   
   // For operators
   #include "duckdb/planner/logical_operator.hpp"

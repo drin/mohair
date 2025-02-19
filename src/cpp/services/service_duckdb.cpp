@@ -212,13 +212,14 @@ namespace skytether::services {
   //  TODO: eventually split the plan lazily
   Status
   DuckDBService::CoopDecomp(unique_ptr<SystemPlan>& sys_plan) {
-    unique_ptr<PlanSplit> split_widejoin {
-      PlanSplit::FindSplit(sys_plan.get(), DecomposeAlg::WideJoinHead)
+    unique_ptr<PlanSplit> candidate_split {
+      // PlanSplit::FindSplit(sys_plan.get(), DecomposeAlg::WideJoinHead)
+      PlanSplit::FindSplit(sys_plan.get(), this->service_cfg->decompose_alg())
     };
 
     // Split, send subplans, then merge (back into sys_plan)
-    if (split_widejoin->CanSplit()) {
-      return DecomposePlan(*sys_plan, std::move(split_widejoin));
+    if (candidate_split->CanSplit()) {
+      return DecomposePlan(*sys_plan, std::move(candidate_split));
     }
 
     // Send the whole plan, then merge (replace whole sys_plan)

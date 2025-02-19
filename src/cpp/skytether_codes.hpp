@@ -24,6 +24,7 @@
 // ------------------------------
 // Macro definitions for common status codes
 
+// TODO: this can probably be changed to an enum
 #define ERRCODE_INV_ARGS        1
 #define ERRCODE_INV_URISCHEME   2
 #define ERRCODE_PARSE_URI       3
@@ -34,6 +35,7 @@
 #define ERRCODE_NO_ENGINE       7
 #define ERRCODE_CONN_CLIENT     8
 
+#define ERRCODE_API            17
 #define ERRCODE_API_REGISTER    9
 #define ERRCODE_API_DEREGISTER 10
 #define ERRCODE_API_QUERY      12

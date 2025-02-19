@@ -61,6 +61,9 @@ namespace skytether {
   using mohair::ServiceConfig;
   using mohair::DeviceClass;
 
+  // >> Mohair decomposition options
+  using mohair::DecomposeAlg;
+
   // >> Types from mohair
   using mohair::PlanMessage;
 

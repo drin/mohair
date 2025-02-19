@@ -58,6 +58,7 @@
       idx_t col_ndx { col_offset };
       for (; col_ndx < src_chunk.ColumnCount() && col_ndx < col_count; ++col_ndx) {
         idx_t view_length { row_count - row_offset };
+        if (view_length > src_chunk.size()) { view_length = src_chunk.size(); }
 
         duckdb::Vector col_view {
           src_chunk.data[col_ndx],  row_offset, row_count
@@ -299,7 +300,20 @@
       );
 
       // Execute the relation and move the result
-      DuckContext* ctx = GetDuckContext(context_id);
+      DuckContext*       ctx       = GetDuckContext(context_id);
+      duck_sptr<DuckRel> query_rel = ctx->duck_plan;
+
+      // DEBUG: Check the explain analyze
+      query_rel->context->GetContext()->EnableProfiling();
+      ARROW_RETURN_NOT_OK(
+        PrintQueryResults(
+           *(query_rel->Explain(ExplainType::EXPLAIN_ANALYZE))
+          ,0, 10
+          ,0, 10
+          ,0, 10
+        )
+      );
+      query_rel->context->GetContext()->DisableProfiling();
 
       // Create a view that wraps (references) the query
       constexpr bool replace_if_exists { true };

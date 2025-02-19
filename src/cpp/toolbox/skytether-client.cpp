@@ -61,6 +61,8 @@ using skytether::cli::ParseArgLocationUri;
 struct ClientActions {
   bool should_shutdown { false };
   bool should_dereg    { false };
+  bool should_split    { false };
+  bool should_notsplit { false };
 
   Location                service_loc;
   Location                target_loc;
@@ -123,10 +125,46 @@ struct ClientActions {
       }
     }
 
+    if (should_split and should_notsplit) {
+      std::cerr << "Both [s] and [S] specified; can only specify one:" << std::endl
+                << "\ts - Turn on cooperative decomposition"           << std::endl
+                << "\tS - Turn off cooperative decomposition"          << std::endl
+      ;
+      return ERRCODE_API;
+    }
+
     if (should_dereg) {
       auto result_dereg = client_conn->SendDeactivation(target_loc);
       if (not result_dereg.ok()) {
         skytether::PrintError("Unable to deregister service", result_dereg.status());
+        return ERRCODE_API_DEREGISTER;
+      }
+
+      SkytetherDebugMsg("Service deregistered; shutting down...");
+      auto service_conn = SkytetherClient::ForLocation(target_loc);
+      if (service_conn == nullptr) { return ERRCODE_CONN_CLIENT; }
+
+      auto result_shutdown = service_conn->SendSignalShutdown();
+      if (not result_shutdown.ok()) {
+        skytether::PrintError("Unable to shutdown service", result_shutdown.status());
+        return ERRCODE_API_SHUTDOWN;
+      }
+
+      SkytetherDebugMsg("Service [" << target_loc.ToString() << "] shut down");
+    }
+
+    else if (should_notsplit) {
+      auto result_decompoff = client_conn->SendDecompositionOff(target_loc);
+      if (not result_decompoff.ok()) {
+        skytether::PrintError("Unable to disable decomposition", result_decompoff.status());
+        return ERRCODE_API_DEREGISTER;
+      }
+    }
+
+    else if (should_split) {
+      auto result_decompon = client_conn->SendDecompositionOn(target_loc);
+      if (not result_decompon.ok()) {
+        skytether::PrintError("Unable to enable decomposition", result_decompon.status());
         return ERRCODE_API_DEREGISTER;
       }
     }
@@ -166,7 +204,7 @@ int main(int argc, char **argv) {
 
   // Parse each argument and internalize the provided option
   constexpr char  is_done_parsing = -1;
-  const     char* opt_template    = "l:q:d:kh";
+  const     char* opt_template    = "l:q:d:s:S:kh";
   char            parsed_opt;
   int             errcode_cli;
 
@@ -197,6 +235,20 @@ int main(int argc, char **argv) {
 
       case 'd': {
         client_actions.should_dereg = true;
+        errcode_cli = ParseArgLocationUri(optarg, &(client_actions.target_loc));
+        SkytetherCheckErrCode(errcode_cli, "Failed to parse target location");
+        break;
+      }
+
+      case 's': {
+        client_actions.should_split = true;
+        errcode_cli = ParseArgLocationUri(optarg, &(client_actions.target_loc));
+        SkytetherCheckErrCode(errcode_cli, "Failed to parse target location");
+        break;
+      }
+
+      case 'S': {
+        client_actions.should_notsplit = true;
         errcode_cli = ParseArgLocationUri(optarg, &(client_actions.target_loc));
         SkytetherCheckErrCode(errcode_cli, "Failed to parse target location");
         break;

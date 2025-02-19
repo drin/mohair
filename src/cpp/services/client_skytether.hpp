@@ -60,6 +60,8 @@ namespace skytether::services {
     Result<unique_ptr<ResultStream>> SendViewUpdate(const ServiceConfig& service_cfg);
     Result<unique_ptr<ResultStream>> SendActivation(const Location& service_loc);
     Result<unique_ptr<ResultStream>> SendDeactivation(const Location& service_loc);
+    Result<unique_ptr<ResultStream>> SendDecompositionOff(const Location& service_loc);
+    Result<unique_ptr<ResultStream>> SendDecompositionOn(const Location& service_loc);
 
     // Engine-specific Methods
     Result<unique_ptr<FlightStreamReader>> GetQueryResults(SkytetherTicket& query_ticket);
