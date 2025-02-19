@@ -34,6 +34,8 @@
 // Topology-specific actions
 #define ActionActivate   "topology-activate"
 #define ActionDeactivate "topology-deactivate"
+#define ActionDisableDecomp "topology-disabledeco"
+#define ActionEnableDecomp  "topology-enabledeco"
 
 // Engine-specific actions
 #define ActionViewChange "view-change"

@@ -104,7 +104,7 @@ namespace skytether::services {
     ARROW_ASSIGN_OR_RAISE(FlightStreamChunk result_chunk, result_reader->Next());
     while (result_chunk.data != nullptr) {
       result_batches.push_back(std::move(result_chunk.data));
-      ARROW_ASSIGN_OR_RAISE(FlightStreamChunk result_chunk, result_reader->Next());
+      ARROW_ASSIGN_OR_RAISE(result_chunk, result_reader->Next());
     }
 
     return result_batches;

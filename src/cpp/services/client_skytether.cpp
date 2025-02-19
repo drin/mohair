@@ -121,6 +121,18 @@ namespace skytether::services {
   }
 
   Result<unique_ptr<ResultStream>>
+  SkytetherClient::SendDecompositionOff(const Location& service_loc) {
+    Action rpc_action { ActionDisableDecomp, Buffer::FromString(service_loc.ToString()) };
+    return client->DoAction(rpc_opts, rpc_action);
+  }
+
+  Result<unique_ptr<ResultStream>>
+  SkytetherClient::SendDecompositionOn(const Location& service_loc) {
+    Action rpc_action { ActionEnableDecomp, Buffer::FromString(service_loc.ToString()) };
+    return client->DoAction(rpc_opts, rpc_action);
+  }
+
+  Result<unique_ptr<ResultStream>>
   SkytetherClient::SendViewUpdate(const ServiceConfig& service_cfg) {
     string serialized_msg;
     if (not service_cfg.SerializeToString(&serialized_msg)) {
