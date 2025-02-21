@@ -34,6 +34,45 @@
 
 
 // ------------------------------
+// Macros
+
+#if SKYTETHER_DEBUG
+  #define SkytetherInitLogger(logger_name) {                              \
+    *(SkytetherLogger(logger_name)) << "Logger initialized" << std::endl; \
+  }
+
+  #define SkytetherStartTS(phase_name) \
+    SteadyTS ts_start_##phase_name = steady_clock::now();
+
+  #define SkytetherStopTS(phase_name) \
+    SteadyTS ts_stop_##phase_name = steady_clock::now();
+
+  #define SkytetherLogTimestamps(phase_name) {                                           \
+    auto ts_diff = mohair::StringifyTSDiff(ts_start_##phase_name, ts_stop_##phase_name); \
+    *(SkytetherLogger()) << "["                                                          \
+                              << mohair::StringifyTS(ts_start_##phase_name) << ":µs"     \
+                      << ", " << mohair::StringifyTS(ts_stop_##phase_name)  << ":µs"     \
+                      << ", " << ts_diff                                    << ":µs"     \
+                   << "] |> " << #phase_name << std::endl                                \
+    ;                                                                                    \
+  }
+
+  #define SkytetherLogPerf(phase_name, code_block) \
+    SkytetherStartTS(phase_name)                   \
+    code_block                                     \
+    SkytetherStopTS(phase_name)                    \
+    SkytetherLogTimestamps(phase_name)
+
+#else
+  #define SkytetherStartTS(phase_name)             {}
+  #define SkytetherStopTS(phase_name)              {}
+  #define SkytetherLogTimestamps(ts_name, log_msg) {}
+  #define SkytetherLogPerf(phase_name, code_block) code_block
+
+#endif
+
+
+// ------------------------------
 // Public global variables
 
 namespace skytether {
@@ -48,6 +87,10 @@ namespace skytether {
 // Public classes and functions
 
 namespace skytether {
+
+  //! A function that returns a singleton file handle for a log file.
+  std::fstream* SkytetherLogger(string logger_name);
+  std::fstream* SkytetherLogger();
 
   // >> Reader functions (from files)
   fstream InputStreamForFile(const char* in_fpath);

@@ -40,6 +40,28 @@
             std::cerr << msg_str << std::endl; \
           } while (0);
 
+  #define SkytetherStartTS(phase_name) \
+    SteadyTS ts_start_##phase_name = steady_clock::now();
+
+  #define SkytetherStopTS(phase_name) \
+    SteadyTS ts_stop_##phase_name = steady_clock::now();
+
+  #define SkytetherLogTimestamps(phase_name) {                                   \
+    auto ts_diff = StringifyTSDiff(ts_start_##phase_name, ts_stop_##phase_name); \
+    *(LogHandle()) << "["                                                        \
+                              << StringifyTS(ts_start_##phase_name) << ":µs"     \
+                      << ", " << StringifyTS(ts_stop_##phase_name)  << ":µs"     \
+                      << ", " << ts_diff                            << ":µs"     \
+                   << "] |> " << #phase_name << std::endl                        \
+    ;                                                                            \
+  }
+
+  #define SkytetherLogPerf(phase_name, code_block) \
+    SkytetherStartTS(phase_name)                   \
+    code_block                                  \
+    SkytetherStopTS(phase_name)                    \
+    SkytetherLogTimestamps(phase_name)
+
 #else
   #define SkytetherDebugMsg(msg_str) {}
 

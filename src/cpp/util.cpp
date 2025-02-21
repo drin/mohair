@@ -86,7 +86,45 @@ namespace skytether {
 
   } // anonymous namespace: skytether::<anonymous>
 
-  //  >> Reader functions
+  // >> Logger functions
+  string PathForInstantiatedLog(const string& logger_name) {
+    const string path_prefix { "skytether." + logger_name + "." };
+    const string path_suffix { ".log"                           };
+
+    auto     ts_logstart = system_clock::to_time_t(system_clock::now());
+    std::tm* local_ts    = std::localtime(&ts_logstart);
+
+    stringstream ss;
+    ss << path_prefix << std::put_time(local_ts, "%Y%m%d%H%M%S") << path_suffix;
+
+    return ss.str();
+  }
+
+  std::fstream* SkytetherLogger() {
+    static string empty_name;
+    return SkytetherLogger(empty_name);
+  }
+
+  std::fstream* SkytetherLogger(string logger_name) {
+    static bool         is_initialized { false };
+    static std::fstream log_handle;
+
+    if (not is_initialized) {
+      string log_fpath = PathForInstantiatedLog(logger_name);
+      log_handle       = OutputStreamForFile(log_fpath.data());
+
+      auto ts_init = steady_clock::now();
+      log_handle << "[" << mohair::StringifyTS(ts_init) << ":µs] "
+                 << "|> initial timestamp"              << std::endl
+      ;
+
+      is_initialized = true;
+    }
+
+    return &log_handle;
+  }
+
+  // >> Reader functions
 
   /** Given a file path, return a binary input stream. */
   fstream InputStreamForFile(const char* in_fpath) {
