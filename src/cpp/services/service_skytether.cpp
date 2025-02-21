@@ -121,7 +121,25 @@ namespace skytether::services {
     SkytetherDebugMsg("Setting SIGTERM handler...");
     ARROW_RETURN_NOT_OK(skytether_service.SetShutdownOnSignals({SIGTERM}));
 
-    SkytetherDebugMsg("Starting service [" << skytether_service.location().ToString() << "]");
+    string service_loc { skytether_service.location().ToString() };
+    string service_name;
+    service_name.reserve(service_loc.size());
+
+    // Construct service_name from the location (excluding the URI)
+    unsigned char prev_char { (unsigned char) service_loc[0] };
+    auto str_itr = ++service_loc.cbegin();
+    for (; str_itr != service_loc.cend(); ++str_itr) {
+      if (prev_char == '\0') {
+        service_name.push_back(isalnum(*str_itr) ?  *str_itr : '_');
+      }
+
+      else if (*str_itr == '/' and prev_char == '/') { prev_char = '\0'; }
+      else                       { prev_char = (unsigned char) *str_itr; }
+    }
+
+    SkytetherDebugMsg("Starting service [" << service_loc << "]");
+    MohairInitLogger(service_name);
+    SkytetherInitLogger(service_name);
     ARROW_RETURN_NOT_OK(skytether_service.Serve());
 
     return Status::OK();

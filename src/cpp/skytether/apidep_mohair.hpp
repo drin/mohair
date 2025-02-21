@@ -43,6 +43,11 @@ namespace skytether {
   using google::protobuf::TextFormat;
   using AnyMessage = google::protobuf::Any;
 
+  // >> Mohair timing types
+  using mohair::system_clock;
+  using mohair::steady_clock;
+  using mohair::SteadyTS;
+
   // >> Mohair query processing types
   using mohair::Plan;
   using mohair::SuperPlan;

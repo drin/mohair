@@ -77,21 +77,30 @@ namespace skytether::services {
                                 ,                 unique_ptr<ResultStream>* result) {
     // >> Parse phase
     SkytetherDebugMsg("Starting parse phase");
-    unique_ptr<SystemPlan> sys_plan {
-      mohair::SystemPlanFrom(
-        mohair::PlanMessage::FromString(plan_data->ToString())
-      )
-    };
+    unique_ptr<SystemPlan> sys_plan;
+
+    SkytetherLogPerf(DuckServicePhaseParse,
+      {
+        sys_plan = mohair::SystemPlanFrom(
+          mohair::PlanMessage::FromString(plan_data->ToString())
+        );
+      }
+    );
 
     // >> Delegation phase
-    if (not service_conns.empty()) {
-      SkytetherDebugMsg("Starting delegation phase");
-      ARROW_RETURN_NOT_OK(CoopDecomp(sys_plan));
-    }
+    SkytetherLogPerf(DuckServicePhaseDelegation,
+      {
+        if (not service_conns.empty()) {
+          SkytetherDebugMsg("Starting delegation phase");
+          ARROW_RETURN_NOT_OK(CoopDecomp(sys_plan));
+        }
+      }
+    );
 
     // >> Execution phase
     //    NOTE: Sending pushback before finishing query execution affects recovery
     SkytetherDebugMsg("Starting execution phase");
+    SkytetherStartTS(DuckServicePhaseExecution);
     try {
       // Translate to execution plan and construct pushback plan
       auto [pushback, ctx_id, view_name] = engine->ProcessForExecution(
@@ -112,6 +121,8 @@ namespace skytether::services {
       SkytetherDebugMsg("DuckDB exception: " << duck_err.what());
       return Status::Invalid("DuckDB execution failed");
     }
+    SkytetherStopTS(DuckServicePhaseExecution);
+    SkytetherLogTimestamps(DuckServicePhaseExecution);
 
     SkytetherDebugMsg("Query processing complete");
     return Status::OK();
@@ -184,7 +195,8 @@ namespace skytether::services {
   //! Delegates each subplan to each downstream connection
   //  TODO: this currently assumes only one connection can execute a subplan
   Status
-  DuckDBService::DecomposePlan(SystemPlan& sys_plan, unique_ptr<PlanSplit> decomposer) {
+  DuckDBService::DecomposePlan([[maybe_unused]] SystemPlan&           sys_plan
+                               ,                unique_ptr<PlanSplit> decomposer) {
     vector<unique_ptr<PlanMessage>> pushdown_msgs = decomposer->ExtractSubplans();
 
     for (size_t srv_ndx = 0; srv_ndx < service_conns.size(); ++srv_ndx) {
@@ -195,12 +207,26 @@ namespace skytether::services {
         PlanMessage& pushdown_msg = *(pushdown_msgs[plan_ndx]);
 
         // Send the subplan
-        ARROW_ASSIGN_OR_RAISE(unique_ptr<Plan> pushback, conn.DelegatePlan(pushdown_msg));
-        ARROW_RETURN_NOT_OK(MaterializeLocally(conn, *pushback, *engine));
+        unique_ptr<Plan> pushback;
+        SkytetherLogPerf(DuckServiceDelegateSubplan,
+          {
+            ARROW_ASSIGN_OR_RAISE(pushback, conn.DelegatePlan(pushdown_msg));
+          }
+        );
+
+        SkytetherLogPerf(DuckServiceMaterializePushback,
+          {
+            ARROW_RETURN_NOT_OK(MaterializeLocally(conn, *pushback, *engine));
+          }
+        );
 
         // Receive and merge the pushback plan
-        auto pushback_msg { mohair::PlanMessage::FromPlan(std::move(pushback)) };
-        decomposer->MergeSubplan(pushback_msg.get());
+        SkytetherLogPerf(DuckServiceMergePushback,
+          {
+            auto pushback_msg { mohair::PlanMessage::FromPlan(std::move(pushback)) };
+            decomposer->MergeSubplan(pushback_msg.get());
+          }
+        );
       }
     }
 
@@ -226,15 +252,17 @@ namespace skytether::services {
     // TODO: hardcoded to only send to first connection; requires a way to merge results
     //       from each connection
     SkytetherClient& conn = *(service_conns[0]);
+    unique_ptr<Plan> pushback;
 
-    ARROW_ASSIGN_OR_RAISE(
-       unique_ptr<Plan> pushback
-      ,conn.DelegatePlan(*(sys_plan->plan_msg))
-    );
-    ARROW_RETURN_NOT_OK(MaterializeLocally(conn, *pushback, *engine));
+    SkytetherLogPerf(DuckServicePropagatePlan,
+      {
+        ARROW_ASSIGN_OR_RAISE(pushback, conn.DelegatePlan(*(sys_plan->plan_msg)));
+        ARROW_RETURN_NOT_OK(MaterializeLocally(conn, *pushback, *engine));
 
-    sys_plan = mohair::SystemPlanFrom(
-      mohair::PlanMessage::FromPlan(std::move(pushback))
+        sys_plan = mohair::SystemPlanFrom(
+          mohair::PlanMessage::FromPlan(std::move(pushback))
+        );
+      }
     );
 
     return Status::OK();

@@ -52,6 +52,9 @@
 #include <mutex>
 #include <condition_variable>
 
+// >> Performance and timing support
+#include <chrono>
+
 
 // ------------------------------
 // Type aliases

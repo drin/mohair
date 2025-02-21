@@ -271,20 +271,32 @@
 
       // Translate the system plan for execution and register it in a context
       SkytetherDebugMsg("Translating the system plan for execution");
-      DuckContext* ctx = DuckContext::Emplace(
-         context_map
-        ,std::make_unique<DuckContext>(this->TranslatePlan(sys_plan))
+      DuckContext* ctx;
+
+      SkytetherLogPerf(DuckEngineTranslatePlan,
+        {
+          ctx = DuckContext::Emplace(
+             context_map
+            ,std::make_unique<DuckContext>(this->TranslatePlan(sys_plan))
+          );
+        }
       );
 
       // Create the pushback plan to capture remaining work and the schema of our result
-      SkytetherDebugMsg("Constructing the pushback plan");
       string result_name { engine_id + "_materialized_" + std::to_string(ctx->uuid) };
-      unique_ptr<Plan> pushback_plan = this->PushbackForExecPlan(
-         dynamic_cast<ProjectionRelation&>(*(ctx->duck_plan))
-        ,sys_plan.plan_msg->payload.get()
-        ,ctx->uuid
-        ,srv_loc
-        ,result_name
+      unique_ptr<Plan> pushback_plan;
+
+      SkytetherDebugMsg("Constructing the pushback plan");
+      SkytetherLogPerf(DuckEngineConstructPushback,
+        {
+          pushback_plan = this->PushbackForExecPlan(
+             dynamic_cast<ProjectionRelation&>(*(ctx->duck_plan))
+            ,sys_plan.plan_msg->payload.get()
+            ,ctx->uuid
+            ,srv_loc
+            ,result_name
+          );
+        }
       );
 
       // Return a tuple of the pushback plan and how to identify its context
@@ -304,16 +316,20 @@
       duck_sptr<DuckRel> query_rel = ctx->duck_plan;
 
       // DEBUG: Check the explain analyze
-      query_rel->context->GetContext()->EnableProfiling();
-      ARROW_RETURN_NOT_OK(
-        PrintQueryResults(
-           *(query_rel->Explain(ExplainType::EXPLAIN_ANALYZE))
-          ,0, 10
-          ,0, 10
-          ,0, 10
-        )
+      SkytetherLogPerf(DuckEngineExplainAnalyzeContext,
+        {
+          query_rel->context->GetContext()->EnableProfiling();
+          ARROW_RETURN_NOT_OK(
+            PrintQueryResults(
+               *(query_rel->Explain(ExplainType::EXPLAIN_ANALYZE))
+              ,0, 10
+              ,0, 10
+              ,0, 10
+            )
+          );
+          query_rel->context->GetContext()->DisableProfiling();
+        }
       );
-      query_rel->context->GetContext()->DisableProfiling();
 
       // Create a view that wraps (references) the query
       constexpr bool replace_if_exists { true };
@@ -324,12 +340,16 @@
 
       // Change the query status, execute the query, then notify when complete
       ctx->status = QueryStatus::Running;
-      rel_createview->Execute();
-      {
-        lock_guard<mutex> status_lock(ctx->status_mtx);
-        ctx->status = QueryStatus::Complete;
-      }
-      ctx->status_cv.notify_all();
+      SkytetherLogPerf(DuckEngineExecuteContext,
+        {
+          rel_createview->Execute();
+          {
+            lock_guard<mutex> status_lock(ctx->status_mtx);
+            ctx->status = QueryStatus::Complete;
+          }
+          ctx->status_cv.notify_all();
+        }
+      );
 
       return Status::OK();
     }
