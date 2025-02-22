@@ -20,16 +20,6 @@
 // Dependencies
 #pragma once
 
-
-// ------------------------------
-// Overview
-//
-// Dependencies from standard library that are common throughout this library.
-
-
-// ------------------------------
-// Dependencies
-
 // >> Memory and data type support
 #include <memory>
 #include <string>

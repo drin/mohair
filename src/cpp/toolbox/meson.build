@@ -66,3 +66,4 @@ duck_bin = executable('duckdb-mohair'
   ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,install            : false
 )
+

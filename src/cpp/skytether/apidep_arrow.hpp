@@ -67,3 +67,4 @@ namespace skytether {
   using arrow::ipc::RecordBatchFileReader;
 
 } // namespace: skytether
+
