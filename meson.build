@@ -4,7 +4,7 @@
 # >> project info
 project('libskytether'
   ,'cpp'
-  ,version         : '2.0.0'
+  ,version         : '2.0.1'
   ,meson_version   : '>=1.6.0'
   ,license         : 'Apache-2.0'
   ,license_files   : 'LICENSE'
