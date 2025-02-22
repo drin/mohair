@@ -1,12 +1,29 @@
 # Overview
 
+This project started as an extension of the idea behind [SkyhookDM][repo-skyhookdm], but
+implemented for single-cell gene expression analysis and computational storage. The
+original implementation can be found in the ([skytether-singlecell][repo-skytethersc])
+repository.
+
+In addition to being a simple prototype, skytether-singlecell was also narrowly started
+before [Arrow Flight][docs-flight], [Acero][docs-acero], and [Substrait][web-substrait]
+were publically announced; so, a lot of the skytether-singlecell repository
+is low-level and highly specific.
+
+This repository combines Arrow Flight, Substrait, and the original skytether-singlecell
+repository to provide a distributed, relational system backed by computational storage.
+The project name is shortened to simply "Skytether" and is an extension (in spirit) of
+SkyhookDM. Where SkyhookDM implemented a relational system in Ceph, a distributed object
+storage system, Skytether implements a relational system across loosely coupled services
+that collectively compose a distributed object storage system. Skytether is not
+implemented on Ceph (due to wanting a more flexible infrastructure for prototyping), and
+so is more of an academic prototype.
+
+## Organization
+
 "Mohair" is a project to prototype the use of [substrait][web-substrait] and
-[arrow][web-arrow] to handle pushdown of partial queries to remote storage. Initially,
-this project will largely inspired by [Skytether][repo-skytether]--an extension of
-[SkyhookDM][repo-skyhookdm] for single-cell gene expression analysis and computational
-storage. However, work on skytether narrowly started before [Arrow Flight][docs-flight],
-[Acero][docs-acero], and substrait were started. So, a lot of skytether is low-level and
-specific, where mohair will try to be higher-level and more generic.
+[arrow][web-arrow] to handle pushdown of partial queries to remote storage.
+
 
 # Goals
 
@@ -137,21 +154,21 @@ buf generate --template buf.gen.yaml submodules/mohair-proto
 
 
 <!-- resources -->
-[web-substrait]:  https://substrait.io/
-[web-arrow]:      https://arrow.apache.org/
-[web-duckdb]:     https://duckdb.org/
-[web-homebrew]:   https://brew.sh/
-[web-meson]:      https://mesonbuild.com/
-[web-poetry]:     https://python-poetry.org/
+[web-substrait]:    https://substrait.io/
+[web-arrow]:        https://arrow.apache.org/
+[web-duckdb]:       https://duckdb.org/
+[web-homebrew]:     https://brew.sh/
+[web-meson]:        https://mesonbuild.com/
+[web-poetry]:       https://python-poetry.org/
 
-[docs-flight]:    https://arrow.apache.org/docs/format/Flight.html
-[docs-acero]:     https://arrow.apache.org/docs/cpp/streaming_execution.html
-[docs-tap]:       https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap
+[docs-flight]:      https://arrow.apache.org/docs/format/Flight.html
+[docs-acero]:       https://arrow.apache.org/docs/cpp/streaming_execution.html
+[docs-tap]:         https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap
 
-[repo-skytether]: https://gitlab.com/skyhookdm/skytether-singlecell
-[repo-skyhookdm]: https://github.com/uccross/skyhookdm-ceph-cls
-[repo-hatchery]:  https://github.com/drin/homebrew-hatchery
+[repo-skytethersc]: https://gitlab.com/skyhookdm/skytether-singlecell
+[repo-skyhookdm]:   https://github.com/uccross/skyhookdm-ceph-cls
+[repo-hatchery]:    https://github.com/drin/homebrew-hatchery
 
-[issues-mohair]:  https://github.com/drin/mohair/issues
+[issues-mohair]:    https://github.com/drin/mohair/issues
 
-[formula-mohair]: https://github.com/drin/homebrew-hatchery/blob/mainline/Formula/skytether-mohair.rb
+[formula-mohair]:   https://github.com/drin/homebrew-hatchery/blob/mainline/Formula/skytether-mohair.rb
