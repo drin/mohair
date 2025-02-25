@@ -19,15 +19,20 @@
 // ------------------------------
 // Dependencies
 
-// NOTE: include filesystem before trying to incude <arrow/filesystem/api.h>
+// >> Standard libs
+#include <unistd.h>
 #include <filesystem>
 
-#include "../mohair.hpp"
+// >> Internal
+#include "skytether.hpp"
 
-#if USE_DUCKDB
-  #include "../engines/adapter_duckdb.hpp"
+//  service-specific includes
+#if SKYTETHER_USE_DUCKDB
+  #include "skytether/engines.hpp"
+  #include "skytether/engines/duckdb/apidep_duckdb.hpp"
+  #include "skytether/engines/duckdb/adapter_duckdb.hpp"
 
-  using mohair::adapters::EngineDuckDB;
+  using skytether::engines::EngineDuckDB;
 #endif
 
 
@@ -37,113 +42,156 @@
 // >> Namespaces
 namespace fs = std::filesystem;
 
+using std::vector;
+using std::unique_ptr;
 
 
 // ------------------------------
-// Variables
-const std::string local_file_protocol { "file://" };
+// Structs and Classes
 
-const char* test_query = (
-  "  SELECT  gene_id"
-  "         ,COUNT(*)        AS cell_count"
-  "         ,AVG(e.expr)     AS expr_avg"
-  "         ,VAR_POP(e.expr) AS expr_var"
-  "    FROM metaclusters mc"
+struct ToolInterface {
+  fs::path arrow_fpath;
+  bool use_duckdb { false };
+  bool is_stream  { false };
+  int  col_limit  { 5     };
 
-  "          JOIN clusters c"
-  "         USING (cluster_id)"
+  #if SKYTETHER_USE_DUCKDB
+    int ScanFileWithDuckDB() {
+      unique_ptr<EngineDuckDB> duck_engine = skytether::engines::DuckDBForMem("local");
 
-  "          JOIN cluster_membership cm"
-  "         USING (cluster_id)"
+      // Use new path, `scan_arrows_file`
+      int  context_id     = duck_engine->ContextForArrowScanOp(arrow_fpath);
+      auto execute_status = duck_engine->ExecuteContext(context_id);
+      if (not execute_status.ok()) { return 4; }
+    }
+  #endif
 
-  "          JOIN  expression e"
-  "         USING (cell_id)"
+  vector<int> IndicesForSelection(int table_colcount) {
+    int sel_size = col_limit;
+    if (table_colcount < sel_size) { sel_size = table_colcount; }
 
-  "   WHERE mc.mcluster_id = 12"
+    vector<int> col_selection;
+    col_selection.reserve(sel_size);
+    for (int col_ndx = 0; col_ndx < sel_size; ++col_ndx) {
+      col_selection.push_back(col_ndx);
+    }
 
-  "GROUP BY e.gene_id"
-);
+    return col_selection;
+  }
+
+  int ScanStreamFromFile() {
+    std::string arrow_file_uri { "file://" + arrow_fpath.string() };
+    auto result_data = skytether::ReadIPCStream(arrow_file_uri);
+    if (not result_data.ok()) {
+      skytether::PrintError("Error reading data stream from file", result_data.status());
+      return 6;
+    }
+
+    vector<int> col_selection = IndicesForSelection((*result_data)->num_columns());
+    auto data_excerpt = (*result_data)->SelectColumns(col_selection);
+    if (not data_excerpt.ok()) {
+      skytether::PrintError("Error projecting table columns", data_excerpt.status());
+      return 9;
+    }
+
+    skytether::PrintTable(*data_excerpt, 0, 10);
+    return 0;
+  }
+
+  int ScanFile() {
+    std::string arrow_file_uri { "file://" + arrow_fpath.string() };
+    auto result_data = skytether::ReadIPCFile(arrow_file_uri);
+    if (not result_data.ok()) {
+      skytether::PrintError("Error reading data from file", result_data.status());
+      return 5;
+    }
+
+    vector<int> col_selection = IndicesForSelection((*result_data)->num_columns());
+    auto data_excerpt = (*result_data)->SelectColumns(col_selection);
+    if (not data_excerpt.ok()) {
+      skytether::PrintError("Error projecting table columns", data_excerpt.status());
+      return 9;
+    }
+
+    skytether::PrintTable(*data_excerpt, 0, 10);
+    return 0;
+  }
+
+  int Start() {
+    if (arrow_fpath.empty()) {
+      SkytetherDebugMsg("No data source provided.");
+      return ERRCODE_CLIENT;
+    }
+
+    if (use_duckdb) {
+      #if SKYTETHER_USE_DUCKDB
+        return ScanFileWithDuckDB();
+
+      #else
+        SkytetherDebugMsg("DuckDB backend unavailable");
+        return 0;
+
+      #endif
+    }
+
+    if (is_stream)  { return ScanStreamFromFile(); }
+
+    return ScanFile(); 
+  }
+};
 
 
 // ------------------------------
 // Functions
 
-int ViewArrowIPCFromFile(fs::path arrow_fpath, bool& is_feather) {
-    // Create a RecordBatchStreamReader for the given `arrow_fpath`
-    is_feather = true;
-    arrow::Result<shared_ptr<Table>> read_result = mohair::ReadIPCFile(arrow_fpath.string());
-    if (not read_result.ok()) {
-      std::cerr << "Could not read file:"       << std::endl
-                << "\t" << read_result.status() << std::endl
-      ;
+int PrintHelp() {
+    std::cout << "read-arrow"
+              << " [-h]"
+              << " [-f <read file as arrow file (default)>]"
+              << " [-s <read file as arrow stream>]"
+              << " [-d <read file through duckdb>]"
+              << " -p <path-to-file>"
+              << std::endl
+    ;
 
-      is_feather = false;
-    }
-
-    if (not is_feather) {
-      std::cout << "Trying to read file as IPC stream..." << std::endl;
-
-      read_result = mohair::ReadIPCStream(arrow_fpath.string());
-      if (not read_result.ok()) {
-        std::cerr << "Could not read file:"       << std::endl
-                  << "\t" << read_result.status() << std::endl
-        ;
-
-        return 2;
-      }
-    }
-
-    arrow::Result<shared_ptr<Table>> proj_result = read_result;
-    if ((*read_result)->num_columns() >= 10) {
-      std::cout << "Projecting first 10 columns for readability" << std::endl;
-
-      auto proj_result = (*read_result)->SelectColumns({0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-      if (not proj_result.ok()) {
-        std::cerr << "Could not do projection:"   << std::endl
-                  << "\t" << proj_result.status() << std::endl
-        ;
-        return 3;
-      }
-    }
-
-    // print the first 10 rows for readability
-    mohair::PrintTable(*proj_result, 0, 10);
-    return 0;
+    return 1;
 }
 
 
 // ------------------------------
 // Main Logic
+
 int main(int argc, char **argv) {
-    if (argc != 2) {
-        printf("parse-arrow <path-to-arrow-file>\n");
-        return 1;
-    }
+  ToolInterface my_cli;
 
-    fs::path path_to_arrow = local_file_protocol + fs::absolute(argv[1]).string();
-    bool is_feather = true;
+  // Parse each argument and internalize the provided option
+  constexpr char  is_done_parsing = -1;
+  const     char* opt_template    = "hdsfp:";
 
-    int view_status = ViewArrowIPCFromFile(path_to_arrow, is_feather);
-    if (view_status > 0) {
-      std::cerr << "Exiting early" << std::endl;
-      return view_status;
-    }
+  char parsed_opt;
+  while ((parsed_opt = (char) getopt(argc, argv, opt_template)) != is_done_parsing) {
+    switch (parsed_opt) {
 
-    // Try using DuckDB
-    #if USE_DUCKDB
-      std::cout << "Attempting to scan data with DuckDB" << std::endl;
-      EngineDuckDB duck_engine = mohair::adapters::DuckDBForMem();
+      case 'h': { return PrintHelp(); }
 
-      std::cout << "Constructing scan op" << std::endl;
-      auto queryid_result = duck_engine.ArrowScanOp(path_to_arrow);
-      if (not queryid_result.ok()) {
-        std::cerr << "Failed to construct scan op for Arrow IPC" << std::endl;
+      case 's': {
+        my_cli.is_stream = true;
+        break;
       }
 
-      std::cout << "Executing Relation" << std::endl;
-      auto execute_status = duck_engine.ExecuteRelation(*queryid_result);
-      if (not execute_status.ok()) { return 4; }
-    #endif
+      case 'd': {
+        my_cli.use_duckdb = true;
+        break;
+      }
 
-    return 0;
+      case 'p': {
+        my_cli.arrow_fpath = fs::absolute(optarg).string();
+        break;
+      }
+
+      default: { break; }
+    }
+  }
+
+  return my_cli.Start();
 }

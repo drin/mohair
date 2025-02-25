@@ -1,330 +1,111 @@
 # ------------------------------
 # Project Definition
 
-# >> configuration
-project('libmohair'
+# >> project info
+project('libskytether'
   ,'cpp'
-  ,version         : '0.1.0'
+  ,version         : '2.0.1'
+  ,meson_version   : '>=1.6.0'
+  ,license         : 'Apache-2.0'
+  ,license_files   : 'LICENSE'
   ,default_options : ['warning_level=3','cpp_std=c++17']
 )
 
-
-# ------------------------------
-# Build variables (convenience)
-
-# base directory
-cpp_srcdir    = 'src' / 'cpp'
-
-# dir for core mohair sources
-cpp_querydir  = cpp_srcdir / 'query'
-
-# dir for generated protobuf code
-cpp_proto_substrait = cpp_srcdir / 'query' / 'substrait'
-cpp_proto_mohair    = cpp_srcdir / 'query' / 'mohair'
-
-# dir for adapters (execution engines)
-cpp_enginedir = cpp_srcdir / 'engines'
-
-# dir for flight services
-cpp_servicedir = cpp_srcdir / 'services'
-
-# dir for binary sources (1-1 with binaries)
-cpp_tooldir   = cpp_srcdir / 'toolbox'
-
-
-# ------------------------------
-# Meson dependencies (modules)
-
-# use pkg-config to generate library build info
-module_pkgcfg = import('pkgconfig')
-
-
-# >> Determine the system we're building on
-buildsys_type = 'unknown'
-
-os_name = run_command('uname', '-s', check: false).stdout().strip()
-if os_name == 'Darwin'
-    buildsys_type = 'macosx'
-
-elif os_name == 'Linux'
-    os_is_arch   = run_command(
-      'grep', '--silent', 'NAME="Arch Linux"', '/etc/os-release', check: false
-    )
-    os_is_ubuntu = run_command(
-      'grep', '--silent', 'NAME="Ubuntu"'    , '/etc/os-release', check: false
-    )
-
-    if os_is_arch.returncode() == 0
-        buildsys_type = 'archlinux'
-
-    elif os_is_ubuntu.returncode() == 0
-        buildsys_type = 'ubuntu'
-
-    endif
-
-endif
-
-
-# ------------------------------
-# Library dependencies
-
-# >> System-dependent dependencies
-
-# Include directory for arrow headers
-arrow_incdir = ''
-
-# NOTE: with brew installed dependencies, macosx can resolve like archlinux
-#       otherwise, macosx deps might need "manual" resolution (specific paths)
-if   buildsys_type == 'macosx'
-  arrow_incdir = '/opt/homebrew/include'
-elif buildsys_type == 'archlinux'
-endif
-
-
-# >> Required dependencies
-
-#   |> Arrow
-dep_arrow  = dependency('arrow')
-dep_acero  = dependency('arrow-substrait') # this is Acero + substrait
-dep_flight = dependency('arrow-flight')
-
-#   |> Protobuf (for substrait)
-dep_proto  = dependency('protobuf')
-
-
-# >> Optional dependencies
-#   |> Faodel
-dep_ompi   = dependency('ompi-cxx', required: get_option('mpi'))
-dep_faodel = dependency('faodel'  , required: get_option('faodel'))
-dep_tiledb = dependency('tiledb'  , required: get_option('tiledb'))
-dep_duckdb = dependency('duckdb'
-  ,method: 'cmake'
-  ,required: get_option('duckdb')
-)
-
-
-# >> Make configuration data available to source files
+# >> project configuration
 version_str    = meson.project_version()
 version_fields = version_str.split('.')
 
+
+# ------------------------------
+# Dependencies
+
+cpp_compiler = meson.get_compiler('cpp')
+
+# >> Backend dependency: tiledb
+libtiledb_dep = dependency('tiledb', required: get_option('tiledb'))
+
+# >> Backend dependency: duckdb
+# search typical location first (never required)
+libduckdb_dep = dependency('duckdb', method: 'cmake', required: false)
+
+if not get_option('duckdb').disabled() and not libduckdb_dep.found()
+  is_duckdb_found = false
+
+  # try to find duckdb using each provided cmake prefix path
+  foreach lib_prefixdir : get_option('cmake_prefix_path')
+    libduckdb = cpp_compiler.find_library('duckdb'
+      ,dirs    : lib_prefixdir / 'lib'
+      ,required: false
+    )
+
+    # if we didn't find it in this path, go to the next one
+    if not libduckdb.found()
+      continue
+    endif
+
+    # we found it, so update our dependency and stop searching
+    libduckdb_inc = include_directories(lib_prefixdir / 'include')
+    libduckdb_dep = declare_dependency(
+       dependencies       : [libduckdb]
+      ,include_directories: [libduckdb_inc]
+    )
+
+    is_duckdb_found = true
+    break
+  endforeach
+
+  # check if the loop was able to find duckdb (and if we required it in the first place)
+  if not is_duckdb_found and get_option('duckdb').enabled()
+    error('Unable to find duckdb dependency with explicit fallback')
+  endif
+
+endif
+
+# >> configure build options based on libraries we found
 mohair_cfgdata = configuration_data({
-   'VERSION_STR'  : meson.project_version()
-  ,'VERSION_MAJOR': version_fields[0]
-  ,'VERSION_MINOR': version_fields[1]
-  ,'VERSION_PATCH': version_fields[2]
-  ,'MPI'          : dep_ompi.found()
-  ,'FAODEL'       : dep_faodel.found()
-  ,'TILEDB'       : dep_tiledb.found()
-  ,'DUCKDB'       : dep_duckdb.found() ? 1 : 0
+   'VERSION_STR'   : version_str
+  ,'VERSION_MAJOR' : version_fields[0]
+  ,'VERSION_MINOR' : version_fields[1]
+  ,'VERSION_PATCH' : version_fields[2]
+  ,'BUILD_IS_DEBUG': get_option('buildtype') == 'debug' ? 1 : 0
+  ,'TILEDB'        : libtiledb_dep.found()              ? 1 : 0
+  ,'DUCKDB'        : libduckdb_dep.found()              ? 1 : 0
 })
 
+
+# ------------------------------
+# Reference paths
+
+# base directory
+cpp_srcdir  = 'src' / 'cpp'
+cpp_tooldir = cpp_srcdir / 'toolbox'
+
+
+# ------------------------------
+# Build definitions
+
 mohair_cfgfile = configure_file(
-   input        : cpp_srcdir / 'mohair-config.hpp.in'
-  ,output       : 'mohair-config.hpp'
+   input        : cpp_srcdir / 'skytether-config.hpp.in'
+  ,output       : 'skytether-config.hpp'
   ,configuration: mohair_cfgdata
-)
-
-
-# >> Grouped dependencies
-dep_service = [dep_arrow, dep_acero, dep_flight, dep_ompi, dep_faodel, dep_proto]
-dep_query   = [dep_arrow, dep_acero, dep_proto]
-
-#   |> add optional dependencies
-if dep_faodel.found()
-  dep_service += [dep_ompi, dep_faodel]
-
-elif dep_ompi.found()
-  dep_service += [dep_ompi]
-
-endif
-
-if dep_tiledb.found()
-  dep_service += [dep_tiledb]
-endif
-
-if dep_duckdb.found()
-  dep_service += [dep_duckdb]
-endif
-
-
-# ------------------------------
-# Composable lists of headers
-
-# >> For substrait definitions
-substrait_hdrlist = [
-   cpp_proto_mohair    / 'algebra.pb.h'
-  ,cpp_proto_substrait / 'algebra.pb.h'
-  ,cpp_proto_substrait / 'extensions' / 'extensions.pb.h'
-  ,cpp_proto_substrait / 'type.pb.h'
-  ,cpp_proto_substrait / 'function.pb.h'
-  ,cpp_proto_substrait / 'type_expressions.pb.h'
-  ,cpp_proto_substrait / 'parameterized_types.pb.h'
-  ,cpp_proto_substrait / 'extended_expression.pb.h'
-  ,cpp_proto_substrait / 'capabilities.pb.h'
-  ,cpp_proto_substrait / 'plan.pb.h'
-]
-
-# >> For decomposable queries
-query_hdrlist = [
-   cpp_srcdir   / 'mohair.hpp'
-  ,cpp_querydir / 'plans.hpp'
-  ,cpp_querydir / 'operators.hpp'
-  ,cpp_querydir / 'messages.hpp'
-]
-
-# >> For flight services
-services_hdrlist = [
-   cpp_srcdir     / 'mohair.hpp'
-  ,cpp_querydir   / 'plans.hpp'
-  ,cpp_querydir   / 'messages.hpp'
-  ,cpp_enginedir  / 'adapter_acero.hpp'
-  ,cpp_enginedir  / 'adapter_faodel.hpp'
-  ,cpp_servicedir / 'service_mohair.hpp'
-  ,cpp_servicedir / 'service_faodel.hpp'
-]
-
-
-# ------------------------------
-# Composable lists of sources
-
-# >> For substrait implementations
-substrait_srclist = [
-   cpp_proto_mohair    / 'algebra.pb.cc'
-  ,cpp_proto_substrait / 'algebra.pb.cc'
-  ,cpp_proto_substrait / 'extensions' / 'extensions.pb.cc'
-  ,cpp_proto_substrait / 'type.pb.cc'
-  ,cpp_proto_substrait / 'function.pb.cc'
-  ,cpp_proto_substrait / 'type_expressions.pb.cc'
-  ,cpp_proto_substrait / 'parameterized_types.pb.cc'
-  ,cpp_proto_substrait / 'extended_expression.pb.cc'
-  ,cpp_proto_substrait / 'capabilities.pb.cc'
-  ,cpp_proto_substrait / 'plan.pb.cc'
-]
-
-# >> For decomposable queries
-query_srclist = [
-   cpp_srcdir   / 'util.cpp'
-  ,cpp_querydir / 'messages.cpp'
-  ,cpp_querydir / 'plans.cpp'
-  ,cpp_querydir / 'operators.cpp'
-]
-
-# >> For flight services
-services_srclist = [
-   cpp_srcdir     / 'util.cpp'
-  ,cpp_querydir   / 'messages.cpp'
-  ,cpp_querydir   / 'plans.cpp'
-  ,cpp_querydir   / 'operators.cpp'
-  ,cpp_enginedir  / 'execution.cpp'
-  ,cpp_servicedir / 'service_mohair.cpp'
-]
-
-
-# ------------------------------
-# Composed header and source lists (organized by library/binary)
-
-# >> Library for mohair query processing
-libmohair_srclist = (substrait_srclist + query_srclist)
-
-# >> Binary for mohair flight services
-mohair_srv_srclist = (substrait_srclist + services_srclist)
-
-
-# ------------------------------
-# Library definitions
-
-libmohair = library('mohair'
-  ,libmohair_srclist
-  ,dependencies       : dep_query
-  ,include_directories: arrow_incdir
-  ,install            : true
-)
-
-module_pkgcfg.generate(libmohair)
-
-# ------------------------------
-# Installation
-
-install_headers(query_hdrlist, subdir: 'mohair')
-libmohair_dep = declare_dependency(
-   include_directories: arrow_incdir
-  ,dependencies       : [dep_arrow, dep_duckdb]
-  ,link_with          : libmohair
+  ,install_dir  : get_option('includedir') / 'skytether'
 )
 
 
 # ------------------------------
-# Binaries
+# Build targets
 
-# >> Executables we always create
+# >> Include targets
 
-#   |> simple reader for Arrow files
-bin_readarrow_srclist = [
-   cpp_tooldir  / 'read-arrow.cpp'
-  ,cpp_srcdir   / 'util.cpp'
-]
-
-if dep_duckdb.found()
-  message('Adding duckdb source to read-arrow source list')
-  bin_readarrow_srclist += [cpp_enginedir / 'duckdb.cpp']
-
-  message(bin_readarrow_srclist)
-endif
-
-bin_readarrow = executable('read-arrow'
-  ,bin_readarrow_srclist
-  ,dependencies       : [dep_arrow, dep_duckdb]
-  ,include_directories: arrow_incdir
-  ,install            : false
-)
-
-#   |> minimal query processor
-bin_mohairquery_srclist = (
-    [ cpp_tooldir / 'mohair.cpp' ]
-  + libmohair_srclist
-)
-
-bin_mohairquery = executable('mohair'
-  ,bin_mohairquery_srclist
-  ,dependencies       : [dep_query, dep_duckdb]
-  ,include_directories: arrow_incdir
-  ,install            : true
-)
-
-#   |> minimal client for mohair services
-bin_mohairclient_srclist = (
-    [ cpp_tooldir / 'mohair-client.cpp' ]
-  + mohair_srv_srclist
-)
-bin_mohairclient   = executable('mohair-client'
-  ,bin_mohairclient_srclist
-  ,dependencies       : dep_service
-  ,include_directories: arrow_incdir
-  ,install            : false
-)
+config_inc = [ include_directories('.') ]
 
 
-# ------------------------------
-# Feature-based executables
+# >> Invoke from subdirectories
 
-# >> Faodel mohair service
-if dep_faodel.found()
+# creates library and dependency targets
+subdir(cpp_srcdir)
 
-  # main source file and faodel-specific source files
-  faodel_srv_srclist = (
-      [
-         cpp_tooldir    / 'faodel-service.cpp'
-        ,cpp_enginedir  / 'faodel.cpp'
-        ,cpp_servicedir / 'service_faodel.cpp'
-      ]
-    + mohair_srv_srclist
-  )
 
-  bin_srv_faodel = executable('faodel-service'
-    ,faodel_srv_srclist
-    ,dependencies       : dep_service
-    ,include_directories: arrow_incdir
-    ,install            : false
-  )
+# creates executable targets (binaries)
+subdir(cpp_tooldir)
 
-endif

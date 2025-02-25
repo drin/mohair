@@ -35,7 +35,7 @@ from pathlib     import Path
 from hashlib     import sha256
 
 # >> substrait types
-from mohair.substrait.plan_pb2 import Plan, PlanRel
+from skyproto.substrait.plan_pb2 import Plan, PlanRel
 
 # >> internal
 #   |> classes

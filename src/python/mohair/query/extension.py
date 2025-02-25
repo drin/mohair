@@ -34,62 +34,161 @@ or modified message type instead of a core substrait message type.
 # Dependencies
 
 # >> Standard libs
-import typing
+import sys
+
+from typing      import Any, Annotated, TypeAlias, TypeVar
 from dataclasses import dataclass
 
+# >> Arrow
+import pyarrow
+from pyarrow import types
+
 # >> Ibis
-from ibis.expr             import types, rules, schema as sch
-from ibis.expr.operations  import relations
-from ibis.backends.pyarrow import datatypes
+from ibis.common.patterns           import InstanceOf
+from ibis.expr.types                import Table
+from ibis.expr.operations.relations import UnboundTable
 
 # >> Ibis-substrait
-from ibis_substrait.compiler.translate import stalg
+# NOTE: stalg is short for "substrait algebra";
+#       stt   is short for "substrait types"
+from ibis_substrait.compiler.translate import stalg, stt
 from ibis_substrait.compiler.translate import translate
-from ibis_substrait.compiler.core      import SubstraitCompiler
 
-# >> Google
-from google.protobuf import any_pb2
+from ibis_substrait.compiler.core import SubstraitCompiler
 
 # >> Internal
-from mohair.query.operators    import SkyPartition
-from mohair.mohair.algebra_pb2 import SkyRel, ExecutionStats
+from mohair.query.types import SkyPartition, SkyDomain, SkyCatalog
+
+from skyproto.substrait.type_pb2 import (NamedStruct, Type as SubstraitType)
+
+from skyproto.mohair.algebra_pb2 import ( ExecutionStats
+                                         ,SkyRel
+                                         ,SkyPartitionRel
+                                         ,SkySliceRel)
+
+
+# ------------------------------
+# Module Variables
+
+# >> Forward references (Type aliases)
+# type SkyPartition  = 'SkyPartition'
+type SkyTable      = 'SkyTable'
+type SkySliceTable = 'SkySliceTable'
+
+
+from ibis_substrait.compiler.mapping import IBIS_SUBSTRAIT_TYPE_MAPPING
+IBIS_SUBSTRAIT_TYPE_MAPPING['UInt16'] = 'u16'
+
+
+# >> Substrait types
+NullAttr    = SubstraitType.Nullability.NULLABILITY_NULLABLE
+NonNullAttr = SubstraitType.Nullability.NULLABILITY_REQUIRED
 
 
 # ------------------------------
 # Classes
 
-# NOTE: deriving from PhysicalTable gives a clean base
-# class SkyTable(relations.PhysicalTable):
-#     skyrel = rules.instance_of(SkyPartition)
-# 
-#     # NOTE: these properties/attributes are necessary to use `to_expr()` and interact with
-#     # it as any other ibis table
-#     @property
-#     def name(self):
-#         return self.skyrel.name()
-# 
-#     @property
-#     def schema(self):
-#         return datatypes.from_pyarrow_schema(self.skyrel.schema())
+class SkyTable(UnboundTable):
+    """
+    A custom class that wraps a `SkyRel` in an ibis `Table` so that we can register a
+    handler with `SubstraitCompiler.translate` for a `SkyRel` relation.
 
-# NOTE: we extend from UnboundTable since schema and name are so useful anyways
-class SkyTable(relations.UnboundTable):
-    skyrel = rules.instance_of(SkyPartition)
+    We derive from `UnboundTable` since we call `unbind()` when generating substrait
+    anyways.
+    """
+
+    data_partition: SkyPartition
+
+    @classmethod
+    def FromPartition(cls, src_partition: SkyPartition) -> SkyTable:
+        return cls(
+             name=src_partition.name()
+            ,schema=src_partition.schema()
+            ,data_partition=src_partition
+        )
+
+# >> TODO: build out this custom IR type for directly naming partitions
+class SkyPartitionTable(SkyTable): pass
+
+class SkySliceTable(UnboundTable):
+    """
+    Ibis op representing a directly named skytether data slice. This may be used for a
+    skytether partition that is stored only using a data slice (no independent meta
+    slice).
+    """
+
+    sky_partition: SkyPartition
+
+    @classmethod
+    def ForPartition(cls, src_partition: SkyPartition) -> SkySliceTable:
+        return cls(
+             name=src_partition.Name()
+            ,schema=src_partition.schema
+            ,sky_partition=src_partition
+        )
 
 
 # ------------------------------
 # Functions
 
-# this requires ibis 5.0+
-def arrow_schema_to_ibis(arrow_schema):
-    return datatypes.from_pyarrow_schema(arrow_schema)
+def SNullability(nullable: bool=False):
+    return NullAttr if nullable else NonNullAttr
 
+def STypeI8(nullable: bool=False) -> SubstraitType.I8:
+    return SubstraitType.I8(nullability=SNullability(nullable))
+
+def STypeI16(nullable: bool=False) -> SubstraitType.I16:
+    return SubstraitType.I16(nullability=SNullability(nullable))
+
+def STypeI32(nullable: bool=False) -> SubstraitType.I32:
+    return SubstraitType.I32(nullability=SNullability(nullable))
+
+def STypeI64(nullable: bool=False) -> SubstraitType.I64:
+    return SubstraitType.I64(nullability=SNullability(nullable))
+
+def STypeInt(width: int, nullable: bool=False) -> SubstraitType:
+    if   width ==  8: return SubstraitType(i8=STypeI8(nullable))
+    elif width == 16: return SubstraitType(i16=STypeI16(nullable))
+    elif width == 32: return SubstraitType(i32=STypeI32(nullable))
+    elif width == 64: return SubstraitType(i64=STypeI64(nullable))
+
+    return None
+
+def STypeFP32(nullable: bool=False) -> SubstraitType.FP32:
+    return SubstraitType.FP32(nullability=SNullability(nullable))
+
+def STypeFP64(nullable: bool=False) -> SubstraitType.FP64:
+    return SubstraitType.FP64(nullability=SNullability(nullable))
+
+def STypeFloat(width: int, nullable: bool=False) -> SubstraitType:
+    if   width == 32: return SubstraitType(fp32=STypeFP32(nullable))
+    elif width == 64: return SubstraitType(fp64=STypeFP64(nullable))
+
+    return None
+
+def STypeStr(nullable: bool=False) -> SubstraitType:
+    return SubstraitType(
+        string=SubstraitType.String(nullability=SNullability(nullable))
+    )
+
+
+# >> TODO: create a translation for this type
+#     elif type(op) is SkyPartitionTable:
+#         sky_rel = SkyPartitionRel(
+#             domain=op.data_partition.domain.key
+#            ,partition=op.data_partition.meta.key
+#            ,slices=op.data_partition.slice_indices()
+#            ,execstats=op.data_partition.exec_stats()
+#         )
+
+# >> Dispatch functions for custom translations
 @translate.register(SkyTable)
-def _translate_mohair( op      : SkyTable
-                      ,expr    : types.TableExpr | None = None
-                      ,*args   : typing.Any
+def _translate_skyrel( op      : SkyTable
+                      ,expr    : Table | None = None
+                      ,*args   : Any
                       ,compiler: SubstraitCompiler | None = None
-                      ,**kwargs: typing.Any                     ) -> stalg.Rel:
+                      ,**kwargs: Any) -> stalg.Rel:
+    """ A translation function for `SkyTable` operator. """
 
     substrait_rel = stalg.Rel(
         extension_leaf=stalg.ExtensionLeafRel(
@@ -97,14 +196,74 @@ def _translate_mohair( op      : SkyTable
         )
     )
 
-    # NOTE: apparently messages have to be packed into an `any_pb2.Any`
-    substrait_rel.extension_leaf.detail.Pack(
-        SkyRel(
-            domain=op.skyrel.domain.key
-           ,partition=op.skyrel.meta.key
-           ,slices=op.skyrel.slice_indices()
-           ,execstats=op.skyrel.exec_stats()
+    # extension_leaf.detail is an Any message, so we use its Pack method on SkyRel
+    sky_rel = SkyRel(
+         domain=op.data_partition.domain.key
+        ,partition=op.data_partition.meta.key
+        ,schema=translate(expr.schema())
+    )
+
+    substrait_rel.extension_leaf.detail.Pack(sky_rel)
+
+    return substrait_rel
+
+@translate.register(SkySliceTable)
+def _translate_skyslice( op      : SkySliceTable
+                        ,expr    : Table | None = None
+                        ,*args   : Any
+                        ,compiler: SubstraitCompiler | None = None
+                        ,**kwargs: Any) -> stalg.Rel:
+    """ A translation function for `SkySliceTable` operator. """
+
+    substrait_rel = stalg.Rel(
+        extension_leaf=stalg.ExtensionLeafRel(
+             common=stalg.RelCommon(direct=stalg.RelCommon.Direct())
         )
     )
 
+    skyslice_rel = SkySliceRel(
+         slice_key=op.sky_partition.Name()
+        ,domain=op.sky_partition.domain
+        ,partition=op.sky_partition.partition
+        ,schema=translate(op.sky_partition.schema)
+    )
+
+    substrait_rel.extension_leaf.detail.Pack(skyslice_rel)
+
     return substrait_rel
+
+@translate.register(pyarrow.Schema)
+def _translate_arrow_type( pyschema: pyarrow.Schema
+                          ,expr    : Table | None = None
+                          ,*args   : Any
+                          ,compiler: SubstraitCompiler | None = None
+                          ,**kwargs: Any) -> NamedStruct:
+    """ A translation function for direct support of pyarrow schema. """
+
+    return NamedStruct(
+         names=pyschema.names
+        ,struct=SubstraitType.Struct(
+              types=list(map(translate, pyschema.types))
+             ,nullability=NonNullAttr
+         )
+    )
+
+@translate.register(pyarrow.DataType)
+def _translate_arrow_type( dtype   : pyarrow.DataType
+                          ,expr    : Table | None = None
+                          ,*args   : Any
+                          ,compiler: SubstraitCompiler | None = None
+                          ,**kwargs: Any) -> SubstraitType:
+    """ A translation function for pyarrow data types. """
+
+    if   types.is_int8(dtype):                            return STypeInt(8)
+    elif types.is_uint8(dtype)  or types.is_int16(dtype): return STypeInt(16)
+    elif types.is_uint16(dtype) or types.is_int32(dtype): return STypeInt(32)
+    elif types.is_uint32(dtype) or types.is_int64(dtype): return STypeInt(64)
+
+    elif types.is_float16(dtype) or types.is_float32(dtype): return STypeFloat(32)
+    elif types.is_float64(dtype):                            return STypeFloat(64)
+
+    elif types.is_string(dtype): return STypeStr()
+
+    sys.exit(f'Unable to translate arrow type: {dtype}')

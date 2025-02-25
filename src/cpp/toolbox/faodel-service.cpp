@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
     }
 
     // Start the flight service
-    auto status_service = mohair::services::StartDefaultFaodelService();
+    auto status_service = skytether::services::StartDefaultFaodelService();
     if (not status_service.ok()) {
       mohair::PrintError("Error running faodel service", status_service);
       return 2;
