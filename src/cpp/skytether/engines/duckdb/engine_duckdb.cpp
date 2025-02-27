@@ -230,47 +230,10 @@
       return scan_context->uuid;
     }
 
-    unique_ptr<Plan>
-    EngineDuckDB::PushbackForExecPlan( ProjectionRelation& result_proj
-                                      ,Plan*               src_plan
-                                      ,size_t              ctx_id
-                                      ,const string&       srv_loc
-                                      ,const string&       result_name) {
-      // Construct the pushback plan
-      auto pushback = std::make_unique<Plan>();
-      pushback->CopyFrom(*src_plan);
-
-      auto plan_rels = pushback->mutable_relations();
-      auto rel_itr = plan_rels->begin();
-      for (; rel_itr != plan_rels->end() and not rel_itr->has_root(); ++rel_itr) {}
-
-      Rel* result_rel = rel_itr->mutable_root()->mutable_input();
-      result_rel->set_allocated_extension_leaf(
-          TranslateResultProjection(result_proj, ctx_id, srv_loc, result_name).release()
-      );
-
-      // Substrait version?
-      pushback->mutable_version()->set_major_number(0);
-      pushback->mutable_version()->set_major_number(53);
-      pushback->mutable_version()->set_major_number(0);
-
-      pushback->mutable_version()->set_allocated_producer(
-        new string { "Skytether" }
-      );
-
-      return pushback;
-    }
-
-    //! Main entry path for execution of a cooperatively decomposed query plan.
-    //  `sys_plan` is the interface to the overall plan: (1) what was received from
-    //  upstream and (2) what was merged from downstream.
-    //  `srv_loc` is a name to identify this engine's identity and used for labeling of
-    //  the materialized results.
-    std::tuple<unique_ptr<Plan>, size_t, string>
-    EngineDuckDB::ProcessForExecution(SystemPlan& sys_plan, const string& srv_loc) {
-
+    std::tuple<size_t, string>
+    EngineDuckDB::CreateExecutionContext(SystemPlan& sys_plan) {
       // Translate the system plan for execution and register it in a context
-      SkytetherDebugMsg("Translating the system plan for execution");
+      SkytetherDebugMsg("Creating execution context for DuckDB");
       DuckContext* ctx;
 
       SkytetherLogPerf(DuckEngineTranslatePlan,
@@ -282,25 +245,10 @@
         }
       );
 
-      // Create the pushback plan to capture remaining work and the schema of our result
-      string result_name { engine_id + "_materialized_" + std::to_string(ctx->uuid) };
-      unique_ptr<Plan> pushback_plan;
-
-      SkytetherDebugMsg("Constructing the pushback plan");
-      SkytetherLogPerf(DuckEngineConstructPushback,
-        {
-          pushback_plan = this->PushbackForExecPlan(
-             dynamic_cast<ProjectionRelation&>(*(ctx->duck_plan))
-            ,sys_plan.plan_msg->payload.get()
-            ,ctx->uuid
-            ,srv_loc
-            ,result_name
-          );
-        }
+      return std::make_tuple(
+         ctx->uuid
+        ,string { engine_id + "_materialized_" + std::to_string(ctx->uuid) }
       );
-
-      // Return a tuple of the pushback plan and how to identify its context
-      return std::make_tuple(std::move(pushback_plan), ctx->uuid, result_name);
     }
 
     //! Given a query context ID and a name, create a view from that query

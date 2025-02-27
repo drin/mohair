@@ -73,9 +73,11 @@ struct ClientActions {
   //! Executes a query by submitting the query plan then fetching the results.
   Status ExecuteQuery(SkytetherClient& client_conn) {
     SkytetherDebugMsg("Sending query request");
+
+    // Send the query request and store the pushback response
     ARROW_ASSIGN_OR_RAISE(
        unique_ptr<Plan> pushback_plan
-      ,client_conn.DelegatePlan(*query_plan)
+      ,client_conn.SendQueryPlan(*query_plan)
     );
 
     // TODO: hardcoded for now

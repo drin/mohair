@@ -65,13 +65,13 @@ namespace skytether::services {
 
     // Engine-specific Methods
     Result<unique_ptr<FlightStreamReader>> GetQueryResults(SkytetherTicket& query_ticket);
-    Result<unique_ptr<ResultStream>>       SendPlanPushdown(shared_ptr<Buffer> plan_msg);
+    Result<unique_ptr<ResultStream>>       SendPlanMessage(shared_ptr<Buffer> plan_data);
 
     // >> Static functions
     static unique_ptr<SkytetherClient> ForLocation(const Location& conn_location);
 
     // >> Convenient public interface
-    Result<unique_ptr<Plan>> DelegatePlan(PlanMessage& plan_data);
+    Result<unique_ptr<Plan>> SendQueryPlan(PlanMessage& plan_data);
   };
 
 

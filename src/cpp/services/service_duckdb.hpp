@@ -77,8 +77,11 @@ using skytether::engines::QueryStatus;
                    ,unique_ptr<FlightDataStream>* stream) override;
 
       // >> Support methods
-      Status DecomposePlan(SystemPlan& sys_plan, unique_ptr<PlanSplit> decomposer);
-      Status CoopDecomp(unique_ptr<SystemPlan>& sys_plan);
+      Result<std::tuple<unique_ptr<Plan>, unique_ptr<SystemPlan>, size_t, string>>
+      CoopDecomposePlan(unique_ptr<SystemPlan> sys_plan, const string& loc);
+
+      Result<unique_ptr<SystemPlan>> EagerDecomposeDelegate(unique_ptr<SystemPlan> sys_plan);
+      Result<unique_ptr<SystemPlan>> DelegatePushdown(unique_ptr<SystemPlan> sys_plan);
     };
 
   } // namespace: skytether::services

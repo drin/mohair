@@ -150,8 +150,8 @@ namespace skytether::services {
   }
 
   Result<unique_ptr<ResultStream>>
-  SkytetherClient::SendPlanPushdown(shared_ptr<Buffer> plan_msg) {
-    Action rpc_action { ActionQuery, plan_msg };
+  SkytetherClient::SendPlanMessage(shared_ptr<Buffer> plan_data) {
+    Action rpc_action { ActionQuery, plan_data };
     return client->DoAction(rpc_opts, rpc_action);
   }
 
@@ -174,14 +174,10 @@ namespace skytether::services {
 
   //! Submits a single query plan then validates the response is a `Plan`
   Result<unique_ptr<Plan>>
-  SkytetherClient::DelegatePlan(PlanMessage& pushdown_msg) {
-    unique_ptr<ResultStream> response;
-
+  SkytetherClient::SendQueryPlan(PlanMessage& plan_msg) {
     ARROW_ASSIGN_OR_RAISE(
-       response
-      ,SendPlanPushdown(
-         Buffer::FromString(pushdown_msg.Serialize())
-       )
+       unique_ptr<ResultStream> response
+      ,SendPlanMessage(Buffer::FromString(plan_msg.Serialize()))
     );
 
     return ExpectPushbackFromQuery(std::move(response));

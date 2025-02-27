@@ -628,7 +628,7 @@ namespace skytether::engines {
   duck_uptr<DuckRel> EngineDuckDB::TranslatePlan(SystemPlan& sys_plan) {
     SkytetherDebugMsg("Preparing for plan translation");
     mohair::PrintSubstraitPlan(sys_plan.plan_msg->payload.get());
-    const RelRoot&   root_rel   { sys_plan.RootRelation()                };
+    const RelRoot& root_rel { sys_plan.RootRelation() };
 
     // TODO: cleanup the root projection that duckdb needs
     const RelCommon& rel_common { mohair::GetRelCommon(root_rel.input()) };
@@ -662,124 +662,5 @@ namespace skytether::engines {
       ,aliases
     );
   }
-
-  unique_ptr<ExtensionLeafRel>
-  EngineDuckDB::TranslateResultProjection( ProjectionRelation& result_proj
-                                          ,size_t              ctx_id
-                                          ,const string&       srv_loc
-                                          ,const string&       result_name) {
-
-    SkytetherDebugMsg("Creating SkyResultRel to describe pushback");
-
-    // First, initialize SkyResultRel to pack into the ExtensionLeafRel
-    SkyResultRel result_rel;
-    result_rel.set_context_id(ctx_id);
-    result_rel.set_result_name(result_name);
-    result_rel.set_service_location(srv_loc);
-
-    // Populate `SkyResultRel`
-    // TODO: somehow propagate nullability
-    SubstraitSchema*       result_schema   = result_rel.mutable_schema();
-    SubstraitType::Struct* result_coltypes = result_schema->mutable_struct_();
-    for (auto& duck_col : result_proj.Columns()) {
-      *(result_schema->add_names())   = duck_col.Name();
-      *(result_coltypes->add_types()) = *(FromDuckType(duck_col.Type(), true));
-    }
-
-    // Second, initialize `ExtensionLeafRel`
-    auto leaf_rel = std::make_unique<ExtensionLeafRel>();
-    leaf_rel->mutable_detail()->PackFrom(result_rel);
-
-    // also, initialize its output aliases and schema
-    RelCommon::Hint* leafrel_hint = leaf_rel->mutable_common()->mutable_hint();
-    leafrel_hint->mutable_output_schema()->CopyFrom(*result_schema);
-
-    for (const auto& proj_expr : result_proj.expressions) {
-      *(leafrel_hint->add_output_names()) = proj_expr->alias;
-    }
-
-    return leaf_rel;
-  }
-
-  /*
-  // >> Translation back to substrait
-  RelRoot* TranslateDuckRoot(LogicalOperator* duck_op) {
-    unique_ptr<RelRoot> root_rel { std::make_unique<RelRoot>() };
-
-    // This is a weird scenario where a projection is put on top of a top-k but
-    // the actual aliases are on the projection below the top-k still.
-    bool weird_scenario = (
-         duck_op->type              == LogicalOperatorType::LOGICAL_PROJECTION
-      && duck_op->children[0]->type == LogicalOperatorType::LOGICAL_TOP_N
-    );
-
-    LogicalOperator* tmp_op = duck_op;
-    if (weird_scenario) { tmp_op = tmp_op->children[0].get(); }
-
-    // Recurse through ops until the first projection; then grab output aliases
-    while (tmp_op->type != LogicalOperatorType::LOGICAL_PROJECTION) {
-      if (IsSetOperation(*tmp_op)) {
-        // Take the projection from the first child of the set operation
-        D_ASSERT(tmp_op->children.size() == 2);
-        tmp_op = tmp_op->children[1].get();
-        continue;
-      }
-
-      if (tmp_op->children.size() != 1) {
-        throw InternalException(
-          "Expected only unary operators before reaching a projection."
-          "Found [%d] with [%d] children.",
-          tmp_op->type, tmp_op->children.size()
-        );
-      }
-
-      tmp_op = tmp_op->children[0].get();
-    }
-
-    root_rel->set_allocated_input(TranslateDuckOp(duck_op));
-    auto& dproj = tmp_op->Cast<LogicalProjection>();
-    if (!weird_scenario) {
-      for (auto &expression : dproj.expressions) {
-        root_rel->add_names(expression->GetName());
-
-        auto depth_names = DepthFirstNames(expression->return_type);
-        for (auto &name : depth_names) { root_rel->add_names(name); }
-      }
-    }
-
-    else {
-      for (auto &expression : duck_op->expressions) {
-        auto &b_expr = expression->Cast<BoundReferenceExpression>();
-        root_rel->add_names(dproj.expressions[b_expr.index]->GetName());
-
-        auto depth_names = DepthFirstNames(expression->return_type);
-        for (auto &name : depth_names) { root_rel->add_names(name); }
-      }
-    }
-
-    return root_rel;
-  }
-
-  void TranslatePushback(LogicalOperator* duck_op) {
-    plan.add_relations()->set_allocated_root(TranslateDuckRoot(duck_op));
-
-    if (strict && !errors.empty()) {
-      throw InvalidInputException(
-          "Strict Mode is set to true, and the following warnings/errors happened. \n"
-        + errors
-      );
-    }
-
-    auto version = plan.mutable_version();
-    version->set_major_number(0);
-    version->set_minor_number(53);
-    version->set_patch_number(0);
-
-
-    auto* producer_name = new string();
-    *producer_name = "DuckDB";
-    version->set_allocated_producer(producer_name);
-  }
-  */
 
 } // namespace: skytether::engines

@@ -215,17 +215,8 @@ namespace skytether::engines {
                                 ,const string&       srv_loc
                                 ,const string&       result_name);
 
-      //! Constructs a simple pushback plan from the given projection operator
-      unique_ptr<Plan>
-      PushbackForExecPlan( ProjectionRelation& result_proj
-                          ,Plan*               src_plan
-                          ,size_t              ctx_id
-                          ,const string&       srv_loc
-                          ,const string&       result_name);
-
-      //! Translates the given `SystemPlan` then returns a Pushback plan
-      std::tuple<unique_ptr<Plan>, size_t, string>
-      ProcessForExecution(SystemPlan& sys_plan, const string& srv_loc);
+      //! Translates the given `SystemPlan` and returns identifiers for the context
+      std::tuple<size_t, string> CreateExecutionContext(SystemPlan& sys_plan);
 
 
       // >> Methods for local interaction
