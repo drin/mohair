@@ -82,6 +82,12 @@ using skytether::engines::QueryStatus;
 
       Result<unique_ptr<SystemPlan>> EagerDecomposeDelegate(unique_ptr<SystemPlan> sys_plan);
       Result<unique_ptr<SystemPlan>> DelegatePushdown(unique_ptr<SystemPlan> sys_plan);
+
+      Result<std::tuple<unique_ptr<Plan>, size_t, string>>
+      EagerDecomposeExecute(SystemPlan& exec_sysplan, const string& loc);
+
+      Result<std::tuple<unique_ptr<Plan>, unique_ptr<SystemPlan>, size_t, string>>
+      LazyDecomposeExecute(unique_ptr<SystemPlan> pushback_sysplan, const string& loc);
     };
 
   } // namespace: skytether::services

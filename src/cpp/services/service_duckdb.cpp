@@ -36,7 +36,7 @@ namespace skytether::services {
 
   // Support function
   string EngineIDForLocation(const string& engine_loc) {
-    string result; 
+    string result;
     result.reserve(engine_loc.size());
 
     std::transform(
@@ -95,6 +95,7 @@ namespace skytether::services {
 
   Result<bool> ShouldDecomposeEagerly(const DecomposeAlg& split_strat) {
     switch (split_strat) {
+      case DecomposeAlg::Eager:
       case DecomposeAlg::WideJoinHead:
       case DecomposeAlg::LongPipelineHead:
       case DecomposeAlg::TallJoinLeaf:
@@ -151,6 +152,7 @@ namespace skytether::services {
 
     // >> Delegation phase
     SkytetherDebugMsg("Starting delegation phase");
+
     SkytetherStartTS(DuckServicePhaseDelegation);
 
     auto result_decomposed = CoopDecomposePlan(std::move(sys_plan), context.peer());
@@ -318,35 +320,6 @@ namespace skytether::services {
     return mohair::PlanMessage::FromPlan(std::move(pushback));
   }
 
-  //! Logic for lazy cooperative decomposition of a query plan.
-  //  Lazy splitting occurs after pushback is received, so the entire plan is delegated.
-  Result<unique_ptr<SystemPlan>>
-  DuckDBService::DelegatePushdown(unique_ptr<SystemPlan> sys_plan) {
-    unique_ptr<PlanMessage> pushback_plan;
-
-    // TODO: this should be async
-    // Delegate the whole plan to each downstream service; merge each pushback plan
-    for (size_t conn_ndx = 0; conn_ndx < service_conns.size(); ++conn_ndx) {
-      SkytetherClient& cse_conn     = *(service_conns[conn_ndx]);
-      PlanMessage&     pushdown_msg = *(sys_plan->plan_msg);
-
-      // Send the pushdown message and materialize SkyResultRel ops
-      ARROW_ASSIGN_OR_RAISE(
-         unique_ptr<PlanMessage> pushback_msg
-        ,SendPushdown(cse_conn, pushdown_msg, *engine)
-      );
-
-      // TODO: add capability to merge many pushback messages
-      if (pushback_plan != nullptr) {
-        return Status::Invalid("Not yet supported: merging many pushback plans");
-      }
-
-      pushback_plan = std::move(pushback_msg); 
-    }
-
-    return mohair::SystemPlanFrom(std::move(pushback_plan));
-  }
-
   //! Logic for eager cooperative decomposition of a query plan.
   //  Eager splitting occurs before pushdown so that only subplans are delegated.
   Result<unique_ptr<SystemPlan>>
@@ -384,6 +357,106 @@ namespace skytether::services {
     return sys_plan;
   }
 
+  //! Logic for lazy cooperative decomposition of a query plan.
+  //  Lazy splitting occurs after pushback is received, so the entire plan is delegated.
+  Result<unique_ptr<SystemPlan>>
+  DuckDBService::DelegatePushdown(unique_ptr<SystemPlan> sys_plan) {
+    unique_ptr<PlanMessage> pushback_plan { nullptr };
+
+    // TODO: add capability to merge many pushback messages
+    constexpr size_t count_conns = 1;
+    if (service_conns.size() > count_conns) {
+      SkytetherDebugMsg(
+        "Unable to delegate pushdown to [" << service_conns.size() << "] services."
+      );
+    }
+
+    // TODO: this should be async
+    // Delegate the whole plan to each downstream service; merge each pushback plan
+    for (size_t conn_ndx = 0; conn_ndx < count_conns; ++conn_ndx) {
+      SkytetherClient& cse_conn     = *(service_conns[conn_ndx]);
+      PlanMessage&     pushdown_msg = *(sys_plan->plan_msg);
+
+      // Send the pushdown message and materialize SkyResultRel ops
+      ARROW_ASSIGN_OR_RAISE(
+         unique_ptr<PlanMessage> pushback_msg
+        ,SendPushdown(cse_conn, pushdown_msg, *engine)
+      );
+
+      pushback_plan = std::move(pushback_msg);
+    }
+
+    return mohair::SystemPlanFrom(std::move(pushback_plan));
+  }
+
+  Result<std::tuple<unique_ptr<Plan>, size_t, string>>
+  DuckDBService::EagerDecomposeExecute(SystemPlan& exec_sysplan, const string& loc) {
+    unique_ptr<Plan> pushback_plan;
+    size_t           ctx_id;
+    string           view_name;
+
+    // Eager decomposition tries to execute the whole plan; only pushback the result
+    try {
+      std::tie(ctx_id, view_name) = engine->CreateExecutionContext(exec_sysplan);
+
+      pushback_plan = PushbackFromExecutionPlan(
+         exec_sysplan
+        ,ResultRelWithContext(
+           exec_sysplan.plan_msg->payload.get(), ctx_id, view_name, loc
+         )
+      );
+    }
+    catch (const std::exception& duck_err) {
+      SkytetherDebugMsg("DuckDB exception: " << duck_err.what());
+      return Status::Invalid("DuckDB execution failed");
+    }
+
+    return std::make_tuple(std::move(pushback_plan), ctx_id, view_name);
+  }
+
+  Result<std::tuple<unique_ptr<Plan>, unique_ptr<SystemPlan>, size_t, string>>
+  DuckDBService::LazyDecomposeExecute( unique_ptr<SystemPlan> pushback_sysplan
+                                      ,const string&          loc) {
+    unique_ptr<Plan>       pushback_plan;
+    unique_ptr<SystemPlan> exec_sysplan;
+    size_t                 ctx_id;
+    string                 view_name;
+
+    // Lazy decomposition decomposes the pushback; only execute a subplan
+    unique_ptr<PlanSplit> lazy_splitter {
+      PlanSplit::FindSplit(pushback_sysplan.get(), DecomposeAlg::LongPipelineLeaf)
+    };
+
+    // Determine what to use as the execution plan
+    if (not lazy_splitter->CanSplit())   { exec_sysplan = std::move(pushback_sysplan); }
+    else { exec_sysplan = mohair::SystemPlanFrom(lazy_splitter->ExtractExecSubplan()); }
+
+    // Create execution context and construct the pushback plan
+    try {
+      std::tie(ctx_id, view_name) = engine->CreateExecutionContext(*exec_sysplan);
+      unique_ptr<Rel> result_rel  = ResultRelWithContext(
+        exec_sysplan->plan_msg->payload.get(), ctx_id, view_name, loc
+      );
+
+      if (not lazy_splitter->CanSplit()) {
+        pushback_plan = PushbackFromExecutionPlan(*exec_sysplan, std::move(result_rel));
+      }
+      else {
+        // Undo split annotations by replacing the subplan with a SkyResultRel
+        lazy_splitter->MergeResultRel(result_rel.get());
+        pushback_plan = std::move(pushback_sysplan->plan_msg->payload);
+      }
+    }
+    catch (const std::exception& duck_err) {
+      SkytetherDebugMsg("DuckDB exception: " << duck_err.what());
+      return Status::Invalid("DuckDB execution failed");
+    }
+
+    return std::make_tuple(
+       std::move(pushback_plan), std::move(exec_sysplan), ctx_id, view_name
+    );
+  }
+
 
   //! Entry point into cooperative decomposition logic.
   Result<std::tuple<unique_ptr<Plan>, unique_ptr<SystemPlan>, size_t, string>>
@@ -393,92 +466,80 @@ namespace skytether::services {
     size_t                 ctx_id;
     string                 view_name;
 
-    SkytetherStartTS(DuckServiceDecomposeDelegate);
+    SkytetherStartTS(DuckServiceCoopDecomposition);
 
     ARROW_ASSIGN_OR_RAISE(
        bool should_eagersplit, ShouldDecomposeEagerly(service_cfg->decompose_alg())
     );
 
     if (should_eagersplit) {
+      // >> Decompose then delegate pushdown
+      SkytetherStartTS(DuckServiceEagerDecomposeDelegate);
+
       // If we are the leaf device, the whole plan is our execution plan
-      if (service_conns.empty()) {
-        exec_sysplan = std::move(sys_plan);
-      }
-      else {
-        ARROW_ASSIGN_OR_RAISE(
-           exec_sysplan
-          ,EagerDecomposeDelegate(std::move(sys_plan))
-        );
+      if (service_conns.empty()) { exec_sysplan = std::move(sys_plan); }
+      else { ARROW_ASSIGN_OR_RAISE(exec_sysplan, EagerDecomposeDelegate(std::move(sys_plan))); }
+
+      SkytetherStopTS(DuckServiceEagerDecomposeDelegate);
+      SkytetherLogTimestamps(DuckServiceEagerDecomposeDelegate);
+
+
+      // >> Decompose execution plan and return pushback
+      SkytetherStartTS(DuckServiceEagerDecomposeExecute);
+
+      auto result_eagerexec = this->EagerDecomposeExecute(*exec_sysplan, loc);
+
+      SkytetherStopTS(DuckServiceEagerDecomposeExecute);
+      SkytetherLogTimestamps(DuckServiceEagerDecomposeExecute);
+
+      // NOTE: ARROW_ASSIGN_OR_RAISE does not work well with structured binding, so we
+      //       have to check the status and assign the results directly
+      if (not result_eagerexec.ok()) {
+        PrintError("Failed during execution", result_eagerexec.status());
+        return result_eagerexec.status();
       }
 
-      // Eager decomposition tries to execute the whole plan; only pushback the result
-      try {
-        std::tie(ctx_id, view_name) = engine->CreateExecutionContext(*exec_sysplan);
-        unique_ptr<Rel> result_rel  = ResultRelWithContext(
-          exec_sysplan->plan_msg->payload.get(), ctx_id, view_name, loc
-        );
-
-        pushback_plan = PushbackFromExecutionPlan(*exec_sysplan, std::move(result_rel));
-      }
-      catch (const std::exception& duck_err) {
-        SkytetherDebugMsg("DuckDB exception: " << duck_err.what());
-        return Status::Invalid("DuckDB execution failed");
-      }
+      std::tie(pushback_plan, ctx_id, view_name) = std::move(result_eagerexec).ValueOrDie();
     }
 
     else {
+      // >> Decompose then delegate pushdown
+      SkytetherStartTS(DuckServiceLazyDecomposeDelegate);
 
       // If we are the leaf device, the whole plan is like a pushback
       unique_ptr<SystemPlan> pushback_sysplan;
-      if (service_conns.empty()) {
-        pushback_sysplan = std::move(sys_plan);
-      }
-      else {
-        ARROW_ASSIGN_OR_RAISE(
-           pushback_sysplan
-          ,DelegatePushdown(std::move(sys_plan))
-        );
+      if (service_conns.empty()) { pushback_sysplan = std::move(sys_plan); }
+      else { ARROW_ASSIGN_OR_RAISE(pushback_sysplan, DelegatePushdown(std::move(sys_plan))); }
+
+      SkytetherStopTS(DuckServiceLazyDecomposeDelegate);
+      SkytetherLogTimestamps(DuckServiceLazyDecomposeDelegate);
+
+
+      // >> Decompose execution plan and return pushback
+      SkytetherStartTS(DuckServiceLazyDecomposeExecute);
+
+      auto result_lazyexec = this->LazyDecomposeExecute(std::move(pushback_sysplan), loc);
+
+      SkytetherStopTS(DuckServiceLazyDecomposeExecute);
+      SkytetherLogTimestamps(DuckServiceLazyDecomposeExecute);
+
+      // NOTE: ARROW_ASSIGN_OR_RAISE does not work well with structured binding, so we
+      //       have to check the status and assign the results directly
+      if (not result_lazyexec.ok()) {
+        PrintError("Failed during execution", result_lazyexec.status());
+        return result_lazyexec.status();
       }
 
-      // Lazy decomposition decomposes the pushback; only execute a subplan
-      unique_ptr<PlanSplit> lazy_splitter {
-        PlanSplit::FindSplit(pushback_sysplan.get(), DecomposeAlg::LongPipelineLeaf)
-      };
-
-      // Determine what to use as the execution plan
-      if (not lazy_splitter->CanSplit())   { exec_sysplan = std::move(pushback_sysplan); }
-      else { exec_sysplan = mohair::SystemPlanFrom(lazy_splitter->ExtractExecSubplan()); }
-
-      // Create execution context and construct the pushback plan
-      try {
-        std::tie(ctx_id, view_name) = engine->CreateExecutionContext(*exec_sysplan);
-        unique_ptr<Rel> result_rel  = ResultRelWithContext(
-          exec_sysplan->plan_msg->payload.get(), ctx_id, view_name, loc
-        );
-
-        if (not lazy_splitter->CanSplit()) {
-          pushback_plan = PushbackFromExecutionPlan(*exec_sysplan, std::move(result_rel));
-        }
-        if (lazy_splitter->CanSplit()) {
-          // Undo split annotations by replacing the subplan with a SkyResultRel
-          lazy_splitter->MergeResultRel(result_rel.get());
-          pushback_plan = std::move(pushback_sysplan->plan_msg->payload);
-        }
-      }
-      catch (const std::exception& duck_err) {
-        SkytetherDebugMsg("DuckDB exception: " << duck_err.what());
-        return Status::Invalid("DuckDB execution failed");
-      }
+      std::tie(pushback_plan, exec_sysplan, ctx_id, view_name) = (
+        std::move(result_lazyexec).ValueOrDie()
+      );
     }
 
-    SkytetherStopTS(DuckServiceDecomposeDelegate);
-    SkytetherLogTimestamps(DuckServiceDecomposeDelegate);
+    SkytetherStopTS(DuckServiceCoopDecomposition);
+    SkytetherLogTimestamps(DuckServiceCoopDecomposition);
 
     return std::make_tuple(
-       std::move(pushback_plan)
-      ,std::move(exec_sysplan)
-      ,ctx_id
-      ,view_name
+      std::move(pushback_plan), std::move(exec_sysplan), ctx_id, view_name
     );
   }
 
