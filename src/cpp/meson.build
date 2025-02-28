@@ -15,6 +15,7 @@ dataservice_dep = [
 protocol_dep = [
    dependency('absl_status'               , static: true)
   ,dependency('absl_log_internal_check_op', static: true)
+  ,dependency('absl_log_internal_message' , static: true)
   ,dependency('protobuf'                  , static: true)
   ,dependency('arrow-substrait'           , static: false)
   ,dependency('mohair'                    , static: false)
