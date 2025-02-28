@@ -73,7 +73,10 @@ namespace skytether::services {
 
     // >> Constructors and Deconstructors
     EngineService(unique_ptr<ServiceConfig>&& cfg, ShutdownCallback* cb_custom)
-      : ServerAdapter(cb_custom), service_cfg(std::move(cfg)) {}
+      : ServerAdapter(cb_custom), service_cfg(std::move(cfg)) {
+      // NOTE: For experimental purposes, set default to Eager
+      service_cfg->set_decompose_alg(DecomposeAlg::Eager);
+    }
 
     EngineService(unique_ptr<ServiceConfig>&& cfg)
       : EngineService(std::move(cfg), nullptr) {}

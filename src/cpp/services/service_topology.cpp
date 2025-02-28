@@ -431,7 +431,8 @@ namespace skytether::services {
     }
 
     // Localize the updated configuration
-    config_entry->second->set_decompose_alg(DecomposeAlg::WideJoinHead);
+    // config_entry->second->set_decompose_alg(DecomposeAlg::WideJoinHead);
+    config_entry->second->set_decompose_alg(DecomposeAlg::Eager);
 
     // Send the update to the service
     auto client_conn = SkytetherClient::ForLocation(service_loc);
