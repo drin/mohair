@@ -66,3 +66,12 @@ duck_bin = executable('duckdb-mohair'
   ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,install            : false
 )
+
+# experimental client for communicating with skytether services
+skytether_client_bin = executable('experiment-client'
+  ,['experiment-client.cpp', 'skytether_cli.cpp']
+  ,include_directories: [ libskytether_inc ]
+  ,dependencies       : libskytether_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
+  ,install            : true
+)
