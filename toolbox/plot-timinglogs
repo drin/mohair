@@ -1,0 +1,515 @@
+#!/usr/bin/env python
+
+# ------------------------------
+# License
+
+# Copyright 2025 Aldrin Montana
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+# ------------------------------
+# Module Docstring
+"""
+Logic to plot timing intervals from a set of timing logs.
+"""
+
+
+# ------------------------------
+# Dependencies
+
+import os
+import sys
+
+import math
+import argparse
+import re
+
+import numpy
+
+from typing import TypeAlias, Any
+from pathlib import Path
+
+from matplotlib import style, pyplot, patches
+from matplotlib.figure import Figure
+
+
+# ------------------------------
+# Module variables
+
+point_normalization = 72
+
+indexed_steps = {
+    step_name: step_ndx
+    for step_ndx, step_name in enumerate([
+         'DuckServicePhaseParse'
+        ,'DuckServiceDelegateSubplan'
+        ,'DuckServiceMaterializePushback'
+        ,'DuckServiceEagerDecomposeDelegate'
+        ,'DuckServiceLazyDecomposeDelegate'
+        ,'DuckEngineTranslatePlan'
+        ,'DuckServiceEagerDecomposeExecute'
+        ,'DuckServiceLazyDecomposeExecute'
+        ,'DuckServiceCoopDecomposition'
+        ,'DuckServicePhaseDelegation'
+        ,'DuckEngineExplainAnalyzeContext'
+        ,'DuckEngineExecuteContext'
+        ,'DuckServicePhaseExecution'
+    ])
+}
+
+dev_colors = {
+     'CS0': (  68/255,   1/255,  84/255)
+    ,'CS1': (  33/255, 145/255, 140/255)
+    ,'CSD': ( 253/255, 231/255,  37/255)
+}
+
+
+# >> CLI arg parsing
+if __name__ == '__main__':
+    arg_parser = argparse.ArgumentParser(description='Plot timing logs')
+
+    arg_parser.add_argument(
+         '--log-dirpath'
+        ,dest='log_dirpath', type=str, required=True
+        ,help='Path to directory containing logs to plot'
+    )
+
+    arg_parser.add_argument(
+         '--output'
+        ,dest='output_fpath', type=str, required=False
+        ,default='timing.plotted.png'
+        ,help='Path to file for this program to produce'
+    )
+
+    parsed_args, parsed_extra_args = arg_parser.parse_known_args()
+
+
+# ------------------------------
+# Functions
+
+# >> Helper functions
+
+def NormalizeTimestamps(base_ts, start_ts, stop_ts, len_ts, is_micros=True):
+    def micros_to_millis(microsecs): return microsecs / 1000
+    # def micros_to_millis(microsecs): return microsecs
+
+    return (
+         micros_to_millis(start_ts - base_ts)
+        ,micros_to_millis(stop_ts - base_ts)
+        ,micros_to_millis(len_ts)
+    )
+
+
+# >> Reader functions
+
+def TimingsFromLog(expected_dev_id, log_fpath):
+    """ Parses entries from a **simplified** log file into intervals. """
+
+    trecords = []
+    with open(log_fpath) as log_fhandle:
+        # Parse initial timestamp
+        init_ts_id, init_ts = next(log_fhandle).strip().split(' ')
+
+        # Verify the service ID used in this log (optional, but why not)
+        match_dev_id = re.match(r'(CS.*)-', init_ts_id)
+        if match_dev_id is None:
+            sys.exit(f'Unexpected device prefix used: {init_ts_id}')
+
+        dev_id = match_dev_id.group(1).upper()
+        if not expected_dev_id == dev_id:
+            sys.exit(f'Expected log file for service [{expected_dev_id}], found {dev_id}')
+
+        # Parse first timing record (to establish base timestamp)
+        record_name, start_ts, stop_ts, len_ts = next(log_fhandle).strip().split(' ')
+        base_ts = int(start_ts)
+
+        trecords.append(
+              (record_name,)
+            + NormalizeTimestamps(base_ts, int(start_ts), int(stop_ts), int(len_ts))
+        )
+
+        # Normalize and accumulate remaining timing records
+        for timing_record in log_fhandle:
+            record_name, start_ts, stop_ts, len_ts = timing_record.strip().split(' ')
+
+            # NOTE: for now we strip the service name prefix
+            # Normalize and accumulate the timings
+            trecords.append(
+                  (record_name,)
+                + NormalizeTimestamps(base_ts, int(start_ts), int(stop_ts), int(len_ts))
+            )
+
+    # Schema of timing records
+    record_fields = [
+         ('step_id' , '<U38'       )
+        ,('start'   , numpy.uint32 )
+        ,('stop'    , numpy.uint32 )
+        ,('duration', numpy.float64)
+    ]
+
+    return numpy.array(trecords, dtype=record_fields)
+
+
+# >> Processing functions (preprocessing for plotting)
+
+def CoalesceTimingsByQuery(timings_by_service):
+    """
+    Reorganize timing data in from a service-oriented structure to a query-oriented
+    structure.
+    NOTE: this may not be necessary if we propagate timing data with a query.
+    """
+
+    # NOTE: for now, we assume :timings_by_service: is in topological order by service
+
+    # Gather start and stop timestamps for each service by query
+    tsbounds_by_query = []
+    for ws_service in timings_by_service:
+        is_parsephase = numpy.strings.endswith(
+            ws_service['step_id'], 'DuckServicePhaseParse'
+        )
+
+        is_execphase = numpy.strings.endswith(
+            ws_service['step_id'], 'DuckServicePhaseExecution'
+        )
+
+        ws_parsephase = ws_service[is_parsephase]
+        ws_execphase  = ws_service[is_execphase]
+
+        tsbounds_by_query.append(
+            numpy.column_stack(
+                (ws_parsephase['start'], ws_execphase['stop'])
+            )
+        )
+
+    count_queries      = len(tsbounds_by_query[0])
+    intervals_by_query = []
+    for ndx_query in range(count_queries):
+        ws_query = None
+
+        for ndx_service, ws_service in enumerate(timings_by_service):
+            ts_qstart, ts_qstop = tsbounds_by_query[ndx_service][ndx_query, :]
+            ws_servicequery = ws_service[
+                  (ws_service['start'] >= ts_qstart)
+                & (ws_service['stop']  <= ts_qstop)
+            ]
+
+            # Normalize the service timings to relative to start of the query
+            ws_servicequery = ws_servicequery.copy()
+            ws_servicequery['start'] -= ts_qstart
+            ws_servicequery['stop']  -= ts_qstart
+
+            # First service initializes the accumulated records
+            if ndx_service == 0:
+                ws_query = ws_servicequery
+                continue
+
+            # NOTE: this only works for linear topology
+            # Otherwise, the downstream service timestamps go before "DelegateSubplan"
+            is_delegatestep = numpy.strings.endswith(
+                ws_query['step_id'], 'DuckServiceDelegateSubplan'
+            )
+            rowndx_pushdowns = numpy.where(is_delegatestep)
+            query_mergerow   = rowndx_pushdowns[0][0]
+
+            # For consistency (and readability), shift this service's timestamps
+            ts_shift       = ws_query[query_mergerow]['start']
+            ws_servicequery['start'] += ts_shift
+            ws_servicequery['stop']  += ts_shift
+
+            # Do the actual merge of timing records
+            ws_query = numpy.hstack([
+                 ws_query[:query_mergerow]
+                ,ws_servicequery
+                ,ws_query[query_mergerow:]
+            ])
+
+        intervals_by_query.append(ws_query)
+
+        # TODO: for now, just test on first and second queries
+        # if ndx_query >= 1: break
+
+    return intervals_by_query
+
+
+# >> Plotting helper functions
+
+# Colors
+def ConvertRGB(rgb_tuple):
+    """
+    Converts a tuple of ints (RGB values) to a tuple of floats (range: [0, 1]).
+    """
+
+    return tuple(val / 255 for val in rgb_tuple)
+
+
+def ColorsForGradient(rgb_list, sample_size=100):
+    """
+    Returns a gradient for a list of RGB points by constructing gradients between each
+    pair of RGB points and combining them together (using list.extend).
+    """
+
+    def PairwiseGradient(rgb_start, rgb_end, gradient_len):
+        """ Closure for generating a gradient between 2 RGB points. """
+
+        # create linear spaces as a column-based list of RGB values
+        gradient_dims = [
+            numpy.linspace(rgb_start[color_dim], rgb_end[color_dim], gradient_len)
+            for color_dim in range(3)
+        ]
+
+        # transforms column-based to row-based
+        return [
+            tuple((
+                 gradient_dims[0][color_ndx]
+                ,gradient_dims[1][color_ndx]
+                ,gradient_dims[2][color_ndx]
+            ))
+            for color_ndx in range(gradient_len)
+        ]
+
+    # number of gradients (intervals between RGB points)
+    gradient_count = len(rgb_list) - 1
+    gradient_len   = int(sample_size / gradient_count) + 1
+
+    # for each gradient interval
+    gradient_colors = []
+    for rgb_ndx in range(gradient_count):
+        gradient_colors.extend(PairwiseGradient(
+             rgb_list[rgb_ndx]
+            ,rgb_list[rgb_ndx + 1]
+            ,gradient_len
+        ))
+
+    return gradient_colors
+
+
+def ColorsForPlasmaHeatmap(gradient_range=2000):
+    """
+    Convenience function that calls `ColorsForGradient` on a fixed list of 5 RGB points.
+    """
+
+    plasma_rgblist = [
+         ConvertRGB(( 15,   0, 118))
+        ,ConvertRGB(( 87,   0, 151))
+        ,ConvertRGB((190,  48, 101))
+        ,ConvertRGB((245, 135,  48))
+        ,ConvertRGB((237, 252,  27))
+    ]
+
+    return ColorsForGradient(plasma_rgblist, gradient_range)
+
+
+# >> Plotting functions
+
+def CreateFigure(input_cfg={}) -> Figure:
+    """ Convenience function that creates a matplotlib Figure. """
+
+    default_cfg = {
+         'id'    : None
+        ,'width' : 24
+        ,'height': 8
+        ,'dpi'   : 600
+    }
+
+    # Take specified config over defaults
+    fig_config = dict(default_cfg)
+    fig_config.update(input_cfg)
+
+    # use `pyplot.figure` to create the `matplotlib.Figure`
+    return pyplot.figure(
+         num     =  fig_config['id']
+        ,figsize = (fig_config['width'], fig_config['height'])
+        ,dpi     =  fig_config['dpi']
+    )
+
+
+def CreatePanelIntervalByQuerySplit( parent_figure
+                                    ,panel_intervals
+                                    ,bin_dim   =0
+                                    ,panel_size=(20.0, 6.0)
+                                    ,panel_pos =( 2.0, 1.5)):
+    """
+    Creates a matplotlib.axes.Axes instance (a "panel") and populates it with N interval
+    plots, where N is the number of queries to plot. Each interval plot shows timings for
+    each step as it spans the topology. Comparison across interval plots shows how timings
+    change across the topology for different query splits.
+    """
+
+    # Make sure the figure is activated
+    pyplot.figure(parent_figure)
+
+    # Create the `Axes` instance for the panel (percentages of parent dim)
+    interval_panel = parent_figure.add_axes([
+         panel_pos[0]  / parent_figure.get_figwidth()
+        ,panel_pos[1]  / parent_figure.get_figheight()
+        ,panel_size[0] / parent_figure.get_figwidth()
+        ,panel_size[1] / parent_figure.get_figheight()
+    ])
+
+
+    # panel_intervals should be a list(list(tuple)). The dimensions are as follows:
+    #   1. The elements of the outer list correspond to different query splits
+    #   2. The elements of the inner list correspond to each step in chronological order
+    #   3. The tuple contains device ID, step name, and latency (microsecs) of the step
+
+    # TODO: parameterize
+    count_services       =  2 # 2 CS services + 1 CS drive = 3 device topology
+    count_steps_service  = 11
+    count_steps_device   =  9 # CS drive (leaf) does not delegate or materialize
+    count_steps_topology = (count_services * count_steps_service) + count_steps_device
+
+    # Calculate count for sub-panels and multiply by how many intervals each will have
+    count_subpanel = len(panel_intervals)
+    interval_panel.set_xlim(0, count_subpanel * count_steps_topology)
+
+    # TODO: eventually derive from data
+    # Longest step duration (interval length)
+    max_msticks = 21000
+    # max_msticks = int(math.log2(32768))
+    interval_panel.set_ylim(0, max_msticks)
+
+    interval_panel.tick_params(
+        bottom=True , labelbottom=True ,
+        left  =True , labelleft  =True ,
+        right =False, labelright =False,
+        top   =False, labeltop   =False
+    )
+    interval_panel.set_yticks(
+         ticks =[tick_val        for tick_val in range(0, max_msticks + 1, 5000)]
+        ,labels=[f'{tick_val}ms' for tick_val in range(0, max_msticks + 1, 5000)]
+        ,fontsize=8
+    )
+
+    # Plotting properties for the intervals themselves
+    bar_width = 1
+    bar_color = ConvertRGB((120, 172, 145))
+    colors_by_step = ColorsForPlasmaHeatmap(gradient_range=len(indexed_steps))
+
+    # Collection of timings for a particular query split (for a sub-panel)
+    current_service = None
+    interval_ndx    = 0
+
+    service_ticks, service_labels = [], []
+    step_ticks, step_labels       = [], []
+
+    step_colors, service_colors   = [], []
+    for split_intervals in panel_intervals:
+
+        # List of timings for each step in chronological order (each interval)
+        for step_ndx, timing_interval in enumerate(split_intervals):
+            step_name       = timing_interval['step_id']
+            current_service = step_name[:3].upper()
+
+            step_color    = colors_by_step[indexed_steps[step_name[4:]]]
+            service_color = dev_colors[current_service]
+
+            if timing_interval['duration'] > 1000:
+                step_ticks.append(interval_ndx + float(bar_width / 2))
+                step_labels.append(step_name[8:])
+                step_colors.append(step_color)
+    
+            if step_name.endswith('PhaseParse'):
+                service_colors.append(service_color)
+                service_ticks.append(interval_ndx)
+
+                if current_service == 'CS0': 
+                    service_labels.append(f'{current_service}: Begin Query')
+                else:
+                    service_labels.append(f'{current_service}: Begin')
+
+            elif step_name.endswith('PhaseExecution'):
+                service_colors.append(service_color)
+                service_ticks.append(interval_ndx)
+
+                if current_service == 'CS0': 
+                    service_labels.append(f'{current_service}: End Query')
+                else:
+                    service_labels.append(f'{current_service}: End')
+
+            elif step_name.endswith('PhaseDelegation'):
+                service_colors.append(service_color)
+                service_ticks.append(interval_ndx)
+                service_labels.append(f'{current_service}: Resume')
+
+            # Plot the interval itself
+            bar_pos   = (interval_ndx, timing_interval['start'])
+            interval_panel.add_patch(patches.Rectangle(
+                 bar_pos
+                ,bar_width
+                ,timing_interval['duration']
+                #,facecolor=bar_color
+                ,facecolor=step_color
+                ,edgecolor=service_color
+                ,linewidth=0.5
+            ))
+
+            # Plot a label above the interval
+            # vpadding = 10 + (200 * (step_ndx % 2))
+            vpadding = 500
+            interval_panel.text(
+                 interval_ndx + float(bar_width/2)
+                ,(timing_interval['start'] + timing_interval['duration'] + vpadding)
+                ,str(int(timing_interval['duration']))
+                ,ha='center'
+                ,va='center'
+                ,rotation=90
+                ,rotation_mode='anchor'
+                ,fontsize=6
+            )
+
+            interval_ndx += 1
+
+    # Set X ticks after we know what they are
+    interval_panel.set_xticks(
+         ticks =step_ticks
+        ,labels=step_labels
+        ,rotation=70
+        ,rotation_mode='anchor'
+        ,ha='right'
+        ,fontsize=6
+    )
+
+    for ndx, xlabel in enumerate(interval_panel.get_xticklabels()):
+        xlabel.set_color(step_colors[ndx % len(step_colors)])
+
+    return interval_panel
+
+
+# ------------------------------
+# Main Logic
+
+if __name__ == '__main__':
+    style.use('BME163')
+
+    # >> Process data for plotting
+    # NOTE: hardcoded for now
+    # Parse source data into a list of structured arrays, separated by service
+    service_timings = []
+    for service_id in ['CS0', 'CS1', 'CSD']:
+        service_logfpath = Path(parsed_args.log_dirpath) / f'{service_id}.simplified.log'
+        service_timings.append(TimingsFromLog(service_id, service_logfpath))
+
+        # print(service_timings[-1][-12:])
+
+    # Preprocess data for visualization (organize by query intead of by service)
+    service_timings = CoalesceTimingsByQuery(service_timings)
+    
+    # >> Plot figures
+    timing_fig = CreateFigure()
+
+    print('Creating interval plot')
+    timing_panel_interval = CreatePanelIntervalByQuerySplit(timing_fig, service_timings)
+
+    pyplot.savefig(parsed_args.output_fpath)
+
