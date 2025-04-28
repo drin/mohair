@@ -73,6 +73,11 @@
     using duckdb::DuckDB;
     using duckdb::Connection;
 
+    // Internal storage types
+    using duckdb::BufferManager;
+    using duckdb::MemoryInformation;
+    using duckdb::MemoryTag;
+
     // Data types
     using DuckDecimal = duckdb::DecimalType;
 
@@ -216,10 +221,13 @@ namespace skytether::engines {
                                 ,const string&       result_name);
 
       //! Translates the given `SystemPlan` and returns identifiers for the context
-      std::tuple<size_t, string> CreateExecutionContext(SystemPlan& sys_plan);
+      std::tuple<size_t, uint64_t> CreateExecutionContext(SystemPlan& sys_plan);
 
 
       // >> Methods for local interaction
+
+      // To support performance observability
+      size_t EstimateTotalTableSize();
 
       // These create a QueryContext but return the context ID
       size_t ContextForArrowScanOp(shared_ptr<Buffer> ipc_buffer);
@@ -230,7 +238,7 @@ namespace skytether::engines {
       DuckContext* GetDuckContext(size_t ctx_id);
 
       Status ExecuteContext(size_t context_id) override;
-      Status ExecuteContext(size_t context_id, const string& view_name) override;
+      Status ExecuteContext(size_t context_id, uint64_t view_id) override;
 
       Status MaterializeResults(const string& name, RecordBatchVector batches) override;
       Result<shared_ptr<RecordBatchReader>> ScanResults(const string& view_name) override;

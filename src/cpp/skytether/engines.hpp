@@ -80,7 +80,6 @@ namespace skytether::engines {
   enum QueryStatus { Pending, Running, Complete };
 
   //! A convenience class wrapping a mapping of UUIDs to query contexts
-  struct QueryContext;
   struct ContextMap {
     static size_t next_uuid;
 
@@ -113,7 +112,7 @@ namespace skytether::engines {
 
     virtual ResultReader ResultSetForContext(size_t context_id);
     virtual Status       ExecuteContext(size_t context_id) = 0;
-    virtual Status       ExecuteContext(size_t context_id, const string& view_name) = 0;
+    virtual Status       ExecuteContext(size_t context_id, uint64_t view_id) = 0;
 
     virtual Status MaterializeResults(const string& view_name, RecordBatchVector batches) = 0;
 

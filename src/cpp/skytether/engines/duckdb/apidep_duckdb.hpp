@@ -96,4 +96,7 @@
   #include "duckdb/planner/joinside.hpp"
   #include "duckdb/planner/table_filter.hpp"
 
+  // >> Internal storage API (catalog)
+  #include "duckdb/storage/buffer_manager.hpp"
+
 #endif

@@ -70,6 +70,10 @@ using skytether::engines::QueryStatus;
                               ,const shared_ptr<Buffer>  plan_msg
                               ,unique_ptr<ResultStream>* result) override;
 
+      Status ClearViews      ( const ServerCallContext&  context
+                              ,const shared_ptr<Buffer>  plan_msg
+                              ,unique_ptr<ResultStream>* result) override;
+
 
       // >> Standard Flight API
       Status DoGet( const ServerCallContext&      context
@@ -77,17 +81,17 @@ using skytether::engines::QueryStatus;
                    ,unique_ptr<FlightDataStream>* stream) override;
 
       // >> Support methods
-      Result<std::tuple<unique_ptr<Plan>, unique_ptr<SystemPlan>, size_t, string>>
+      Result<std::tuple<unique_ptr<Plan>, unique_ptr<SystemPlan>, size_t, uint64_t>>
       CoopDecomposePlan(unique_ptr<SystemPlan> sys_plan, const string& loc);
 
       Result<unique_ptr<SystemPlan>> EagerDecomposeDelegate(unique_ptr<SystemPlan> sys_plan);
       Result<unique_ptr<SystemPlan>> DelegatePushdown(unique_ptr<SystemPlan> sys_plan);
 
-      Result<std::tuple<unique_ptr<Plan>, size_t, string>>
-      EagerDecomposeExecute(SystemPlan& exec_sysplan, const string& loc);
+      Result<std::tuple<unique_ptr<Plan>, size_t, uint64_t>>
+      EagerDecomposeTranslate(SystemPlan& exec_sysplan, const string& loc);
 
-      Result<std::tuple<unique_ptr<Plan>, unique_ptr<SystemPlan>, size_t, string>>
-      LazyDecomposeExecute(unique_ptr<SystemPlan> pushback_sysplan, const string& loc);
+      Result<std::tuple<unique_ptr<Plan>, unique_ptr<SystemPlan>, size_t, uint64_t>>
+      LazyDecomposeTranslate(unique_ptr<SystemPlan> pushback_sysplan, const string& loc);
     };
 
   } // namespace: skytether::services

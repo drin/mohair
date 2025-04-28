@@ -570,7 +570,12 @@ namespace skytether::engines {
       mohair::SkyPartitionRel sky_rel;
       extension_msg.UnpackTo(&sky_rel);
 
+      SkytetherStartTS(DuckEngineTranslateRead);
+
       translated_rel = TranslateSkyPartitionRel(tl_state, sky_rel);
+
+      SkytetherStopTS(DuckEngineTranslateRead);
+      SkytetherLogTimestamps(DuckEngineTranslateRead);
     }
 
     else if (extension_msg.Is<mohair::SkySliceRel>()) { 

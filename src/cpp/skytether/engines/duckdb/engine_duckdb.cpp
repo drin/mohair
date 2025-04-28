@@ -177,6 +177,24 @@
     }
 
     // >> EngineDuckDB
+    //! Calculate an estimated memory size for DuckDB
+    size_t EngineDuckDB::EstimateTotalTableSize() {
+      size_t count_bytes { 0 };
+
+      auto& engine_buffermgr = BufferManager::GetBufferManager(*engine_conn.context);
+      for (const MemoryInformation& mem_info : engine_buffermgr.GetMemoryUsageInfo()) {
+        switch (mem_info.tag) {
+          case MemoryTag::BASE_TABLE:
+          case MemoryTag::IN_MEMORY_TABLE:
+            count_bytes += mem_info.size;
+
+          default: continue;
+        }
+      }
+
+      return count_bytes;
+    }
+
     //! Create a duckdb scan operator from an IPC buffer (extracted from an arrow file)
     size_t EngineDuckDB::ContextForArrowScanOp(shared_ptr<Buffer> ipc_buffer) {
       // `scan_arrow_ipc` takes IPC buffers as a list of structs
@@ -217,8 +235,6 @@
     //  This table function takes a single binary blob as input, the serialized substrait
     //  plan. The table function is then registered in a context for subsequent access.
     size_t EngineDuckDB::ContextForArrowScanOp(const string& plan_msg) {
-      SkytetherDebugMsg("Creating execution context for query plan");
-
       duckdb::vector<Value> fn_args { Value::BLOB_RAW(plan_msg) };
       DuckContext*          scan_context = DuckContext::Emplace(
          context_map
@@ -230,74 +246,82 @@
       return scan_context->uuid;
     }
 
-    std::tuple<size_t, string>
+    std::tuple<size_t, uint64_t>
     EngineDuckDB::CreateExecutionContext(SystemPlan& sys_plan) {
       // Translate the system plan for execution and register it in a context
-      SkytetherDebugMsg("Creating execution context for DuckDB");
-      DuckContext* ctx;
-
-      SkytetherLogPerf(DuckEngineTranslatePlan,
-        {
-          ctx = DuckContext::Emplace(
-             context_map
-            ,std::make_unique<DuckContext>(this->TranslatePlan(sys_plan))
-          );
-        }
+      SkytetherStartTS(ActionEngineTranslatePlan);
+      DuckContext* ctx = DuckContext::Emplace(
+         context_map
+        ,std::make_unique<DuckContext>(this->TranslatePlan(sys_plan))
       );
+      SkytetherStopTS(ActionEngineTranslatePlan);
+      SkytetherLogTimestamps(ActionEngineTranslatePlan);
 
-      return std::make_tuple(
-         ctx->uuid
-        ,string { engine_id + "_materialized_" + std::to_string(ctx->uuid) }
-      );
+      return std::make_tuple(ctx->uuid, sys_plan.Hash());
     }
 
     //! Given a query context ID and a name, create a view from that query
     Status
-    EngineDuckDB::ExecuteContext(size_t context_id, const string& view_name) {
+    EngineDuckDB::ExecuteContext(size_t context_id, uint64_t view_id) {
+      string view_name { std::to_string(view_id) };
+
       SkytetherDebugMsg(
-           "Context: [(" << std::to_string(context_id)
-        << ") " << view_name << "]"
+        "Context: ["
+           << "(" << std::to_string(context_id) << ") " << view_name
+        << "]"
       );
 
       // Execute the relation and move the result
       DuckContext*       ctx       = GetDuckContext(context_id);
       duck_sptr<DuckRel> query_rel = ctx->duck_plan;
 
-      // DEBUG: Check the explain analyze
-      SkytetherLogPerf(DuckEngineExplainAnalyzeContext,
-        {
-          query_rel->context->GetContext()->EnableProfiling();
-          ARROW_RETURN_NOT_OK(
-            PrintQueryResults(
-               *(query_rel->Explain(ExplainType::EXPLAIN_ANALYZE))
-              ,0, 10
-              ,0, 10
-              ,0, 10
-            )
-          );
-          query_rel->context->GetContext()->DisableProfiling();
-        }
-      );
+      try {
+        engine_conn.Table(INVALID_SCHEMA, view_name);
+        ctx->status = QueryStatus::Complete;
+        ctx->status_cv.notify_all();
+        SkytetherDebugMsg("Execution plan already materialized");
+        return Status::OK();
+      }
+      catch (const duckdb::CatalogException& duck_err) {
+        // NOTE: we could do nothing here, but I decided to put this debugging code here
+        SkytetherStartTS(ActionEngineExecAnalyze);
+
+        query_rel->context->GetContext()->EnableProfiling();
+        ARROW_RETURN_NOT_OK(
+          PrintQueryResults(
+             *(query_rel->Explain(ExplainType::EXPLAIN_ANALYZE))
+            ,0, 10
+            ,0, 10
+            ,0, 10
+          )
+        );
+        query_rel->context->GetContext()->DisableProfiling();
+
+        SkytetherStopTS(ActionEngineExecAnalyze);
+        SkytetherLogTimestamps(ActionEngineExecAnalyze);
+      }
 
       // Create a view that wraps (references) the query
-      constexpr bool replace_if_exists { true };
-      constexpr bool is_temporary      { true };
-      auto rel_createview = ctx->duck_plan->CreateView(
-        view_name, replace_if_exists, is_temporary
+      constexpr bool             is_temporary { true };
+      constexpr OnCreateConflict opt_replace  { OnCreateConflict::REPLACE_ON_CONFLICT };
+      auto rel_createview = ctx->duck_plan->CreateRel(
+        INVALID_SCHEMA, view_name, is_temporary, opt_replace
       );
 
       // Change the query status, execute the query, then notify when complete
+      SkytetherStartTS(ActionEngineExecute);
+
       ctx->status = QueryStatus::Running;
-      SkytetherLogPerf(DuckEngineExecuteContext,
-        {
-          rel_createview->Execute();
-          {
-            lock_guard<mutex> status_lock(ctx->status_mtx);
-            ctx->status = QueryStatus::Complete;
-          }
-          ctx->status_cv.notify_all();
-        }
-      );
+      rel_createview->Execute();
+      {
+        lock_guard<mutex> status_lock(ctx->status_mtx);
+        ctx->status = QueryStatus::Complete;
+      }
+      ctx->status_cv.notify_all();
+
+      SkytetherStopTS(ActionEngineExecute);
+
+      SkytetherLogTimestamps(ActionEngineExecute);
 
       return Status::OK();
     }
@@ -330,11 +354,7 @@
     }
 
     Status
-    EngineDuckDB::MaterializeResults(const string& view_name, RecordBatchVector batches) {
-      SkytetherDebugMsg(
-        "Materializing " << view_name << "(" << batches.size() << " batches)"
-      );
-
+    EngineDuckDB::MaterializeResults(const string& table_name, RecordBatchVector batches) {
       ARROW_ASSIGN_OR_RAISE(auto ipc_buffer, SerializeRecordBatches(std::move(batches)));
       child_list_t<Value> struct_vals {
          { "ptr" , Value::UBIGINT((uintptr_t) ipc_buffer->mutable_data()) }
@@ -345,10 +365,11 @@
         Value::LIST({ Value::STRUCT(struct_vals) })
       };
 
-      constexpr bool is_temporary { true };
+      constexpr bool             is_temporary { true };
+      constexpr OnCreateConflict opt_replace  { OnCreateConflict::REPLACE_ON_CONFLICT };
       duck_sptr<DuckRel> materialize_plan = (
         engine_conn.TableFunction("scan_arrow_ipc", scan_args)
-                   ->CreateRel(INVALID_SCHEMA, view_name, is_temporary)
+                   ->CreateRel(INVALID_SCHEMA, table_name, is_temporary, opt_replace)
       );
 
       auto exec_results = materialize_plan->Execute();
@@ -362,18 +383,15 @@
     //! Given a query context ID and a name, create a view from that query
     Result<shared_ptr<RecordBatchReader>>
     EngineDuckDB::ScanResults(const string& view_name) {
-      SkytetherDebugMsg("Scanning results of: " << view_name);
-
       duckdb::vector<string>                      proj_aliases;
       duckdb::vector<duck_uptr<ParsedExpression>> proj_exprs;
       proj_exprs.emplace_back(duckdb::make_uniq<StarExpression>());
 
       duck_sptr<DuckRel> proj_rel = (
-        engine_conn.View(view_name)
+        engine_conn.Table(INVALID_SCHEMA, view_name)
                   ->Project(std::move(proj_exprs), std::move(proj_aliases))
       );
 
-      SkytetherDebugMsg("Returning result reader");
       return ReaderForResult(proj_rel->Execute());
     }
 
