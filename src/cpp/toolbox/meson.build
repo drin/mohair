@@ -75,3 +75,12 @@ skytether_client_bin = executable('experiment-client'
   ,install_rpath      : get_option('prefix') / get_option('libdir')
   ,install            : true
 )
+
+# sandbox to validate parsing of topology config
+skytether_client_bin = executable('read-topology'
+  ,['read-topology.cpp', 'skytether_cli.cpp']
+  ,include_directories: [ libskytether_inc ]
+  ,dependencies       : libskytether_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
+  ,install            : false
+)

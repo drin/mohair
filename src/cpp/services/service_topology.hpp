@@ -40,16 +40,8 @@ using std::unordered_map;
 namespace skytether::services {
 
   // >> type forwards
-  struct ServiceHierarchy;
-
   // `ActionType` has 2 attributes: <type: std::string>, <descr: std::string>
-  vector<ActionType> SupportedActionsForTopology();
-
-  // Constructs a topology from the config
-  Result<unique_ptr<ServiceHierarchy>>
-  TopologyFromConfig(const char* config_fpath, bool be_verbose = false);
-
-  void PrintTopology(ServiceHierarchy* service_map);
+  static vector<ActionType> SupportedActionsForTopology();
 
 } // namespace: skytether::services
 
@@ -69,21 +61,6 @@ namespace skytether::services {
     std::size_t operator()(const Location& skyloc) const;
   };
 
-  // >> Aliases for templated types
-  using service_topology = unordered_map< Location
-                                         ,unique_ptr<ServiceConfig>
-                                         ,HashFunctorSkytetherLocation>;
-
-  using upstream_map = unordered_map< Location
-                                     ,Location
-                                     ,HashFunctorSkytetherLocation>;
-
-  struct ServiceHierarchy {
-    vector<Location> cs_servers;
-    service_topology cs_devices;
-    upstream_map     upstream_locs;
-  };
-
 } // namespace: skytether::services
 
 
@@ -93,10 +70,10 @@ namespace skytether::services {
   struct TopologyService : public ServerAdapter {
 
     // Attributes
-    unique_ptr<ServiceHierarchy> service_map;
+    unique_ptr<StorageHierarchy> service_map;
 
     // Constructors
-    TopologyService(unique_ptr<ServiceHierarchy>&& srv_topology)
+    TopologyService(unique_ptr<StorageHierarchy> srv_topology)
       : ServerAdapter(), service_map(std::move(srv_topology)) {}
 
     // Helper functions

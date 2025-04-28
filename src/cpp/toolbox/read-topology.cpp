@@ -1,7 +1,7 @@
 // ------------------------------
 // License
 //
-// Copyright 2024 Aldrin Montana
+// Copyright 2025 Aldrin Montana
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,37 +52,12 @@ constexpr int argndx_loc { 1 };
 
 
 // ------------------------------
-// Functions
-
-// >> Engine-agnostic
-int ValidateArgs(int argc, [[maybe_unused]] char **argv) {
-  // default status is success
-  int errcode_validation { 0 };
-
-  // Error if we have an invalid amount of arguments
-  errcode_validation = ValidateArgCount(argc, argc_min, argc_max);
-  SkytetherCheckErrCode(errcode_validation, "Usage: topo-service [<Location URI>]");
-
-  // Error if we have an invalid Uri scheme
-  if (argc == 2) {
-    errcode_validation = ValidateArgLocationUri(argv[argndx_loc]);
-    SkytetherCheckErrCode(errcode_validation, "Invalid scheme for location URI");
-  }
-
-  return errcode_validation;
-}
-
-
-// ------------------------------
 // Structs and Classes
 
 struct ServiceActions {
-  Location    service_loc;
   const char* config_fpath;
-  bool        should_print_topo { false };
-  bool        should_verbose    { false };
 
-  ServiceActions(): service_loc(), config_fpath(nullptr) {}
+  ServiceActions(): config_fpath(nullptr) {}
 
   // Public entry point
   int Start() {
@@ -92,7 +67,7 @@ struct ServiceActions {
       return ERRCODE_INV_ARGS;
     }
 
-    // Parse input (topology config)
+    // Read the topology config
     auto result_topology = StorageHierarchy::FromFile(config_fpath);
     if (not result_topology.ok()) {
       skytether::PrintError("Failed to parse topology config", result_topology.status());
@@ -100,33 +75,41 @@ struct ServiceActions {
     }
     auto topology = std::move(result_topology).ValueOrDie();
 
-    // Debugging options
-    if (should_print_topo) {
-      std::cout << std::endl << "Topology:" << std::endl;
-      topology->PrintTopology();
-    }
+    // View some stats
+    /*
+    std::cout << "Topology:" << std::endl
+              << "\tService count: "  << topology->labels.size()    << std::endl
+              << "\tLocation count: " << topology->locations.size() << std::endl
+              << std::endl
+    ;
+    */
 
-    if (should_verbose) {
-      std::cout << "Upstream entries:" << std::endl;
-      for (size_t engine_ndx = 0; engine_ndx < topology->labels.size(); ++engine_ndx) {
-        Location& engine_loc = topology->locations[engine_ndx];
+    // View the constructed topology
+    topology->PrintTopology();
 
-        for (size_t upstream_ndx : topology->upstream_links[engine_ndx]) {
-          std::cout << "\t"   << engine_loc.ToString()
-                    << " <- " << topology->locations[upstream_ndx].ToString()
-                    << std::endl
-          ;
-        }
+    /*
+    std::cout << "Upstream entries:" << std::endl;
+    for (size_t engine_ndx = 0; engine_ndx < topology->labels.size(); ++engine_ndx) {
+      Location& engine_loc = topology->locations[engine_ndx];
+
+      // This engine does not have any upstream engines
+      if (topology->upstream_links[engine_ndx].empty()) {
+        std::cout << "\t" << engine_loc.ToString() << " (root service)" << std::endl;
+        continue;
       }
-    }
 
-    // Create and start the topology service
-    auto topo_service = std::make_unique<TopologyService>(std::move(topology));
-    auto status_start = StartService(*topo_service, service_loc);
-    if (not status_start.ok()) {
-      skytether::PrintError("Unable to start topo-service", status_start);
-      return ERRCODE_START_SRV;
+      // This engine has upstream engines
+      std::cout << "\t" << engine_loc.ToString() << " (upstream)|> ";
+      std::vector<size_t>& upstream_ids = topology->upstream_links[engine_ndx];
+      auto                 upstream_itr = upstream_ids.begin();
+
+      std::cout << topology->locations[*upstream_itr].ToString();
+      for (; upstream_itr != upstream_ids.end(); ++upstream_itr) {
+        std::cout << ", " << topology->locations[*upstream_itr].ToString();
+      }
+      std::cout << std::endl;
     }
+    */
 
     return 0;
   }
@@ -137,10 +120,9 @@ struct ServiceActions {
 // Functions
 
 int PrintHelp() {
-    std::cout << "topo-service"
+    std::cout << "read-topology"
               << " [-h]"
-              << " -l service-location-uri"
-              << " -f path-to-config-file"
+              << " -f <path-to-config-file>"
               << std::endl
     ;
 
@@ -156,34 +138,16 @@ int main(int argc, char **argv) {
 
   // Parse each argument and internalize the provided option
   constexpr char  is_done_parsing = -1;
-  const     char* opt_template    = "l:f:hpv";
+  const     char* opt_template    = "f:h";
 
   char parsed_opt;
-  int  errcode_cli;
-
   while ((parsed_opt = (char) getopt(argc, argv, opt_template)) != is_done_parsing) {
     switch (parsed_opt) {
 
       case 'h': { return PrintHelp(); }
 
-      case 'l': {
-        errcode_cli = ParseArgLocationUri(optarg, &(client_actions.service_loc));
-        SkytetherCheckErrCode(errcode_cli, "Failed to parse service location");
-        break;
-      }
-
       case 'f': {
         client_actions.config_fpath = optarg;
-        break;
-      }
-
-      case 'p': {
-        client_actions.should_print_topo = true;
-        break;
-      }
-
-      case 'v': {
-        client_actions.should_verbose = true;
         break;
       }
 

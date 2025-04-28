@@ -32,10 +32,10 @@ namespace skytether::services {
                        ,string&              prefix
                        ,const ServiceConfig* service_cfg) {
     // Print root location
-    print_stream << prefix << service_cfg->service_location() << std::endl;
+    print_stream << prefix << service_cfg->location() << std::endl;
 
     string downstream_prefix { prefix + "\t" };
-    const auto& downstream_cfgs = service_cfg->downstream_services();
+    const auto& downstream_cfgs = service_cfg->downstream();
     for (int cfg_ndx = 0; cfg_ndx < downstream_cfgs.size(); ++cfg_ndx) {
       const auto& downstream_cfg = downstream_cfgs[cfg_ndx];
 
@@ -56,16 +56,16 @@ namespace skytether::services {
   // >> Public
 
   // Print service configurations using pre-order traversal
-  void PrintConfig(ServiceConfig* service_cfg) {
+  void PrintTopologyConfig(ServiceConfig* service_cfg) {
     stringstream print_stream;
     string       empty_prefix;
 
     // Print root location
-    print_stream << service_cfg->service_location() << std::endl;
+    print_stream << service_cfg->location() << std::endl;
 
     // Then recurse on each downstream config
     string downstream_prefix { empty_prefix + "\t" };
-    auto   downstream_srvs   = service_cfg->mutable_downstream_services();
+    auto   downstream_srvs   = service_cfg->mutable_downstream();
     for (auto cfg_itr = downstream_srvs->begin(); cfg_itr < downstream_srvs->end(); ++cfg_itr) {
       if (cfg_itr->is_active()) {
         SerializeConfig(print_stream, downstream_prefix, &(*cfg_itr));
@@ -87,12 +87,12 @@ namespace skytether::services {
     return 0;
   }
 
+  // TODO: somehow get a RecordBatch from FlightStreamChunk into an ArrowScan
   //! Submits a single ticket to request query results, then prints the results
   Result<RecordBatchVector>
   RequestResultSet(SkytetherClient& client_conn, SkytetherTicket& query_ticket) {
     SkytetherDebugMsg(
-         "Context: [(" << query_ticket.Id()
-      << ") " << query_ticket.Name() << "]"
+      "Context: [(" << query_ticket.Id() << ") " << query_ticket.Name() << "]"
     );
 
     ARROW_ASSIGN_OR_RAISE(
@@ -138,6 +138,7 @@ namespace skytether::services {
     }
 
     SkytetherDebugMsg("Starting service [" << service_loc << "]");
+
     MohairInitLogger(service_name);
     SkytetherInitLogger(service_name);
     ARROW_RETURN_NOT_OK(skytether_service.Serve());
@@ -152,23 +153,34 @@ namespace skytether::services {
 namespace skytether::services {
 
   //! Connects to downstream services listed in this instance's `ServiceConfig`
-  Status
-  EngineService::ConnectToTopology() {
-    auto downstream_srvs = service_cfg->mutable_downstream_services();
+  Status EngineService::PrintConfig() {
+    string config_str;
+
+    if (not mohair::StringifyMessage(*service_cfg, &config_str)) {
+      return Status::Invalid("Unable to view service configuration");
+    }
+
+    SkytetherDebugMsg("Configuration:" << std::endl << config_str);
+    return Status::OK();
+  }
+
+  //! Connects to downstream services listed in this instance's `ServiceConfig`
+  Status EngineService::ConnectToTopology() {
+    auto downstream_srvs = service_cfg->mutable_downstream();
     std::cout << "downstream_srvs: " << downstream_srvs->size() << std::endl;
 
     if (downstream_srvs == nullptr) { return Status::Invalid("No downstream services"); }
     else if (downstream_srvs->empty()) { return Status::OK(); }
 
-    size_t count_services = service_cfg->downstream_services_size();
+    size_t count_services = service_cfg->downstream_size();
     service_conns.reserve(count_services);
 
     for (size_t srv_ndx = 0; srv_ndx < count_services; ++srv_ndx) {
-      ServiceConfig* downstream_srv = service_cfg->mutable_downstream_services(srv_ndx);
+      ServiceConfig* downstream_srv = service_cfg->mutable_downstream(srv_ndx);
 
       ARROW_ASSIGN_OR_RAISE(
           auto result_loc
-        ,Location::Parse(downstream_srv->service_location())
+        ,Location::Parse(downstream_srv->location())
       );
 
       service_conns.push_back(SkytetherClient::ForLocation(result_loc));
@@ -215,7 +227,6 @@ namespace skytether::services {
   EngineService::DoPlanPushdown( [[maybe_unused]] const ServerCallContext&  context
                                 ,[[maybe_unused]] const shared_ptr<Buffer>  plan_msg
                                 ,[[maybe_unused]] unique_ptr<ResultStream>* result) {
-    // TODO: distinguish between pushdown and execution paths
     return Status::NotImplemented("TODO");
   }
 
@@ -223,7 +234,13 @@ namespace skytether::services {
   EngineService::DoPlanExecution( [[maybe_unused]] const ServerCallContext&  context
                                  ,[[maybe_unused]] const shared_ptr<Buffer>  plan_msg
                                  ,[[maybe_unused]] unique_ptr<ResultStream>* result) {
-    // TODO: distinguish between pushdown and execution paths
+    return Status::NotImplemented("TODO");
+  }
+
+  Status
+  EngineService::ClearViews( [[maybe_unused]] const ServerCallContext&  context
+                            ,[[maybe_unused]] const shared_ptr<Buffer>  plan_msg
+                            ,[[maybe_unused]] unique_ptr<ResultStream>* result) {
     return Status::NotImplemented("TODO");
   }
 
@@ -238,11 +255,11 @@ namespace skytether::services {
       return Status::Invalid("Unable to parse service config for view change");
     }
 
-    if (updated_cfg.service_location() == service_cfg->service_location()) {
+    if (updated_cfg.location() == service_cfg->location()) {
       service_cfg->CopyFrom(updated_cfg);
 
       SkytetherDebugMsg("New config:");
-      PrintConfig(service_cfg.get());
+      PrintTopologyConfig(service_cfg.get());
 
       ARROW_RETURN_NOT_OK(this->ConnectToTopology());
       return Status::OK();
@@ -251,9 +268,9 @@ namespace skytether::services {
     stringstream err_msg;
     err_msg << "Cannot accept update for a different location."
             << std::endl
-            << "\tExpected [" << service_cfg->service_location() << "]"
+            << "\tExpected [" << service_cfg->location() << "]"
             << std::endl
-            << "\tReceived [" << updated_cfg.service_location() << "]"
+            << "\tReceived [" << updated_cfg.location() << "]"
             << std::endl
     ;
 

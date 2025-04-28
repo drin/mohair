@@ -32,8 +32,8 @@
 #define ActionShutdown   "service-shutdown"
 
 // Topology-specific actions
-#define ActionActivate   "topology-activate"
-#define ActionDeactivate "topology-deactivate"
+#define ActionActivate      "topology-activate"
+#define ActionDeactivate    "topology-deactivate"
 #define ActionDisableDecomp "topology-disabledeco"
 #define ActionEnableDecomp  "topology-enabledeco"
 
@@ -48,6 +48,27 @@
 namespace skytether::services {
 
   // >> Support classes
+
+  //! Data structure for holding the storage topology configuration
+  struct StorageHierarchy {
+    vector<string>                    labels;
+    vector<Location>                  locations;
+    vector<unique_ptr<ServiceConfig>> configs;
+
+    unordered_map<string, size_t> engine_map;
+    vector<vector<size_t>>        downstream_links;
+    vector<vector<size_t>>        upstream_links;
+
+    // >> Methods
+    void   PrintTopology();
+
+    Result<size_t> IndexForLabel(string& engine_label);
+    Result<size_t> IndexForLocation(Location& engine_loc);
+    Status         UpdateConfigView(size_t upstream_ndx, size_t engine_ndx);
+
+    // >> Static functions
+    static Result<unique_ptr<StorageHierarchy>> FromFile(const char* config_fpath);
+  };
 
   //! Default handler implementation for server shutdown
   struct ShutdownCallback {

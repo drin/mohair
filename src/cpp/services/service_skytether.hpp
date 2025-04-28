@@ -33,7 +33,7 @@
 namespace skytether::services {
 
   // Viewing data structures
-  void PrintConfig(ServiceConfig* service_cfg);
+  void PrintTopologyConfig(ServiceConfig* service_cfg);
 
   // Internal functions to help initialize a service
   int  SetDefaultLocation(Location *srv_loc);
@@ -85,6 +85,7 @@ namespace skytether::services {
 
 
     // >> Convenience functions
+    virtual Status PrintConfig();
     virtual Status ConnectToTopology();
 
     virtual Result<FlightInfo>
@@ -112,6 +113,12 @@ namespace skytether::services {
     );
 
     virtual Status DoViewChange(
+       const ServerCallContext&  context
+      ,const shared_ptr<Buffer>  service_cfg
+      ,unique_ptr<ResultStream>* result
+    );
+
+    virtual Status ClearViews(
        const ServerCallContext&  context
       ,const shared_ptr<Buffer>  service_cfg
       ,unique_ptr<ResultStream>* result
