@@ -9,8 +9,8 @@ import sys
 from pathlib import Path
 
 # >> Third-party
-from mohair.substrait.plan_pb2 import Plan
-from mohair.substrait.algebra_pb2 import Rel
+from skyproto.substrait.plan_pb2 import Plan
+from skyproto.substrait.algebra_pb2 import Rel
 
 
 # ------------------------------

@@ -98,16 +98,16 @@ struct ServiceActions {
     }
 
     // Validate that the config we received is for our location
-    if (service_cfg->service_location() != service_loc.ToString()) {
-      std::cerr << "Invalid location in configuration. "            << std::endl
-                << "\tExpected: " << service_loc.ToString()         << std::endl
-                << "\tReceived: " << service_cfg->service_location() << std::endl
+    if (service_cfg->location() != service_loc.ToString()) {
+      std::cerr << "Invalid location in configuration. "     << std::endl
+                << "\tExpected: " << service_loc.ToString()  << std::endl
+                << "\tReceived: " << service_cfg->location() << std::endl
       ;
       return ERRCODE_API_REGISTER;
     }
 
     SkytetherDebugMsg("Initializing connected service with config:");
-    skytether::services::PrintConfig(service_cfg.get());
+    skytether::services::PrintTopologyConfig(service_cfg.get());
 
     return 0;
   }
@@ -115,10 +115,10 @@ struct ServiceActions {
   int InitLocalServiceConfig() {
     // Create a ServiceConfig structure and parse the protobuf message into it
     service_cfg = std::make_unique<ServiceConfig>();
-    service_cfg->set_service_location(service_loc.ToString());
+    service_cfg->set_location(service_loc.ToString());
 
     SkytetherDebugMsg("Initializing local-only service with config:");
-    skytether::services::PrintConfig(service_cfg.get());
+    skytether::services::PrintTopologyConfig(service_cfg.get());
 
     return 0;
   }
@@ -168,6 +168,12 @@ struct ServiceActions {
       auto status_connect = skytether_service->ConnectToTopology();
       if (not status_connect.ok()) {
         skytether::PrintError("Unable to connect to downstream services", status_connect);
+        return ERRCODE_START_SRV;
+      }
+
+      auto status_viewconfig = skytether_service->PrintConfig();
+      if (not status_viewconfig.ok()) {
+        skytether::PrintError("Unable to view service config", status_viewconfig);
         return ERRCODE_START_SRV;
       }
 

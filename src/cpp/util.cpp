@@ -33,58 +33,53 @@ using IPCReadOpts = arrow::ipc::IpcReadOptions;
 
 namespace skytether {
 
-  // Anonymous namespace for internal functions
-  namespace {
+  /** Given a file path, return an arrow::io::ReadableFile. */
+  Result<shared_ptr<RandomAccessFile>> ReadHandleForIPCFile(const std::string &path_as_uri) {
+    std::string fpath;
 
-    /** Given a file path, return an arrow::io::ReadableFile. */
-    Result<shared_ptr<RandomAccessFile>> ReadHandleForIPCFile(const std::string &path_as_uri) {
-      std::string fpath;
+    // get a `FileSystem` instance (local fs scheme is "file://")
+    std::cout << "Creating read handle for file: " << path_as_uri << std::endl;
+    ARROW_ASSIGN_OR_RAISE(auto localfs, arrow::fs::FileSystemFromUri(path_as_uri, &fpath));
 
-      // get a `FileSystem` instance (local fs scheme is "file://")
-      std::cout << "Creating read handle for file: " << path_as_uri << std::endl;
-      ARROW_ASSIGN_OR_RAISE(auto localfs, arrow::fs::FileSystemFromUri(path_as_uri, &fpath));
+    // use the `FileSystem` instance to open a handle to the file
+    return localfs->OpenInputFile(fpath);
+  }
 
-      // use the `FileSystem` instance to open a handle to the file
-      return localfs->OpenInputFile(fpath);
-    }
+  /** Given a file path, return an arrow::io::OutputStream. */
+  Result<shared_ptr<ArrowOutputStream>> WriteHandleForIPCFile(const std::string &path_as_uri) {
+    std::string fpath;
 
-    /** Given a file path, return an arrow::io::OutputStream. */
-    Result<shared_ptr<ArrowOutputStream>> WriteHandleForIPCFile(const std::string &path_as_uri) {
-      std::string fpath;
+    // get a `FileSystem` instance (local fs scheme is "file://")
+    std::cout << "Creating write handle for file: " << path_as_uri << std::endl;
+    ARROW_ASSIGN_OR_RAISE(auto localfs, arrow::fs::FileSystemFromUri(path_as_uri, &fpath));
 
-      // get a `FileSystem` instance (local fs scheme is "file://")
-      std::cout << "Creating write handle for file: " << path_as_uri << std::endl;
-      ARROW_ASSIGN_OR_RAISE(auto localfs, arrow::fs::FileSystemFromUri(path_as_uri, &fpath));
+    // use the `FileSystem` instance to open a handle to the file
+    return localfs->OpenOutputStream(fpath);
+  }
 
-      // use the `FileSystem` instance to open a handle to the file
-      return localfs->OpenOutputStream(fpath);
-    }
+  /** Given a file path, create a RecordBatchStreamReader. */
+  Result<shared_ptr<RecordBatchStreamReader>>
+  ReaderForIPCStream(const std::string &path_as_uri) {
+    std::cout << "Creating reader for IPC stream" << std::endl;
 
-    /** Given a file path, create a RecordBatchStreamReader. */
-    Result<shared_ptr<RecordBatchStreamReader>>
-    ReaderForIPCStream(const std::string &path_as_uri) {
-      std::cout << "Creating reader for IPC stream" << std::endl;
+    // use the `FileSystem` instance to open a handle to the file
+    ARROW_ASSIGN_OR_RAISE(auto input_file_handle, ReadHandleForIPCFile(path_as_uri));
 
-      // use the `FileSystem` instance to open a handle to the file
-      ARROW_ASSIGN_OR_RAISE(auto input_file_handle, ReadHandleForIPCFile(path_as_uri));
+    // read from the handle using `RecordBatchStreamReader`
+    return RecordBatchStreamReader::Open(input_file_handle, IPCReadOpts::Defaults());
+  }
 
-      // read from the handle using `RecordBatchStreamReader`
-      return RecordBatchStreamReader::Open(input_file_handle, IPCReadOpts::Defaults());
-    }
+  /** Given a file path, create a RecordBatchFileReader. */
+  Result<shared_ptr<RecordBatchFileReader>>
+  ReaderForIPCFile(const std::string &path_as_uri) {
+    std::cout << "Creating reader for IPC file" << std::endl;
 
-    /** Given a file path, create a RecordBatchFileReader. */
-    Result<shared_ptr<RecordBatchFileReader>>
-    ReaderForIPCFile(const std::string &path_as_uri) {
-      std::cout << "Creating reader for IPC file" << std::endl;
+    // use the `FileSystem` instance to open a handle to the file
+    ARROW_ASSIGN_OR_RAISE(auto input_file_handle, ReadHandleForIPCFile(path_as_uri));
 
-      // use the `FileSystem` instance to open a handle to the file
-      ARROW_ASSIGN_OR_RAISE(auto input_file_handle, ReadHandleForIPCFile(path_as_uri));
-
-      // read from the handle using `RecordBatchStreamReader`
-      return RecordBatchFileReader::Open(input_file_handle, IPCReadOpts::Defaults());
-    }
-
-  } // anonymous namespace: skytether::<anonymous>
+    // read from the handle using `RecordBatchStreamReader`
+    return RecordBatchFileReader::Open(input_file_handle, IPCReadOpts::Defaults());
+  }
 
   // >> Logger functions
   string PathForInstantiatedLog(const string& logger_name) {
@@ -101,8 +96,8 @@ namespace skytether {
   }
 
   std::fstream* SkytetherLogger() {
-    static string empty_name;
-    return SkytetherLogger(empty_name);
+    static string default_name { "default" };
+    return SkytetherLogger(default_name);
   }
 
   std::fstream* SkytetherLogger(string logger_name) {
@@ -114,9 +109,7 @@ namespace skytether {
       log_handle       = OutputStreamForFile(log_fpath.data());
 
       auto ts_init = steady_clock::now();
-      log_handle << "[" << mohair::StringifyTS(ts_init) << ":µs] "
-                 << "|> initial timestamp"              << std::endl
-      ;
+      log_handle << "InitialTimestamp " << mohair::StringifyTS(ts_init) << std::endl;
 
       is_initialized = true;
     }

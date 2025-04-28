@@ -72,14 +72,11 @@ namespace skytether::services {
   //! Parse a single Plan from `query_results`, representing the pushback plan
   Result<unique_ptr<Plan>>
   ExpectPushbackFromQuery(unique_ptr<ResultStream> query_results) {
-    SkytetherDebugMsg("Reading responses");
     ARROW_ASSIGN_OR_RAISE(unique_ptr<FlightResult> query_result, query_results->Next());
 
-    SkytetherDebugMsg("Validating responses");
     ARROW_RETURN_NOT_OK(ErrorForEmptyResult(query_result.get()));
     ARROW_RETURN_NOT_OK(ErrorForTrailingData(*query_results));
 
-    SkytetherDebugMsg("Deserializing pushback plan data");
     return mohair::SubstraitPlanFromString(query_result->body->ToString());
   }
 
