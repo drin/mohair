@@ -48,6 +48,10 @@ namespace skytether {
   using mohair::steady_clock;
   using mohair::SteadyTS;
 
+  // >> Mohair query statistic types
+  using mohair::DecomposeStats;
+  using mohair::ExecutionStats;
+
   // >> Mohair query processing types
   using mohair::Plan;
   using mohair::SuperPlan;
@@ -64,7 +68,9 @@ namespace skytether {
 
   // >> Mohair topology types
   using mohair::ServiceConfig;
-  using mohair::DeviceClass;
+  using mohair::PlatformSpec;
+  using mohair::CpuSpec;
+  using mohair::MemorySpec;
 
   // >> Mohair decomposition options
   using mohair::DecomposeAlg;
@@ -73,6 +79,7 @@ namespace skytether {
   using mohair::PlanMessage;
 
   using mohair::SystemPlan;
+  using mohair::OpPipeline;
   using mohair::PlanSplit;
   using mohair::DecomposeAlg;
 

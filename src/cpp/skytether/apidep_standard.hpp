@@ -34,6 +34,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <optional>
 
 // >> Function support
 #include <functional>
@@ -69,9 +70,11 @@ namespace skytether {
 
   // >> data type aliases
   using std::string;
+  using std::optional;
 
   // >> data structure type aliases
   using std::vector;
+  using std::unordered_map;
 
   // >> I/O type aliases
   using std::stringstream;

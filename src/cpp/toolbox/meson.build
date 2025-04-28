@@ -58,6 +58,16 @@ duck_bin = executable('duckdb-sandbox'
   ,install            : false
 )
 
+
+# for testing if I can pass an arrow::RecordBatchReader directly to a duckdb TableFunction
+skytether_client_bin = executable('arrow-sandbox'
+  ,['arrow-sandbox.cpp']
+  ,include_directories: [ libskytether_inc ]
+  ,dependencies       : libskytether_dep
+  ,install_rpath      : get_option('prefix') / get_option('libdir')
+  ,install            : false
+)
+
 # for a duckdb-enabled skytether client
 duck_bin = executable('duckdb-mohair'
   ,['duckdb-mohair.cpp', 'skytether_cli.cpp']

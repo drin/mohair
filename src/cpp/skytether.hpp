@@ -36,8 +36,15 @@
 // ------------------------------
 // Macros
 
-#define SkytetherInitLogger(logger_name) {                              \
-  *(SkytetherLogger(logger_name)) << "Logger initialized" << std::endl; \
+#define SKYTETHER_ASSERT(assert_msg, assert_expr) { \
+    assert(assert_expr && assert_msg);              \
+  }
+
+#define SkytetherInitLogger(logger_name) {              \
+  SKYTETHER_ASSERT(                                     \
+     "Failed to initialize logger"                      \
+    ,skytether::SkytetherLogger(logger_name) != nullptr \
+  );                                                    \
 }
 
 #define SkytetherStartTS(phase_name) \
@@ -46,13 +53,31 @@
 #define SkytetherStopTS(phase_name) \
   SteadyTS ts_stop_##phase_name = steady_clock::now();
 
+#define SkytetherTrackDecomposeTS(phase_name, decompose_step, substrait_plan, op_id) { \
+  auto ts_diff = mohair::MicroTSDiff(ts_start_##phase_name, ts_stop_##phase_name);     \
+  auto p_stats = substrait_plan->add_decompose_stats();                                \
+  p_stats->set_step_id(decompose_step);                                                \
+  p_stats->set_operator_id(op_id);                                                     \
+  p_stats->set_latency(ts_diff);                                                       \
+}
+
 #define SkytetherLogTimestamps(phase_name) {                                           \
   auto ts_diff = mohair::StringifyTSDiff(ts_start_##phase_name, ts_stop_##phase_name); \
-  *(SkytetherLogger()) << "["                                                          \
-                            << mohair::StringifyTS(ts_start_##phase_name) << ":µs"     \
-                    << ", " << mohair::StringifyTS(ts_stop_##phase_name)  << ":µs"     \
-                    << ", " << ts_diff                                    << ":µs"     \
-                 << "] |> " << #phase_name << std::endl                                \
+  *(skytether::SkytetherLogger()) << #phase_name                                       \
+                                  << " " << mohair::StringifyTS(ts_start_##phase_name) \
+                                  << " " << mohair::StringifyTS(ts_stop_##phase_name)  \
+                                  << " " << ts_diff                                    \
+                                  << std::endl                                         \
+  ;                                                                                    \
+}
+
+#define SkytetherLogLabeledTimestamps(ts_label, phase_name) {                          \
+  auto ts_diff = mohair::StringifyTSDiff(ts_start_##phase_name, ts_stop_##phase_name); \
+  *(skytether::SkytetherLogger()) << ts_label << ":" << #phase_name                    \
+                                  << " " << mohair::StringifyTS(ts_start_##phase_name) \
+                                  << " " << mohair::StringifyTS(ts_stop_##phase_name)  \
+                                  << " " << ts_diff                                    \
+                                  << std::endl                                         \
   ;                                                                                    \
 }
 
@@ -61,16 +86,6 @@
   code_block                                     \
   SkytetherStopTS(phase_name)                    \
   SkytetherLogTimestamps(phase_name)
-
-/* NOTE: for now this needs to always be available
-#if SKYTETHER_DEBUG
-#else
-  #define SkytetherStartTS(phase_name)             {}
-  #define SkytetherStopTS(phase_name)              {}
-  #define SkytetherLogTimestamps(ts_name, log_msg) {}
-  #define SkytetherLogPerf(phase_name, code_block) code_block
-#endif
-*/
 
 
 // ------------------------------
@@ -97,6 +112,9 @@ namespace skytether {
   fstream InputStreamForFile(const char* in_fpath);
   fstream OutputStreamForFile(const char* out_fpath);
   bool    FileToString(const char* in_fpath, string& file_data);
+
+  Result<shared_ptr<RecordBatchStreamReader>>
+  ReaderForIPCStream(const std::string &path_as_uri);
 
   Result<shared_ptr<Buffer>> BufferFromFile(const char* fpath);
   Result<shared_ptr<Buffer>> BufferFromIPCStream(const string& fpath);

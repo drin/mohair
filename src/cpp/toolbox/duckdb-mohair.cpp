@@ -54,6 +54,11 @@
 // >> namespace aliases
 namespace fs = std::filesystem;
 
+// >> Arrow types
+using arrow::Schema;
+using arrow::RecordBatch;
+using arrow::RecordBatchVector;
+
 // >> DuckDB types
 using duckdb::unique_ptr;
 using duckdb::shared_ptr;
@@ -89,6 +94,7 @@ using duckdb::ProjectionRelation;
 using skytether::Status;
 using skytether::Buffer;
 
+using skytether::RecordBatchReader;
 using skytether::RecordBatchVector;
 
 using skytether::services::Location;
@@ -193,6 +199,31 @@ CustomTableLookup( shared_ptr<ClientContext>& context
 // ------------------------------
 // Structs and Classes
 
+//! A wrapper around FlightStreamReader that provides a RecordBatchReader interface.
+struct FlightStreamBatchReader : skytether::RecordBatchReader {
+
+  std::unique_ptr<FlightStreamReader> flight_stream;
+  std::shared_ptr<RecordBatch>        current_batch;
+
+  FlightStreamBatchReader(std::unique_ptr<FlightStreamReader> flight_reader)
+    : flight_stream(std::move(flight_reader)) {}
+
+  std::shared_ptr<Schema> schema() const override {
+    auto result_schema = flight_stream->GetSchema();
+    if (not result_schema.ok()) { return nullptr; }
+
+    return std::move(result_schema).ValueOrDie();
+  }
+
+  Status ReadNext(std::shared_ptr<RecordBatch>* batch) override {
+    ARROW_ASSIGN_OR_RAISE(FlightStreamChunk result_chunk, flight_stream->Next());
+    *batch = std::move(result_chunk.data);
+
+    return Status::OK();
+  }
+
+};
+
 struct ClientActions {
   size_t            result_id;
   string            result_name;
@@ -201,6 +232,68 @@ struct ClientActions {
   RecordBatchVector result_batches;
 
   // >> "Application Interface"
+  arrow::Result<unique_ptr<duckdb::ArrowArrayStreamWrapper>>
+  ArrowStreamForData(SkytetherClient& client_conn, SkytetherTicket& query_ticket) {
+    SkytetherDebugMsg("Using FlightStreamReader directly");
+    SkytetherDebugMsg(
+       "Context: [(" << query_ticket.Id() << ") " << query_ticket.Name() << "]"
+    );
+
+    ARROW_ASSIGN_OR_RAISE(
+       std::unique_ptr<FlightStreamReader> result_reader
+      ,client_conn.GetQueryResults(query_ticket)
+    );
+
+    auto stream_reader = std::make_shared<FlightStreamBatchReader>(
+      std::move(result_reader)
+    );
+
+    // Create arrow stream
+    auto stream_wrapper = duckdb::make_uniq<duckdb::ArrowArrayStreamWrapper>();
+    stream_wrapper->arrow_array_stream.release = nullptr;
+
+    // Export the RecordBatchReader to use the C data stream interface
+    ARROW_RETURN_NOT_OK(
+      arrow::ExportRecordBatchReader(
+        std::move(stream_reader), &stream_wrapper->arrow_array_stream
+      )
+    );
+
+    return stream_wrapper;
+  }
+
+  arrow::Result<RecordBatchVector>
+  ResultsByArrowStream(SkytetherClient& client_conn, SkytetherTicket& query_ticket) {
+    ARROW_ASSIGN_OR_RAISE(
+       auto stream_wrapper
+      ,ArrowStreamForData(client_conn, query_ticket)
+    );
+
+    RecordBatchVector result_batches;
+
+    duckdb::ArrowSchemaWrapper schema_wrapper;
+    stream_wrapper->GetSchema(schema_wrapper);
+    ARROW_ASSIGN_OR_RAISE(
+       auto stream_schema
+      ,arrow::ImportSchema(&(schema_wrapper.arrow_schema))
+    );
+
+    auto chunk = stream_wrapper->GetNextChunk();
+    while (chunk->arrow_array.release) {
+      if (chunk->arrow_array.length != 0) {
+        ARROW_ASSIGN_OR_RAISE(
+           auto chunk_batch
+          ,arrow::ImportRecordBatch(&(chunk->arrow_array), stream_schema)
+        );
+
+        result_batches.push_back(std::move(chunk_batch));
+      }
+
+      chunk = stream_wrapper->GetNextChunk();
+    }
+
+    return result_batches;
+  }
 
   //! Executes a query by submitting the query plan then fetching the results.
   Status GetQueryResults(SkytetherClient& client_conn) {
@@ -213,7 +306,8 @@ struct ClientActions {
     SkytetherTicket query_ticket = SkytetherTicket::ForContext(result_id, result_name);
 
     SkytetherDebugMsg("Requesting results");
-    ARROW_ASSIGN_OR_RAISE(result_batches, RequestResultSet(client_conn, query_ticket));
+    // ARROW_ASSIGN_OR_RAISE(result_batches, RequestResultSet(client_conn, query_ticket));
+    ARROW_ASSIGN_OR_RAISE(result_batches, ResultsByArrowStream(client_conn, query_ticket));
 
     SkytetherDebugMsg(
          "Received results in ["
