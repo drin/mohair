@@ -76,78 +76,90 @@ struct ClientActions {
 
 
   // >> "Application Interface"
-  Status AnnotateSinks(mohair::MohairOp* op, size_t& count_sinks) {
-    if (op->IsSink()) {
-      ++count_sinks;
-      op->substrait_rel->set_has_splitoverride(true);
-    }
-
-    for (size_t op_ndx = 0; op_ndx < op->GetOpArity(); ++op_ndx) {
-      ARROW_RETURN_NOT_OK(AnnotateSinks(op->GetOpInputs()[op_ndx].get(), count_sinks));
-    }
-
-    return Status::OK();
-  }
-
-  Status RemoveOneAnnotation(mohair::MohairOp* op, size_t& count_sinks) {
-    if (op->IsSink() and op->substrait_rel->has_splitoverride()) {
-      op->substrait_rel->set_has_splitoverride(false);
-      --count_sinks;
-      return Status::OK();
-    }
-
-    for (size_t op_ndx = 0; op_ndx < op->GetOpArity(); ++op_ndx) {
-      ARROW_RETURN_NOT_OK(RemoveOneAnnotation(op->GetOpInputs()[op_ndx].get(), count_sinks));
-    }
-
-    return Status::OK();
-  }
-
   //! Executes many queries to try every possible eager split.
   Status ExecuteManyQueries(SkytetherClient& client_conn) {
     SkytetherDebugMsg("Sending many query requests...");
 
-    // Annotate the source query plan
+    std::string plan_basename { "simple-experiment" };
+
+    // Parse the source query plan
     auto sys_plan = mohair::SystemPlanFrom(std::move(query_plan));
+
+    // Collect pointers to all sink operators
+    std::vector<mohair::MohairOp*> sink_ops;
+    for (mohair::MohairOp* plan_op : sys_plan->plan_ops) {
+      if (plan_op->IsSink()) { sink_ops.push_back(plan_op); }
+    }
+
 
     SkytetherStartTS(ClientTryAllEager);
 
-    size_t count_sinks { 0 };
-    ARROW_RETURN_NOT_OK(AnnotateSinks(sys_plan->plan_root.get(), count_sinks));
+    // Each query plan will be annotated with 2 splits
+    size_t experiment_itr { 0 };
+    for (size_t first_splitndx = 0; first_splitndx < sink_ops.size() - 1; ++first_splitndx) {
 
-    // For every annotated sink, send the plan, then remove the annotation
-    while (count_sinks > 0) {
+      size_t second_splitndx = first_splitndx + 1;
+      for (; second_splitndx < sink_ops.size(); ++second_splitndx) {
+        ++experiment_itr;
 
-      SkytetherStartTS(ClientExecuteQuery);
+        // NOTE: Skip to the failing experiment
+        if (experiment_itr < 4) { continue; }
 
-      // Send the query request and store the pushback response
-      ARROW_ASSIGN_OR_RAISE(
-         unique_ptr<Plan> pushback_plan
-        ,client_conn.SendQueryPlan(*(sys_plan->plan_msg))
-      );
+        // NOTE: set these every time because they get unset at split time
+        sink_ops[first_splitndx]->substrait_rel->set_has_splitoverride(true);
+        sink_ops[second_splitndx]->substrait_rel->set_has_splitoverride(true);
 
-      SkytetherStopTS(ClientExecuteQuery);
-      SkytetherLogTimestamps(ClientExecuteQuery);
+        std::string exp_id     { "." + std::to_string(experiment_itr) };
+        std::string plan_name  { plan_basename + exp_id               };
+        std::string plan_fpath { plan_name     + ".plan"              };
 
-      // TODO: hardcoded for now
-      mohair::SkyResultRel result_rel;
-      pushback_plan->relations(0).root()
-                                 .input()
-                                 .extension_leaf()
-                                 .detail()
-                                 .UnpackTo(&result_rel);
+        // Assign an ID to plan that way we can distinguish between experiments
+        sys_plan->plan_msg->payload->set_plan_id(plan_name);
 
-      SkytetherStartTS(ClientGetResultSet);
+        // Serialize annotated plan for debugging
+        sys_plan->plan_msg->SerializeToFile(plan_fpath.data());
 
-      SkytetherTicket result_ticket = SkytetherTicket::ForContext(
-         result_rel.context_id(), result_rel.result_name()
-       );
-      ARROW_RETURN_NOT_OK(RequestResultSet(client_conn, result_ticket));
+        // >> Send the query request and store the pushback response
+        SkytetherStartTS(ClientExecuteQuery);
+        ARROW_ASSIGN_OR_RAISE(
+           unique_ptr<Plan> pushback_plan
+          ,client_conn.SendQueryPlan(*(sys_plan->plan_msg))
+        );
+        SkytetherStopTS(ClientExecuteQuery);
+        SkytetherLogTimestamps(ClientExecuteQuery);
 
-      SkytetherStopTS(ClientGetResultSet);
-      SkytetherLogTimestamps(ClientGetResultSet);
+        // >> Request the result set
+        // TODO: hardcoded for now
+        mohair::SkyResultRel result_rel;
+        pushback_plan->relations(0).root()
+                                   .input()
+                                   .extension_leaf()
+                                   .detail()
+                                   .UnpackTo(&result_rel);
 
-      ARROW_RETURN_NOT_OK(RemoveOneAnnotation(sys_plan->plan_root.get(), count_sinks));
+        SkytetherStartTS(ClientGetResultSet);
+        SkytetherTicket result_ticket = SkytetherTicket::ForContext(
+          result_rel.context_id(), result_rel.result_name()
+        );
+
+        ARROW_RETURN_NOT_OK(RequestResultSet(client_conn, result_ticket));
+        SkytetherStopTS(ClientGetResultSet);
+        SkytetherLogTimestamps(ClientGetResultSet);
+
+        // >> Write pushback plan to file for analysis (contains latencies)
+        std::string pushback_fpath {
+          "experiment." + std::to_string(experiment_itr) + ".pushback"
+        };
+
+        auto pushback_msg = PlanMessage::FromPlan(std::move(pushback_plan));
+        pushback_msg->SerializeToFile(pushback_fpath.data());
+
+        // Cleanup second annotation
+        sink_ops[second_splitndx]->substrait_rel->set_has_splitoverride(false);
+      }
+
+      // Cleanup first annotation
+      sink_ops[first_splitndx]->substrait_rel->set_has_splitoverride(false);
     }
 
     SkytetherStopTS(ClientTryAllEager);
@@ -315,6 +327,9 @@ int main(int argc, char **argv) {
           std::cerr << "Failed to parse plan file" << std::endl;
           return ERRCODE_FILE_PARSE;
         }
+
+        client_actions.query_plan->payload->set_plan_id("simple-experiment");
+
         break;
       }
 
