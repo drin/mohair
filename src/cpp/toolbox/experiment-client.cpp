@@ -102,9 +102,6 @@ struct ClientActions {
       for (; second_splitndx < sink_ops.size(); ++second_splitndx) {
         ++experiment_itr;
 
-        // NOTE: Skip to the failing experiment
-        if (experiment_itr < 4) { continue; }
-
         // NOTE: set these every time because they get unset at split time
         sink_ops[first_splitndx]->substrait_rel->set_has_splitoverride(true);
         sink_ops[second_splitndx]->substrait_rel->set_has_splitoverride(true);
