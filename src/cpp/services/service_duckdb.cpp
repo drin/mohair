@@ -49,6 +49,17 @@ namespace skytether::services {
 
   unique_ptr<Rel>
   ResultRelWithContext(Plan* view_plan, size_t ctx_id, uint64_t view_id, const string& loc) {
+    // Get the common portion of the root operator
+    const PlanRel& view_planrel = view_plan->relations(0);
+    if (not view_planrel.has_root()) {
+      std::cerr << "Expected first relation of view plan to be a root subtree"
+                << std::endl
+      ;
+      return nullptr;
+    }
+
+    const RelCommon& view_common = mohair::GetRelCommon(view_planrel.root().input());
+
     // Initialize SkyResultRel
     unique_ptr<SkyResultRel> skyrel = mohair::CreateResultRelForPlan(view_plan);
     skyrel->set_context_id(ctx_id);
@@ -65,13 +76,14 @@ namespace skytether::services {
     leaf_hint->mutable_output_schema()->CopyFrom(skyrel->schema());
     leaf_hint->set_alias_hash(view_id);
     leaf_rel->mutable_detail()->PackFrom(*skyrel);
+    leaf_rel->mutable_common()->set_operator_id(view_common.operator_id());
 
     return result_rel;
   }
 
   unique_ptr<Plan>
   PushbackFromExecutionPlan(const SystemPlan& exec_plan, unique_ptr<Rel> result_rel) {
-    // Initialize pushbaack from execution plan
+    // Initialize pushback from execution plan
     auto pushback = std::make_unique<Plan>();
     pushback->CopyFrom(*(exec_plan.plan_msg->payload));
 
@@ -114,15 +126,15 @@ namespace skytether::services {
                                ,ShutdownCallback*           cb_custom
                                ,fs::path                    db_fpath)
     : EngineService(std::move(cfg), cb_custom) {
-    string srv_id = EngineIDForLocation(this->service_cfg->location());
-    engine = skytether::engines::DuckDBForFile(srv_id, db_fpath);
+    string service_id = this->service_cfg->label();
+    engine = skytether::engines::DuckDBForFile(service_id, db_fpath);
   }
 
   DuckDBService::DuckDBService( unique_ptr<ServiceConfig>&& cfg
                                ,ShutdownCallback*           cb_custom)
     : EngineService(std::move(cfg), cb_custom) {
-    string srv_id = EngineIDForLocation(this->service_cfg->location());
-    engine = skytether::engines::DuckDBForMem(srv_id);
+    string service_id = this->service_cfg->label();
+    engine = skytether::engines::DuckDBForMem(service_id);
   }
 
   DuckDBService::DuckDBService(unique_ptr<ServiceConfig>&& cfg, fs::path db_fpath)
@@ -270,7 +282,7 @@ namespace skytether::services {
 
 
   // >> Support methods
-  bool IsResultRel(Rel* rel) {
+  bool IsResultRel(const Rel* rel) {
     if (not rel->has_extension_leaf()) { return false; }
     return rel->extension_leaf().detail().Is<SkyResultRel>();
   }
@@ -336,6 +348,9 @@ namespace skytether::services {
     mohair::PrintSubstraitPlan(*(pushdown_msg.payload));
     */
 
+    // Clear the stats so they don't get duplicated on the pushback path
+    pushdown_msg.payload->clear_decompose_stats();
+
     // Send the pushdown message and store the pushback response
     SkytetherStartTS(ActionServiceSendPushdown);
     ARROW_ASSIGN_OR_RAISE(unique_ptr<Plan> pushback, conn.SendQueryPlan(pushdown_msg));
@@ -372,7 +387,7 @@ namespace skytether::services {
 
     eager_split->PrintSplit();
 
-    uint32_t id_mergerel { 0 };
+    uint32_t id_splitrel { 0 };
     vector<unique_ptr<PlanMessage>> pushdown_msgs;
 
     if (not eager_split->CanSplit()) {
@@ -380,11 +395,12 @@ namespace skytether::services {
     }
 
     else {
+      // Get the operator ID of the stage sink
       const RelCommon& mergerel_common = mohair::GetRelCommon(
-        *(eager_split->superplan_mergerel->substrait_rel)
+        *(eager_split->stage->sink->substrait_rel)
       );
 
-      id_mergerel   = mergerel_common.operator_id();
+      id_splitrel = mergerel_common.operator_id();
       pushdown_msgs = eager_split->ExtractSubplans();
     }
 
@@ -393,7 +409,7 @@ namespace skytether::services {
        EagerSplitStep
       ,DecomposeStats::SPLIT
       ,eager_split->super_plan
-      ,id_mergerel
+      ,id_splitrel
     );
 
     // TODO: this should be async
@@ -416,11 +432,20 @@ namespace skytether::services {
             ,SendPushdown(cse_conn, *origin_msg, *engine)
           );
 
+          // Propagate the runtime stats from the pushback
+          auto pushback_stats = origin_pushback->payload->decompose_stats();
+          for (auto dstat : pushback_stats) {
+            auto upstream_dstat = sys_plan->plan_msg->payload->add_decompose_stats();
+            upstream_dstat->CopyFrom(dstat);
+          }
+
+          // Find each result rel (they should be materialized already)
           vector<Rel*> origin_resultrels = FindResultRels(*(origin_pushback->payload));
           if (origin_resultrels.size() != 1) {
             return Status::Invalid("Expected a single ResultRel for origin request");
           }
 
+          // replace the origin request with the materialized view to read from
           if (not eager_split->MergeOriginResult(opipe, origin_resultrels[0])) {
             return Status::Invalid("Unable to merge origin result into super plan");
           }
@@ -477,6 +502,14 @@ namespace skytether::services {
 
         // If we need to merge pushback for a delegated subplan
         else {
+          // Propagate the runtime stats from the pushback
+          auto pushback_stats = pushback_msg->payload->decompose_stats();
+          for (auto downstream_dstat : pushback_stats) {
+            auto upstream_dstat = eager_split->super_plan->add_decompose_stats();
+            upstream_dstat->CopyFrom(downstream_dstat);
+          }
+
+          // Merge the pushback plan
           SkytetherStartTS(EagerMergeStep);
           eager_split->MergeSubplan(pushback_msg.get());
 
@@ -594,16 +627,16 @@ namespace skytether::services {
       exec_sysplan = mohair::SystemPlanFrom(lazy_splitter->ExtractExecSubplan());
 
       const RelCommon& mergerel_common = mohair::GetRelCommon(
-        *(lazy_splitter->superplan_mergerel->substrait_rel)
+        *(lazy_splitter->stage->sink->substrait_rel)
       );
-      uint32_t id_mergerel = mergerel_common.operator_id();
+      uint32_t id_splitrel = mergerel_common.operator_id();
 
       SkytetherStopTS(LazySplitStep);
       SkytetherTrackDecomposeTS(
          LazySplitStep
         ,DecomposeStats::SPLIT
         ,lazy_splitter->super_plan
-        ,id_mergerel
+        ,id_splitrel
       );
     }
 
@@ -667,14 +700,24 @@ namespace skytether::services {
     if (should_eagersplit) {
       // >> Delegate pushdown plans
       // a leaf engine uses the whole plan as the execution plan
-      if (service_conns.empty()) { exec_sysplan = std::move(sys_plan); }
+      if (service_conns.empty()) {
+        exec_sysplan = std::move(sys_plan);
+      }
 
       // non-leaf engines decomposes the system plan and delegates pushdown plans
-      else { ARROW_ASSIGN_OR_RAISE(exec_sysplan, EagerDecomposeDelegate(std::move(sys_plan))); }
+      else {
+        ARROW_ASSIGN_OR_RAISE(
+           exec_sysplan
+          ,EagerDecomposeDelegate(std::move(sys_plan))
+        );
+      }
 
-      const RelCommon& execplan_root = mohair::GetRelCommon(
-        exec_sysplan->plan_msg->payload->relations(0).root().input()
-      );
+      const PlanRel& exec_planrel = exec_sysplan->plan_msg->payload->relations(0);
+      if (not exec_planrel.has_root()) {
+        return Status::Invalid("Expected first exec PlanRel to be root subtree");
+      }
+
+      const RelCommon& execplan_root = mohair::GetRelCommon(exec_planrel.root().input());
       uint32_t id_execroot = execplan_root.operator_id();
 
       // >> Translate execution plan
@@ -690,9 +733,10 @@ namespace skytether::services {
       std::tie(pushback_plan, ctx_id, view_id) = std::move(result_eagerexec).ValueOrDie();
       size_t count_tablebytes = engine->EstimateTotalTableSize();
 
+      bool only_materialize = IsResultRel(&(exec_planrel.root().input()));
       SkytetherTrackDecomposeTS(
          EagerTranslateStep
-        ,DecomposeStats::TRANSLATE
+        ,only_materialize ? DecomposeStats::MATERIALIZE : DecomposeStats::TRANSLATE
         ,pushback_plan
         ,id_execroot
       );

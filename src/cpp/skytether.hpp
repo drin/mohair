@@ -56,8 +56,11 @@
 #define SkytetherTrackDecomposeTS(phase_name, decompose_step, substrait_plan, op_id) { \
   auto ts_diff = mohair::MicroTSDiff(ts_start_##phase_name, ts_stop_##phase_name);     \
   auto p_stats = substrait_plan->add_decompose_stats();                                \
+  p_stats->set_engine_id(engine->engine_id);                                           \
   p_stats->set_step_id(decompose_step);                                                \
   p_stats->set_operator_id(op_id);                                                     \
+  p_stats->set_start_ts(mohair::MicroTSVal(ts_start_##phase_name));                    \
+  p_stats->set_stop_ts(mohair::MicroTSVal(ts_stop_##phase_name));                      \
   p_stats->set_latency(ts_diff);                                                       \
 }
 
