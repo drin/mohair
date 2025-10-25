@@ -222,9 +222,10 @@
       };
 
       // Construct a QueryContext to keep everything alive
-      DuckContext* scan_context = DuckContext::Emplace(context_map
+      DuckContext* scan_context = DuckContext::Emplace(
+         context_map
         ,std::make_unique<DuckContext>(
-           engine_conn.TableFunction("scan_arrows_file", fn_args)
+           engine_conn.TableFunction("read_arrow", fn_args)
          )
       );
 
